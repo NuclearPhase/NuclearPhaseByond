@@ -207,7 +207,7 @@ its easier to just keep the beam vertical.
 			f_name += "oil-stained [name][infix]."
 	if(!isobserver(user))
 		user.visible_message("<font size=1>[user.name] looks at [src].</font>")
-		
+
 		if(get_dist(user,src) > 5)//Don't get descriptions of things far away.
 			to_chat(user, "<span class='info'>It's too far away to see clearly.</span>")
 			return
@@ -365,6 +365,19 @@ its easier to just keep the beam vertical.
 /atom/movable/onDropInto(var/atom/movable/AM)
 	return loc // If onDropInto returns something, then dropInto will attempt to drop AM there.
 
+//Multi-z falling procs
+/atom/movable/can_fall()
+	return !anchored
+
+//Execution by grand piano!
+/atom/movable/proc/get_fall_damage()
+	return 42
+
+//If atom stands under open space, it can prevent fall, or not
+/atom/proc/can_prevent_fall()
+	return FALSE
+
+
 /atom/proc/InsertedContents()
 	return contents
 
@@ -378,7 +391,7 @@ its easier to just keep the beam vertical.
 			var/obj/item/organ/affecting = user.get_organ(limbcheck)
 			if(!affecting)//Oh shit, we don't have have any legs, we can't kick.
 				return 0
-		
+
 		user.setClickCooldown(DEFAULT_SLOW_COOLDOWN)
 		return 1 //We do have legs now though, so we can kick.
 
@@ -391,7 +404,7 @@ its easier to just keep the beam vertical.
 		var/obj/item/organ/affecting = user.get_organ(limbcheck)
 		if(!affecting)//Oh shit, we don't have have any legs, we can't jump.
 			return
-	
+
 	//Nice, we can jump, let's do that then.
 	playsound(user, "sound/effects/jump_[user.gender == MALE ? "male" : "female"].ogg", 25)
 	user.visible_message("[user] jumps.")
@@ -407,80 +420,6 @@ its easier to just keep the beam vertical.
 		user.visible_message("<span class='warning'>[user.name] shakes \the [src].</span>", \
 					"<span class='notice'>You shake \the [src].</span>")
 		object_shaken()
-
-/atom/New()
-	..()
-	if(flags & OBJ_CLIMBABLE)
-		verbs += /atom/proc/climb_on
-
-/atom/proc/climb_on()
-
-	set name = "Climb"
-	set desc = "Climbs onto an object."
-	set category = "Object"
-	set src in oview(1)
-
-	do_climb(usr)
-
-/atom/proc/can_climb(var/mob/living/user, post_climb_check=0)
-	if (!(flags & OBJ_CLIMBABLE) || !can_touch(user) || (!post_climb_check && (user in climbers)))
-		return 0
-
-	if (!user.Adjacent(src))
-		to_chat(user, "<span class='danger'>You can't climb there, the way is blocked.</span>")
-		return 0
-
-	var/obj/occupied = turf_is_crowded()
-	if(occupied)
-		to_chat(user, "<span class='danger'>There's \a [occupied] in the way.</span>")
-		return 0
-	return 1
-
-/atom/proc/can_touch(var/mob/user)
-	if (!user)
-		return 0
-	if(!Adjacent(user))
-		return 0
-	if (user.restrained() || user.buckled)
-		to_chat(user, "<span class='notice'>You need your hands and legs free for this.</span>")
-		return 0
-	if (user.incapacitated())
-		return 0
-	if (issilicon(user))
-		to_chat(user, "<span class='notice'>You need hands for this.</span>")
-		return 0
-	return 1
-
-/atom/proc/turf_is_crowded()
-	var/turf/T = get_turf(src)
-	if(!T || !istype(T))
-		return 0
-	for(var/obj/O in T.contents)
-		if(O.flags & OBJ_CLIMBABLE) continue
-		if(O && O.density && !(O.flags & ON_BORDER)) //ON_BORDER structures are handled by the Adjacent() check.
-			return O
-	return 0
-
-/atom/proc/do_climb(var/mob/living/user)
-	if (!can_climb(user))
-		return
-
-	user.visible_message("<span class='warning'>\The [user] starts climbing onto \the [src]!</span>")
-	climbers |= user
-
-	if(!do_after(user,(issmall(user) ? 30 : 50), src))
-		climbers -= user
-		return
-
-	if (!can_climb(user, post_climb_check=1))
-		climbers -= user
-		return
-
-	user.forceMove(get_turf(src))
-
-	if (get_turf(user) == get_turf(src))
-		user.visible_message("<span class='warning'>\The [user] climbs onto \the [src]!</span>")
-	climbers -= user
 
 /atom/proc/object_shaken()
 	for(var/mob/living/M in climbers)
@@ -520,10 +459,3 @@ its easier to just keep the beam vertical.
 			H.UpdateDamageIcon()
 			H.updatehealth()
 	return
-
-/atom/MouseDrop_T(mob/target, mob/user)
-	var/mob/living/H = user
-	if(istype(H) && can_climb(H) && target == user)
-		do_climb(target)
-	else
-		return ..()

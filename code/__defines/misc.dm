@@ -87,6 +87,8 @@
 #define CUSTOM_ITEM_SYNTH 'icons/mob/custom_synthetic.dmi'
 #endif
 
+#define FALL_GIB_DAMAGE 999
+
 #define WALL_CAN_OPEN 1
 #define WALL_OPENING 2
 

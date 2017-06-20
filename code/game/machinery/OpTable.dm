@@ -46,6 +46,9 @@
 		visible_message("<span class='danger'>\The [usr] destroys \the [src]!</span>")
 		src.set_density(0)
 		qdel(src)
+		return
+	if (usr.resting)
+		usr.resting = 0
 	return
 
 /obj/machinery/optable/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
@@ -55,16 +58,6 @@
 		return 1
 	else
 		return 0
-
-
-/obj/machinery/optable/MouseDrop_T(obj/O as obj, mob/user as mob)
-
-	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
-		return
-	user.drop_item()
-	if (O.loc != src.loc)
-		step(O, get_dir(O, src))
-	return
 
 /obj/machinery/optable/proc/check_victim()
 	if(locate(/mob/living/carbon/human, src.loc))
@@ -89,9 +82,9 @@
 		C.client.perspective = EYE_PERSPECTIVE
 		C.client.eye = src
 	C.resting = 1
-	C.dropInto(loc)
+	C.loc = src.loc
 	for(var/obj/O in src)
-		O.dropInto(loc)
+		O.loc = src.loc
 	src.add_fingerprint(user)
 	if(ishuman(C))
 		var/mob/living/carbon/human/H = C
@@ -110,7 +103,11 @@
 	else
 		return ..()
 
-/obj/machinery/optable/climb_on()
+/obj/machinery/optable/verb/climb_on()
+	set name = "Climb On Table"
+	set category = "Object"
+	set src in oview(1)
+
 	if(usr.stat || !ishuman(usr) || usr.restrained() || !check_table(usr))
 		return
 

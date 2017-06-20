@@ -45,9 +45,86 @@
 /turf/simulated/open/update_dirt()
 	return 0
 
+
 /turf/simulated/open/Entered(var/atom/movable/mover)
-	..()
-	mover.fall()
+	. = ..()
+
+	if(!mover.can_fall())
+		return
+
+	// only fall down in defined areas (read: areas with artificial gravitiy)
+	if(!istype(below)) //make sure that there is actually something below
+		below = GetBelow(src)
+		if(!below)
+			return
+
+	// No gravit, No fall.
+	if(!has_gravity(src))
+		return
+
+	if(locate(/obj/structure/catwalk) in src)
+		return
+
+	if(locate(/obj/structure/stairs) in src)
+		return
+
+	var/soft = FALSE
+	for(var/atom/A in below)
+		if(A.can_prevent_fall())
+			return
+
+		// Dont break here, since we still need to be sure that it isnt blocked
+		if(istype(A, /obj/structure/stairs))
+			soft = TRUE
+	// We've made sure we can move, now.
+	mover.forceMove(below)
+
+	if(!soft)
+		if(!isliving(mover))
+			if(istype(below, /turf/simulated/open))
+				mover.visible_message(
+					"\The [mover] falls from the deck above through \the [below]!",
+					"You hear a whoosh of displaced air."
+				)
+			else
+				mover.visible_message(
+					"\The [mover] falls from the deck above and slams into \the [below]!",
+					"You hear something slam into the deck."
+				)
+		else
+			var/mob/M = mover
+			if(istype(below, /turf/simulated/open))
+				below.visible_message(
+					"\The [mover] falls from the deck above through \the [below]!",
+					"You hear a soft whoosh.[M.stat ? "" : ".. and some screaming."]"
+				)
+			else
+				M.visible_message(
+					"\The [mover] falls from the deck above and slams into \the [below]!",
+					"You land on \the [below].", "You hear a soft whoosh and a crunch"
+				)
+
+			// Handle people getting hurt, it's funny!
+			if (istype(mover, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = mover
+				var/damage = 5
+				for(var/organ in list(BP_CHEST, BP_R_ARM, BP_L_ARM, BP_R_LEG, BP_L_LEG))
+					H.apply_damage(rand(0, damage), BRUTE, organ)
+
+				H.Weaken(4)
+				H.updatehealth()
+
+		var/fall_damage = mover.get_fall_damage()
+		for(var/mob/living/M in below)
+			if(M == mover)
+				continue
+			M.Weaken(10)
+			if(fall_damage >= FALL_GIB_DAMAGE)
+				M.gib()
+			else
+				for(var/organ in list(BP_HEAD, BP_CHEST, BP_R_ARM, BP_L_ARM))
+					M.apply_damage(rand(0, fall_damage), BRUTE, organ)
+
 
 // Called when thrown object lands on this turf.
 /turf/simulated/open/hitby(var/atom/movable/AM, var/speed)

@@ -694,3 +694,6 @@ modules/mob/living/carbon/human/life.dm if you die, you will be zoomed out.
 	else
 		mob_icon = default_onmob_icons[slot]
 	return overlay_image(mob_icon,mob_state,color,RESET_COLOR)
+
+/obj/item/get_fall_damage()
+	return w_class * 2

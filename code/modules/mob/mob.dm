@@ -695,7 +695,7 @@
 		set_density(0)
 	//	if(l_hand) unEquip(l_hand)
 	//	if(r_hand) unEquip(r_hand)
-	
+
 	else
 		set_density(initial(density))
 	reset_layer()
@@ -788,6 +788,10 @@
 		weakened = max(amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
+
+/mob/get_fall_damage()
+	return 15
+
 
 /mob/proc/AdjustWeakened(amount)
 	if(status_flags & CANWEAKEN)

@@ -17,9 +17,8 @@
             Gender:
         </div>
         <div class="itemContentWide">
-            {{for data.genders}}
-                {{:helper.link(value.gender_name, null, { 'gender' : value.gender_key}, null, data.gender == value.gender_key ? 'selected' : null)}}
-            {{/for}}
+            {{:helper.link('Male', null, { 'gender' : 'male'}, null, data.gender == 'male' ? 'selected' : null)}}
+            {{:helper.link('Female', null, { 'gender' : 'female'}, null, data.gender == 'female' ? 'selected' : null)}}
         </div>
     </div>
 {{/if}}
