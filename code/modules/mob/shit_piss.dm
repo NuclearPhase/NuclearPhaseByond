@@ -181,7 +181,7 @@
 		..()
 		if(reagents.total_volume)
 			src.reagents.handle_reactions()
-		playsound(src.loc, "sound/effects/squishy.ogg", 40, 1)
+		playsound(src.loc, 'sound/effects/squishy.ogg', 40, 1)
 		var/turf/T = src.loc
 		if(!istype(T, /turf/space))
 			new /obj/effect/decal/cleanable/poo(T)

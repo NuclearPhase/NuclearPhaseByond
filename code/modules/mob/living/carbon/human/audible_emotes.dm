@@ -2,17 +2,17 @@ proc/agony_scream(var/mob/M)
 	var/screamsound = null
 	if(M.stat)//No dead or unconcious people screaming pls.
 		return
-	
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.isChild())
-			screamsound = "sound/voice/child_pain[rand(1,2)].ogg"
+			screamsound = pick('sound/voice/child_pain1.ogg', 'sound/voice/child_pain2.ogg')
 
 		else if(M.gender == MALE)
-			screamsound = "sound/voice/man_pain[rand(1,3)].ogg"
+			screamsound = pick('sound/voice/man_pain1.ogg','sound/voice/man_pain2.ogg','sound/voice/man_pain3.ogg')
 
 		else
-			screamsound = "sound/voice/woman_agony[rand(1,3)].ogg"
+			screamsound = pick('sound/voice/woman_agony1.ogg','sound/voice/woman_agony2.ogg','sound/voice/woman_agony3.ogg')
 
 
 	if(screamsound)
@@ -24,10 +24,10 @@ proc/gasp_sound(var/mob/M)
 		return
 
 	if(M.gender == MALE)
-		gaspsound = "sound/voice/gasp_male[rand(1,7)].ogg"
+		gaspsound = pick('sound/voice/gasp_male1.ogg','sound/voice/gasp_male2.ogg','sound/voice/gasp_male3.ogg','sound/voice/gasp_male4.ogg','sound/voice/gasp_male5.ogg','sound/voice/gasp_male6.ogg','sound/voice/gasp_male7.ogg')
 
 	if(M.gender == FEMALE)
-		gaspsound = "sound/voice/gasp_female[rand(1,7)].ogg"
+		gaspsound = pick('sound/voice/gasp_female1.ogg','sound/voice/gasp_female2.ogg','sound/voice/gasp_female3.ogg','sound/voice/gasp_female4.ogg','sound/voice/gasp_female5.ogg','sound/voice/gasp_female6.ogg','sound/voice/gasp_female7.ogg')
 
 	if(gaspsound)
 		playsound(M, gaspsound, 25, 0, 1)
