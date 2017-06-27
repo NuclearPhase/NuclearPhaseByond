@@ -239,8 +239,3 @@ var/image/exterior_light_overlay
 	name = "bluespace"
 	icon_state = "bluespace"
 	keep_sprite = 1
-
-/turf/space/can_have_cabling()
-	if(locate(/obj/structure/catwalk, src))
-		return 1
-	return 0
