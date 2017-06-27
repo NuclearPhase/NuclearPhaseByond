@@ -36,18 +36,18 @@ var/list/department_radio_keys = list(
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":Ãª" = "right ear",	".Ãª" = "right ear",
-	  ":Ã¤" = "left ear",	".Ã¤" = "left ear",
-	  ":Ã¸" = "intercom",	".Ã¸" = "intercom",
-	  ":Ã°" = "department",	".Ã°" = "department",
-	  ":Ã±" = "Command",		".Ã±" = "Command",
-	  ":Ã²" = "Science",		".Ã²" = "Science",
-	  ":Ã¼" = "Medical",		".Ã¼" = "Medical",
-	  ":Ã³" = "Engineering",	".Ã³" = "Engineering",
-	  ":Ã»" = "Security",	".Ã»" = "Security",
-	  ":Ã¶" = "whisper",		".Ã¶" = "whisper",
-	  ":Ã¥" = "Mercenary",	".Ã¥" = "Mercenary",
-	  ":Ã©" = "Supply",		".Ã©" = "Supply",
+	  ":ê" = "right ear",	".Ê" = "right ear",
+	  ":ë" = "left ear",	".Ë" = "left ear",
+	  ":ø" = "intercom",	".Ø" = "intercom",
+	  ":ð" = "department",	".Ð" = "department",
+	  ":ñ" = "Command",		".Ñ" = "Command",
+	  ":ò" = "Science",		".Ò" = "Science",
+	  ":ü" = "Medical",		".Ü" = "Medical",
+	  ":ó" = "Engineering",	".Ó" = "Engineering",
+	  ":û" = "Security",	".Û" = "Security",
+	  ":ö" = "whisper",		".Ö" = "whisper",
+	  ":å" = "Mercenary",	".Å" = "Mercenary",
+	  ":ã" = "Supply",		".Ã" = "Supply",
 )
 
 

@@ -122,7 +122,7 @@
 	if(anchored)
 		return FALSE
 
-	if(locate(/obj/structure/lattice, loc))
+	if(locate(/obj/structure/lattice, loc) || locate(/obj/structure/catwalk, loc))
 		return FALSE
 
 	// See if something prevents us from falling.

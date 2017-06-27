@@ -1,11 +1,13 @@
 /obj/structure/catwalk
-	layer = TURF_LAYER + 0.5
 	icon = 'icons/turf/catwalks.dmi'
 	icon_state = "catwalk"
 	name = "catwalk"
 	desc = "Cats really don't like these things."
 	density = 0
 	anchored = 1.0
+	w_class = ITEM_SIZE_NORMAL
+	plane = ABOVE_PLATING_PLANE
+	layer = LATTICE_LAYER
 
 /obj/structure/catwalk/New()
 	..()
@@ -73,5 +75,5 @@
 			new /obj/item/stack/rods(src.loc)
 			new /obj/item/stack/rods(src.loc)
 			new /obj/structure/lattice/(src.loc)
-			qdel(src)
+			qdel(src)	
 	return
