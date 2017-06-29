@@ -86,6 +86,8 @@
 
 //This makes sure that the grab screen object is displayed in the correct hand.
 /obj/item/weapon/grab/proc/synch() //why is this needed?
+	if(assailant.z != affecting.z) // Multi-Z stuff
+		qdel(src)
 	if(QDELETED(src))
 		return
 	if(affecting)
@@ -93,6 +95,7 @@
 			hud.screen_loc = ui_rhand
 		else
 			hud.screen_loc = ui_lhand
+
 
 /obj/item/weapon/grab/process()
 	if(QDELETED(src)) // GC is trying to delete us, we'll kill our processing so we can cleanly GC
