@@ -24,8 +24,8 @@
 		T.ChangeTurf(new_turf_type)
 
 // This is not great.
-/turf/simulated/proc/wet_floor(var/wet_val = 1)
-	if(wet_val < wet)
+/turf/simulated/proc/wet_floor(var/wet_val = 1, var/overwrite = FALSE)
+	if(wet_val < wet && !overwrite)
 		return
 
 	if(!wet)
@@ -105,10 +105,53 @@
 			// Tracking blood
 			var/list/bloodDNA = null
 			var/bloodcolor=""
-			if(H.shoes)
+			var/is_wearing_armor = 0
+
+			//Getting footstep sounds.
+			if 		(istype(src, /turf/simulated/floor/grass))
+				footstepsound = "grassfootsteps"
+			else 	if(istype(src, /turf/simulated/floor/beach/water))
+				footstepsound = "waterfootsteps"
+			else 	if(istype(src, /turf/simulated/floor/wood))
+				footstepsound = "woodfootsteps"
+			else 	if(istype(src, /turf/simulated/floor/carpet))
+				footstepsound = "carpetfootsteps"
+			else 	if(istype(src, /turf/simulated/floor/beach/sand))
+				footstepsound = "dirtfootsteps"
+			else	if(istype(src,/turf/simulated/floor/plating))
+				footstepsound = "platingfootsteps"
+			else	if(istype(src,/turf/simulated/floor/snow))
+				footstepsound = "snowsteps"
+
+			else
+				footstepsound = "erikafootsteps"
+
+			if(H.wear_suit)//If they're wearing armor make an armor sound.
+				var/obj/item/clothing/suit/armor/C = H.wear_suit
+				if(istype(C))
+					is_wearing_armor = 1
+
+			if(H.shoes)//If they're wearing shoes play some shoe sounds.
 				var/obj/item/clothing/shoes/S = H.shoes
 				if(istype(S))
 					S.handle_movement(src,(H.m_intent == "run" ? 1 : 0))
+					if(!H.throwing)
+						if(H.m_intent == "run")
+							if(H.footstep >= 1)//Every two steps.
+								H.footstep = 0
+								playsound(src, footstepsound, 100, 1)
+								if(is_wearing_armor)
+									playsound(src, "sound/effects/footsteps/armor/gear[rand(1,4)].ogg", 15, 1)
+							else
+								H.footstep++
+						else
+							if(H.footstep >= 6)
+								H.footstep = 0
+								playsound(src, footstepsound, 100, 1)
+								if(is_wearing_armor)
+									playsound(src, "sound/effects/footsteps/armor/gear[rand(1,4)].ogg", 15, 1)
+							else
+								H.footstep++
 					if(S.track_blood && S.blood_DNA)
 						bloodDNA = S.blood_DNA
 						bloodcolor=S.blood_color
@@ -126,36 +169,6 @@
 					from.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints,bloodDNA,0,H.dir,bloodcolor) // Going
 
 				bloodDNA = null
-
-			//Shoe sounds
-			if 		(istype(src, /turf/simulated/floor/grass))
-				footstepsound = "grassfootsteps"
-			//else 	if(istype(src, /turf/stalker/floor/tropa))//Not needed for now.
-			//	footstepsound = "sandfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/beach/water))
-				footstepsound = "waterfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/wood))
-				footstepsound = "woodfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/carpet))
-				footstepsound = "carpetfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/beach/sand))
-				footstepsound = "dirtfootsteps"
-			else
-				footstepsound = "erikafootsteps"
-
-			if(istype(H.shoes, /obj/item/clothing/shoes) && !H.throwing)//This is probably the worst possible way to handle walking sfx.
-				if(H.m_intent == "run")
-					if(H.footstep >= 1)//Every two steps.
-						H.footstep = 0
-						playsound(src, footstepsound, 100, 1)
-					else
-						H.footstep++
-				else
-					if(H.footstep >= 6)
-						H.footstep = 0
-						playsound(src, footstepsound, 100, 1)
-					else
-						H.footstep++
 
 		if(src.wet)
 

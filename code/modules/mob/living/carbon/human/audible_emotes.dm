@@ -5,8 +5,11 @@ proc/agony_scream(var/mob/M)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.isChild())
-			screamsound = pick('sound/voice/child_pain1.ogg', 'sound/voice/child_pain2.ogg')
+		if(H.isMonkey())
+			screamsound = "sound/voice/monkey_pain[rand(1,3)].ogg"
+
+		else if(H.isChild())
+			screamsound = "sound/voice/child_pain[rand(1,2)].ogg"
 
 		else if(M.gender == MALE)
 			screamsound = pick('sound/voice/man_pain1.ogg','sound/voice/man_pain2.ogg','sound/voice/man_pain3.ogg')
@@ -31,3 +34,26 @@ proc/gasp_sound(var/mob/M)
 
 	if(gaspsound)
 		playsound(M, gaspsound, 25, 0, 1)
+
+proc/agony_moan(var/mob/M)
+	var/moansound = null
+	if(M.stat)//No dead or unconcious people screaming pls.
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.isMonkey())
+			return
+
+		if(H.isChild())
+			moansound = 'sound/voice/child_moan1.ogg'
+
+		else if(M.gender == MALE)
+			moansound = "sound/voice/male_moan[rand(1,3)].ogg"
+
+		else
+			moansound = "sound/voice/female_moan[rand(1,3)].ogg"
+
+
+	if(moansound)
+		playsound(M, moansound, 25, 0, 1)

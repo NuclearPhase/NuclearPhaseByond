@@ -595,3 +595,6 @@ th.misc {
 .width75btn {
     width: 75px;
 }
+.wideTable tr:nth-child(odd) {
+    background-color: #272727;
+}

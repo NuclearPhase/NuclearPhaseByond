@@ -329,7 +329,9 @@ its easier to just keep the beam vertical.
 	for(var/m in mobs)
 		var/mob/M = m
 		if(M.see_invisible >= invisibility)
-			M.show_message(message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
+			if(M.client)
+				if(!(src in M.client.hidden_mobs))
+					M.show_message(message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
 		else if(blind_message)
 			M.show_message(blind_message, AUDIBLE_MESSAGE)
 
@@ -397,7 +399,7 @@ its easier to just keep the beam vertical.
 
 //Jumping
 /atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	if(user.lying && isinspace(user.loc))//No jumping on the ground dummy && No jumping in space
+	if(user.lying || isspace(user.loc))//No jumping on the ground dummy && No jumping in space
 		return
 
 	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.

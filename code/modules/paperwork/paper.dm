@@ -42,7 +42,7 @@
 /obj/item/weapon/paper/proc/set_content(text,title)
 	if(title)
 		name = title
-	info = rhtml_encode(text)
+	info = html_encode(text)
 	info = parsepencode(text)
 	update_icon()
 	update_space(info)
@@ -196,8 +196,6 @@
 /obj/item/weapon/paper/proc/parsepencode(t, obj/item/weapon/pen/P, mob/user, iscrayon)
 	if(length(t) == 0)
 		return ""
-		
-	t = cp1251_to_utf8(t)
 
 	if(findtext(t, "\[sign\]"))
 		t = replacetext(t, "\[sign\]", "<font face=\"[signfont]\"><i>[get_signature(P, user)]</i></font>")
@@ -369,7 +367,7 @@
 			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY bgcolor='[color]'>[info_links][stamps]</BODY></HTML>", "window=[name]")
 		return
 
-	else if(istype(P, /obj/item/weapon/stamp) || istype(P, /obj/item/clothing/gloves/ring/seal))
+	else if(istype(P, /obj/item/weapon/stamp) || istype(P, /obj/item/clothing/ring/seal))
 		if((!in_range(src, usr) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P))
 			return
 
