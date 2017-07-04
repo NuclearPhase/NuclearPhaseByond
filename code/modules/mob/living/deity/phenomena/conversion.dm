@@ -1,7 +1,7 @@
 /datum/phenomena/conversion
 	name = "Conversion"
 	cost = 20
-	flags = PHENOMENA_NONFOLLOWER
+	flags = 0
 	expected_type = /mob/living
 
 /datum/phenomena/conversion/can_activate(var/atom/target)
@@ -29,7 +29,7 @@
 /datum/phenomena/forced_conversion
 	name = "Forced Conversion"
 	cost = 50
-	flags = PHENOMENA_NONFOLLOWER
+	flags = 0
 	expected_type = /mob/living
 
 /datum/phenomena/forced_conversion/can_activate(var/mob/living/L)

@@ -13,24 +13,14 @@ mob/var/next_pain_time = 0
 // message is the custom message to be displayed
 // power decides how much painkillers will stop the message
 // force means it ignores anti-spam timer
-mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting, var/nohalloss)
+mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting)
 	if(!message || stat || !can_feel_pain() || chem_effects[CE_PAINKILLER] > power)
 		return 0
 
 	// Excessive halloss is horrible, just give them enough to make it visible.
-	if(!nohalloss && power)
+	if(power)
 		if(affecting)
 			affecting.add_pain(ceil(power/2))
-
-			switch(power)
-				if(1 to 10)
-					flash_weakest_pain()
-				if(11 to 90)
-					flash_weak_pain()
-					stuttering += 5
-				if(91 to INFINITY)
-					flash_pain()
-					stuttering += 10
 		else
 			adjustHalLoss(ceil(power/2))
 
@@ -54,7 +44,7 @@ mob/living/carbon/human/proc/handle_pain()
 	var/obj/item/organ/external/damaged_organ = null
 	for(var/obj/item/organ/external/E in organs)
 		if(!E.can_feel_pain()) continue
-		var/dam = E.get_pain() + E.get_damage()
+		var/dam = E.get_damage()
 		// make the choice of the organ depend on damage,
 		// but also sometimes use one of the less damaged ones
 		if(dam > maxdam && (maxdam == 0 || prob(70)) )
@@ -93,9 +83,9 @@ mob/living/carbon/human/proc/handle_pain()
 
 	if(prob(2))
 		switch(getToxLoss())
-			if(10 to 25)
+			if(1 to 10)
 				custom_pain("Your body stings slightly.", getToxLoss())
-			if(25 to 45)
+			if(11 to 60)
 				custom_pain("Your whole body hurts badly.", getToxLoss())
 			if(61 to INFINITY)
 				custom_pain("Your body aches all over, it's driving you mad.", getToxLoss())

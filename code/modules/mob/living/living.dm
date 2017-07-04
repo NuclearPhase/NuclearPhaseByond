@@ -224,47 +224,40 @@ default behaviour is:
 // I touched them without asking... I'm soooo edgy ~Erro (added nodamage checks)
 
 /mob/living/proc/getBruteLoss()
-	return maxHealth - health
+	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
 	if(status_flags & GODMODE)	return 0	//godmode
-	health = max(health-amount, 0)
+	bruteloss = Clamp(bruteloss + amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/getOxyLoss()
-	return 0
+	return oxyloss
 
 /mob/living/proc/adjustOxyLoss(var/amount)
-	return
+	if(status_flags & GODMODE)	return 0	//godmode
+	oxyloss = Clamp(oxyloss + amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/setOxyLoss(var/amount)
-	return
+	if(status_flags & GODMODE)	return 0	//godmode
+	oxyloss = Clamp(amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/getToxLoss()
-	return 0
+	return toxloss
 
 /mob/living/proc/adjustToxLoss(var/amount)
-	adjustBruteLoss(amount * 0.5)
+	if(status_flags & GODMODE)	return 0	//godmode
+	toxloss = Clamp(toxloss + amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/setToxLoss(var/amount)
-	adjustBruteLoss((amount * 0.5)-getBruteLoss())
+	if(status_flags & GODMODE)	return 0	//godmode
+	toxloss = Clamp(amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/getFireLoss()
-	return
+	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
-	adjustBruteLoss(amount * 0.5)
-
-/mob/living/proc/setFireLoss(var/amount)
-	adjustBruteLoss((amount * 0.5)-getBruteLoss())
-
-/mob/living/proc/getHalLoss()
-	return 0
-
-/mob/living/proc/adjustHalLoss(var/amount)
-	adjustBruteLoss(amount * 0.5)
-
-/mob/living/proc/setHalLoss(var/amount)
-	adjustBruteLoss((amount * 0.5)-getBruteLoss())
+	if(status_flags & GODMODE)	return 0	//godmode
+	fireloss = Clamp(fireloss + amount, 0, (maxHealth - config.health_threshold_dead))
 
 /mob/living/proc/getStaminaLoss()//Stamina shit.
 	return staminaloss
@@ -281,19 +274,28 @@ default behaviour is:
 	return 0
 
 /mob/living/proc/adjustBrainLoss(var/amount)
-	return
+	return 0
 
 /mob/living/proc/setBrainLoss(var/amount)
-	return
+	return 0
 
 /mob/living/proc/getCloneLoss()
-	return 0
+	return
 
 /mob/living/proc/setCloneLoss(var/amount)
 	return
 
 /mob/living/proc/adjustCloneLoss(var/amount)
 	return
+
+/mob/living/proc/getHalLoss()
+	return 0
+
+/mob/living/proc/adjustHalLoss(var/amount)
+	adjustBruteLoss(amount * 0.5)
+
+/mob/living/proc/setHalLoss(var/amount)
+	adjustBruteLoss((amount * 0.5)-getBruteLoss())
 
 /mob/living/proc/getMaxHealth()
 	return maxHealth
@@ -304,7 +306,7 @@ default behaviour is:
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 /mob/proc/get_contents()
-	return
+
 
 //Recursive function to find everything a mob is holding.
 /mob/living/get_contents(var/obj/item/weapon/storage/Storage = null)

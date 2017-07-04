@@ -89,10 +89,8 @@
 			continue
 
 		if(M.see_invisible >= invisibility)
-			if(M.client)
-				if(!(src in M.client.hidden_mobs))
-					M.show_message(message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
-					continue
+			M.show_message(message, VISIBLE_MESSAGE, blind_message, AUDIBLE_MESSAGE)
+			continue
 
 		if(blind_message)
 			M.show_message(blind_message, AUDIBLE_MESSAGE)
@@ -338,7 +336,7 @@
 	set src in usr
 	if(usr != src)
 		to_chat(usr, "No.")
-	var/msg = sanitize(input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null, extra = 0)
+	var/msg = sanitize(input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",rhtml_decode(flavor_text)) as message|null, extra = 0)
 
 	if(msg != null)
 		flavor_text = msg
@@ -351,7 +349,7 @@
 
 /mob/proc/print_flavor_text()
 	if (flavor_text && flavor_text != "")
-		var/msg = replacetext(flavor_text, "\n", " ")
+		var/msg = trim(replacetext(flavor_text, "\n", " "))
 		if(lentext(msg) <= 40)
 			return "<span class='notice'>[msg]</span>"
 		else
@@ -480,28 +478,25 @@
 		src << browse(null, t1)
 
 	if(href_list["flavor_more"])
-		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, replacetext(flavor_text, "\n", "<BR>")), text("window=[];size=500x200", name))
+		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, cp1251_to_utf8(replacetext(flavor_text, "\n", "<BR>"))), text("window=[];size=500x200", name))
 		onclose(usr, "[name]")
 	if(href_list["flavor_change"])
 		update_flavor_text()
 //	..()
 	return
 
-/mob/proc/pull_damage()
-	return 0
 
-/mob/living/carbon/human/pull_damage()
-	if(!lying || getBruteLoss() + getFireLoss() < 100)
+/mob/proc/pull_damage()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(H.health - H.getHalLoss() <= config.health_threshold_softcrit)
+			for(var/name in H.organs_by_name)
+				var/obj/item/organ/external/e = H.organs_by_name[name]
+				if(e && H.lying)
+					if((((e.status & ORGAN_BROKEN) && !e.splinted) || e.status & ORGAN_BLEEDING ) && (H.getBruteLoss() + H.getFireLoss() >= 100))
+						return 1
+						break
 		return 0
-	for(var/thing in organs)
-		var/obj/item/organ/external/e = thing
-		if(!e || e.is_stump())
-			continue
-		if((e.status & ORGAN_BROKEN) && !e.splinted)
-			return 1
-		if(e.status & ORGAN_BLEEDING)
-			return 1
-	return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
@@ -968,10 +963,18 @@ mob/proc/yank_out_object()
 /mob/proc/updateicon()
 	return
 
-/mob/proc/face_direction()
+/mob/verb/face_direction()
+
+	set name = "Face Direction"
+	set category = "IC"
+	set src = usr
+
 	set_face_dir()
 
-
+	if(!facing_dir)
+		to_chat(usr, "You are now not facing anything.")
+	else
+		to_chat(usr, "You are now facing [dir2text(facing_dir)].")
 /mob/proc/set_face_dir(var/newdir)
 	if(!isnull(facing_dir) && newdir == facing_dir)
 		facing_dir = null

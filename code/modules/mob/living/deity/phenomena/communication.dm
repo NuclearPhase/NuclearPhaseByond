@@ -12,7 +12,7 @@
 /datum/phenomena/point
 	name = "Point"
 	cost = 0
-	flags = PHENOMENA_MUNDANE|PHENOMENA_FOLLOWER|PHENOMENA_NONFOLLOWER
+	flags = PHENOMENA_MUNDANE
 	expected_type = /atom
 	var/image/arrow
 

@@ -70,8 +70,6 @@ Buildable meters
 			src.pipe_type = PIPE_UVENT
 		else if(istype(make_from, /obj/machinery/atmospherics/valve/shutoff))
 			src.pipe_type = PIPE_SVALVE
-		else if(istype(make_from, /obj/machinery/atmospherics/valve/digital))
-			src.pipe_type = PIPE_DVALVE
 		else if(istype(make_from, /obj/machinery/atmospherics/valve))
 			src.pipe_type = PIPE_MVALVE
 		else if(istype(make_from, /obj/machinery/atmospherics/binary/pump/high_power))
@@ -188,11 +186,11 @@ Buildable meters
 		"manifold", \
 		"junction", \
 		"uvent", \
-		"manual valve", \
-		"digital valve", \
+		"mvalve", \
 		"pump", \
 		"scrubber", \
-		"unused", \
+		"insulated pipe", \
+		"bent insulated pipe", \
 		"gas filter", \
 		"gas mixer", \
 		"pressure regulator", \
@@ -227,7 +225,7 @@ Buildable meters
 		"supply pipe cap", \
 		"scrubbers pipe cap", \
 		"t-valve m", \
-		"shutoff valve", \
+		"svalve", \
 ///// Fuel pipes
 		"fuel pipe",\
 		"bent fuel pipe",\
@@ -248,10 +246,11 @@ Buildable meters
 		"junction", \
 		"uvent", \
 		"mvalve", \
-		"dvalve", \
+
 		"pump", \
 		"scrubber", \
-		"unused", \
+		"insulated", \
+		"insulated", \
 		"filter", \
 		"mixer", \
 		"passivegate", \
@@ -318,7 +317,7 @@ Buildable meters
 
 	src.set_dir(turn(src.dir, -90))
 
-	if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_UNIVERSAL, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
+	if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_UNIVERSAL, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
 		if(dir==2)
 			set_dir(1)
 		else if(dir==8)
@@ -333,7 +332,7 @@ Buildable meters
 	if ((pipe_type in list (PIPE_SIMPLE_BENT, PIPE_SUPPLY_BENT, PIPE_SCRUBBERS_BENT, PIPE_HE_BENT, PIPE_FUEL_BENT)) \
 		&& (src.dir in cardinal))
 		src.set_dir(src.dir|turn(src.dir, 90))
-	else if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_UNIVERSAL, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
+	else if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_UNIVERSAL, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
 		if(dir==2)
 			set_dir(1)
 		else if(dir==8)
@@ -357,7 +356,6 @@ Buildable meters
 			PIPE_VOLUME_PUMP ,\
 			PIPE_PASSIVE_GATE ,\
 			PIPE_MVALVE, \
-			PIPE_DVALVE, \
 			PIPE_SVALVE, \
 			PIPE_SUPPLY_STRAIGHT, \
 			PIPE_SCRUBBERS_STRAIGHT, \
@@ -429,7 +427,7 @@ Buildable meters
 		return ..()
 	if (!isturf(src.loc))
 		return 1
-	if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_DVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
+	if (pipe_type in list (PIPE_SIMPLE_STRAIGHT, PIPE_SUPPLY_STRAIGHT, PIPE_SCRUBBERS_STRAIGHT, PIPE_HE_STRAIGHT, PIPE_MVALVE, PIPE_SVALVE, PIPE_FUEL_STRAIGHT))
 		if(dir==2)
 			set_dir(1)
 		else if(dir==8)
@@ -825,23 +823,6 @@ Buildable meters
 //				log_error("[V.node2.name] is connected to valve, forcing it to update its nodes.")
 				V.node2.initialize()
 				V.node2.build_network()
-
-		if(PIPE_DVALVE)		//digital valve
-			var/obj/machinery/atmospherics/valve/digital/D = new( src.loc)
-			D.set_dir(dir)
-			D.initialize_directions = pipe_dir
-			if (pipename)
-				D.name = pipename
-			var/turf/T = D.loc
-			D.level = !T.is_plating() ? 2 : 1
-			D.initialize()
-			D.build_network()
-			if (D.node1)
-				D.node1.initialize()
-				D.node1.build_network()
-			if (D.node2)
-				D.node2.initialize()
-				D.node2.build_network()
 
 		if(PIPE_SVALVE)		//shutoff valve
 			var/obj/machinery/atmospherics/valve/shutoff/S = new( src.loc)
@@ -1307,8 +1288,6 @@ Buildable meters
 #undef PIPE_JUNCTION
 #undef PIPE_UVENT
 #undef PIPE_MVALVE
-#undef PIPE_DVALVE
-#undef PIPE_SVALVE
 #undef PIPE_PUMP
 #undef PIPE_SCRUBBER
 #undef PIPE_GAS_FILTER
@@ -1328,4 +1307,5 @@ Buildable meters
 #undef PIPE_SUPPLY_MANIFOLD
 #undef PIPE_SCRUBBERS_MANIFOLD
 #undef PIPE_UNIVERSAL
+#undef PIPE_SVALVE
 //#undef PIPE_MANIFOLD4W
