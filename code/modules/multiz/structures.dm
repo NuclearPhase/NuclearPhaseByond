@@ -36,33 +36,7 @@
 		target_up = null
 	return ..()
 
-/obj/structure/ladder/attackby(obj/item/C as obj, mob/user as mob) 
-	if(istype(C, /obj/item/weapon/grab)) // БРОСАЙ ЛЮДЕЙ, ЛОМАЙ ИХ КОСТИ, КРУШИ, УНИИЧТОЖААААЙ!!! - Canvas123
-		var/obj/item/weapon/grab/F = C
-		var/mob/living/carbon/human/S = F.affecting
-		if (allowed_directions == DOWN)
-			if (F.state == GRAB_PASSIVE)
-				user.visible_message("<span class='notice'>\The [user] begins to get [S] down carefully.</span>",
-				"You begin to get [S] down carefully.",
-				"You hear the grunting and clanging of a metal ladder being used.")
-				var/obj/structure/ladder/target_ladder = getTargetLadder(S)
-				if(do_after(user, climb_time, src, same_direction = 1))
-					climbLadder(S, target_ladder)
-			else
-				user.visible_message("<span class='notice'>\The [user] begins to push [S] down the ladder.</span>",
-				"You begin to push [S] down.",
-				"You hear something falls the ladder.")
-				S.forceMove(get_turf(src))
-				var/turf/below = GetBelow(src)
-				if(do_after(user, climb_time, src, same_direction = 1))
-					S.handle_fall(below)
-			F.synch()
-			return
-		else
-			to_chat(user, "<span class='notice'>You cant get [S] up the ladder.</span>")
-			F.synch()
-			return
-
+/obj/structure/ladder/attackby(obj/item/C as obj, mob/user as mob)
 	attack_hand(user)
 	return
 

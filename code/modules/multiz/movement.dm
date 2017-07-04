@@ -166,9 +166,12 @@
 		return
 	playsound(src.loc, 'sound/effects/gore/fallsmash.ogg', 75, 1)//Splat
 	var/damage = 10
-	var/attack_zones = list(BP_HEAD, BP_CHEST, BP_L_LEG, BP_R_LEG, BP_L_ARM, BP_R_ARM)
-	for(var/zone in attack_zones)
-		apply_damage(rand(0, damage), BRUTE, zone)
+	apply_damage(rand(0, damage), BRUTE, BP_HEAD)
+	apply_damage(rand(0, damage), BRUTE, BP_CHEST)
+	apply_damage(rand(0, damage), BRUTE, BP_L_LEG)
+	apply_damage(rand(0, damage), BRUTE, BP_R_LEG)
+	apply_damage(rand(0, damage), BRUTE, BP_L_ARM)
+	apply_damage(rand(0, damage), BRUTE, BP_R_ARM)
 	Stun(rand(1,5))
 	Weaken(rand(1,5))
 	updatehealth()
