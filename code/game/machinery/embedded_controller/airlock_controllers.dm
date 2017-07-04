@@ -13,7 +13,7 @@
 	var/tag_secure = 0
 	var/list/dummy_terminals = list()
 
-/obj/machinery/embedded_controller/radio/airlock/New()
+/obj/machinery/embedded_controller/radio/airlock/initialize()
 	..()
 	program = new/datum/computer/file/embedded_program/airlock(src)
 

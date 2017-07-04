@@ -142,7 +142,7 @@ var/list/point_source_descriptions = list(
 	var/list/master_supply_list = list()
 	//shuttle movement
 	var/movetime = 1200
-	var/datum/shuttle/autodock/ferry/supply/shuttle
+	var/datum/shuttle/ferry/supply/shuttle
 
 	var/obj/machinery/computer/supply/primaryterminal //terminal hardcopy forms will be printed to.
 
@@ -180,15 +180,19 @@ var/list/point_source_descriptions = list(
 
 	//Sellin
 	proc/sell()
+		var/area/area_shuttle = shuttle.get_location_area()
+		if(!area_shuttle)	return
+
 		var/phoron_count = 0
 		var/plat_count = 0
-		for(var/atom/movable/MA in shuttle.shuttle_area)
+
+		for(var/atom/movable/MA in area_shuttle)
 			if(MA.anchored)	continue
 
 			// Must be in a crate!
 			if(istype(MA,/obj/structure/closet/crate))
 				var/obj/structure/closet/crate/CR = MA
-				callHook("sell_crate", list(CR, shuttle.shuttle_area))
+				callHook("sell_crate", list(CR, area_shuttle))
 
 				add_points_from_source(CR.points_per_crate, "crate")
 				var/find_slip = 1
@@ -222,9 +226,11 @@ var/list/point_source_descriptions = list(
 	//Buyin
 	proc/buy()
 		if(!shoppinglist.len) return
+		var/area/area_shuttle = shuttle.get_location_area()
+		if(!area_shuttle)	return
 		var/list/clear_turfs = list()
 
-		for(var/turf/T in shuttle.shuttle_area)
+		for(var/turf/T in area_shuttle)
 			if(T.density)	continue
 			var/contcount
 			for(var/atom/A in T.contents)

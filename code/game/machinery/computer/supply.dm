@@ -79,7 +79,7 @@
 
 /obj/machinery/computer/supply/ui_data(mob/user)
 	var/list/data = list()
-	var/datum/shuttle/autodock/ferry/supply/shuttle = supply_controller.shuttle
+	var/datum/shuttle/ferry/supply/shuttle = supply_controller.shuttle
 	var/shuttlestatus = ""
 	var/canlaunch = 0
 
@@ -87,10 +87,8 @@
 		shuttlestatus = "In transit ([shuttle.eta_minutes()] Mins.)"
 	else
 		if (shuttle.at_station())
-			if (!shuttle.active_docking_controller)
-				shuttlestatus = "Undocked"
-			else
-				switch(shuttle.active_docking_controller.get_docking_status())
+			if (shuttle.docking_controller)
+				switch(shuttle.docking_controller.get_docking_status())
 					if ("docked")
 						shuttlestatus = "Docked"
 					if ("undocked") shuttlestatus = "Undocked"
@@ -145,7 +143,7 @@
 	if(..())
 		return
 
-	var/datum/shuttle/autodock/ferry/supply/shuttle = supply_controller.shuttle
+	var/datum/shuttle/ferry/supply/shuttle = supply_controller.shuttle
 
 
 	switch(action)

@@ -12,7 +12,6 @@
 	..()
 	tag = "landmark*[name]"
 
-	//TODO clean up this mess
 	switch(name)			//some of these are probably obsolete
 		if("monkey")
 			monkeystart += loc

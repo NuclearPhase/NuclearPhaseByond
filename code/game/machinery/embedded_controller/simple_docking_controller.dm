@@ -3,11 +3,10 @@
 	name = "docking hatch controller"
 	var/tag_door
 	var/datum/computer/file/embedded_program/docking/simple/docking_program
-	var/progtype = /datum/computer/file/embedded_program/docking/simple/
 
-/obj/machinery/embedded_controller/radio/simple_docking_controller/New()
+/obj/machinery/embedded_controller/radio/simple_docking_controller/initialize()
 	..()
-	docking_program = new progtype(src)
+	docking_program = new/datum/computer/file/embedded_program/docking/simple(src)
 	program = docking_program
 
 /obj/machinery/embedded_controller/radio/simple_docking_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/nano_ui/master_ui = null, var/datum/topic_state/state = default_state)
