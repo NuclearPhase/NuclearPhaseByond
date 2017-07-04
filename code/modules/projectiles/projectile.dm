@@ -182,7 +182,7 @@
 
 	if(result == PROJECTILE_FORCE_MISS)
 		if(!silenced)
-			var/missound = "sound/weapons/guns/misc/miss[rand(1,4)].ogg"
+			var/missound = pick('sound/weapons/guns/misc/miss1.ogg','sound/weapons/guns/misc/miss2.ogg','sound/weapons/guns/misc/miss3.ogg','sound/weapons/guns/misc/miss4.ogg')
 			target_mob.visible_message("<span class='notice'>\The [src] misses [target_mob] narrowly!</span>")
 			playsound(target_mob.loc, missound, 60, 1)
 		return 0

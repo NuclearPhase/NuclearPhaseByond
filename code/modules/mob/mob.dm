@@ -794,6 +794,10 @@
 		update_canmove()	//updates lying, canmove and icons
 	return
 
+/mob/get_fall_damage()
+	return 15
+
+
 /mob/proc/AdjustWeakened(amount)
 	if(status_flags & CANWEAKEN)
 		weakened = max(weakened + amount,0)

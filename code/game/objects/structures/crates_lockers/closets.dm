@@ -23,6 +23,9 @@
 
 	var/list/will_contain
 
+/obj/structure/closet/can_prevent_fall()
+	return TRUE
+
 /obj/structure/closet/initialize()
 	..()
 	if(will_contain)

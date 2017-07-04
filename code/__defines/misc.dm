@@ -87,6 +87,8 @@
 #define CUSTOM_ITEM_SYNTH 'icons/mob/custom_synthetic.dmi'
 #endif
 
+#define FALL_GIB_DAMAGE 999
+
 #define WALL_CAN_OPEN 1
 #define WALL_OPENING 2
 
@@ -215,3 +217,5 @@
 #define STARVATION_BRAIN_DAMAGE 2.5
 
 #define STARVATION_OXY_HEAL_RATE 1 //While starving, THIS much oxygen damage is restored per life tick (instead of the default 5)
+
+#define LIST_OF_CONSONANT list("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z","á","â","ã","ä","æ","ç","é","ê","ë","ì","í","ï","ð","ñ","ò","ô","õ","ö","÷","ø","ù")

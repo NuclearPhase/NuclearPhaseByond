@@ -84,6 +84,9 @@
 	else
 		return null
 
+/obj/get_fall_damage()
+	return w_class * 2
+
 /obj/return_air()
 	if(loc)
 		return loc.return_air()

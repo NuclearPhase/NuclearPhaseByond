@@ -1560,7 +1560,7 @@
 /mob/living/carbon/human/throw_impact(atom/hit_atom)
 	if(iswall(hit_atom))
 		var/damage = rand(0, 10)
-		var/smashsound = pick("sound/effects/gore/smash[rand(1,3)].ogg", "sound/effects/gore/trauma1.ogg")
+		var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
 		playsound(loc, smashsound, 50, 1, -1)
 
 		var/blocked = run_armor_check(BP_HEAD,"melee")

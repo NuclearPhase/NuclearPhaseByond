@@ -51,7 +51,7 @@ var/image/exterior_light_overlay
 		O.hide(0)
 
 /turf/space/is_solid_structure()
-	return locate(/obj/structure/lattice, src) //counts as solid structure if it has a lattice
+	return locate(/obj/structure/lattice, src) || locate(/obj/structure/catwalk, src) //counts as solid structure if it has a lattice
 
 /turf/space/proc/update_starlight()
 	if(!config.starlight)
@@ -65,14 +65,31 @@ var/image/exterior_light_overlay
 
 	if (istype(C, /obj/item/stack/rods))
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-		if(L)
-			return
 		var/obj/item/stack/rods/R = C
+		var/obj/structure/catwalk/W = locate(/obj/structure/catwalk, src)
+
+		if(W)
+			to_chat(user, "<span class='warning'>There is already a catwalk here!</span>")
+			return
+
+		if(L)
+			if(R.use(1))
+				to_chat(user, "<span class='notice'>You construct a catwalk.</span>")
+				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+				new/obj/structure/catwalk(src)
+			else
+				to_chat(user, "<span class='warning'>You need two rods to build a catwalk!</span>")
+			return
+
 		if (R.use(1))
 			to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 			ReplaceWithLattice()
+		else
+			to_chat(user, "<span class='warning'>You need one rod to build a lattice.</span>")
+
 		return
+
 
 	if (istype(C, /obj/item/stack/tile/floor))
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)

@@ -23,12 +23,12 @@
 	if(!istype(start))
 		to_chat(src, "<span class='notice'>You are unable to move from here.</span>")
 		return 0
-		
+
 	var/turf/destination = (direction == UP) ? GetAbove(src) : GetBelow(src)
 	if(!destination)
 		to_chat(src, "<span class='notice'>There is nothing of interest in this direction.</span>")
 		return 0
-	
+
 	if(!start.CanZPass(src, direction))
 		to_chat(src, "<span class='warning'>\The [start] is in the way.</span>")
 		return 0
@@ -122,7 +122,7 @@
 	if(anchored)
 		return FALSE
 
-	if(locate(/obj/structure/lattice, loc))
+	if(locate(/obj/structure/lattice, loc) || locate(/obj/structure/catwalk, loc))
 		return FALSE
 
 	// See if something prevents us from falling.
@@ -166,12 +166,9 @@
 		return
 	playsound(src.loc, 'sound/effects/gore/fallsmash.ogg', 75, 1)//Splat
 	var/damage = 10
-	apply_damage(rand(0, damage), BRUTE, BP_HEAD)
-	apply_damage(rand(0, damage), BRUTE, BP_CHEST)
-	apply_damage(rand(0, damage), BRUTE, BP_L_LEG)
-	apply_damage(rand(0, damage), BRUTE, BP_R_LEG)
-	apply_damage(rand(0, damage), BRUTE, BP_L_ARM)
-	apply_damage(rand(0, damage), BRUTE, BP_R_ARM)
+	var/attack_zones = list(BP_HEAD, BP_CHEST, BP_L_LEG, BP_R_LEG, BP_L_ARM, BP_R_ARM)
+	for(var/zone in attack_zones)
+		apply_damage(rand(0, damage), BRUTE, zone)
 	Stun(rand(1,5))
 	Weaken(rand(1,5))
 	updatehealth()

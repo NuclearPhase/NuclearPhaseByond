@@ -51,8 +51,6 @@
 
 #define isorgan(A) istype(A, /obj/item/organ/external)
 
-#define isspace(A) istype(A, /turf/space)
-
 #define isspace(A) istype(A, /area/space)
 
 #define ispAI(A) istype(A, /mob/living/silicon/pai)

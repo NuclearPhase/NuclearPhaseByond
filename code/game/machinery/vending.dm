@@ -67,7 +67,7 @@
 	var/scan_id = 1
 	var/obj/item/weapon/coin/coin
 	var/datum/wires/vending/wires = null
-	var/vending_sound = "machines/vending_drop.ogg"
+	var/vending_sound = 'sound/machines/vending_drop.ogg'
 
 /obj/machinery/vending/New()
 	..()
@@ -186,7 +186,7 @@
 		src.panel_open = !src.panel_open
 		var/interact_sound = "[src.panel_open ? "open" : "close"]"
 		to_chat(user, "You [interact_sound] the maintenance panel.")
-		playsound(src.loc, "sound/machines/Custom_screwdriver[interact_sound].ogg", 50, 1)
+		playsound(src.loc, src.panel_open ? 'sound/machines/Custom_screwdriveropen.ogg' : 'sound/machines/Custom_screwdriverclose.ogg', 50, 1)
 		src.overlays.Cut()
 		if(src.panel_open)
 			src.overlays += image(src.icon, "[initial(icon_state)]-panel")
@@ -478,11 +478,11 @@
 		flick(src.icon_vend,src)
 	spawn(src.vend_delay)
 		R.get_product(get_turf(src))
-		playsound(src.loc, "sound/[vending_sound]", 100, 1)
+		playsound(src.loc, vending_sound, 100, 1)
 		if(prob(1))
 			sleep(3)
 			if(R.get_product(get_turf(src)))
-				playsound(src.loc, "sound/[vending_sound]", 100, 1)
+				playsound(src.loc, vending_sound, 100, 1)
 				src.visible_message("<span class='notice'>\The [src] clunks as it vends an additional item.</span>")
 
 		src.status_message = ""
@@ -644,7 +644,7 @@
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
 	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
-	vending_sound = "machines/vendingcans.ogg"
+	vending_sound = 'sound/machines/vendingcans.ogg'
 	req_access = list(access_bar)
 
 /obj/machinery/vending/assist
@@ -673,7 +673,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/ice = 10)
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 3, /obj/item/weapon/reagent_containers/food/drinks/tea = 3, /obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 3)
-	vending_sound = "machines/vendingcoffee.ogg"
+	vending_sound = 'sound/machines/vendingcoffee.ogg'
 
 
 
@@ -710,7 +710,7 @@
 					/obj/item/weapon/reagent_containers/food/drinks/cans/waterbottle = 2,/obj/item/weapon/reagent_containers/food/drinks/cans/space_up = 1,
 					/obj/item/weapon/reagent_containers/food/drinks/cans/iced_tea = 1,/obj/item/weapon/reagent_containers/food/drinks/cans/grape_juice = 1)
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
-	vending_sound = "machines/vendingcans.ogg"
+	vending_sound = 'sound/machines/vendingcans.ogg'
 
 /obj/machinery/vending/fitness
 	name = "SweatMAX"
@@ -968,7 +968,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/space_up = 30) // TODO Russian soda can
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/cola = 20) // TODO Russian cola can
 	idle_power_usage = 211 //refrigerator - believe it or not, this is actually the average power consumption of a refrigerated vending machine according to NRCan.
-	vending_sound = "machines/vendingcans.ogg"
+	vending_sound = 'sound/machines/vendingcans.ogg'
 
 /obj/machinery/vending/tool
 	name = "YouTool"

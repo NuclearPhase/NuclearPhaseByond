@@ -439,3 +439,6 @@
 				src.anchored = 1
 	else
 		..()
+
+/obj/structure/device/piano/get_fall_damage()
+	return FALL_GIB_DAMAGE
