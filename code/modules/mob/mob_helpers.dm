@@ -207,7 +207,6 @@ var/list/global/organ_rel_size = list(
 	return t
 
 proc/slur(phrase)
-	phrase = html_decode(phrase)
 	var/leng=lentext(phrase)
 	var/counter=lentext(phrase)
 	var/newphrase=""
@@ -248,10 +247,9 @@ proc/slur(phrase)
 						n_letter = null
 					else
 						n_letter = text("[n_letter]-[n_letter]")
-
-		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
+		t += n_letter //since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
-	return sanitize(t)
+	return sanitize(t.Join(null))
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
@@ -287,7 +285,7 @@ The difference with stutter is that this proc can stutter more than 1 letter
 The issue here is that anything that does not have a space is treated as one word (in many instances). For instance, "LOOKING," is a word, including the comma.
 It's fairly easy to fix if dealing with single letters but not so much with compounds of letters./N
 */
-	var/te = html_decode(n)
+	var/te = rhtml_decode(n)
 	var/t = ""
 	n = length(n)
 	var/p = 1

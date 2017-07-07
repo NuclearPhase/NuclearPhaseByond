@@ -673,11 +673,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 //MESSENGER/NOTE FUNCTIONS===================================
 
 		if ("Edit")
-			var/n = input(U, "Please enter message", name, notehtml) as message
+			var/n = input_utf8(U, "Please enter message", name, notehtml, type = "message")
 			if (in_range(src, U) && loc == U)
 				n = sanitizeSafe(n, extra = 0)
 				if (mode == 1)
-					note = html_decode(n)
+					note = n
 					notehtml = note
 					note = replacetext(note, "\n", "<br>")
 			else
@@ -985,7 +985,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	last_text = world.time
 	var/datum/reception/reception = get_reception(src, P, t)
-	t = reception.message
+	t = cp1251_to_utf8(reception.message)
 	if(!get_message_server(z))
 		to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
 		return
@@ -1059,7 +1059,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	new_message(sending_device, sending_device.owner, sending_device.ownjob, message)
 
 /obj/item/device/pda/proc/new_message(var/sending_unit, var/sender, var/sender_job, var/message)
-	var/reception_message = "\icon[src] <b>Message from [sender] ([sender_job]), </b>\"[message]\" (<a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[sending_unit]'>Reply</a>)"
+	var/reception_message = "\icon[src] <b>Message from [sender] ([sender_job]), </b>\"[utf8_to_cp1251(message)]\" (<a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[sending_unit]'>Reply</a>)"
 	new_info(message_silent, ttone, reception_message)
 
 	log_pda("[usr] (PDA: [sending_unit]) sent \"[message]\" to [name]")
@@ -1238,7 +1238,29 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				for (var/mob/O in viewers(C, null))
 					O.show_message("<span class='warning'>\The [user] has analyzed [C]'s vitals!</span>", 1)
-				user.show_message(medical_scan_results(C, 1))
+
+				user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
+				user.show_message("<span class='notice'>    Overall Status: [C.stat > 1 ? "dead" : "[C.health - C.getHalLoss()]% healthy"]</span>", 1)
+				user.show_message(text("<span class='notice'>    Damage Specifics:</span> <span class='[]'>[]</span>-<span class='[]'>[]</span>-<span class='[]'>[]</span>-<span class='[]'>[]</span>",
+						(C.getOxyLoss() > 50) ? "warning" : "", C.getOxyLoss(),
+						(C.getToxLoss() > 50) ? "warning" : "", C.getToxLoss(),
+						(C.getFireLoss() > 50) ? "warning" : "", C.getFireLoss(),
+						(C.getBruteLoss() > 50) ? "warning" : "", C.getBruteLoss()
+						), 1)
+				user.show_message("<span class='notice'>    Key: Suffocation/Toxin/Burns/Brute</span>", 1)
+				user.show_message("<span class='notice'>    Body Temperature: [C.bodytemperature-T0C]&deg;C ([C.bodytemperature*1.8-459.67]&deg;F)</span>", 1)
+				if(C.stat == DEAD || (C.status_flags & FAKEDEATH))
+					user.show_message("<span class='notice'>    Time of Death: [time2text(worldtime2stationtime(C.timeofdeath))]</span>")
+				if(istype(C, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = C
+					var/list/damaged = H.get_damaged_organs(1,1)
+					user.show_message("<span class='notice'>Localized Damage, Brute/Burn:</span>",1)
+					if(length(damaged)>0)
+						for(var/obj/item/organ/external/org in damaged)
+							user.show_message(text("<span class='notice'>     []: <span class='[]'>[]</span>-<span class='[]'>[]</span></span>",
+									capitalize(org.name), (org.brute_dam > 0) ? "warning" : "notice", org.brute_dam, (org.burn_dam > 0) ? "warning" : "notice", org.burn_dam),1)
+					else
+						user.show_message("<span class='notice'>    Limbs are OK.</span>",1)
 
 			if(2)
 				if (!istype(C:dna, /datum/dna))

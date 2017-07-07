@@ -69,8 +69,7 @@
 		/area/vacant/infirmary = NO_SCRUBBER|NO_VENT,
 		/area/vacant/missile = NO_SCRUBBER|NO_VENT,
 		/area/vacant/monitoring = NO_SCRUBBER|NO_VENT,
-		/area/vacant/office = 0,
-		/area/rnd/blanks = NO_SCRUBBER|NO_VENT
+		/area/vacant/office = 0
 	)
 
 	area_coherency_test_exempt_areas = list(
