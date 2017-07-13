@@ -46,3 +46,7 @@
 		return
 
 	return ..()
+
+/obj/structure/sign/double/barsign/cafe
+	icon_state = "cafe_1"
+
