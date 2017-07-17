@@ -9,6 +9,8 @@
 	icobase = 'icons/mob/human_races/subspecies/r_gravworlder.dmi'
 	health_hud_intensity = 3
 
+	spawn_flags =      SPECIES_IS_RESTRICTED
+
 	flash_mod =     0.9
 	oxy_mod =       1.1
 	radiation_mod = 0.5
@@ -23,6 +25,8 @@
 	toxins, but they suffer from weakened bone structure and a marked vulnerability to bright lights."
 	icobase = 'icons/mob/human_races/subspecies/r_spacer.dmi'
 
+	spawn_flags =      SPECIES_IS_RESTRICTED
+
 	oxy_mod =   0.8
 	toxins_mod =   0.9
 	flash_mod = 1.2
@@ -36,6 +40,8 @@
 	of bodies is a very real and rather ethically grey industry. Vat-grown humans tend to be paler than \
 	baseline, with no appendix and fewer inherited genetic disabilities, but a weakened metabolism."
 	icobase = 'icons/mob/human_races/subspecies/r_vatgrown.dmi'
+
+	spawn_flags =      SPECIES_IS_RESTRICTED
 
 	toxins_mod =   1.1
 	has_organ = list(
