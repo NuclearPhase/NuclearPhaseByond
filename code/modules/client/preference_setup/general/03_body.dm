@@ -437,10 +437,10 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 			if("Right Hand")
 				limb = BP_R_HAND
 				third_limb = BP_R_ARM
-			if("Head")
+			/*if("Head")
 				limb =        BP_HEAD
 				choice_options = list("Prosthesis")
-			/*if("Full Body")
+			if("Full Body")
 				limb =        BP_CHEST
 				third_limb =  BP_GROIN
 				choice_options = list("Normal","Prosthesis")*/
