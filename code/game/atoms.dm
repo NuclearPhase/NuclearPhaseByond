@@ -279,7 +279,7 @@ its easier to just keep the beam vertical.
 /atom/proc/clean_blood()
 	if(!simulated)
 		return
-	fluorescent = 0
+	fluorescent = 0F
 	src.germ_level = 0
 	if(istype(blood_DNA, /list))
 		blood_DNA = null
@@ -386,6 +386,13 @@ its easier to just keep the beam vertical.
 /atom/proc/kick_act(mob/living/carbon/human/user)
 	if(!Adjacent(user))//They're not adjcent to us so we can't kick them.
 		return
+		
+	if(user.handcuffed && rand(1, 100) <= 35)//User can fail to kick smbd if cuffed
+		user.visible_message("<span class='danger'>[user.name] loses \his balance while trying to kick \the [src].</span>", \
+					"<span class='warning'> You lost your balance.</span>")
+		user.Weaken(5)
+		return
+		
 	if(user.middle_click_intent == "kick")//We're in kick mode, we can kick.
 		for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
 			var/obj/item/organ/affecting = user.get_organ(limbcheck)
@@ -397,7 +404,7 @@ its easier to just keep the beam vertical.
 
 //Jumping
 /atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	if(user.lying && isinspace(user.loc))//No jumping on the ground dummy && No jumping in space
+	if(user.lying || user.isinspace())//No jumping on the ground dummy && No jumping in space
 		return
 
 	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
