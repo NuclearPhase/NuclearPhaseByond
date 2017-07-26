@@ -384,10 +384,14 @@ its easier to just keep the beam vertical.
 
 //Kicking
 /atom/proc/kick_act(mob/living/carbon/human/user)
-	if(!Adjacent(user))//They're not adjcent to us so we can't kick them.
+	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED| \
+												INCAPACITATION_KNOCKOUT| \
+												INCAPACITATION_BUCKLED_PARTIALLY| \
+												INCAPACITATION_BUCKLED_FULLY) \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket))//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or incapacitated except lying
 		return
 
-	if(user.handcuffed && rand(1, 100) <= 35)//User can fail to kick smbd if cuffed
+	if(user.handcuffed && prob(45) && !user.incapacitated(INCAPACITATION_FORCELYING))//User can fail to kick smbd if cuffed
 		user.visible_message("<span class='danger'>[user.name] loses \his balance while trying to kick \the [src].</span>", \
 					"<span class='warning'> You lost your balance.</span>")
 		user.Weaken(5)
@@ -404,7 +408,8 @@ its easier to just keep the beam vertical.
 
 //Jumping
 /atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	if(user.lying || user.isinspace())//No jumping on the ground dummy && No jumping in space
+	if(user.incapacitated(INCAPACITATION_STUNNED | INCAPACITATION_KNOCKOUT | INCAPACITATION_BUCKLED_PARTIALLY | INCAPACITATION_BUCKLED_FULLY | INCAPACITATION_FORCELYING) \
+	|| user.isinspace() || istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket))//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or incapacitated except handcuffs
 		return
 
 	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
