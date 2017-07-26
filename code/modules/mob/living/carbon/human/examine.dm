@@ -1,6 +1,6 @@
 /mob/living/carbon/human/examine(mob/user)
 	user.visible_message("<small>[user] looks at [src].</small>")
-	if(get_dist(user,src) > 5)//Don't get descriptions of things far away.
+	if(get_dist(user,src) > 5 && !isobserver(user))//Don't get descriptions of things far away.
 		to_chat(user, "<span class='info'>It's too far away to see clearly.</span>")
 		return
 	var/skipgloves = 0

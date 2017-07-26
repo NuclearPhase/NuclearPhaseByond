@@ -61,7 +61,7 @@ mob/living/carbon/human/update_vision_cone()
 			spawn(delay)
 				qdel(I)
 			delay += 10
-		rest_cone_act()
+		check_fov()
 		src.client.hidden_atoms = list()
 		src.client.hidden_mobs = list()
 		src.fov.dir = src.dir
@@ -87,8 +87,8 @@ mob/living/carbon/human/update_vision_cone()
 	else
 		return
 
-mob/living/carbon/human/proc/rest_cone_act()//For showing and hiding the cone when you rest or lie down.
-	if(resting || lying)
+mob/living/carbon/human/proc/check_fov()//For showing and hiding the cone when you rest or lie down.
+	if(!usefov || resting || lying)
 		hide_cone()
 	else
 		show_cone()
@@ -97,7 +97,9 @@ mob/living/carbon/human/proc/rest_cone_act()//For showing and hiding the cone wh
 mob/living/carbon/human/proc/show_cone()
 	if(src.fov)
 		src.fov.alpha = 255
+		usefov = 1
 
 mob/living/carbon/human/proc/hide_cone()
 	if(src.fov)
 		src.fov.alpha = 0
+		usefov = 0

@@ -114,3 +114,4 @@
 	var/footstep = 0
 
 	var/obj/screen/fov = null//The screen object because I can't figure out how the hell TG does their screen objects so I'm just using legacy code.
+	var/usefov = 1
