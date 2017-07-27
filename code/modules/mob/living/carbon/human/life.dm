@@ -1222,7 +1222,7 @@
 	if(!isnull(A))
 		hide_cone()
 	else
-		show_cone()
+		check_fov()
 /mob/living/carbon/human/handle_vision()
 	if(client)
 		client.screen.Remove(global_hud.nvg, global_hud.thermal, global_hud.meson, global_hud.science)
