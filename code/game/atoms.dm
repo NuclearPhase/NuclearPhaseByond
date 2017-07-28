@@ -381,14 +381,10 @@ its easier to just keep the beam vertical.
 /atom/proc/InsertedContents()
 	return contents
 
-
 //Kicking
 /atom/proc/kick_act(mob/living/carbon/human/user)
-	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED| \
-												INCAPACITATION_KNOCKOUT| \
-												INCAPACITATION_BUCKLED_PARTIALLY| \
-												INCAPACITATION_BUCKLED_FULLY) \
-		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket))//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or incapacitated except lying
+	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY) \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed())//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or while being incapacitated (except lying)
 		return
 
 	if(user.handcuffed && prob(45) && !user.incapacitated(INCAPACITATION_FORCELYING))//User can fail to kick smbd if cuffed
@@ -408,13 +404,8 @@ its easier to just keep the beam vertical.
 
 //Jumping
 /atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	if(user.incapacitated(INCAPACITATION_STUNNED| \
-							INCAPACITATION_KNOCKOUT| \
-							INCAPACITATION_BUCKLED_PARTIALLY| \
-							INCAPACITATION_BUCKLED_FULLY| \
-							INCAPACITATION_FORCELYING) \
-		|| user.isinspace() \ 
-		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket))//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or incapacitated except handcuffs
+	if(user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY|INCAPACITATION_FORCELYING) || user.isinspace() \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed())//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or while being incapacitated (except handcuffs)
 		return
 
 	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
