@@ -434,8 +434,8 @@ var/list/mining_floors = list()
 	base_icon_state = "asteroid"
 
 	initial_flooring = null
-	oxygen = 0
-	nitrogen = 0
+	oxygen = 21.8366
+	nitrogen = 82.1472
 	temperature = TCMB
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/overlay_detail
@@ -571,3 +571,7 @@ var/list/mining_floors = list()
 				attackby(R.module_state_3,R)
 			else
 				return
+
+/turf/simulated/floor/asteroid/airless
+	oxygen = 0
+	nitrogen = 0

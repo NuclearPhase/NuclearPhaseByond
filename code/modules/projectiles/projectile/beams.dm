@@ -71,10 +71,10 @@
 	impact_type = /obj/effect/projectile/laser_pulse/impact
 
 /obj/item/projectile/beam/pulse/mid
-	damage = 20
+	damage = 60
 
 /obj/item/projectile/beam/pulse/heavy
-	damage = 25
+	damage = 80
 
 /obj/item/projectile/beam/pulse/destroy
 	name = "destroyer pulse"

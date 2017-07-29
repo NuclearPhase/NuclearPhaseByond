@@ -47,6 +47,10 @@
 
 	return ..()
 
-/obj/structure/sign/double/barsign/cafe
+/obj/structure/sign/double/Cafe
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "cafe_1"
 
+/obj/structure/sign/double/Gym
+	icon = 'icons/obj/gym.dmi'
+	icon_state = "gym_0"
