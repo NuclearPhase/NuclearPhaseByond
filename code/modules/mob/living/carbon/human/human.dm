@@ -1564,7 +1564,7 @@
 			play_xylophone()
 
 /mob/living/carbon/human/throw_impact(atom/hit_atom)
-	var/damage = rand(0, 25)
+	var/damage = rand(1, 25)
 	var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
 	playsound(loc, smashsound, 50, 1, -1)
 
