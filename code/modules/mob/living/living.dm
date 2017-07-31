@@ -386,8 +386,8 @@ default behaviour is:
 
 /mob/living/proc/take_impact_damage(atom/movable/AM as mob|obj)
 	var/damage = rand(1, 25)
-	//var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
-	//playsound(loc, smashsound, 50, 1, -1)
+	var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
+	playsound(loc, smashsound, 50, 1, -1)
 	switch(rand(0, 10))
 		if(0) src.apply_damage(damage, BRUTE, BP_HEAD, run_armor_check(BP_HEAD,"melee"))
 		if(1) src.apply_damage(damage, BRUTE, BP_CHEST, run_armor_check(BP_CHEST,"melee"))
