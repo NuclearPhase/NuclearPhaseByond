@@ -347,7 +347,7 @@ meteor_act
 	if(istype(AM, /mob/living))
 		var/chance = prob(50)
 		if(chance) src.Weaken(5)
-			take_impact_damage(AM)
+		take_impact_damage(AM)
 	if(istype(AM,/obj/))
 		var/obj/O = AM
 
