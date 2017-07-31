@@ -177,6 +177,13 @@
 		return 1
 	return 0
 
+/mob/living/carbon/human/proc/legcuffed()
+	if (istype(src.shoes, /obj/item/clothing/shoes/orange))
+		var/obj/item/clothing/shoes/orange/S = src.shoes
+		return S.chained == null ? 0 : 1
+	else
+		return 0
+
 /mob/living/carbon/human/var/co2overloadtime = null
 /mob/living/carbon/human/var/temperature_resistance = T0C+75
 
@@ -1397,7 +1404,6 @@
 	if(update_hud)
 		handle_regular_hud_updates()
 
-
 /mob/living/carbon/human/can_stand_overridden()
 	if(wearing_rig && wearing_rig.ai_can_move_suit(check_for_ai = 1))
 		// Actually missing a leg will screw you up. Everything else can be compensated for.
@@ -1558,24 +1564,25 @@
 			play_xylophone()
 
 /mob/living/carbon/human/throw_impact(atom/hit_atom)
-	if(iswall(hit_atom))
-		var/damage = rand(0, 10)
-		var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
-		playsound(loc, smashsound, 50, 1, -1)
+	var/damage = rand(1, 25)
+	var/smashsound = pick('sound/effects/gore/smash1.ogg', 'sound/effects/gore/smash2.ogg', 'sound/effects/gore/smash3.ogg', 'sound/effects/gore/trauma1.ogg')
+	playsound(loc, smashsound, 50, 1, -1)
 
-		var/blocked = run_armor_check(BP_HEAD,"melee")
-		apply_damage(damage, BRUTE, BP_HEAD, blocked)
+	var/blocked = run_armor_check(BP_HEAD,"melee")
+	blocked += run_armor_check(BP_CHEST,"melee")
+	blocked += run_armor_check(BP_GROIN,"melee")
+	blocked += run_armor_check(BP_L_HAND,"melee")
+	blocked += run_armor_check(BP_R_HAND,"melee")
+	blocked += run_armor_check(BP_L_ARM,"melee")
+	blocked += run_armor_check(BP_R_ARM,"melee")
+	blocked += run_armor_check(BP_L_FOOT,"melee")
+	blocked += run_armor_check(BP_R_FOOT,"melee")
+	blocked += run_armor_check(BP_L_LEG,"melee")
+	blocked += run_armor_check(BP_R_LEG,"melee")
+	
+	src.take_organ_damage(damage * (1 - blocked/1100))
 
-		blocked = run_armor_check(BP_CHEST,"melee")
-		apply_damage(damage, BRUTE, BP_CHEST, blocked)
-
-		blocked = run_armor_check(BP_GROIN,"melee")
-		apply_damage(damage, BRUTE, BP_GROIN, blocked)
-
-		updatehealth()
-		if(damage)
-			hit_atom.add_blood(src)
-		..()
-
-	else
-		..()
+	updatehealth()
+	if(damage)
+		hit_atom.add_blood(src)
+	..()
