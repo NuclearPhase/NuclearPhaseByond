@@ -657,7 +657,13 @@ default behaviour is:
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
-
+	
+	if(src.staminaloss >= 120) 
+		to_chat(src, "<span class='warning'>You're too weak to resist!</span>")
+		return
+	else
+		src.adjustStaminaLoss(rand(20,60))
+		
 	if(!incapacitated(INCAPACITATION_KNOCKOUT) && canClick())
 		setClickCooldown(20)
 		resist_grab()
