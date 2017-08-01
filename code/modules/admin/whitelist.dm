@@ -37,9 +37,9 @@
 
 /client/proc/cmd_admin_add_all()
 	set category = "Whitelist"
-	set name = "Add all players elder than 60 days"
+	set name = "Add all last seen players (60 days)"
 
-	var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey, lastseen FROM erro_player WHERE datediff(Now(), lastseen) > 60")
+	var/DBQuery/query_inactive = dbcon.NewQuery("SELECT ckey, lastseen FROM erro_player WHERE datediff(Now(), lastseen) < 60")
 	query_inactive.Execute()
 	while(query_inactive.NextRow())
 		var/cur_ckey = query_inactive.item[1]
