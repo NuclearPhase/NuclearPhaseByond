@@ -85,7 +85,7 @@
 	icon_state = "janitorbelt"
 	item_state = "janitor"
 	can_hold = list(
-		/obj/item/weapon/reagent_containers/spray/,
+		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/device/lightreplacer,
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/item/weapon/storage/bag/trash,
