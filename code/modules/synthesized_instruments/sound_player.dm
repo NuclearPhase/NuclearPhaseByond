@@ -49,7 +49,7 @@
 			continue
 		if (some_hearer.ear_deaf > 0)
 			continue
-		var/dist = get_dist(some_hearer, src)
+		// var/dist = get_dist(some_hearer, src)
 		// if (dist < forced_sound_in)
 		//	continue
 		eligible_mobs += some_hearer
