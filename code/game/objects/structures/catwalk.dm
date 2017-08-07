@@ -75,5 +75,5 @@
 			new /obj/item/stack/rods(src.loc)
 			new /obj/item/stack/rods(src.loc)
 			new /obj/structure/lattice/(src.loc)
-			qdel(src)	
+			qdel(src)
 	return
