@@ -92,6 +92,9 @@ var/list/ventcrawl_machinery = list(
 /mob/living/carbon/alien/ventcrawl_carry()
 	return 1
 
+/mob/living/silicon/robot/drone/ventcrawl_carry()
+	return TRUE
+
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)
 	if(!can_ventcrawl())
 		return
