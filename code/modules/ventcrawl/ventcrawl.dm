@@ -154,6 +154,7 @@ var/list/ventcrawl_machinery = list(
 			to_chat(src, "This vent is not connected to anything.")
 	else
 		to_chat(src, "You must be standing on or beside an air vent to enter it.")
+
 /mob/living/proc/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
 	is_ventcrawling = 1
 	//candrop = 0
