@@ -92,6 +92,9 @@ var/list/ventcrawl_machinery = list(
 /mob/living/carbon/alien/ventcrawl_carry()
 	return 1
 
+/mob/living/silicon/robot/drone/ventcrawl_carry()
+	return TRUE
+
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)
 	if(!can_ventcrawl())
 		return
@@ -151,6 +154,7 @@ var/list/ventcrawl_machinery = list(
 			to_chat(src, "This vent is not connected to anything.")
 	else
 		to_chat(src, "You must be standing on or beside an air vent to enter it.")
+
 /mob/living/proc/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
 	is_ventcrawling = 1
 	//candrop = 0
