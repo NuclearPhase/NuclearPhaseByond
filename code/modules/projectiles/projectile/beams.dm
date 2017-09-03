@@ -71,10 +71,10 @@
 	impact_type = /obj/effect/projectile/laser_pulse/impact
 
 /obj/item/projectile/beam/pulse/mid
-	damage = 20
+	damage = 60
 
 /obj/item/projectile/beam/pulse/heavy
-	damage = 25
+	damage = 80
 
 /obj/item/projectile/beam/pulse/destroy
 	name = "destroyer pulse"
@@ -173,6 +173,7 @@
 	sharp = 0 //not a laser
 	taser_effect = 1
 	agony = 40
+	stun = 2
 	damage_type = STUN
 
 	muzzle_type = /obj/effect/projectile/stun/muzzle
@@ -182,6 +183,7 @@
 /obj/item/projectile/beam/stun/heavy
 	name = "heavy stun beam"
 	agony = 60
+	stun = 5
 	armor_penetration = 10
 
 /obj/item/projectile/beam/stun/shock
@@ -189,9 +191,13 @@
 	damage_type = ELECTROCUTE
 	damage = 10
 	agony  = 5
+	paralyze = 2
+	stutter = 10
 	fire_sound='sound/weapons/pulse.ogg'
 
 /obj/item/projectile/beam/stun/shock/heavy
 	name = "heavy shock beam"
 	damage = 20
 	agony  = 10
+	paralyze = 4
+	stutter = 30

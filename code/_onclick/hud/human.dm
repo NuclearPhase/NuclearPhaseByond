@@ -255,6 +255,7 @@
 	mymob.pain.icon_state = "blank"
 	mymob.pain.name = "pain"
 	mymob.pain.screen_loc = "WEST,SOUTH to EAST,NORTH"
+	mymob.pain.layer = UNDER_HUD_LAYER
 	mymob.pain.mouse_opacity = 0
 	hud_elements |= mymob.pain
 
@@ -264,7 +265,7 @@
 	mymob.noise1.name = " "
 	mymob.noise1.screen_loc = "1,1 to 15,15"
 	mymob.noise1.mouse_opacity = 0
-	hud_elements |= mymob.noise1 
+	hud_elements |= mymob.noise1
 
 	mymob.noise2 = new /obj/screen()
 	mymob.noise2.icon = 'icons/mob/noise.dmi'
@@ -311,9 +312,10 @@
 	mymob.radio_use_icon.icon = ui_style
 	mymob.radio_use_icon.color = ui_color
 	mymob.radio_use_icon.alpha = ui_alpha
-
-	mymob.fov = new /obj/screen/fov()
-	hud_elements |= mymob.fov
+	if(ishuman(mymob))
+		var/mob/living/carbon/human/H = mymob
+		H.fov = new /obj/screen/fov()
+		hud_elements |= H.fov
 
 	mymob.client.screen = list()
 

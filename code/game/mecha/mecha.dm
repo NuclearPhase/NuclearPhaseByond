@@ -1071,7 +1071,7 @@
 		src.log_append_to_last("[H] moved in as pilot.")
 		src.icon_state = src.reset_icon()
 		set_dir(dir_in)
-		H.hide_cone()
+		H.SetFov(0)
 		playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
 		if(!hasInternalDamage())
 			to_chat(src.occupant, sound('sound/mecha/nominal.ogg',volume=50))
@@ -1115,8 +1115,10 @@
 	if(!src.occupant) return
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
+		var/mob/living/carbon/human/H = occupant
 		mob_container = src.occupant
-		occupant.show_cone()
+		H.SetFov(1)
+
 	else if(istype(occupant, /mob/living/carbon/brain))
 		var/mob/living/carbon/brain/brain = occupant
 		mob_container = brain.container
