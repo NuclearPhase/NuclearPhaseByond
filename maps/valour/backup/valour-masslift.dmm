@@ -1,0 +1,23 @@
+"a" = (/turf/space,/area/space)
+"b" = (/obj/effect/masslift_transit,/turf/space,/area/masslift/a)
+"c" = (/turf/simulated/wall/outwards/stone,/area/space)
+"d" = (/turf/space,/area/masslift/a)
+"e" = (/obj/effect/masslift_transit,/turf/space,/area/masslift/b)
+"f" = (/turf/space,/area/masslift/b)
+"g" = (/obj/effect/masslift_transit,/turf/space,/area/masslift/c)
+"h" = (/turf/space,/area/masslift/c)
+"i" = (/obj/effect/masslift_transit,/turf/space,/area/masslift/d)
+"j" = (/turf/space,/area/masslift/d)
+
+(1,1,1) = {"
+cccccccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cbddceffcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cdddcfffcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cdddcfffcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cccccccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cghhcijjcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+chhhcjjjcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+chhhcjjjcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+cccccccccaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+"}

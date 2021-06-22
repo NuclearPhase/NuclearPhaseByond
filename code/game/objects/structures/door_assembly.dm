@@ -23,6 +23,42 @@
 	glass_type = "/glass_command"
 	airlock_type = "/command"
 
+/obj/structure/door_assembly/door_assembly_black
+	base_icon_state = "black"
+	base_name = "Black Airlock"
+	glass_type = "/glass_black"
+	airlock_type = "/black"
+
+/obj/structure/door_assembly/door_assembly_hyd
+	base_icon_state = "hyd"
+	base_name = "Hydroponics Airlock"
+	glass_type = "/glass_hydroponics"
+	airlock_type = "/hydroponics"
+
+/obj/structure/door_assembly/door_assembly_chem
+	base_icon_state = "chem"
+	base_name = "Chemistry Airlock"
+	glass_type = "/glass_chemistry"
+	airlock_type = "/chemistry"
+
+/obj/structure/door_assembly/door_assembly_arbiter
+	base_icon_state = "coma"
+	base_name = "Arbiter Airlock"
+	glass_type = "/glass_arbiter"
+	airlock_type = "/arbiter"
+
+/obj/structure/door_assembly/door_assembly_cone
+	base_icon_state = "cone"
+	base_name = "Cone Airlock"
+	glass_type = "/glass_cone"
+	airlock_type = "/cone"
+
+/obj/structure/door_assembly/door_assembly_weap
+	base_icon_state = "weap"
+	base_name = "Weapon Airlock"
+	glass_type = "/glass_weap"
+	airlock_type = "/weap"
+
 /obj/structure/door_assembly/door_assembly_sec
 	base_icon_state = "sec"
 	base_name = "Security Airlock"
@@ -65,12 +101,6 @@
 	glass_type = "/glass_medical"
 	airlock_type = "/medical"
 
-/obj/structure/door_assembly/door_assembly_hyd
-	base_icon_state = "hyd"
-	base_name = "Hydroponics Airlock"
-	glass_type = "/glass_hydroponics"
-	airlock_type = "/hydroponics"
-
 /obj/structure/door_assembly/door_assembly_viro
 	base_icon_state = "viro"
 	base_name = "Virology Airlock"
@@ -111,6 +141,12 @@
 	base_icon_state = "mhatch"
 	base_name = "Maintenance Hatch"
 	airlock_type = "/maintenance_hatch"
+	glass = -1
+
+/obj/structure/door_assembly/door_assembly_shatch
+	base_icon_state = "shatch"
+	base_name = "Security Hatch"
+	airlock_type = "/security_hatch"
 	glass = -1
 
 /obj/structure/door_assembly/door_assembly_highsecurity // Borrowing this until WJohnston makes sprites for the assembly
@@ -160,7 +196,7 @@
 		created_name = t
 		return
 
-	if(istype(W, /obj/item/weapon/weldingtool) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
+	if(isWelder(W) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0, user))
 			playsound(src.loc, 'sound/items/Welder2.ogg', 50, 1)
@@ -190,7 +226,7 @@
 			to_chat(user, "<span class='notice'>You need more welding fuel.</span>")
 			return
 
-	else if(istype(W, /obj/item/weapon/wrench) && state == 0)
+	else if(isWrench(W) && state == 0)
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 100, 1)
 		if(anchored)
 			user.visible_message("[user] begins unsecuring the airlock assembly from the floor.", "You starts unsecuring the airlock assembly from the floor.")
@@ -202,7 +238,7 @@
 			to_chat(user, "<span class='notice'>You [anchored? "un" : ""]secured the airlock assembly!</span>")
 			anchored = !anchored
 
-	else if(istype(W, /obj/item/stack/cable_coil) && state == 0 && anchored)
+	else if(isCoil(W) && state == 0 && anchored)
 		var/obj/item/stack/cable_coil/C = W
 		if (C.get_amount() < 1)
 			to_chat(user, "<span class='warning'>You need one length of coil to wire the airlock assembly.</span>")
@@ -213,7 +249,7 @@
 				src.state = 1
 				to_chat(user, "<span class='notice'>You wire the airlock.</span>")
 
-	else if(istype(W, /obj/item/weapon/wirecutters) && state == 1 )
+	else if(isWirecutter(W) && state == 1 )
 		playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
@@ -233,10 +269,10 @@
 			W.loc = src
 			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
 			src.state = 2
-			src.name = "Near finished Airlock Assembly"
+			src.SetName("Near finished Airlock Assembly")
 			src.electronics = W
 
-	else if(istype(W, /obj/item/weapon/crowbar) && state == 2 )
+	else if(isCrowbar(W) && state == 2 )
 		//This should never happen, but just in case I guess
 		if (!electronics)
 			to_chat(user, "<span class='notice'>There was nothing to remove.</span>")
@@ -250,7 +286,7 @@
 			if(!src) return
 			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
 			src.state = 1
-			src.name = "Wired Airlock Assembly"
+			src.SetName("Wired Airlock Assembly")
 			electronics.loc = src.loc
 			electronics = null
 
@@ -279,7 +315,7 @@
 								to_chat(user, "<span class='notice'>You installed [material_display_name(material_name)] plating into the airlock assembly.</span>")
 								glass = material_name
 
-	else if(istype(W, /obj/item/weapon/screwdriver) && state == 2 )
+	else if(isScrewdriver(W) && state == 2 )
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
 
@@ -302,13 +338,14 @@
 
 /obj/structure/door_assembly/proc/update_state()
 	icon_state = "door_as_[glass == 1 ? "g" : ""][istext(glass) ? glass : base_icon_state][state]"
-	name = ""
+	var/final_name = ""
 	switch (state)
 		if(0)
 			if (anchored)
-				name = "Secured "
+				final_name = "Secured "
 		if(1)
-			name = "Wired "
+			final_name = "Wired "
 		if(2)
-			name = "Near Finished "
-	name += "[glass == 1 ? "Window " : ""][istext(glass) ? "[glass] Airlock" : base_name] Assembly"
+			final_name = "Near Finished "
+	final_name += "[glass == 1 ? "Window " : ""][istext(glass) ? "[glass] Airlock" : base_name] Assembly"
+	SetName(final_name)

@@ -8,8 +8,7 @@
 	var/list/resources
 
 	var/thermite = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
+	initial_gas = list("oxygen" = MOLES_O2STANDARD, "nitrogen" = MOLES_N2STANDARD)
 	var/to_be_destroyed = 0 //Used for fire, if a melting temperature was reached, it will be destroyed
 	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 	var/dirt = 0
@@ -24,15 +23,14 @@
 		T.ChangeTurf(new_turf_type)
 
 // This is not great.
-/turf/simulated/proc/wet_floor(var/wet_val = 1)
-	if(wet_val < wet)
+/turf/simulated/proc/wet_floor(var/wet_val = 1, var/overwrite = FALSE)
+	if(wet_val < wet && !overwrite)
 		return
 
 	if(!wet)
 		wet = wet_val
-		if(!wet_overlay)
-			wet_overlay = image('icons/effects/water.dmi',src,"wet_floor")
-			overlays += wet_overlay
+		wet_overlay = image('icons/effects/water.dmi',src,"wet_floor")
+		overlays += wet_overlay
 
 	if(unwet_task)
 		unwet_task.trigger_task_in(8 SECONDS)
@@ -57,7 +55,6 @@
 	if(wet_overlay)
 		overlays -= wet_overlay
 		wet_overlay = null
-		update_icon()
 
 /turf/simulated/clean_blood()
 	for(var/obj/effect/decal/cleanable/blood/B in contents)
@@ -74,7 +71,7 @@
 	task_unwet_floor(unwet_task, FALSE)
 	return ..()
 
-/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor="#A10808")
+/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=COLOR_BLOOD_HUMAN)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
 	if(!tracks)
 		tracks = new typepath(src)
@@ -103,7 +100,6 @@
 
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
-			var/footstepsound = null
 			// Tracking blood
 			var/list/bloodDNA = null
 			var/bloodcolor=""
@@ -122,42 +118,12 @@
 					H.track_blood--
 
 			if (bloodDNA)
-				src.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints,bloodDNA,H.dir,0,bloodcolor) // Coming
+				src.AddTracks(H.species.get_move_trail(H),bloodDNA,H.dir,0,bloodcolor) // Coming
 				var/turf/simulated/from = get_step(H,reverse_direction(H.dir))
 				if(istype(from) && from)
-					from.AddTracks(/obj/effect/decal/cleanable/blood/tracks/footprints,bloodDNA,0,H.dir,bloodcolor) // Going
+					from.AddTracks(H.species.get_move_trail(H),bloodDNA,0,H.dir,bloodcolor) // Going
 
 				bloodDNA = null
-
-			//Shoe sounds
-			if 		(istype(src, /turf/simulated/floor/grass))
-				footstepsound = "grassfootsteps"
-			//else 	if(istype(src, /turf/stalker/floor/tropa))//Not needed for now.
-			//	footstepsound = "sandfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/beach/water))
-				footstepsound = "waterfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/wood))
-				footstepsound = "woodfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/carpet))
-				footstepsound = "carpetfootsteps"
-			else 	if(istype(src, /turf/simulated/floor/beach/sand))
-				footstepsound = "dirtfootsteps"
-			else
-				footstepsound = "erikafootsteps"
-
-			if(istype(H.shoes, /obj/item/clothing/shoes) && !H.throwing)//This is probably the worst possible way to handle walking sfx.
-				if(H.m_intent == "run")
-					if(H.footstep >= 1)//Every two steps.
-						H.footstep = 0
-						playsound(src, footstepsound, 100, 1)
-					else
-						H.footstep++
-				else
-					if(H.footstep >= 6)
-						H.footstep = 0
-						playsound(src, footstepsound, 100, 1)
-					else
-						H.footstep++
 
 		if(src.wet)
 
@@ -213,7 +179,7 @@
 	return 0
 
 /turf/simulated/attackby(var/obj/item/thing, var/mob/user)
-	if(istype(thing, /obj/item/stack/cable_coil) && can_build_cable(user))
+	if(isCoil(thing) && can_build_cable(user))
 		var/obj/item/stack/cable_coil/coil = thing
 		coil.turf_place(src, user)
 		return

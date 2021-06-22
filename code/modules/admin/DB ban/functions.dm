@@ -89,26 +89,15 @@ datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = 
 		computerid = bancid
 		ip = banip
 
-	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_player WHERE ckey = '[ckey]'")
-	query.Execute()
-	var/validckey = 0
-	if(query.NextRow())
-		validckey = 1
-	if(!validckey)
-		if(!banned_mob || (banned_mob && !IsGuestKey(banned_mob.key)))
-			if(usr)
-				message_admins("<font color='red'>[key_name_admin(usr)] attempted to ban [ckey], but [ckey] has not been seen yet. Please only ban actual players.</font>",1)
-			return 0
-
 	var/who
-	for(var/client/C in clients)
+	for(var/client/C in GLOB.clients)
 		if(!who)
 			who = "[C]"
 		else
 			who += ", [C]"
 
 	var/adminwho
-	for(var/client/C in admins)
+	for(var/client/C in GLOB.admins)
 		if(!adminwho)
 			adminwho = "[C]"
 		else
@@ -341,7 +330,7 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 	output += "<option value=''>--</option>"
 	for(var/j in get_all_jobs())
 		output += "<option value='[j]'>[j]</option>"
-	for(var/j in nonhuman_positions)
+	for(var/j in GLOB.nonhuman_positions)
 		output += "<option value='[j]'>[j]</option>"
 	var/list/bantypes = list("traitor","changeling","operative","revolutionary","cultist","wizard") //For legacy bans.
 	var/list/all_antag_types = all_antag_types()
@@ -419,13 +408,13 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 				if(playercid)
 					cidsearch  = "AND computerid = '[playercid]' "
 			else
-				if(adminckey && lentext(adminckey) >= 3)
+				if(adminckey && length(adminckey) >= 3)
 					adminsearch = "AND a_ckey LIKE '[adminckey]%' "
-				if(playerckey && lentext(playerckey) >= 3)
+				if(playerckey && length(playerckey) >= 3)
 					playersearch = "AND ckey LIKE '[playerckey]%' "
-				if(playerip && lentext(playerip) >= 3)
+				if(playerip && length(playerip) >= 3)
 					ipsearch  = "AND ip LIKE '[playerip]%' "
-				if(playercid && lentext(playercid) >= 7)
+				if(playercid && length(playercid) >= 7)
 					cidsearch  = "AND computerid LIKE '[playercid]%' "
 
 			if(dbbantype)

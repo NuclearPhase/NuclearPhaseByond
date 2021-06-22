@@ -1,4 +1,6 @@
-//print an error message to world.log
+//wrapper macros for easier grepping
+#define DIRECT_OUTPUT(A, B) A << B
+#define WRITE_FILE(file, text) DIRECT_OUTPUT(file, text)
 
 
 // On Linux/Unix systems the line endings are LF, on windows it's CRLF, admins that don't use notepad++
@@ -24,7 +26,7 @@
 	diary << "\[[time_stamp()]] [game_id] [category]: [text][log_end]"
 
 /proc/log_admin(text)
-	admin_log.Add(text)
+	GLOB.admin_log.Add(text)
 	if (config.log_admin)
 		game_log("ADMIN", text)
 
@@ -42,8 +44,8 @@
 	to_debug_listeners(text, "WARNING")
 
 /proc/to_debug_listeners(text, prefix = "DEBUG")
-	for(var/client/C in admins)
-		if(C.is_preference_enabled(/datum/client_preference/debug/show_debug_logs))
+	for(var/client/C in GLOB.admins)
+		if(C.get_preference_value(/datum/client_preference/staff/show_debug_logs) == GLOB.PREF_SHOW)
 			to_chat(C, "[prefix]: [text]")
 
 /proc/log_game(text)
@@ -102,6 +104,9 @@
 	to_world_log("## UNIT_TEST ##: [text]")
 	log_debug(text)
 
+/proc/log_qdel(text)
+	WRITE_FILE(GLOB.world_qdel_log, "\[[time_stamp()]]QDEL: [text]")
+
 //This replaces world.log so it displays both in DD and the file
 /proc/log_world(text)
 	if(config && config.log_runtime)
@@ -123,7 +128,7 @@
 	return english_list(comps, nothing_text="0", and_text="|", comma_text="|")
 
 //more or less a logging utility
-/proc/key_name(var/whom, var/include_link = null, var/include_name = 1, var/highlight_special_characters = 1)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = 1, var/highlight_special_characters = 1, var/datum/ticket/ticket = null)
 	var/mob/M
 	var/client/C
 	var/key
@@ -153,7 +158,7 @@
 
 	if(key)
 		if(include_link && C)
-			. += "<a href='?priv_msg=\ref[C]'>"
+			. += "<a href='?priv_msg=\ref[C];ticket=\ref[ticket]'>"
 
 		. += key
 
@@ -173,7 +178,7 @@
 
 
 		if(include_link && is_special_character(M) && highlight_special_characters)
-			. += "/(<font color='#FFA500'>[name]</font>)" //Orange
+			. += "/(<font color='#ffa500'>[name]</font>)" //Orange
 		else
 			. += "/([name])"
 
@@ -200,8 +205,13 @@
 	return ckey ? "[..()] ([ckey])" : ..()
 
 /proc/log_info_line(var/datum/d)
-	if(!d)
+	if(isnull(d))
 		return "*null*"
+	if(islist(d))
+		var/list/L = list()
+		for(var/e in d)
+			L += log_info_line(e)
+		return "\[[jointext(L, ", ")]\]" // We format the string ourselves, rather than use json_encode(), because it becomes difficult to read recursively escaped "
 	if(!istype(d))
 		return json_encode(d)
 	return d.get_log_info_line()

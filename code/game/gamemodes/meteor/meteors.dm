@@ -70,8 +70,8 @@
 //Meteor spawning global procs
 ///////////////////////////////
 
-/proc/pick_meteor_start(var/startSide = pick(cardinal))
-	var/startLevel = pick(using_map.station_levels)
+/proc/pick_meteor_start(var/startSide = pick(GLOB.cardinal))
+	var/startLevel = pick(GLOB.using_map.station_levels)
 	var/pickedstart = spaceDebrisStartLoc(startSide, startLevel)
 
 	return list(startLevel, pickedstart)
@@ -146,7 +146,7 @@
 	var/hits = 4
 	var/hitpwr = 2 //Level of ex_act to be called on hit.
 	var/dest
-	pass_flags = PASSTABLE
+	pass_flags = PASS_FLAG_TABLE
 	var/heavy = 0
 	var/z_original
 	var/meteordrop = /obj/item/weapon/ore/iron
@@ -223,7 +223,7 @@
 
 /obj/effect/meteor/proc/meteor_effect()
 	if(heavy)
-		for(var/mob/M in player_list)
+		for(var/mob/M in GLOB.player_list)
 			var/turf/T = get_turf(M)
 			if(!T || T.z != src.z)
 				continue
@@ -239,7 +239,7 @@
 /obj/effect/meteor/dust
 	name = "space dust"
 	icon_state = "dust"
-	pass_flags = PASSTABLE | PASSGRILLE
+	pass_flags = PASS_FLAG_TABLE | PASS_FLAG_GRILLE
 	hits = 1
 	hitpwr = 3
 	dropamt = 1

@@ -3,7 +3,7 @@
 	desc = "A roll of sticky tape. Possibly for taping ducks... or was that ducts?"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "taperoll"
-	w_class = ITEM_SIZE_TINY
+	w_class = ITEM_SIZE_SMALL
 
 /obj/item/weapon/tape_roll/attack(var/mob/living/carbon/human/H, var/mob/user)
 	if(istype(H))
@@ -86,12 +86,12 @@
 
 	var/obj/item/weapon/stuck = null
 
-/obj/item/weapon/ducttape/New()
-	..()
-	flags |= NOBLUDGEON
+/obj/item/weapon/ducttape/Initialize()
+	. = ..()
+	item_flags |= ITEM_FLAG_NO_BLUDGEON
 
 /obj/item/weapon/ducttape/examine(mob/user)
-	return stuck.examine(user)
+	return stuck ? stuck.examine(user) : ..()
 
 /obj/item/weapon/ducttape/proc/attach(var/obj/item/weapon/W)
 	stuck = W
@@ -123,7 +123,7 @@
 	var/dir_offset = 0
 	if(target_turf != source_turf)
 		dir_offset = get_dir(source_turf, target_turf)
-		if(!(dir_offset in cardinal))
+		if(!(dir_offset in GLOB.cardinal))
 			to_chat(user, "You cannot reach that from here.")// can only place stuck papers in cardinal directions, to
 			return											// reduce papers around corners issue.
 

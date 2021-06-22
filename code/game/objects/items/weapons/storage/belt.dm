@@ -8,16 +8,12 @@
 	max_w_class = ITEM_SIZE_NORMAL
 	slot_flags = SLOT_BELT
 	attack_verb = list("whipped", "lashed", "disciplined")
-	var/show_above_suit = 0
 
 /obj/item/weapon/storage/belt/verb/toggle_layer()
 	set name = "Switch Belt Layer"
 	set category = "Object"
 
-	if(show_above_suit == -1)
-		to_chat(usr, "<span class='notice'>\The [src] cannot be worn above your suit!</span>")
-		return
-	show_above_suit = !show_above_suit
+	use_alt_layer = !use_alt_layer
 	update_icon()
 
 /obj/item/weapon/storage/update_icon()
@@ -30,12 +26,15 @@
 	var/image/ret = ..()
 	if(slot == slot_belt_str && contents.len)
 		for(var/obj/item/I in contents)
-			ret.overlays += image("icon" = 'icons/mob/belt.dmi', "icon_state" = "[I.item_state ? I.item_state : I.icon_state]")
+			ret.overlays += image("icon" = 'icons/mob/onmob/belt.dmi', "icon_state" = "[I.item_state ? I.item_state : I.icon_state]")
 	return ret
 
 /obj/item/weapon/storage/belt/utility
-	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
-	desc = "Can hold various tools."
+	name = "tool-belt"
+	desc = "A belt of durable leather, festooned with hooks, slots, and pouches."
+	description_info = "The tool-belt has enough slots to carry a full engineer's toolset: screwdriver, crowbar, wrench, welder, cable coil, and multitool. Simply click the belt to move a tool to one of its slots."
+	description_fluff = "Good hide is hard to come by in certain regions of the galaxy. When they can't come across it, most TSCs will outfit their crews with toolbelts made of synthesized leather."
+	description_antag = "Only amateurs skip grabbing a tool-belt."
 	icon_state = "utilitybelt"
 	item_state = "utility"
 	can_hold = list(
@@ -56,7 +55,8 @@
 		/obj/item/weapon/material/hatchet,
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/taperoll,
-		/obj/item/weapon/extinguisher/mini
+		/obj/item/weapon/extinguisher/mini,
+		/obj/item/weapon/marshalling_wand
 		)
 
 
@@ -79,18 +79,7 @@
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/t_scanner(src)
 
-/obj/item/weapon/storage/belt/janotir
-	name = "janitor belt"
-	desc = "For the King Of Janitors!"
-	icon_state = "janitorbelt"
-	item_state = "janitor"
-	can_hold = list(
-		/obj/item/weapon/reagent_containers/spray,
-		/obj/item/device/lightreplacer,
-		/obj/item/weapon/grenade/chem_grenade,
-		/obj/item/weapon/storage/bag/trash,
-		/obj/item/weapon/soap/nanotrasen
-		)
+
 
 /obj/item/weapon/storage/belt/medical
 	name = "medical belt"
@@ -132,6 +121,7 @@
 	icon_state = "securitybelt"
 	item_state = "security"
 	can_hold = list(
+		/obj/item/weapon/crowbar,
 		/obj/item/weapon/grenade,
 		/obj/item/weapon/reagent_containers/spray/pepper,
 		/obj/item/weapon/handcuffs,
@@ -153,7 +143,8 @@
 		/obj/item/weapon/melee,
 		/obj/item/weapon/gun/projectile/sec,
 		/obj/item/taperoll,
-		/obj/item/device/holowarrant
+		/obj/item/device/holowarrant,
+		/obj/item/weapon/magnetic_ammo
 		)
 
 /obj/item/weapon/storage/belt/soulstone

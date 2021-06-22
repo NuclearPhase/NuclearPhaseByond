@@ -42,14 +42,8 @@
 	var/fire_alert = 0
 
 	//Atmos effect - Yes, you can make creatures that require phoron or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
-	var/min_oxy = 5
-	var/max_oxy = 0					//Leaving something at 0 means it's off - has no maximum
-	var/min_tox = 0
-	var/max_tox = 1
-	var/min_co2 = 0
-	var/max_co2 = 5
-	var/min_n2 = 0
-	var/max_n2 = 0
+	var/min_gas = list("oxygen" = 5)
+	var/max_gas = list("phoron" = 1, "carbon_dioxide" = 5)
 	var/unsuitable_atoms_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
 	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
 
@@ -66,9 +60,13 @@
 	var/supernatural = 0
 	var/purge = 0
 
+	// contained in a cage
+	var/in_stasis = 0
+
 /mob/living/simple_animal/Life()
 	..()
-
+	if(!living_observers_present(GetConnectedZlevels(z)))
+		return
 	//Health
 	if(stat == DEAD)
 		if(health > 0)
@@ -98,7 +96,7 @@
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
 					var/moving_to = 0 // otherwise it always picks 4, fuck if I know.   Did I mention fuck BYOND
-					moving_to = pick(cardinal)
+					moving_to = pick(GLOB.cardinal)
 					set_dir(moving_to)			//How about we turn them the direction they are moving, yay.
 					Move(get_step(src,moving_to))
 					turns_since_move = 0
@@ -120,44 +118,27 @@
 				if("emote_see")
 					visible_emote("[pick(emote_see)].")
 
+	if(in_stasis)
+		return 1 // return early to skip atmos checks
+
 	//Atmos
 	var/atmos_suitable = 1
 
-	var/atom/A = src.loc
+	var/atom/A = loc
+	if(!loc)
+		return 1
+	var/datum/gas_mixture/environment = A.return_air()
 
-	if(istype(A,/turf))
-		var/turf/T = A
-
-		var/datum/gas_mixture/Environment = T.return_air()
-
-		if(Environment)
-
-			if( abs(Environment.temperature - bodytemperature) > 40 )
-				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
-
-			if(min_oxy)
-				if(Environment.gas["oxygen"] < min_oxy)
+	if(environment)
+		if( abs(environment.temperature - bodytemperature) > 40 )
+			bodytemperature += (environment.temperature - bodytemperature) / 5
+		if(min_gas)
+			for(var/gas in min_gas)
+				if(environment.gas[gas] < min_gas[gas])
 					atmos_suitable = 0
-			if(max_oxy)
-				if(Environment.gas["oxygen"] > max_oxy)
-					atmos_suitable = 0
-			if(min_tox)
-				if(Environment.gas["phoron"] < min_tox)
-					atmos_suitable = 0
-			if(max_tox)
-				if(Environment.gas["phoron"] > max_tox)
-					atmos_suitable = 0
-			if(min_n2)
-				if(Environment.gas["nitrogen"] < min_n2)
-					atmos_suitable = 0
-			if(max_n2)
-				if(Environment.gas["nitrogen"] > max_n2)
-					atmos_suitable = 0
-			if(min_co2)
-				if(Environment.gas["carbon_dioxide"] < min_co2)
-					atmos_suitable = 0
-			if(max_co2)
-				if(Environment.gas["carbon_dioxide"] > max_co2)
+		if(max_gas)
+			for(var/gas in max_gas)
+				if(environment.gas[gas] > max_gas[gas])
 					atmos_suitable = 0
 
 	//Atmos effect
@@ -207,23 +188,6 @@
 			M.visible_message("<span class='notice'>[M] [response_disarm] \the [src]</span>")
 			M.do_attack_animation(src)
 			//TODO: Push the mob away or something
-
-		if(I_GRAB)
-			if (M == src)
-				return
-			if (!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src)
-
-			M.put_in_active_hand(G)
-
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			M.visible_message("<span class='warning'>[M] has grabbed \the [src] passively!</span>")
-			M.do_attack_animation(src)
 
 		if(I_HURT)
 			adjustBruteLoss(harm_intent_damage)
@@ -295,12 +259,12 @@
 	if(statpanel("Status") && show_stat_health)
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
-/mob/living/simple_animal/death(gibbed, deathmessage = "dies!")
+/mob/living/simple_animal/death(gibbed, deathmessage = "dies!", show_dead_message)
 	icon_state = icon_dead
 	density = 0
 	adjustBruteLoss(maxHealth) //Make sure dey dead.
 	walk_to(src,0)
-	return ..(gibbed,deathmessage)
+	return ..(gibbed,deathmessage,show_dead_message)
 
 /mob/living/simple_animal/ex_act(severity)
 	if(!blinded)
@@ -370,7 +334,7 @@
 	if(meat_type && actual_meat_amount>0 && (stat == DEAD))
 		for(var/i=0;i<actual_meat_amount;i++)
 			var/obj/item/meat = new meat_type(get_turf(src))
-			meat.name = "[src.name] [meat.name]"
+			meat.SetName("[src.name] [meat.name]")
 		if(issmall(src))
 			user.visible_message("<span class='danger'>[user] chops up \the [src]!</span>")
 			new/obj/effect/decal/cleanable/blood/splatter(get_turf(src))

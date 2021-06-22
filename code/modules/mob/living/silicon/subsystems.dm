@@ -38,7 +38,7 @@
 	if(existing_entry && !ispath(existing_entry))
 		return FALSE
 
-	var/ui_state = subsystem_type == /datum/nano_module/law_manager ? conscious_state : self_state
+	var/ui_state = subsystem_type == /datum/nano_module/law_manager ? GLOB.conscious_state : GLOB.self_state
 	var/stat_silicon_subsystem/SSS = new(src, subsystem_type, ui_state)
 	silicon_subsystems[subsystem_type] = SSS
 	silicon_subsystems_by_name[SSS.name] = SSS
@@ -54,11 +54,11 @@
 	qdel(SSS)
 	return TRUE
 
-/mob/living/silicon/proc/open_subsystem(var/subsystem_type)
+/mob/living/silicon/proc/open_subsystem(var/subsystem_type, var/mob/given = src)
 	var/stat_silicon_subsystem/SSS = silicon_subsystems[subsystem_type]
 	if(!istype(SSS))
 		return FALSE
-	SSS.Click()
+	SSS.Click(given)
 	return TRUE
 
 /mob/living/silicon/verb/activate_subsystem(var/datum/silicon_subsystem_name in silicon_subsystems_by_name)
@@ -101,5 +101,8 @@
 	subsystem = null
 	. = ..()
 
-/stat_silicon_subsystem/Click()
-	subsystem.ui_interact(usr, state = ui_state)
+/stat_silicon_subsystem/Click(var/mob/given = usr)
+	if (istype(given))
+		subsystem.ui_interact(given, state = ui_state)
+	else
+		subsystem.ui_interact(usr, state = ui_state)

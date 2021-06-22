@@ -27,13 +27,13 @@ var/decl/sound_player/sound_player = new()
 	taken_channels = list()
 	source_id_uses = list()
 
-/decl/sound_player/proc/PlayLoopingSound(var/atom/source, var/sound_id, var/sound, var/volume, var/range, var/falloff, var/prefer_mute)
+/decl/sound_player/proc/PlayLoopingSound(var/atom/source, var/sound_id, var/sound, var/volume, var/range, var/falloff, var/prefer_mute, var/ignore_vis = FALSE)
 	var/channel = PrivGetChannel(sound_id)
 	if(!channel)
 		log_warning("All available sound channels are in active use.")
 		return
 
-	return new/datum/sound_token(source, sound_id, sound, volume, channel, range, falloff, prefer_mute)
+	return new/datum/sound_token(source, sound_id, sound, volume, channel, range, falloff, prefer_mute, ignore_vis)
 
 /decl/sound_player/proc/PrivStopSound(var/datum/sound_token/sound_token)
 	var/channel = sound_token.channel
@@ -83,8 +83,9 @@ var/decl/sound_player/sound_player = new()
 
 	var/datum/proximity_trigger/square/proxy_listener
 	var/list/can_be_heard_from
+	var/ignore_vis = FALSE
 
-/datum/sound_token/New(var/atom/source, var/sound_id, var/sound, var/volume, var/channel, var/range = 4, var/falloff = 1, var/prefer_mute = FALSE)
+/datum/sound_token/New(var/atom/source, var/sound_id, var/sound, var/volume, var/channel, var/range = 4, var/falloff = 1, var/prefer_mute = FALSE, var/ignore_vis = FALSE)
 	..()
 	listeners = list()
 	listener_status = list()
@@ -97,8 +98,9 @@ var/decl/sound_player/sound_player = new()
 	src.sound_id = sound_id
 	src.source = source
 	src.volume = volume
+	src.ignore_vis = ignore_vis
 
-	destroyed_event.register(source, src, /datum/sound_token/proc/Stop)
+	GLOB.destroyed_event.register(source, src, /datum/sound_token/proc/Stop)
 
 	if(ismovable(source))
 		proxy_listener = new(source, /datum/sound_token/proc/PrivAddListener, /datum/sound_token/proc/PrivLocateListeners, range, proc_owner = src)
@@ -138,8 +140,8 @@ datum/sound_token/proc/Mute()
 		PrivRemoveListener(listener, null_sound)
 	listeners = null
 
-	destroyed_event.unregister(source, src, /datum/sound_token/proc/Stop)
-	qdel_null(proxy_listener)
+	GLOB.destroyed_event.unregister(source, src, /datum/sound_token/proc/Stop)
+	QDEL_NULL(proxy_listener)
 	source = null
 
 	sound_player.PrivStopSound(src)
@@ -149,7 +151,8 @@ datum/sound_token/proc/Mute()
 		return
 
 	can_be_heard_from = current_turfs
-	var/current_listeners = all_hearers(source, range)
+	var/current_listeners = all_hearers(source, range, ignore_vis)
+
 	var/former_listeners = listeners - current_listeners
 	var/new_listeners = current_listeners - listeners
 
@@ -185,8 +188,8 @@ datum/sound_token/proc/PrivAddListener(var/atom/listener)
 	S.falloff = falloff
 	listeners[listener] = S
 
-	moved_event.register(listener, src, /datum/sound_token/proc/PrivUpdateListenerLoc)
-	destroyed_event.register(listener, src, /datum/sound_token/proc/PrivRemoveListener)
+	GLOB.moved_event.register(listener, src, /datum/sound_token/proc/PrivUpdateListenerLoc)
+	GLOB.destroyed_event.register(listener, src, /datum/sound_token/proc/PrivRemoveListener)
 
 	PrivUpdateListenerLoc(listener)
 
@@ -194,8 +197,8 @@ datum/sound_token/proc/PrivAddListener(var/atom/listener)
 	if(!null_sound)
 		null_sound = new(channel = channel)
 	sound_to(listener, null_sound)
-	moved_event.unregister(listener, src, /datum/sound_token/proc/PrivUpdateListenerLoc)
-	destroyed_event.unregister(listener, src, /datum/sound_token/proc/PrivRemoveListener)
+	GLOB.moved_event.unregister(listener, src, /datum/sound_token/proc/PrivUpdateListenerLoc)
+	GLOB.destroyed_event.unregister(listener, src, /datum/sound_token/proc/PrivRemoveListener)
 	listeners -= listener
 
 /datum/sound_token/proc/PrivUpdateListenerLoc(var/atom/listener)
@@ -205,7 +208,8 @@ datum/sound_token/proc/PrivAddListener(var/atom/listener)
 	var/turf/listener_turf = get_turf(listener)
 
 	var/distance = get_dist(source_turf, listener_turf)
-	if(!listener_turf || (distance > range) || !(listener_turf in can_be_heard_from))
+
+	if(!listener_turf || (distance > range) || (!(listener_turf in can_be_heard_from) && !ignore_vis) )
 		if(prefer_mute)
 			listener_status[listener] |= SOUND_MUTE
 		else

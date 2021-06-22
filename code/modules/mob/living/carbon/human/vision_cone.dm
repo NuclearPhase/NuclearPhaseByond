@@ -38,7 +38,7 @@ mob/dead/InCone(mob/center = usr, dir = NORTH)
 
 mob/living/InCone(mob/center = usr, dir = NORTH)
 	. = ..()
-	for(var/obj/item/weapon/grab/G in center)//TG doesn't have the grab item. But if you're porting it and you do then uncomment this.
+	for(var/obj/item/grab/G in center)//TG doesn't have the grab item. But if you're porting it and you do then uncomment this.
 		if(src == G.affecting)
 			return 0
 		else
@@ -46,8 +46,8 @@ mob/living/InCone(mob/center = usr, dir = NORTH)
 
 
 proc/cone(atom/center = usr, dir = NORTH, list/list = oview(center))
-    for(var/atom/O in list) if(!O.InCone(center, dir)) list -= O
-    return list
+	for(var/atom/O in list) if(!O.InCone(center, dir)) list -= O
+	return list
 
 mob/proc/update_vision_cone()
 	return
@@ -75,6 +75,9 @@ mob/living/carbon/human/update_vision_cone()
 				src.client.hidden_mobs += M
 				if(src.pulling == M)//If we're pulling them we don't want them to be invisible, too hard to play like that.
 					I.override = 0
+
+//				else if(M.footstep >= 1)
+				M.in_vision_cones[src.client] = 1
 
 			//Optional items can be made invisible too. Uncomment this part if you wish to items to be invisible.
 			//var/obj/item/O

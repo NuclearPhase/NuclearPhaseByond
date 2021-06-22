@@ -15,17 +15,19 @@
 	var/light_range_on = 2
 	var/light_power_on = 1
 	var/overlay_layer
-	flags = OBJ_CLIMBABLE
+	atom_flags = ATOM_FLAG_CLIMBABLE
+	clicksound = "keyboard"
 
 /obj/machinery/computer/New()
 	overlay_layer = layer
 	..()
 
-/obj/machinery/computer/initialize()
+/obj/machinery/computer/Initialize()
+	. = ..()
 	power_change()
 	update_icon()
 
-/obj/machinery/computer/process()
+/obj/machinery/computer/Process()
 	if(stat & (NOPOWER|BROKEN))
 		return 0
 	return 1
@@ -89,7 +91,7 @@
 	return text
 
 /obj/machinery/computer/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/weapon/screwdriver) && circuit)
+	if(isScrewdriver(I) && circuit)
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, 20, src))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
@@ -112,8 +114,5 @@
 	else
 		..()
 
-
-/obj/machinery/computer/Topic(href, href_list)
-	. = ..()
-	if(. && istype(usr, /mob/living/carbon))
-		playsound(src, 'sound/machines/keypress.ogg', 50)
+/obj/machinery/computer/attack_ghost(var/mob/ghost)
+	attack_hand(ghost)

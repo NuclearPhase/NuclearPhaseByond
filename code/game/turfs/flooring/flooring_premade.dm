@@ -5,12 +5,6 @@
 	icon_state = "plating"
 	plane = PLATING_PLANE
 
-/turf/simulated/floor/carpet
-	name = "carpet"
-	icon = 'icons/turf/flooring/carpet.dmi'
-	icon_state = "carpet"
-	initial_flooring = /decl/flooring/carpet
-
 /turf/simulated/floor/bluegrid
 	name = "mainframe floor"
 	icon = 'icons/turf/flooring/circuit.dmi'
@@ -21,8 +15,7 @@
 	light_color = COLOR_BLUE
 
 /turf/simulated/floor/bluegrid/airless
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 
 /turf/simulated/floor/greengrid
 	name = "mainframe floor"
@@ -33,9 +26,17 @@
 	light_power = 3
 	light_color = COLOR_GREEN
 
+/turf/simulated/floor/blackgrid
+	name = "mainframe floor"
+	icon = 'icons/turf/flooring/circuit.dmi'
+	icon_state = "rcircuit"
+	initial_flooring = /decl/flooring/reinforced/circuit/red
+	light_range = 2
+	light_power = 2
+	light_color = COLOR_RED
+
 /turf/simulated/floor/greengrid/airless
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 
 /turf/simulated/floor/wood
 	name = "wooden floor"
@@ -54,28 +55,47 @@
 	icon = 'icons/turf/floors.dmi'
 	initial_flooring = /decl/flooring/diona
 
-/turf/simulated/floor/carpet/blue
-	name = "blue carpet"
-	icon_state = "bcarpet"
-	initial_flooring = /decl/flooring/carpet/blue
-
 /turf/simulated/floor/tiled
 	name = "steel floor"
 	icon = 'icons/turf/flooring/tiles.dmi'
 	icon_state = "steel"
 	initial_flooring = /decl/flooring/tiling
 
-/turf/simulated/floor/tiled/ramp
-	name = "foot ramp"
-	icon = 'icons/turf/flooring/tiles.dmi'
-	icon_state = "ramptop"
-	initial_flooring = /decl/flooring/reinforced/ramp
+/turf/simulated/floor/carpet
+	name = "brown carpet"
+	icon = 'icons/turf/flooring/carpet.dmi'
+	icon_state = "brown"
+	initial_flooring = /decl/flooring/carpet
 
-/turf/simulated/floor/tiled/ramp/bottom
-	name = "foot ramp"
-	icon = 'icons/turf/flooring/tiles.dmi'
-	icon_state = "rampbot"
-	initial_flooring = /decl/flooring/reinforced/ramp/bottom
+/turf/simulated/floor/carpet/blue
+	name = "blue carpet"
+	icon_state = "blue1"
+	initial_flooring = /decl/flooring/carpet/blue
+
+/turf/simulated/floor/carpet/blue2
+	name = "pale blue carpet"
+	icon_state = "blue2"
+	initial_flooring = /decl/flooring/carpet/blue2
+
+/turf/simulated/floor/carpet/purple
+	name = "purple carpet"
+	icon_state = "purple"
+	initial_flooring = /decl/flooring/carpet/purple
+
+/turf/simulated/floor/carpet/orange
+	name = "orange carpet"
+	icon_state = "orange"
+	initial_flooring = /decl/flooring/carpet/orange
+
+/turf/simulated/floor/carpet/green
+	name = "green carpet"
+	icon_state = "green"
+	initial_flooring = /decl/flooring/carpet/green
+
+/turf/simulated/floor/carpet/red
+	name = "red carpet"
+	icon_state = "red"
+	initial_flooring = /decl/flooring/carpet/red
 
 /turf/simulated/floor/reinforced
 	name = "reinforced floor"
@@ -83,53 +103,49 @@
 	icon_state = "reinforced"
 	initial_flooring = /decl/flooring/reinforced
 
-
-
 /turf/simulated/floor/reinforced/airless
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 
 /turf/simulated/floor/reinforced/airmix
-	oxygen = MOLES_O2ATMOS
-	nitrogen = MOLES_N2ATMOS
+	initial_gas = list("oxygen" = MOLES_O2ATMOS, "nitrogen" = MOLES_N2ATMOS)
 
 /turf/simulated/floor/reinforced/nitrogen
-	oxygen = 0
-	nitrogen = ATMOSTANK_NITROGEN
+	initial_gas = list("nitrogen" = ATMOSTANK_NITROGEN)
+
+/turf/simulated/floor/reinforced/hydrogen
+	initial_gas = list("hydrogen" = ATMOSTANK_HYDROGEN)
 
 /turf/simulated/floor/reinforced/oxygen
-	oxygen = ATMOSTANK_OXYGEN
-	nitrogen = 0
+	initial_gas = list("oxygen" = ATMOSTANK_OXYGEN)
 
 /turf/simulated/floor/reinforced/phoron
-	oxygen = 0
-	nitrogen = 0
-	phoron = ATMOSTANK_PHORON
+	initial_gas = list("phoron" = ATMOSTANK_PHORON)
+
+/turf/simulated/floor/reinforced/nitrogen/engine
+	name = "engine floor"
+	initial_gas = list("nitrogen" = MOLES_N2STANDARD)
+
+/turf/simulated/floor/reinforced/phoron/fuel
+	initial_gas = list("phoron" = ATMOSTANK_PHORON_FUEL)
+
+/turf/simulated/floor/reinforced/hydrogen
+	initial_gas = list("hydrogen" = ATMOSTANK_HYDROGEN)
+
+/turf/simulated/floor/reinforced/hydrogen/fuel
+	initial_gas = list("hydrogen" = ATMOSTANK_HYDROGEN_FUEL)
 
 /turf/simulated/floor/reinforced/carbon_dioxide
-	oxygen = 0
-	nitrogen = 0
-	carbon_dioxide = ATMOSTANK_CO2
+	initial_gas = list("carbon_dioxide" = ATMOSTANK_CO2)
 
 /turf/simulated/floor/reinforced/n20
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = list("sleeping_agent" = ATMOSTANK_NITROUSOXIDE)
 
-/turf/simulated/floor/reinforced/n20/New()
-	..()
-	sleep(-1)
-	if(!air) make_air()
-	air.adjust_gas("sleeping_agent", ATMOSTANK_NITROUSOXIDE)
 
 /turf/simulated/floor/cult
 	name = "engraved floor"
 	icon = 'icons/turf/flooring/cult.dmi'
 	icon_state = "cult"
 	initial_flooring = /decl/flooring/reinforced/cult
-
-/turf/simulated/floor/cult/New()
-	..()
-	new /obj/effect/overlay/cult/cultfloor(src)
 
 /turf/simulated/floor/cult/cultify()
 	return
@@ -140,8 +156,7 @@
 	initial_flooring = /decl/flooring/tiling/dark
 
 /turf/simulated/floor/tiled/dark/airless
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 
 /turf/simulated/floor/tiled/white
 	name = "white floor"
@@ -159,52 +174,86 @@
 	icon_state = "lino"
 	initial_flooring = /decl/flooring/linoleum
 
+/turf/simulated/floor/tiled/ramp
+	name = "foot ramp"
+	icon = 'icons/turf/flooring/tiles.dmi'
+	icon_state = "ramptop"
+	initial_flooring = /decl/flooring/reinforced/ramp
+
+/turf/simulated/floor/tiled/ramp/bottom
+	name = "foot ramp"
+	icon = 'icons/turf/flooring/tiles.dmi'
+	icon_state = "rampbot"
+	initial_flooring = /decl/flooring/reinforced/ramp/bottom
+
 //ATMOS PREMADES
 /turf/simulated/floor/reinforced/airless
 	name = "vacuum floor"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 /turf/simulated/floor/airless
 	name = "airless plating"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 /turf/simulated/floor/tiled/airless
 	name = "airless floor"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 /turf/simulated/floor/bluegrid/airless
 	name = "airless floor"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 /turf/simulated/floor/greengrid/airless
 	name = "airless floor"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 /turf/simulated/floor/greengrid/nitrogen
-	oxygen = 0
+	initial_gas = list("nitrogen" = MOLES_N2STANDARD)
 
 /turf/simulated/floor/tiled/white/airless
 	name = "airless floor"
-	oxygen = 0
-	nitrogen = 0
+	initial_gas = null
 	temperature = TCMB
 
 // Placeholders
 /turf/simulated/floor/airless/lava
-/turf/simulated/floor/light
+	name = "lava"
+	icon = 'icons/turf/flooring/lava.dmi'
+	icon_state = "lava"
+
+/turf/simulated/floor/ice
+	name = "ice"
+	icon = 'icons/turf/snow.dmi'
+	icon_state = "ice"
+
 /turf/simulated/floor/snow
-/turf/simulated/floor/beach/coastline
-/turf/simulated/floor/plating/snow
+	name = "snow"
+	icon = 'icons/turf/snow.dmi'
+	icon_state = "snow"
+
+/turf/simulated/floor/snow/New()
+	icon_state = pick("snow[rand(1,12)]","snow0")
+	..()
+
+/turf/simulated/floor/dirty
+	name = "dirt"
+	icon = 'icons/turf/dirt.dmi'
+	icon_state = "dirt1"
+
+/turf/simulated/floor/dirty/New()
+	dir = pick(GLOB.alldirs)
+	..()
+
+/turf/simulated/floor/dirty/update_dirt()
+	return	// Dirt doesn't doesn't become dirty
+
+
+/turf/simulated/floor/light
 /turf/simulated/floor/airless/ceiling
 
 /turf/simulated/floor/beach
@@ -217,6 +266,11 @@
 
 /turf/simulated/floor/beach/sand/desert
 	icon_state = "desert"
+	has_resources = 1
+
+/turf/simulated/floor/beach/sand/desert/New()
+	icon_state = "desert[rand(0,5)]"
+	..()
 
 /turf/simulated/floor/beach/coastline
 	name = "coastline"

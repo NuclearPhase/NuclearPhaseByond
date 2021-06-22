@@ -30,7 +30,7 @@
 		user.visible_message("<span class='danger'>\The [user] plunges the knife down into \the [a]!</span>")
 		L.adjustBruteLoss(20)
 		if(altar.linked_god)
-			altar.linked_god.adjust_power(5 * multiplier,0,"from a delicious sacrifice!")
+			altar.linked_god.adjust_power(2 * multiplier,0,"from a delicious sacrifice!")
 
 
 //EXEC AXE
@@ -57,9 +57,9 @@
 	if(ismob(a))
 		var/mob/M = a
 		if(M.stat != DEAD)
-			death_event.register(M,src,/obj/item/weapon/material/twohanded/fireaxe/cult/proc/gain_power)
+			GLOB.death_event.register(M,src,/obj/item/weapon/material/twohanded/fireaxe/cult/proc/gain_power)
 		spawn(30)
-			death_event.unregister(M,src)
+			GLOB.death_event.unregister(M,src)
 	return ..()
 
 /obj/item/weapon/material/twohanded/fireaxe/cult/proc/gain_power()
@@ -76,4 +76,4 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/zombiedrink/New()
 	..()
-	reagents.add_reagent("corruption",120)
+	reagents.add_reagent(/datum/reagent/toxin/corrupting,120)

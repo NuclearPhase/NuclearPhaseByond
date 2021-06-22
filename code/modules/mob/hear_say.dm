@@ -1,10 +1,10 @@
-	// At minimum every mob has a hear_say proc.
+// At minimum every mob has a hear_say proc.
 
 /mob/proc/hear_say(var/message, var/verb = "says", var/datum/language/language = null, var/alt_name = "",var/italics = 0, var/mob/speaker = null, var/sound/speech_sound, var/sound_vol)
 	if(!client)
 		return
 
-	if(speaker && !speaker.client && isghost(src) && is_preference_enabled(/datum/client_preference/ghost_ears) && !(speaker in view(src)))
+	if(speaker && !speaker.client && isghost(src) && get_preference_value(/datum/client_preference/ghost_ears) == GLOB.PREF_ALL_SPEECH && !(speaker in view(src)))
 			//Does the speaker have a client?  It's either random stuff that observers won't care about (Experiment 97B says, 'EHEHEHEHEHEHEHE')
 			//Or someone snoring.  So we make it where they won't hear it.
 		return
@@ -21,7 +21,7 @@
 			italics = 1
 			sound_vol *= 0.5 //muffle the sound a bit, so it's like we're actually talking through contact
 
-	if(sleeping || stat == 1)
+	if(sleeping || stat == UNCONSCIOUS)
 		hear_sleep(message)
 		return
 
@@ -57,7 +57,7 @@
 		if(speaker_name != speaker.real_name && speaker.real_name)
 			speaker_name = "[speaker.real_name] ([speaker_name])"
 		track = "([ghost_follow_link(speaker, src)]) "
-		if(is_preference_enabled(/datum/client_preference/ghost_ears) && (speaker in view(src)))
+		if(get_preference_value(/datum/client_preference/ghost_ears) == GLOB.PREF_ALL_SPEECH && (speaker in view(src)))
 			message = "<b>[message]</b>"
 
 	if(is_deaf())
@@ -84,7 +84,11 @@
 
 /mob/proc/hear_radio(var/message, var/verb="says", var/datum/language/language=null, var/part_a, var/part_b, var/part_c, var/mob/speaker = null, var/hard_to_hear = 0, var/vname ="")
 
-	playsound(loc, 'sound/effects/radio_chatter.ogg', 25, 0, -1)//They won't always be able to read the message, but the sound will play regardless.
+	var/radio_sound = list('sound/effects/radio1.ogg', 'sound/effects/radio2.ogg', 'sound/effects/radio3.ogg', 'sound/effects/radio4.ogg')
+
+	if(!isobserver(src))
+		//playsound(loc, 'sound/effects/radio_chatter.ogg', 25, 0, -1)//They won't always be able to read the message, but the sound will play regardless.
+		playsound(loc, pick(radio_sound), 15, 0, -1)
 
 	if(!client)
 		return
@@ -136,7 +140,7 @@
 			jobname = H.get_assignment()
 
 			if(H.get_assignment() == "No id")//If they don't have an ID then we don't know their job.
-				jobname = "Unknown"
+				jobname = ""
 
 			ageAndGender = ageAndGender2Desc(H.age, H.gender)//Get their age and gender
 
@@ -153,13 +157,13 @@
 		if (ishuman(speaker))
 			var/mob/living/carbon/human/H = speaker
 
-			if(H.wear_mask && istype(H.wear_mask,/obj/item/clothing/mask/gas/voice))
+			if(H.wear_mask && istype(H.wear_mask,/obj/item/clothing/mask/chameleon/voice))
 				changed_voice = 1
 				var/list/impersonated = new()
 				var/mob/living/carbon/human/I = impersonated[speaker_name]
 
 				if(!I)
-					for(var/mob/living/carbon/human/M in mob_list)
+					for(var/mob/living/carbon/human/M in SSmobs.mob_list)
 						if(M.real_name == speaker_name)
 							I = M
 							impersonated[speaker_name] = I
@@ -188,11 +192,11 @@
 
 		if(changed_voice) // Fix for AI tracking camera.
 			if(impersonating)
-				track = "<a href='byond://?src=\ref[src];trackname=[rhtml_encode(speaker.voice_name)];track=\ref[impersonating]'>[speaker_name] ([jobname])</a>"
+				track = "<a href='byond://?src=\ref[src];trackname=[html_encode(speaker.voice_name)];track=\ref[impersonating]'>[speaker_name] ([jobname])</a>"
 			else
 				track = "[speaker_name] ([jobname])"
 		else
-			track = "<a href='byond://?src=\ref[src];trackname=[rhtml_encode(speaker.real_name)];track=\ref[speaker]'>[speaker_name] ([jobname])</a>"
+			track = "<a href='byond://?src=\ref[src];trackname=[html_encode(speaker.real_name)];track=\ref[speaker]'>[speaker_name] ([jobname])</a>"
 
 	if(isghost(src))
 		if(speaker_name != speaker.real_name && !isAI(speaker)) //Announce computer and various stuff that broadcasts doesn't use it's real name but AI's can't pretend to be other mobs.
@@ -232,6 +236,9 @@
 	if(!client)
 		return
 
+	if(sleeping || stat == UNCONSCIOUS)
+		return 0
+
 	if(say_understands(speaker, language))
 		message = "<B>[speaker]</B> [verb], \"[message]\""
 	else
@@ -262,7 +269,7 @@
 		if(copytext(heardword,1, 1) in punctuation)
 			heardword = copytext(heardword,2)
 		if(copytext(heardword,-1) in punctuation)
-			heardword = copytext(heardword,1,lentext(heardword))
+			heardword = copytext(heardword,1,length(heardword))
 		heard = "<span class = 'game_say'>...You hear something about...[heardword]</span>"
 
 	else

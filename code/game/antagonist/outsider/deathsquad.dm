@@ -67,14 +67,14 @@ var/datum/antagonist/deathsquad/deathsquad
 	else
 		syndicate_commando_rank = pick("Lieutenant", "Captain", "Major")
 
-	var/syndicate_commando_name = pick(last_names)
+	var/syndicate_commando_name = pick(GLOB.last_names)
 
 	var/datum/preferences/A = new() //Randomize appearance for the commando.
 	A.randomize_appearance_and_body_for(player.current)
 
 	player.name = "[syndicate_commando_rank] [syndicate_commando_name]"
-	player.current.name = player.name
-	player.current.real_name = player.current.name
+	player.current.real_name = player.name
+	player.current.SetName(player.current.name)
 
 	var/mob/living/carbon/human/H = player.current
 	if(istype(H))

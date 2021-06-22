@@ -9,7 +9,7 @@
 	var/postStartTicks 		= 0
 
 /datum/event/radiation_storm/announce()
-	command_announcement.Announce("High levels of radiation detected in proximity of the [station_name()]. Please evacuate into one of the shielded maintenance tunnels.", "[station_name()] Sensor Array", new_sound = using_map.radiation_detected_sound)
+	command_announcement.Announce("High levels of radiation detected in proximity of the [station_name()]. Please evacuate into one of the shielded maintenance tunnels.", "[station_name()] Sensor Array", new_sound = GLOB.using_map.radiation_detected_sound)
 
 /datum/event/radiation_storm/start()
 	make_maint_all_access()
@@ -31,14 +31,14 @@
 
 /datum/event/radiation_storm/proc/radiate()
 	var/radiation_level = rand(15, 35)
-	for(var/z in using_map.station_levels)
+	for(var/z in GLOB.using_map.station_levels)
 		radiation_repository.z_radiate(locate(1, 1, z), radiation_level, 1)
 
-	for(var/mob/living/carbon/C in living_mob_list_)
+	for(var/mob/living/carbon/C in GLOB.living_mob_list_)
 		var/area/A = get_area(C)
 		if(!A)
 			continue
-		if(A.flags & AREA_RAD_SHIELDED)
+		if(A.area_flags & AREA_FLAG_RAD_SHIELDED)
 			continue
 		if(istype(C,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = C

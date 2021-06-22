@@ -15,6 +15,8 @@
 	brute_mod =     0.85
 	slowdown =      1
 
+	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_GRAV | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
+
 /datum/species/human/spacer
 	name = "Space-Adapted Human"
 	name_plural = "Space-Adapted Humans"
@@ -28,6 +30,9 @@
 	flash_mod = 1.2
 	brute_mod = 1.1
 	burn_mod =  1.1
+	darksight = 6
+
+	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_SPCR | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
 
 /datum/species/human/vatgrown
 	name = "Vat-Grown Human"
@@ -54,7 +59,7 @@
 	// #defines so it's easier to read what's actually being generated
 	#define LTR ascii2text(rand(65,90)) // A-Z
 	#define NUM ascii2text(rand(48,57)) // 0-9
-	#define NAME capitalize(pick(gender == FEMALE ? first_names_female : first_names_male))
+	#define NAME capitalize(pick(gender == FEMALE ? GLOB.first_names_female : GLOB.first_names_male))
 	switch(rand(1,4))
 		if(1) return NAME
 		if(2) return "[LTR][LTR]-[NAME]"
@@ -73,9 +78,3 @@
 	blurb = "Ook ook."
 	icobase = 'icons/mob/human_races/subspecies/r_upliftedchimp.dmi'
 */
-
-/mob/living/carbon/human/proc/isChild()//Used to tell if someone is a child.
-	if(species && species.name == "Child")
-		return 1
-	else
-		return 0

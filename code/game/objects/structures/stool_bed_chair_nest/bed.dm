@@ -62,14 +62,14 @@
 
 	// Strings.
 	if(material_alteration & MATERIAL_ALTERATION_NAME)
-		name = padding_material ? "[padding_material.adjective_name] [initial(name)]" : "[material.adjective_name] [initial(name)]" //this is not perfect but it will do for now.
+		SetName(padding_material ? "[padding_material.adjective_name] [initial(name)]" : "[material.adjective_name] [initial(name)]") //this is not perfect but it will do for now.
 
 	if(material_alteration & MATERIAL_ALTERATION_DESC)
 		desc = initial(desc)
 		desc += padding_material ? " It's made of [material.use_name] and covered with [padding_material.use_name]." : " It's made of [material.use_name]."
 
 /obj/structure/bed/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if(istype(mover) && mover.checkpass(PASS_FLAG_TABLE))
 		return 1
 	else
 		return ..()
@@ -89,7 +89,7 @@
 				return
 
 /obj/structure/bed/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wrench))
+	if(isWrench(W))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		dismantle()
 		qdel(src)
@@ -120,7 +120,7 @@
 		add_padding(padding_type)
 		return
 
-	else if (istype(W, /obj/item/weapon/wirecutters))
+	else if(isWirecutter(W))
 		if(!padding_material)
 			to_chat(user, "\The [src] has no padding to remove.")
 			return
@@ -128,8 +128,8 @@
 		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 		remove_padding()
 
-	else if(istype(W, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
+	else if(istype(W, /obj/item/grab))
+		var/obj/item/grab/G = W
 		var/mob/living/affecting = G.affecting
 		user.visible_message("<span class='notice'>[user] attempts to buckle [affecting] into \the [src]!</span>")
 		if(do_after(user, 20, src))
@@ -172,6 +172,12 @@
 /obj/structure/bed/alien/New(var/newloc)
 	..(newloc,"resin")
 
+/obj/structure/bed/bogani
+	name = "alien bed"
+	desc = "a strange looking bed, not from something you've seen before."
+	icon_state = "bogbed"
+
+
 /*
  * Roller beds
  */
@@ -186,7 +192,7 @@
 	return // Doesn't care about material or anything else.
 
 /obj/structure/bed/roller/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wrench) || istype(W,/obj/item/stack) || istype(W, /obj/item/weapon/wirecutters))
+	if(isWrench(W) || istype(W,/obj/item/stack) || isWirecutter(W))
 		return
 	else if(istype(W,/obj/item/roller_holder))
 		if(buckled_mob)
@@ -269,10 +275,10 @@
 /obj/structure/bed/roller/buckle_mob()
 	. = ..()
 	if(.)
-		moved_event.register(src, src, /obj/structure/bed/roller/proc/move_buckled)
+		GLOB.moved_event.register(src, src, /obj/structure/bed/roller/proc/move_buckled)
 
 /obj/structure/bed/roller/unbuckle_mob()
-	moved_event.unregister(src, src)
+	GLOB.moved_event.unregister(src, src)
 	return ..()
 
 /obj/structure/bed/roller/MouseDrop(over_object, src_location, over_location)

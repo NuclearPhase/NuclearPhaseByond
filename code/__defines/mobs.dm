@@ -15,12 +15,21 @@
 #define NO_ANTAG    0x4000  // Players are restricted from gaining antag roles when occupying this mob
 #define XENO_HOST   0x8000  // Tracks whether we're gonna be a baby alien's mummy.
 
+// Grab Types
+#define GRAB_NORMAL			"normal"
+#define GRAB_NAB			"nab"
+#define GRAB_NAB_SPECIAL	"special nab"
+
 // Grab levels.
-#define GRAB_PASSIVE    1
-#define GRAB_AGGRESSIVE 2
-#define GRAB_NECK       3
-#define GRAB_UPGRADING  4
-#define GRAB_KILL       5
+#define NORM_PASSIVE    "normal passive"
+#define NORM_STRUGGLE   "normal struggle"
+#define NORM_AGGRESSIVE "normal aggressive"
+#define NORM_NECK       "normal neck"
+#define NORM_KILL       "normal kill"
+
+#define NAB_PASSIVE		"nab passive"
+#define NAB_AGGRESSIVE	"nab aggressive"
+#define NAB_KILL		"nab kill"
 
 #define BORGMESON 0x1
 #define BORGTHERM 0x2
@@ -34,8 +43,9 @@
 #define HOSTILE_STANCE_TIRED     5
 #define HOSTILE_STANCE_INSIDE    6
 
-#define LEFT  1
-#define RIGHT 2
+#define LEFT  0x1
+#define RIGHT 0x2
+#define UNDER 0x4
 
 // Pulse levels, very simplified.
 #define PULSE_NONE    0 // So !M.pulse checks would be possible.
@@ -52,6 +62,8 @@
 #define I_DISARM	"disarm"
 #define I_GRAB		"grab"
 #define I_HURT		"harm"
+#define I_DODGE		"dodge"
+#define I_PARRY		"parry"
 
 //These are used Bump() code for living mobs, in the mob_bump_flag, mob_swap_flags, and mob_push_flags vars to determine whom can bump/swap with whom.
 #define HUMAN 1
@@ -83,7 +95,7 @@
 #define APPEARANCE_ALL       0xFFFF
 
 // Click cooldown
-#define DEFAULT_SLOW_COOLDOWN	16 //The default cooldown for slow actions.	
+#define DEFAULT_SLOW_COOLDOWN	16 //The default cooldown for slow actions.
 #define DEFAULT_ATTACK_COOLDOWN 8 //Default timeout for aggressive actions
 #define DEFAULT_QUICK_COOLDOWN  4
 
@@ -108,6 +120,13 @@
 #define MOB_SMALL 		10
 #define MOB_TINY 		5
 #define MOB_MINISCULE	1
+
+// Defines how strong the species is compared to humans. Think like strength in D&D
+#define STR_VHIGH       2
+#define STR_HIGH        1
+#define STR_MEDIUM      0
+#define STR_LOW        -1
+#define STR_VLOW       -2
 
 // Gluttony levels.
 #define GLUT_TINY 1       // Eat anything tiny and smaller
@@ -156,14 +175,13 @@
 #define BP_EYES     "eyes"
 #define BP_HEART    "heart"
 #define BP_LUNGS    "lungs"
+#define BP_TRACH	"tracheae"
 #define BP_BRAIN    "brain"
 #define BP_LIVER    "liver"
 #define BP_KIDNEYS  "kidneys"
 #define BP_PLASMA   "plasma vessel"
-#define BP_STACK    "stack"
 #define BP_APPENDIX "appendix"
 #define BP_CELL     "cell"
-#define BP_OPTICS   "optics"
 #define BP_HIVE     "hive node"
 #define BP_NUTRIENT "nutrient vessel"
 #define BP_ACID     "acid gland"
@@ -174,7 +192,18 @@
 #define BP_GBLADDER "gas bladder"
 #define BP_POLYP    "polyp segment"
 #define BP_ANCHOR   "anchoring ligament"
-#define BP_NECK 	"neck"
+#define BP_PHORON   "phoron filter"
+#define BP_THROAT 	"throat"
+#define BP_VCHORDS  "vocal chords"
+#define BP_TONGUE	"tongue"
+
+// Robo Organs.
+#define BP_POSIBRAIN	"posibrain"
+#define BP_VOICE		"vocal synthesiser"
+#define BP_STACK		"stack"
+#define BP_OPTICS		"optics"
+#define BP_VCHORDS  "vocal chords"
+#define BP_TONGUE	"tongue"
 
 // Limbs.
 #define BP_L_FOOT "l_foot"
@@ -236,4 +265,83 @@
 #define SPECIES_IPC "Machine"
 #define SPECIES_UNATHI "Unathi"
 #define SPECIES_SKRELL "Skrell"
-#define SPECIES_NABBER "Nabber"
+#define SPECIES_NABBER "Giant Armoured Serpentid"
+#define SPECIES_PROMETHEAN "Promethean"
+#define SPECIES_BOGANI "Bogani"
+#define SPECIES_EGYNO "Egyno"
+
+#define SURGERY_CLOSED 0
+#define SURGERY_OPEN 1
+#define SURGERY_RETRACTED 2
+#define SURGERY_ENCASED 3
+
+#define STAMINA_EXHAUST 200
+
+//Moods levels for humans
+#define MOOD_LEVEL_HAPPY4 20
+#define MOOD_LEVEL_HAPPY3 15
+#define MOOD_LEVEL_HAPPY2 10
+#define MOOD_LEVEL_HAPPY1 5
+#define MOOD_LEVEL_NEUTRAL 0
+#define MOOD_LEVEL_SAD1 -5
+#define MOOD_LEVEL_SAD2 -10
+#define MOOD_LEVEL_SAD3 -15
+#define MOOD_LEVEL_SAD4 -20
+
+#define NUTRITION_LEVEL_FAT 550
+#define NUTRITION_LEVEL_FULL 500
+#define NUTRITION_LEVEL_WELL_FED 450
+#define NUTRITION_LEVEL_FED 350
+#define NUTRITION_LEVEL_HUNGRY 250
+#define NUTRITION_LEVEL_STARVING 150
+
+//Thirst levels for humans
+#define THIRST_LEVEL_MAX 600
+#define THIRST_LEVEL_FILLED 500
+#define THIRST_LEVEL_MEDIUM 300
+#define THIRST_LEVEL_THIRSTY 200
+#define THIRST_LEVEL_DEHYDRATED 50
+#define THIRST_FACTOR 0.5
+
+//Hygiene levels for humans
+#define HYGIENE_LEVEL_CLEAN 250
+#define HYGIENE_LEVEL_NORMAL 200
+#define HYGIENE_LEVEL_DIRTY 75
+#define HYGIENE_FACTOR_LOWEST 0.09
+#define HYGIENE_FACTOR 0.1
+#define HYGIENE_FACTOR_HIGHEST 0.110
+
+//Disgust levels for humans
+#define DISGUST_LEVEL_MAXEDOUT 150
+#define DISGUST_LEVEL_DISGUSTED 75
+#define DISGUST_LEVEL_VERYGROSS 50
+#define DISGUST_LEVEL_GROSS 25
+
+//Hardcore mode stuff
+
+#define STARVATION_MIN 60 //If you have less nutrition than this value, the hunger indicator starts flashing
+#define STARVATION_NOTICE 45 //If you have more nutrition than this value, you get an occasional message reminding you that you're going to starve soon
+#define STARVATION_WEAKNESS 20 //Otherwise, if you have more nutrition than this value, you occasionally become weak and receive minor damage
+#define STARVATION_NEARDEATH 5 //Otherwise, if you have more nutrition than this value, you have seizures and occasionally receive damage
+
+//If you have less nutrition than STARVATION_NEARDEATH, you start getting damage
+#define STARVATION_OXY_DAMAGE 2.5
+#define STARVATION_TOX_DAMAGE 2.5
+#define STARVATION_BRAIN_DAMAGE 2.5
+
+#define STARVATION_OXY_HEAL_RATE 1 //While starving, THIS much oxygen damage is restored per life tick (instead of the default 5)
+
+//Temperature stuff
+//BODYTEMP_COLD_DAMAGE_LIMIT 			 -13�C Below which freezing damage occurs.						(defined in items_clothing.dm)
+#define TEMPERATURE_REFRESHING 	278.15	//5�C  Below which drinks and foods are considered refreshing.
+#define TEMPERATURE_WARM 		323.15	//50�C Above which drinks and foods are considered warm.
+//BODYTEMP_HEAT_DAMAGE_LIMIT 			  87�C Above which burn damage occurs.							(defined in items_clothing.dm)#define STASIS_MISC "misc"
+#define STASIS_CRYOBAG "cryobag"
+#define STASIS_COLD "cold"
+
+#define AURA_CANCEL 1
+#define AURA_FALSE  2
+#define AURA_TYPE_BULLET "Bullet"
+#define AURA_TYPE_WEAPON "Weapon"
+#define AURA_TYPE_THROWN "Thrown"
+#define AURA_TYPE_LIFE   "Life"

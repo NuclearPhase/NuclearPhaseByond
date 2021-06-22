@@ -43,10 +43,6 @@
 		else
 			light = new /datum/light_source(src, .)
 
-/atom/New()
-	if(light_power && light_range)
-		update_light()
-
 /atom/Destroy()
 	if(light)
 		light.destroy()
@@ -60,21 +56,31 @@
 		if(istype(T))
 			T.handle_opacity_change(src)
 
-/atom/movable/Move()
-	var/turf/old_loc = loc
-	. = ..()
+#define LIGHT_MOVE_UPDATE \
+var/turf/old_loc = loc;\
+. = ..();\
+if(loc != old_loc) {\
+	for(var/datum/light_source/L in light_sources) {\
+		L.source_atom.update_light();\
+	}\
+}
 
-	if(loc != old_loc)
-		for(var/datum/light_source/L in light_sources)
-			L.source_atom.update_light()
+/atom/movable/Move()
+	LIGHT_MOVE_UPDATE
+
+/atom/movable/forceMove()
+	LIGHT_MOVE_UPDATE
+
+#undef LIGHT_MOVE_UPDATE
 
 /obj/item/equipped()
 	. = ..()
 	update_light()
 
-/obj/item/pickup()
+/obj/item/pickup(mob/user)
 	. = ..()
 	update_light()
+	drawsound(user)
 
 /obj/item/dropped()
 	. = ..()

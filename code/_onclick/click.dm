@@ -48,6 +48,9 @@
 	if(modifiers["shift"] && modifiers["ctrl"])
 		CtrlShiftClickOn(A)
 		return 1
+	if(modifiers["ctrl"] && modifiers["alt"])
+		CtrlAltClickOn(A)
+		return 1
 	if(modifiers["middle"] && modifiers["shift"])
 		ShiftMiddleClickOn(A)
 		return 1
@@ -65,10 +68,10 @@
 		return
 
 	if(lying && istype(A, /turf/) && !istype(A, /turf/space/))
-		if(A.Adjacent(src) && !get_active_hand())
+		if(!get_active_hand())//Should make getting up stairs easier.
 			scramble(A)
 
-	if(stat || paralysis || stunned || weakened)
+	if(stat || paralysis || stunned) //|| weakened)
 		return
 
 	face_atom(A) // change direction to face what you clicked on
@@ -257,6 +260,15 @@
 
 /atom/movable/CtrlClick(var/mob/user)
 	if(Adjacent(user))
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/obj/item/organ/external/temp = H.organs_by_name[BP_R_HAND]
+			var/hashands = (temp && temp.is_usable())
+			if (!hashands)
+				temp = H.organs_by_name[BP_L_HAND]
+				hashands = (temp && temp.is_usable())
+			if (!hashands)
+				return
 		user.start_pulling(src)
 
 /*
@@ -278,7 +290,7 @@
 
 /mob/proc/TurfAdjacent(var/turf/T)
 	return T.AdjacentQuick(src)
-    
+
 /mob/observer/ghost/TurfAdjacent(var/turf/T)
 	if(!isturf(loc) || !client)
 		return FALSE
@@ -293,6 +305,16 @@
 	return
 
 /atom/proc/CtrlShiftClick(var/mob/user)
+	return
+
+/*
+	Control+Alt click
+*/
+/mob/proc/CtrlAltClickOn(var/atom/A)
+	A.CtrlAltClick(src)
+	return
+
+/atom/proc/CtrlAltClick(var/mob/user)
 	return
 
 /*
@@ -336,6 +358,8 @@
 		if(dx > 0)	direction = EAST
 		else		direction = WEST
 	if(direction != dir)
+		if(facing_dir)
+			facing_dir = direction
 		facedir(direction)
 
 /obj/screen/click_catcher
@@ -374,7 +398,7 @@
 /mob/Destroy()
 	if(click_handlers)
 		click_handlers.QdelClear()
-		qdel_null(click_handlers)
+		QDEL_NULL(click_handlers)
 	. = ..()
 
 var/const/CLICK_HANDLER_NONE                 = 0
@@ -389,11 +413,11 @@ var/const/CLICK_HANDLER_ALL                  = (~0)
 	..()
 	src.user = user
 	if(flags & (CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
-		logged_out_event.register(user, src, /datum/click_handler/proc/OnMobLogout)
+		GLOB.logged_out_event.register(user, src, /datum/click_handler/proc/OnMobLogout)
 
 /datum/click_handler/Destroy()
 	if(flags & (CLICK_HANDLER_REMOVE_ON_MOB_LOGOUT))
-		logged_out_event.unregister(user, src, /datum/click_handler/proc/OnMobLogout)
+		GLOB.logged_out_event.unregister(user, src, /datum/click_handler/proc/OnMobLogout)
 	user = null
 	. = ..()
 
@@ -483,14 +507,18 @@ var/const/CLICK_HANDLER_ALL                  = (~0)
 		else		direction = WEST
 	if(direction)
 		scrambling = 1
-		spawn(10)
+		if(do_after(src, 10))//spawn(10)
 			Move(get_step(src,direction))
 			scrambling = 0
 			dir = 2
 			src.visible_message("\red <b>[src]</b> crawls!")
+		else
+			scrambling = 0
 
 /atom/proc/middle_click_intent_check(var/mob/M)
 	if(M.middle_click_intent == "kick")
 		return kick_act(M)
-	if(M.middle_click_intent == "jump")
+	else if(M.middle_click_intent == "jump")
 		jump_act(src, M)
+	else
+		M.swap_hand()

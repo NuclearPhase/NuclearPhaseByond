@@ -4,24 +4,23 @@
 
 //Start of a breath chain, calls breathe()
 /mob/living/carbon/handle_breathing()
-	if((life_tick % MOB_BREATH_DELAY) == 0 || failed_last_breath || (health < config.health_threshold_crit)) 	//First, resolve location and get a breath
+	if((life_tick % MOB_BREATH_DELAY) == 0 || failed_last_breath || is_asystole()) //First, resolve location and get a breath
 		breathe()
 
-/mob/living/carbon/proc/breathe()
+/mob/living/carbon/proc/breathe(var/active_breathe = 1)
 	//if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
-	if(!should_have_organ(BP_LUNGS)) return
+	if(!need_breathe()) return
 
 	var/datum/gas_mixture/breath = null
 
 	//First, check if we can breathe at all
-	if(health < config.health_threshold_crit && !(CE_STABLE in chem_effects)) //crit aka circulatory shock
+	if(is_asystole() && !(CE_STABLE in chem_effects) && active_breathe) //crit aka circulatory shock
 		losebreath = max(2, losebreath + 1)
 
 	if(losebreath>0) //Suffocating so do not take a breath
 		losebreath--
-		if (prob(10)) //Gasp per 10 ticks? Sounds about right.
-			spawn emote("gasp")
-			gasp_sound(src)
+		if (prob(10) && !is_asystole() && active_breathe) //Gasp per 10 ticks? Sounds about right.
+			emote("gasp")
 	else
 		//Okay, we can breathe, now check if we can get air
 		breath = get_breath_from_internal() //First, check for air from internals
@@ -40,7 +39,7 @@
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!(wear_mask && (wear_mask.item_flags & AIRTIGHT)))
+		if (!(wear_mask && (wear_mask.item_flags & ITEM_FLAG_AIRTIGHT)))
 			internal = null
 		if(internal)
 			if (internals)
@@ -75,7 +74,7 @@
 /mob/living/carbon/proc/handle_chemical_smoke(var/datum/gas_mixture/environment)
 	if(species && environment.return_pressure() < species.breath_pressure/5)
 		return //pressure is too low to even breathe in.
-	if(wear_mask && (wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT))
+	if(wear_mask && (wear_mask.item_flags & ITEM_FLAG_BLOCK_GAS_SMOKE_EFFECT))
 		return
 
 	for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))

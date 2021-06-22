@@ -98,7 +98,7 @@
 
 	var/mob/M = usr
 	var/input = sanitizeSafe(input("What do you want to name the circuit?", "Rename", src.name) as null|text, MAX_NAME_LEN)
-	if(src && input && input != name && CanInteract(M, physical_state))
+	if(src && input && input != name && CanInteract(M, GLOB.physical_state))
 		to_chat(M, "<span class='notice'>The circuit '[src.name]' is now labeled '[input]'.</span>")
 		name = input
 		interact(M)
@@ -136,7 +136,7 @@
 	return null
 
 /obj/item/integrated_circuit/interact(mob/user)
-	if(!CanInteract(user, physical_state))
+	if(!CanInteract(user, GLOB.physical_state))
 		return
 
 	var/HTML = list()
@@ -237,7 +237,7 @@
 	var/obj/item/device/electronic_assembly/assembly = get_assembly(loc)
 	return assembly  && assembly.opened
 
-/obj/item/integrated_circuit/Topic(href, href_list, state = physical_state)
+/obj/item/integrated_circuit/Topic(href, href_list, state = GLOB.physical_state)
 	if(..())
 		return 1
 	var/pin = locate(href_list["pin"]) in inputs + outputs + activators
@@ -281,12 +281,12 @@
 		. = IC_TOPIC_REFRESH
 
 	else
-		. = OnTopic(href_list, usr)
+		. = OnICTopic(href_list, usr)
 
 	if(. == IC_TOPIC_REFRESH)
 		interact_with_assembly(usr)
 
-/obj/item/integrated_circuit/proc/OnTopic(href_list, var/mob/user)
+/obj/item/integrated_circuit/proc/OnICTopic(href_list, var/mob/user)
 	return IC_TOPIC_UNHANDLED
 
 /obj/item/integrated_circuit/proc/get_topic_data(mob/user)

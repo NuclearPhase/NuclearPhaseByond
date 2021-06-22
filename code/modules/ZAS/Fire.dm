@@ -60,7 +60,7 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 		fuel_objs.Cut()
 
 	if(!fire_tiles.len)
-		air_master.active_fire_zones.Remove(src)
+		SSair.active_fire_zones.Remove(src)
 
 /zone/proc/remove_liquidfuel(var/used_liquid_fuel, var/remove_fire=0)
 	if(!fuel_objs.len)
@@ -97,12 +97,11 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 		return 1
 
 	fire = new(src, fl)
-	air_master.active_fire_zones |= zone
+	SSair.active_fire_zones |= zone
 
 	var/obj/effect/decal/cleanable/liquid_fuel/fuel = locate() in src
 	zone.fire_tiles |= src
 	if(fuel) zone.fuel_objs += fuel
-	playsound(src.loc, 'sound/effects/fire.ogg', 15, 0)
 
 	return 0
 
@@ -116,18 +115,18 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
-	light_color = "#ED9200"
+	light_color = "#ed9200"
 	plane = EFFECTS_BELOW_LIGHTING_PLANE
 	layer = FIRE_LAYER
 
 	var/firelevel = 1 //Calculated by gas_mixture.calculate_firelevel()
 
-/obj/fire/process()
+/obj/fire/Process()
 	. = 1
 
 	var/turf/simulated/my_tile = loc
 	if(!istype(my_tile) || !my_tile.zone)
-		if(my_tile.fire == src)
+		if(my_tile && my_tile.fire == src)
 			my_tile.fire = null
 		RemoveFire()
 		return 1
@@ -152,7 +151,7 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.volume)
 
 	//spread
-	for(var/direction in cardinal)
+	for(var/direction in GLOB.cardinal)
 		var/turf/simulated/enemy_tile = get_step(my_tile, direction)
 
 		if(istype(enemy_tile))
@@ -182,9 +181,6 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 	animate(src, color = fire_color(air_contents.temperature), 5)
 	set_light(l_color = color)
 
-	if(prob(33))//Play dat burning noise fam.
-		playsound(src.loc, 'sound/effects/fire.ogg', 15, 0)
-
 /obj/fire/New(newLoc,fl)
 	..()
 
@@ -192,14 +188,14 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 		qdel(src)
 		return
 
-	set_dir(pick(cardinal))
+	set_dir(pick(GLOB.cardinal))
 
 	var/datum/gas_mixture/air_contents = loc.return_air()
 	color = fire_color(air_contents.temperature)
 	set_light(3, 1, color)
 
 	firelevel = fl
-	air_master.active_hotspots.Add(src)
+	SSair.active_hotspots.Add(src)
 
 /obj/fire/proc/fire_color(var/env_temperature)
 	var/temperature = max(4000*sqrt(firelevel/vsc.fire_firelevel_multiplier), env_temperature)
@@ -208,7 +204,7 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 /obj/fire/Destroy()
 	RemoveFire()
 
-	..()
+	. = ..()
 
 /obj/fire/proc/RemoveFire()
 	var/turf/T = loc
@@ -217,7 +213,7 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 
 		T.fire = null
 		loc = null
-	air_master.active_hotspots.Remove(src)
+	SSair.active_hotspots.Remove(src)
 
 
 /turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
@@ -308,8 +304,9 @@ turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
 
 		//remove_by_flag() and adjust_gas() handle the group_multiplier for us.
 		remove_by_flag(XGM_GAS_OXIDIZER, used_oxidizers)
-		remove_by_flag(XGM_GAS_FUEL, used_gas_fuel)
-		adjust_gas("carbon_dioxide", used_oxidizers)
+		var/datum/gas_mixture/burned_fuel = remove_by_flag(XGM_GAS_FUEL, used_gas_fuel)
+		for(var/g in burned_fuel.gas)
+			adjust_gas(gas_data.burn_product[g], burned_fuel.gas[g])
 
 		if(zone)
 			zone.remove_liquidfuel(used_liquid_fuel, !check_combustability())
@@ -359,7 +356,7 @@ datum/gas_mixture/proc/check_recombustability(list/fuel_objs)
 
 	. = 0
 	for(var/g in gas)
-		if(gas_data.flags[g] & XGM_GAS_FUEL && QUANTIZE(gas[g] * vsc.fire_consuption_rate) >= 0.005)
+		if(gas_data.flags[g] & XGM_GAS_FUEL && QUANTIZE(gas[g] * vsc.fire_consuption_rate) >= 0.1)
 			. = 1
 			break
 

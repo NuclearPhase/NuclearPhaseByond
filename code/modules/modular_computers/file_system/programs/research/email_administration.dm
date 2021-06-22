@@ -3,6 +3,8 @@
 	filedesc = "Email Administration Utility"
 	extended_desc = "This program may be used to administrate NTNet's emailing service."
 	program_icon_state = "comm_monitor"
+	program_key_state = "generic_key"
+	program_menu_icon = "mail-open"
 	size = 12
 	requires_ntnet = 1
 	available_on_ntnet = 1
@@ -18,7 +20,7 @@
 	var/datum/computer_file/data/email_message/current_message = null
 	var/error = ""
 
-/datum/nano_module/email_administration/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = default_state)
+/datum/nano_module/email_administration/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
 	var/list/data = host.initial_data()
 
 	if(error)
@@ -53,7 +55,7 @@
 		data["accounts"] = all_accounts
 		data["accountcount"] = all_accounts.len
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "email_administration.tmpl", "Email Administration Utility", 600, 450, state = state)
 		if(host.update_layout())
@@ -123,7 +125,7 @@
 		return 1
 
 	if(href_list["newaccount"])
-		var/newdomain = sanitize(input(user,"Pick domain:", "Domain name") as null|anything in using_map.usable_email_tlds)
+		var/newdomain = sanitize(input(user,"Pick domain:", "Domain name") as null|anything in GLOB.using_map.usable_email_tlds)
 		if(!newdomain)
 			return 1
 		var/newlogin = sanitize(input(user,"Pick account name (@[newdomain]):", "Account name"), 100)

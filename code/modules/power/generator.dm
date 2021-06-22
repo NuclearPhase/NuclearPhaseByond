@@ -55,7 +55,7 @@
 				circ1 = null
 				circ2 = null
 
-/obj/machinery/power/generator/proc/updateicon()
+/obj/machinery/power/generator/update_icon()
 	if(stat & (NOPOWER|BROKEN))
 		overlays.Cut()
 	else
@@ -64,7 +64,7 @@
 		if(lastgenlev != 0)
 			overlays += image('icons/obj/power.dmi', "teg-op[lastgenlev]")
 
-/obj/machinery/power/generator/process()
+/obj/machinery/power/generator/Process()
 	if(!circ1 || !circ2 || !anchored || stat & (BROKEN|NOPOWER))
 		stored_energy = 0
 		return
@@ -96,7 +96,7 @@
 			else
 				air2.temperature = air2.temperature + heat/air2_heat_capacity
 				air1.temperature = air1.temperature - energy_transfer/air1_heat_capacity
-		playsound(src.loc, 'sound/effects/beam.ogg', 25, 0, 10)
+		playsound(src.loc, 'sound/effects/beam.ogg', 25, 0, 10,  is_ambiance = 1)
 
 	//Transfer the air
 	if (air1)
@@ -131,14 +131,14 @@
 		genlev = 1
 	if(genlev != lastgenlev)
 		lastgenlev = genlev
-		updateicon()
+		update_icon()
 	add_avail(effective_gen)
 
 /obj/machinery/power/generator/attack_ai(mob/user)
 	attack_hand(user)
 
 /obj/machinery/power/generator/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/wrench))
+	if(isWrench(W))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 		anchored = !anchored
 		user.visible_message("[user.name] [anchored ? "secures" : "unsecures"] the bolts holding [src.name] to the floor.", \
@@ -199,10 +199,10 @@
 
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
 		ui = new(user, src, ui_key, "generator.tmpl", "Thermoelectric Generator", 450, 500)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)

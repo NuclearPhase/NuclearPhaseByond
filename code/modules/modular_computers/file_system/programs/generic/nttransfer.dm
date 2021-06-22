@@ -5,6 +5,8 @@ var/global/nttransfer_uid = 0
 	filedesc = "NTNet P2P Transfer Client"
 	extended_desc = "This program allows for simple file transfer via direct peer to peer connection."
 	program_icon_state = "comm_logs"
+	program_key_state = "generic_key"
+	program_menu_icon = "transferthick-e-w"
 	size = 7
 	requires_ntnet = 1
 	requires_ntnet_feature = NTNET_PEERTOPEER
@@ -29,6 +31,7 @@ var/global/nttransfer_uid = 0
 	..()
 
 /datum/computer_file/program/nttransfer/process_tick()
+	..()
 	// Server mode
 	if(provided_file)
 		for(var/datum/computer_file/program/nttransfer/C in connected_clients)
@@ -76,7 +79,7 @@ var/global/nttransfer_uid = 0
 /datum/nano_module/program/computer_nttransfer
 	name = "NTNet P2P Transfer Client"
 
-/datum/nano_module/program/computer_nttransfer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = default_state)
+/datum/nano_module/program/computer_nttransfer/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
 	if(!program)
 		return
 	var/datum/computer_file/program/nttransfer/PRG = program
@@ -121,7 +124,7 @@ var/global/nttransfer_uid = 0
 			)))
 		data["servers"] = all_servers
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "ntnet_transfer.tmpl", "NTNet P2P Transfer Client", 575, 700, state = state)
 		ui.auto_update_layout = 1

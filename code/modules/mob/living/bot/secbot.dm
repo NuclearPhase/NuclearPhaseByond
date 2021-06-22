@@ -134,12 +134,12 @@
 		broadcast_security_hud_message("[src] is arresting a level [threat] suspect <b>[suspect_name]</b> in <b>[get_area(src)]</b>.", src)
 	say("Down on the floor, [suspect_name]! You have [SECBOT_WAIT_TIME] seconds to comply.")
 	playsound(src.loc, pick(preparing_arrest_sounds), 50)
-	moved_event.register(target, src, /mob/living/bot/secbot/proc/target_moved)
+	GLOB.moved_event.register(target, src, /mob/living/bot/secbot/proc/target_moved)
 
 /mob/living/bot/secbot/proc/target_moved(atom/movable/moving_instance, atom/old_loc, atom/new_loc)
 	if(get_dist(get_turf(src), get_turf(target)) >= 1)
 		awaiting_surrender = INFINITY
-		moved_event.unregister(moving_instance, src)
+		GLOB.moved_event.unregister(moving_instance, src)
 
 /mob/living/bot/secbot/proc/react_to_attack(mob/attacker)
 	if(!target)
@@ -150,7 +150,7 @@
 
 /mob/living/bot/secbot/resetTarget()
 	..()
-	moved_event.unregister(target, src)
+	GLOB.moved_event.unregister(target, src)
 	awaiting_surrender = -1
 	walk_to(src, 0)
 
@@ -278,7 +278,7 @@
 
 /obj/item/weapon/secbot_assembly/attackby(var/obj/item/O, var/mob/user)
 	..()
-	if(istype(O, /obj/item/weapon/weldingtool) && !build_step)
+	if(isWelder(O) && !build_step)
 		var/obj/item/weapon/weldingtool/WT = O
 		if(WT.remove_fuel(0, user))
 			build_step = 1
@@ -290,14 +290,14 @@
 		build_step = 2
 		to_chat(user, "You add \the [O] to [src].")
 		overlays += image('icons/obj/aibots.dmi', "hs_eye")
-		name = "helmet/signaler/prox sensor assembly"
+		SetName("helmet/signaler/prox sensor assembly")
 		qdel(O)
 
 	else if((istype(O, /obj/item/robot_parts/l_arm) || istype(O, /obj/item/robot_parts/r_arm)) && build_step == 2)
 		user.drop_item()
 		build_step = 3
 		to_chat(user, "You add \the [O] to [src].")
-		name = "helmet/signaler/prox sensor/robot arm assembly"
+		SetName("helmet/signaler/prox sensor/robot arm assembly")
 		overlays += image('icons/obj/aibots.dmi', "hs_arm")
 		qdel(O)
 
@@ -305,7 +305,7 @@
 		user.drop_item()
 		to_chat(user, "You complete the Securitron! Beep boop.")
 		var/mob/living/bot/secbot/S = new /mob/living/bot/secbot(get_turf(src))
-		S.name = created_name
+		S.SetName(created_name)
 		qdel(O)
 		qdel(src)
 

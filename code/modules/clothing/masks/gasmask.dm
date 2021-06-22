@@ -1,12 +1,12 @@
 /obj/item/clothing/mask/gas
 	name = "gas mask"
 	desc = "A face-covering mask that can be connected to an air supply. Filters harmful gases from the air."
-	icon_state = "gas_alt"
-	item_flags = BLOCK_GAS_SMOKE_EFFECT | AIRTIGHT
+	icon_state = "fullgas"
+	item_state = "fullgas"
+	item_flags = ITEM_FLAG_BLOCK_GAS_SMOKE_EFFECT | ITEM_FLAG_AIRTIGHT
 	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE
 	body_parts_covered = FACE|EYES
 	w_class = ITEM_SIZE_NORMAL
-	item_state = "gas_alt"
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
@@ -27,14 +27,26 @@
 
 	return filtered
 
+/obj/item/clothing/mask/gas/security
+	name = "military grade gas mask"
+	icon_state = "sgmask"
+	item_state = "sgmask"
+	siemens_coefficient = 0.7
+	body_parts_covered = FACE|EYES
+	armor = list(melee = 15, bullet = 15, laser = 15, energy = 0, bomb = 0, bio = 75, rad = 0)
+
 /obj/item/clothing/mask/gas/half
 	name = "face mask"
 	desc = "A compact, durable gas mask that can be connected to an air supply."
 	icon_state = "halfgas"
+	item_state = "halfgas"
 	siemens_coefficient = 0.7
 	body_parts_covered = FACE
 	w_class = ITEM_SIZE_SMALL
 	armor = list(melee = 10, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 55, rad = 0)
+	sprite_sheets = list(
+		SPECIES_TAJARA = 'icons/mob/species/tajaran/mask.dmi',
+		)
 
 //Plague Dr suit can be found in clothing/suits/bio.dm
 /obj/item/clothing/mask/gas/plaguedoctor

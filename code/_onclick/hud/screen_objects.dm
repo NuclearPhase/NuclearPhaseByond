@@ -66,21 +66,6 @@
 	owner.ui_action_click()
 	return 1
 
-/obj/screen/grab
-	name = "grab"
-
-/obj/screen/grab/Click()
-	var/obj/item/weapon/grab/G = master
-	G.s_click(src)
-	return 1
-
-/obj/screen/grab/attack_hand()
-	return
-
-/obj/screen/grab/attackby()
-	return
-
-
 /obj/screen/storage
 	name = "storage"
 
@@ -235,6 +220,12 @@
 
 		if("Reset Machine")
 			usr.unset_machine()
+
+		if("health")
+			if(ishuman(usr))
+				var/mob/living/carbon/human/X = usr
+				X.exam_self()
+
 		if("internal")
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
@@ -247,9 +238,9 @@
 					else
 
 						var/no_mask
-						if(!(C.wear_mask && C.wear_mask.item_flags & AIRTIGHT))
+						if(!(C.wear_mask && C.wear_mask.item_flags & ITEM_FLAG_AIRTIGHT))
 							var/mob/living/carbon/human/H = C
-							if(!(H.head && H.head.item_flags & AIRTIGHT))
+							if(!(H.head && H.head.item_flags & ITEM_FLAG_AIRTIGHT))
 								no_mask = 1
 
 						if(no_mask)
@@ -365,6 +356,14 @@
 				usr.jump_icon.icon_state = "jump_on"
 				usr.kick_icon.icon_state = "kick"
 
+		if("fixeye")
+			usr.face_direction()
+			if(usr.facing_dir)
+				usr.fixeye.icon_state = "fixeye_on"
+			else
+				usr.fixeye.icon_state = "fixeye"
+
+
 		if("module")
 			if(isrobot(usr))
 				var/mob/living/silicon/robot/R = usr
@@ -418,7 +417,7 @@
 	// We don't even know if it's a middle click
 	if(!usr.canClick())
 		return 1
-	if(usr.stat || usr.paralysis || usr.stunned)
+	if(usr.stat || usr.paralysis || usr.stunned)//|| usr.weakened Don't need none of that shit no more.
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
@@ -440,10 +439,3 @@
 				usr.update_inv_l_hand(0)
 				usr.update_inv_r_hand(0)
 	return 1
-
-/obj/screen/fov
-	icon = 'icons/mob/hide.dmi'
-	icon_state = "combat"
-	name = " "
-	screen_loc = "1,1"
-	mouse_opacity = 0

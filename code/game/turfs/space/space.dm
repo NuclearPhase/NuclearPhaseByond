@@ -1,49 +1,54 @@
-var/image/exterior_light_overlay
-
-/proc/get_exterior_light_overlay()
-	if(!exterior_light_overlay)
-		exterior_light_overlay = image(icon = 'icons/planar_lighting/space.dmi')
-		exterior_light_overlay.blend_mode = BLEND_ADD
-		exterior_light_overlay.plane = LIGHTING_PLANE
-		exterior_light_overlay.mouse_opacity = 0
-	return exterior_light_overlay
-
 /turf/space
 	plane = SPACE_PLANE
 	icon = 'icons/turf/space.dmi'
-	name = "\proper space"
-	icon_state = "0"
-	dynamic_lighting = 0
 
+	name = "\proper space"
+	icon_state = "fake"
+	dynamic_lighting = 0
 	temperature = T20C
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
-	var/keep_sprite = 0
-//	heat_capacity = 700000 No.
+	var/static/list/dust_cache
 
 /turf/space/New()
-	if((icon_state == "0") && (!keep_sprite))
-		icon_state = "[((x + y) ^ ~(x * y)) % 25]"
-	update_starlight()
-	..()
+	icon_state = "white"
 
-/turf/space/initialize()
-	..()
+/turf/space/proc/build_dust_cache()
+	LAZYINITLIST(dust_cache)
+	for (var/i in 0 to 25)
+		var/image/im = image('icons/turf/space_dust.dmi',"[i]")
+		im.plane = DUST_PLANE
+		im.alpha = 80
+		im.blend_mode = BLEND_ADD
+		dust_cache["[i]"] = im
+
+
+/turf/space/Initialize()
+	. = ..()
+	update_starlight()
+	if (!dust_cache)
+		build_dust_cache()
+	overlays += dust_cache["[((x + y) ^ ~(x * y) + z) % 25]"]
+
 	if(!HasBelow(z))
 		return
 	var/turf/below = GetBelow(src)
+
 	if(istype(below, /turf/space))
 		return
 	var/area/A = below.loc
-	if(A.flags & AREA_EXTERNAL)
-		return
-	if(!below.density && istype(below.loc, /area/space))
+
+	if(A.area_flags & AREA_FLAG_EXTERNAL)
 		return
 
+
+	return INITIALIZE_HINT_LATELOAD // oh no! we need to switch to being a different kind of turf!
+
+/turf/space/LateInitialize()
 	// We alter area type before the turf to ensure the turf-change-event-propagation is handled as expected.
-	if(using_map.base_floor_area)
-		var/area/new_area = locate(using_map.base_floor_area) || new using_map.base_floor_area
+	if(GLOB.using_map.base_floor_area)
+		var/area/new_area = locate(GLOB.using_map.base_floor_area) || new GLOB.using_map.base_floor_area
 		new_area.contents.Add(src)
-	ChangeTurf(using_map.base_floor_type)
+	ChangeTurf(GLOB.using_map.base_floor_type)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
@@ -51,7 +56,7 @@ var/image/exterior_light_overlay
 		O.hide(0)
 
 /turf/space/is_solid_structure()
-	return locate(/obj/structure/lattice, src) || locate(/obj/structure/catwalk, src) //counts as solid structure if it has a lattice
+	return locate(/obj/structure/lattice, src) //counts as solid structure if it has a lattice
 
 /turf/space/proc/update_starlight()
 	if(!config.starlight)
@@ -65,31 +70,14 @@ var/image/exterior_light_overlay
 
 	if (istype(C, /obj/item/stack/rods))
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-		var/obj/item/stack/rods/R = C
-		var/obj/structure/catwalk/W = locate(/obj/structure/catwalk, src)
-
-		if(W)
-			to_chat(user, "<span class='warning'>There is already a catwalk here!</span>")
-			return
-
 		if(L)
-			if(R.use(1))
-				to_chat(user, "<span class='notice'>You construct a catwalk.</span>")
-				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-				new/obj/structure/catwalk(src)
-			else
-				to_chat(user, "<span class='warning'>You need two rods to build a catwalk!</span>")
-			return
-
+			return L.attackby(C, user)
+		var/obj/item/stack/rods/R = C
 		if (R.use(1))
 			to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 			ReplaceWithLattice()
-		else
-			to_chat(user, "<span class='warning'>You need one rod to build a lattice.</span>")
-
 		return
-
 
 	if (istype(C, /obj/item/stack/tile/floor))
 		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
@@ -135,8 +123,8 @@ var/image/exterior_light_overlay
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
-		next_x = (--cur_x||global_map.len)
-		y_arr = global_map[next_x]
+		next_x = (--cur_x||GLOB.global_map.len)
+		y_arr = GLOB.global_map[next_x]
 		target_z = y_arr[cur_y]
 /*
 		//debug
@@ -161,8 +149,8 @@ var/image/exterior_light_overlay
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
-		next_x = (++cur_x > global_map.len ? 1 : cur_x)
-		y_arr = global_map[next_x]
+		next_x = (++cur_x > GLOB.global_map.len ? 1 : cur_x)
+		y_arr = GLOB.global_map[next_x]
 		target_z = y_arr[cur_y]
 /*
 		//debug
@@ -186,7 +174,7 @@ var/image/exterior_light_overlay
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
-		y_arr = global_map[cur_x]
+		y_arr = GLOB.global_map[cur_x]
 		next_y = (--cur_y||y_arr.len)
 		target_z = y_arr[next_y]
 /*
@@ -212,7 +200,7 @@ var/image/exterior_light_overlay
 		if(!cur_pos) return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
-		y_arr = global_map[cur_x]
+		y_arr = GLOB.global_map[cur_x]
 		next_y = (++cur_y > y_arr.len ? 1 : cur_y)
 		target_z = y_arr[next_y]
 /*
@@ -238,4 +226,3 @@ var/image/exterior_light_overlay
 /turf/space/bluespace
 	name = "bluespace"
 	icon_state = "bluespace"
-	keep_sprite = 1

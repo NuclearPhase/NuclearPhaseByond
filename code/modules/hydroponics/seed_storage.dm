@@ -27,7 +27,7 @@
 	use_power = 1
 	idle_power_usage = 100
 
-	var/initialized = 0 // Map-placed ones break if seeds are loaded right at the start of the round, so we do it on the first interaction
+	var/seeds_initialized = 0 // Map-placed ones break if seeds are loaded right at the start of the round, so we do it on the first interaction
 	var/list/datum/seed_pile/piles = list()
 	var/list/starting_seeds = list()
 	var/list/scanner = list() // What properties we can view
@@ -53,6 +53,7 @@
 		/obj/item/seeds/chiliseed = 30,
 		/obj/item/seeds/cocoapodseed = 30,
 		/obj/item/seeds/cornseed = 30,
+		/obj/item/seeds/peanutseed = 30,
 		/obj/item/seeds/replicapod = 30,
 		/obj/item/seeds/eggplantseed = 30,
 		/obj/item/seeds/amanitamycelium = 30,
@@ -70,10 +71,13 @@
 		/obj/item/seeds/plumpmycelium = 30,
 		/obj/item/seeds/poppyseed = 30,
 		/obj/item/seeds/potatoseed = 30,
+		/obj/item/seeds/onionseed = 30,
+		/obj/item/seeds/garlicseed = 30,
 		/obj/item/seeds/pumpkinseed = 30,
 		/obj/item/seeds/reishimycelium = 30,
 		/obj/item/seeds/riceseed = 30,
 		/obj/item/seeds/soyaseed = 30,
+		/obj/item/seeds/peppercornseed = 30,
 		/obj/item/seeds/sugarcaneseed = 30,
 		/obj/item/seeds/sunflowerseed = 30,
 		/obj/item/seeds/shandseed = 30,
@@ -100,6 +104,7 @@
 		/obj/item/seeds/chiliseed = 30,
 		/obj/item/seeds/cocoapodseed = 30,
 		/obj/item/seeds/cornseed = 30,
+		/obj/item/seeds/peanutseed = 30,
 		/obj/item/seeds/replicapod = 30,
 		/obj/item/seeds/eggplantseed = 30,
 		/obj/item/seeds/amanitamycelium = 30,
@@ -119,10 +124,13 @@
 		/obj/item/seeds/plumpmycelium = 30,
 		/obj/item/seeds/poppyseed = 30,
 		/obj/item/seeds/potatoseed = 30,
+		/obj/item/seeds/onionseed = 30,
+		/obj/item/seeds/garlicseed = 30,
 		/obj/item/seeds/pumpkinseed = 30,
 		/obj/item/seeds/reishimycelium = 30,
 		/obj/item/seeds/riceseed = 30,
 		/obj/item/seeds/soyaseed = 30,
+		/obj/item/seeds/peppercornseed = 30,
 		/obj/item/seeds/sugarcaneseed = 30,
 		/obj/item/seeds/sunflowerseed = 30,
 		/obj/item/seeds/shandseed = 30,
@@ -143,7 +151,7 @@
 	if (..())
 		return
 
-	if (!initialized)
+	if (!seeds_initialized)
 		for(var/typepath in starting_seeds)
 			var/amount = starting_seeds[typepath]
 			if(isnull(amount)) amount = 1
@@ -151,7 +159,7 @@
 			for (var/i = 1 to amount)
 				var/O = new typepath
 				add(O)
-		initialized = 1
+		seeds_initialized = 1
 
 	var/dat = "<center><h1>Seed storage contents</h1></center>"
 	if (piles.len == 0)
@@ -305,7 +313,7 @@
 		else
 			to_chat(user, "<span class='notice'>There are no seeds in \the [O.name].</span>")
 		return
-	else if(istype(O, /obj/item/weapon/wrench))
+	else if(isWrench(O))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "You [anchored ? "wrench" : "unwrench"] \the [src].")

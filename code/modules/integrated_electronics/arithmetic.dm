@@ -9,9 +9,8 @@
 // +Adding+ //
 
 /obj/item/integrated_circuit/arithmetic/addition
-	name = "wide addition circuit"
-	desc = "This circuit can add up to eight numbers together."
-	outputs = list("sum")
+	name = "addition circuit"
+	desc = "This circuit can add numbers together."
 	icon_state = "addition"
 
 /obj/item/integrated_circuit/arithmetic/addition/do_work()
@@ -22,74 +21,50 @@
 			result = result + I.data
 	set_pin_data(IC_OUTPUT, 1, result)
 
-
-/obj/item/integrated_circuit/arithmetic/binary //binary circuit is adder by default (to avoid having produceable useless circuits)
-	name = "addition circuit"
-	desc = "This circuit can add two numbers together."
-	icon_state = "addition"
-	inputs = list("A", "B")
-	outputs = list("A+B")
-
-/obj/item/integrated_circuit/arithmetic/binary/do_work()
-	var/A = get_pin_data(IC_INPUT, 1)
-	A=isnum(A) ? A : null
-	var/B = get_pin_data(IC_INPUT, 2)
-	B=isnum(B) ? B : null
-	var/result = src.func(A,B)
-	set_pin_data(IC_OUTPUT, 1, result)
-
-/obj/item/integrated_circuit/arithmetic/binary/proc/func(var/A,var/B)
-	if(isnull(A)||isnull(B))
-		return
-	return A + B
-
 // -Subtracting- //
 
-/obj/item/integrated_circuit/arithmetic/binary/subtraction
+/obj/item/integrated_circuit/arithmetic/subtraction
 	name = "subtraction circuit"
-	desc = "This circuit can subtract two numbers."
+	desc = "This circuit can subtract numbers."
 	icon_state = "subtraction"
-	outputs = list("A-B")
 
-/obj/item/integrated_circuit/arithmetic/binary/subtraction/func(var/A,var/B)
-	if(isnull(A)||isnull(B))
-		return
-	return A - B
+/obj/item/integrated_circuit/arithmetic/subtraction/do_work()
+	var/result = 0
+	for(var/datum/integrated_io/input/I in inputs)
+		I.pull_data()
+		if(isnum(I.data))
+			result = result - I.data
+	set_pin_data(IC_OUTPUT, 1, result)
+
 // *Multiply* //
 
-/obj/item/integrated_circuit/arithmetic/binary/multiplication
+/obj/item/integrated_circuit/arithmetic/multiplication
 	name = "multiplication circuit"
-	desc = "This circuit can multiply two numbers."
+	desc = "This circuit can multiply numbers."
 	icon_state = "multiplication"
 
-/obj/item/integrated_circuit/arithmetic/binary/multiplication/func(var/A,var/B)
-	if(isnull(A)||isnull(B))
-		return
-	return A * B
+/obj/item/integrated_circuit/arithmetic/subtraction/do_work()
+	var/result = 0
+	for(var/datum/integrated_io/input/I in inputs)
+		I.pull_data()
+		if(isnum(I.data))
+			result = result * I.data
+	set_pin_data(IC_OUTPUT, 1, result)
+
 // /Division/  //
 
-/obj/item/integrated_circuit/arithmetic/binary/division
+/obj/item/integrated_circuit/arithmetic/division
 	name = "division circuit"
-	desc = "This circuit can divide two numbers"
+	desc = "This circuit can divide numbers, just don't think about trying to divide by zero!"
 	icon_state = "division"
-	outputs = list("A/B")
 
-/obj/item/integrated_circuit/arithmetic/binary/division/func(var/A,var/B)
-	if(isnull(A)||isnull(B))
-		return
-	return A / B
-
-// Random //
-
-/obj/item/integrated_circuit/arithmetic/binary/random
-	name = "random number generator circuit"
-	desc = "This gives a random (integer) number between values A and B inclusive."
-	icon_state = "random"
-
-/obj/item/integrated_circuit/arithmetic/binary/random/func(var/A,var/B)
-	if(isnull(A)||isnull(B))
-		return
-	return rand(A,B)
+/obj/item/integrated_circuit/arithmetic/division/do_work()
+	var/result = 0
+	for(var/datum/integrated_io/input/I in inputs)
+		I.pull_data()
+		if(isnum(I.data) && I.data != 0) //No runtimes here.
+			result = result / I.data
+	set_pin_data(IC_OUTPUT, 1, result)
 
 // Absolute //
 
@@ -137,3 +112,18 @@
 /obj/item/integrated_circuit/arithmetic/pi/do_work()
 	set_pin_data(IC_OUTPUT, 1, 3.14159)
 
+// Random //
+/obj/item/integrated_circuit/arithmetic/random
+	name = "random number generator circuit"
+	desc = "This gives a random (integer) number between values A and B inclusive."
+	icon_state = "random"
+	inputs = list("L","H")
+
+/obj/item/integrated_circuit/arithmetic/random/do_work()
+	var/result = 0
+	var/datum/integrated_io/L = inputs[1]
+	var/datum/integrated_io/H = inputs[2]
+
+	if(isnum(L.data) && isnum(H.data))
+		result = rand(L.data, H.data)
+	set_pin_data(IC_OUTPUT, 1, result)

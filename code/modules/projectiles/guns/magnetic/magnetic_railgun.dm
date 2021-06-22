@@ -11,13 +11,14 @@
 	w_class = ITEM_SIZE_HUGE
 	slot_flags = SLOT_BELT
 	loaded = /obj/item/weapon/rcd_ammo/large
+	combustion = 1
 
 	var/initial_cell_type = /obj/item/weapon/cell/hyper
 	var/initial_capacitor_type = /obj/item/weapon/stock_parts/capacitor/adv
 	var/slowdown_held = 2
 	var/slowdown_worn = 1
 
-/obj/item/weapon/gun/magnetic/railgun/initialize()
+/obj/item/weapon/gun/magnetic/railgun/Initialize()
 
 	capacitor = new initial_capacitor_type(src)
 	capacitor.charge = capacitor.max_charge
@@ -31,7 +32,7 @@
 	slowdown_per_slot[slot_belt] =    slowdown_worn
 	slowdown_per_slot[slot_s_store] = slowdown_worn
 
-	..()
+	. = ..()
 
 // Not going to check type repeatedly, if you code or varedit
 // load_type and get runtime errors, don't come crying to me.
@@ -98,6 +99,7 @@
 	load_type = /obj/item/weapon/magnetic_ammo
 	projectile_type = /obj/item/projectile/bullet/magnetic/flechette
 	loaded = /obj/item/weapon/magnetic_ammo
+	wielded_item_state = "z8carbine-wielded"
 
 	firemodes = list(
 		list(mode_name="semiauto",    burst=1, fire_delay=0,    move_delay=null, one_hand_penalty=1, burst_accuracy=null, dispersion=null),

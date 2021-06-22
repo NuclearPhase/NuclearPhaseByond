@@ -24,8 +24,8 @@
 	c_uid = sequential_id(/obj/item/weapon/cell)
 	..()
 
-/obj/item/weapon/cell/initialize()
-	..()
+/obj/item/weapon/cell/Initialize()
+	. = ..()
 	update_icon()
 
 /obj/item/weapon/cell/drain_power(var/drain_check, var/surge, var/power = 0)
@@ -178,6 +178,12 @@
 	maxcharge = 500
 	matter = list(DEFAULT_WALL_MATERIAL = 700, "glass" = 50)
 
+/obj/item/weapon/cell/apc/empty
+	charge = 0
+
+/obj/item/weapon/cell/apc/empty/New()
+	..()
+	charge = 0
 
 /obj/item/weapon/cell/high
 	name = "advanced power cell"

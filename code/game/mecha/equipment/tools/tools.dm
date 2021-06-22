@@ -30,6 +30,9 @@
 			if(cargo_holder.cargo.len >= cargo_holder.cargo_capacity)
 				occupant_message("<span class='warning'>Not enough room in cargo compartment.</span>")
 				return
+			if(istype(O, /obj/machinery/power/supermatter))
+				occupant_message("<span class='warning'>Warning: Safety systems prevent the loading of [target] into the cargo compartment.</span>")
+				return
 
 			occupant_message("You lift [target] and start to load it into cargo compartment.")
 			chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
@@ -187,11 +190,9 @@
 	var/max_water = 1000
 
 	New()
-		reagents = new/datum/reagents(max_water)
-		reagents.my_atom = src
-		reagents.add_reagent("water", max_water)
+		create_reagents(max_water)
+		reagents.add_reagent(/datum/reagent/water, max_water)
 		..()
-		return
 
 	action(atom/target) //copypasted from extinguisher. TODO: Rewrite from scratch.
 		if(!action_checks(target) || get_dist(chassis, target)>3) return
@@ -363,7 +364,7 @@
 	var/turf/T = get_turf(target)
 	if(T)
 		if(isAdminLevel(T.z))
-			return		
+			return
 		set_ready_state(0)
 		chassis.use_power(energy_drain)
 		do_teleport(chassis, T, 4)
@@ -413,7 +414,7 @@
 		P.icon = 'icons/obj/objects.dmi'
 		P.failchance = 0
 		P.icon_state = "anom"
-		P.name = "wormhole"
+		P.SetName("wormhole")
 		do_after_cooldown()
 		src = null
 		spawn(rand(150,300))

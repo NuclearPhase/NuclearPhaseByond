@@ -4,7 +4,7 @@
 	icon_state = "prox"
 	origin_tech = list(TECH_MAGNET = 1)
 	matter = list(DEFAULT_WALL_MATERIAL = 800, "glass" = 200, "waste" = 50)
-	flags = PROXMOVE
+	movable_flags = MOVABLE_FLAG_PROXMOVE
 	wires = WIRE_PULSE
 
 	secured = 0
@@ -29,11 +29,11 @@
 /obj/item/device/assembly/prox_sensor/toggle_secure()
 	secured = !secured
 	if(secured)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	else
 		scanning = 0
 		timing = 0
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	update_icon()
 	return secured
 
@@ -61,7 +61,7 @@
 	return
 
 
-/obj/item/device/assembly/prox_sensor/process()
+/obj/item/device/assembly/prox_sensor/Process()
 	if(scanning)
 		var/turf/mainloc = get_turf(src)
 		for(var/mob/living/A in range(range,mainloc))
@@ -130,7 +130,7 @@
 	return
 
 
-/obj/item/device/assembly/prox_sensor/Topic(href, href_list, state = physical_state)
+/obj/item/device/assembly/prox_sensor/Topic(href, href_list, state = GLOB.physical_state)
 	if(..()) return 1
 	if(!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 		usr << browse(null, "window=prox")

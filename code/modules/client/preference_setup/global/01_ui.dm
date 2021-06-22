@@ -1,5 +1,10 @@
 /datum/preferences
 	var/clientfps = 0
+	var/ooccolor = "#010000" //Whatever this is set to acts as 'reset' color and is thus unusable as an actual custom color
+
+	var/UI_style = "Midnight"
+	var/UI_style_color = "#ffffff"
+	var/UI_style_alpha = 255
 
 /datum/category_item/player_setup_item/player_global/ui
 	name = "UI"
@@ -42,7 +47,7 @@
 
 /datum/category_item/player_setup_item/player_global/ui/OnTopic(var/href,var/list/href_list, var/mob/user)
 	if(href_list["select_style"])
-		var/UI_style_new = input(user, "Choose UI style.", "Character Preference", pref.UI_style) as null|anything in all_ui_styles
+		var/UI_style_new = input(user, "Choose UI style.", CHARACTER_PREFERENCE_INPUT_TITLE, pref.UI_style) as null|anything in all_ui_styles
 		if(!UI_style_new || !CanUseTopic(user)) return TOPIC_NOACTION
 		pref.UI_style = UI_style_new
 		return TOPIC_REFRESH

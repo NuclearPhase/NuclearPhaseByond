@@ -13,12 +13,12 @@ mob/var/next_pain_time = 0
 // message is the custom message to be displayed
 // power decides how much painkillers will stop the message
 // force means it ignores anti-spam timer
-mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting, var/nohalloss, var/flash_pain)
-	if(!message || stat || !can_feel_pain() || chem_effects[CE_PAINKILLER] > power)
+/mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/item/organ/external/affecting, var/nohalloss, var/flash_pain)
+	if(stat || !can_feel_pain() || chem_effects[CE_PAINKILLER] > power)//!message
 		return 0
 
 	// Excessive halloss is horrible, just give them enough to make it visible.
-	if(!nohalloss && (power || flash_pain))
+	if(!nohalloss && (power || flash_pain))//Flash pain is so that handle_pain actually makes use of this proc to flash pain.
 		var/actual_flash
 		if(affecting)
 			affecting.add_pain(ceil(power/2))
@@ -32,26 +32,29 @@ mob/living/carbon/proc/custom_pain(var/message, var/power, var/force, var/obj/it
 					flash_weakest_pain()
 				if(11 to 90)
 					flash_weak_pain()
-					if(prob(50))
+					if(stuttering < 10)
 						stuttering += 5
 				if(91 to INFINITY)
 					flash_pain()
-					if(prob(50))
+					if(stuttering < 10)
+						stuttering += 10
+					if(prob(2))
+						Stun(5)//makes you drop what you're holding.
+						shake_camera(src, 20, 3)
 						agony_scream()
-					stuttering += 10
 		else
 			adjustHalLoss(ceil(power/2))
 
 	// Anti message spam checks
-	if(force || (message != last_pain_message) || (world.time >= next_pain_time))
+	if((force || (message != last_pain_message) || (world.time >= next_pain_time)) && message)
 		last_pain_message = message
 		if(power >= 50)
-			to_chat(src, "<span class='danger'><font size=3>[message]</font></span>")
+			to_chat(src, "<b><font size=3>[message]</font></b>")
 		else
-			to_chat(src, "<span class='danger'>[message]</span>")
+			to_chat(src, "<b>[message]</b>")
 	next_pain_time = world.time + (100-power)
 
-mob/living/carbon/human/proc/handle_pain()
+/mob/living/carbon/human/proc/handle_pain()
 	if(stat)
 		return
 	if(!can_feel_pain())
@@ -71,35 +74,19 @@ mob/living/carbon/human/proc/handle_pain()
 	if(damaged_organ && chem_effects[CE_PAINKILLER] < maxdam)
 		if(maxdam > 10 && paralysis)
 			paralysis = max(0, paralysis - round(maxdam/10))
-		if(maxdam > 50 && prob(maxdam / 5))
-			drop_item()
-		var/burning = damaged_organ.burn_dam > damaged_organ.brute_dam
+		//if(maxdam > 50 && prob(maxdam / 5))
+		//	drop_item()
+		//var/burning = damaged_organ.burn_dam > damaged_organ.brute_dam
 		var/msg
-		switch(maxdam)//It's important to know that pain counts every single life tick so if you flash pain without a prob here it will flash it every single tick. This causes severe eyestrain.
-			if(1 to 10)
-				//if(prob(35))
-				msg =  "Your [damaged_organ.name] [burning ? "burns" : "hurts"]."
-				//	flash_weakest_pain()
+		//switch(maxdam)
+		//	if(1 to 10)
+				//msg = "Your [damaged_organ.name] [burning ? "burns" : "hurts"]."
 
-			if(11 to 90)
-				/*
-				if(prob(35))
-					flash_weak_pain()
-					stuttering += 5
-					if(prob(35))
-						agony_moan()
-				*/
+		//	if(11 to 90)
+				//msg = "<font size=2>Your [damaged_organ.name] [burning ? "burns" : "hurts"] badly!</font>"
 
-				msg = "<font size=2>Your [damaged_organ.name] [burning ? "burns" : "hurts"] badly!</font>"
-
-			if(91 to 10000)
-				//if(prob(35))
-				//	flash_pain()
-				//	stuttering += 10
-				//	if(prob(35))
-				//		agony_scream()
-
-				msg = "<font size=3>OH GOD! Your [damaged_organ.name] is [burning ? "on fire" : "hurting terribly"]!</font>"
+		//	if(91 to 10000)
+				//msg = "<font size=3>OH GOD! Your [damaged_organ.name] is [burning ? "on fire" : "hurting terribly"]!</font>"
 		custom_pain(msg, 0, prob(10), affecting = damaged_organ, flash_pain = maxdam)
 
 	// Damage to internal organs hurts a lot.

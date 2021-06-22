@@ -56,7 +56,6 @@
 	user.animate_tail_stop()
 
 //Shitty stuff starts here.
-/*
 /decl/emote/human/poo
 	key = "poo"
 
@@ -68,4 +67,4 @@
 
 /decl/emote/human/pee/do_emote(var/mob/living/carbon/human/user)
 	user.handle_piss()
-*/
+

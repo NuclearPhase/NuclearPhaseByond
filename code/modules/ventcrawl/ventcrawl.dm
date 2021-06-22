@@ -53,6 +53,10 @@ var/list/ventcrawl_machinery = list(
 /mob/living/carbon/human/is_allowed_vent_crawl_item(var/obj/item/carried_item)
 	if(carried_item in organs)
 		return 1
+	if(carried_item in list(w_uniform, gloves, glasses, wear_mask, l_ear, r_ear, belt, l_store, r_store))
+		return 1
+	if(carried_item in list(l_hand,r_hand))
+		return carried_item.w_class <= ITEM_SIZE_NORMAL
 	return ..()
 
 /mob/living/simple_animal/spiderbot/is_allowed_vent_crawl_item(var/obj/item/carried_item)
@@ -91,9 +95,6 @@ var/list/ventcrawl_machinery = list(
 
 /mob/living/carbon/alien/ventcrawl_carry()
 	return 1
-
-/mob/living/silicon/robot/drone/ventcrawl_carry()
-	return TRUE
 
 /mob/living/proc/handle_ventcrawl(var/atom/clicked_on)
 	if(!can_ventcrawl())
@@ -154,7 +155,6 @@ var/list/ventcrawl_machinery = list(
 			to_chat(src, "This vent is not connected to anything.")
 	else
 		to_chat(src, "You must be standing on or beside an air vent to enter it.")
-
 /mob/living/proc/add_ventcrawl(obj/machinery/atmospherics/starting_machine)
 	is_ventcrawling = 1
 	//candrop = 0
@@ -166,7 +166,7 @@ var/list/ventcrawl_machinery = list(
 			if(!A.pipe_image)
 				A.pipe_image = image(A, A.loc, dir = A.dir)
 			A.pipe_image.layer = ABOVE_LIGHTING_LAYER
-			A.pipe_image.plane = LIGHTING_PLANE
+			A.pipe_image.plane = EFFECTS_ABOVE_LIGHTING_PLANE
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

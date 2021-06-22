@@ -34,7 +34,7 @@
 	var/list/stored_data = list()
 
 /obj/item/weapon/cartridge/Destroy()
-	qdel_null(radio)
+	QDEL_NULL(radio)
 	return ..()
 
 /obj/item/weapon/cartridge/engineering
@@ -62,9 +62,9 @@
 	icon_state = "cart-s"
 	access_security = 1
 
-/obj/item/weapon/cartridge/security/initialize()
+/obj/item/weapon/cartridge/security/Initialize()
 	radio = new /obj/item/radio/integrated/beepsky(src)
-	..()
+	. = ..()
 
 /obj/item/weapon/cartridge/detective
 	name = "\improper D.E.T.E.C.T. cartridge"
@@ -114,9 +114,9 @@
 	access_reagent_scanner = 1
 	access_atmos = 1
 
-/obj/item/weapon/cartridge/signal/initialize()
-    radio = new /obj/item/radio/integrated/signal(src)
-    ..()
+/obj/item/weapon/cartridge/signal/Initialize()
+	radio = new /obj/item/radio/integrated/signal(src)
+	. = ..()
 
 /obj/item/weapon/cartridge/quartermaster
 	name = "\improper Space Parts & Space Vendors cartridge"
@@ -143,9 +143,9 @@
 	access_status_display = 1
 	access_security = 1
 
-/obj/item/weapon/cartridge/hos/initialize()
+/obj/item/weapon/cartridge/hos/Initialize()
 	radio = new /obj/item/radio/integrated/beepsky(src)
-	..()
+	. = ..()
 
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
@@ -168,9 +168,9 @@
 	access_reagent_scanner = 1
 	access_atmos = 1
 
-/obj/item/weapon/cartridge/rd/initialize()
+/obj/item/weapon/cartridge/rd/Initialize()
 	radio = new /obj/item/radio/integrated/signal(src)
-	..()
+	. = ..()
 
 /obj/item/weapon/cartridge/captain
 	name = "\improper Value-PAK cartridge"
@@ -211,11 +211,11 @@
 				var/obj/item/PDA = loc
 				var/mob/user = PDA.fingerprintslast
 				if(istype(PDA.loc,/mob/living))
-					name = PDA.loc
+					SetName(PDA.loc)
 				log_admin("STATUS: [user] set status screen with [PDA]. Message: [data1] [data2]")
 				message_admins("STATUS: [user] set status screen with [PDA]. Message: [data1] [data2]")
 
-		if("alert")
+		if("image")
 			status_signal.data["picture_state"] = data1
 
 	frequency.post_signal(src, status_signal)
@@ -256,53 +256,13 @@
 		var/list/sensors = list()
 		var/obj/machinery/power/sensor/MS = null
 
-		for(var/obj/machinery/power/sensor/S in machines)
+		for(var/obj/machinery/power/sensor/S in SSmachines.machinery)
 			sensors.Add(list(list("name_tag" = S.name_tag)))
 			if(S.name_tag == selected_sensor)
 				MS = S
 		values["power_sensors"] = sensors
 		if(selected_sensor && MS)
 			values["sensor_reading"] = MS.return_reading_data()
-
-
-	/*		General Records (Mode: 44 / 441 / 45 / 451)	*/
-	if(mode == 44 || mode == 441 || mode == 45 || mode ==451)
-		if(istype(active1, /datum/data/record) && (active1 in data_core.general))
-			values["general"] = active1.fields
-			values["general_exists"] = 1
-
-		else
-			values["general_exists"] = 0
-
-
-
-	/*		Medical Records (Mode: 44 / 441)	*/
-
-	if(mode == 44 || mode == 441)
-		var/medData[0]
-		for(var/datum/data/record/R in sortRecord(data_core.general))
-			medData[++medData.len] = list(Name = R.fields["name"],"ref" = "\ref[R]")
-		values["medical_records"] = medData
-
-		if(istype(active2, /datum/data/record) && (active2 in data_core.medical))
-			values["medical"] = active2.fields
-			values["medical_exists"] = 1
-		else
-			values["medical_exists"] = 0
-
-	/*		Security Records (Mode:45 / 451)	*/
-
-	if(mode == 45 || mode == 451)
-		var/secData[0]
-		for (var/datum/data/record/R in sortRecord(data_core.general))
-			secData[++secData.len] = list(Name = R.fields["name"], "ref" = "\ref[R]")
-		values["security_records"] = secData
-
-		if(istype(active3, /datum/data/record) && (active3 in data_core.security))
-			values["security"] = active3.fields
-			values["security_exists"] = 1
-		else
-			values["security_exists"] = 0
 
 	/*		Security Bot Control (Mode: 46)		*/
 
@@ -347,7 +307,7 @@
 		var/mulebotsData[0]
 		var/count = 0
 
-		for(var/mob/living/bot/mulebot/M in living_mob_list_)
+		for(var/mob/living/bot/mulebot/M in GLOB.living_mob_list_)
 			if(!M.on)
 				continue
 			++count
@@ -371,7 +331,7 @@
 
 	if(mode==47)
 		var/supplyData[0]
-		var/datum/shuttle/ferry/supply/shuttle = supply_controller.shuttle
+		var/datum/shuttle/autodock/ferry/supply/shuttle = supply_controller.shuttle
 		if (shuttle)
 			supplyData["shuttle_moving"] = shuttle.has_arrive_time()
 			supplyData["shuttle_eta"] = shuttle.eta_minutes()
@@ -381,7 +341,7 @@
 		for(var/S in supply_controller.shoppinglist)
 			var/datum/supply_order/SO = S
 
-			supplyOrderData[++supplyOrderData.len] = list("Number" = SO.ordernum, "Name" = rhtml_encode(SO.object.name), "ApprovedBy" = SO.orderedby, "Comment" = rhtml_encode(SO.comment))
+			supplyOrderData[++supplyOrderData.len] = list("Number" = SO.ordernum, "Name" = html_encode(SO.object.name), "ApprovedBy" = SO.orderedby, "Comment" = html_encode(SO.comment))
 		if(!supplyOrderData.len)
 			supplyOrderData[++supplyOrderData.len] = list("Number" = null, "Name" = null, "OrderedBy"=null)
 
@@ -393,7 +353,7 @@
 		for(var/S in supply_controller.requestlist)
 			var/datum/supply_order/SO = S
 			requestCount++
-			requestData[++requestData.len] = list("Number" = SO.ordernum, "Name" = rhtml_encode(SO.object.name), "OrderedBy" = SO.orderedby, "Comment" = html_encode(SO.comment))
+			requestData[++requestData.len] = list("Number" = SO.ordernum, "Name" = html_encode(SO.object.name), "OrderedBy" = SO.orderedby, "Comment" = html_encode(SO.comment))
 		if(!requestData.len)
 			requestData[++requestData.len] = list("Number" = null, "Name" = null, "orderedBy" = null, "Comment" = null)
 
@@ -489,32 +449,6 @@
 
 
 	switch(href_list["choice"])
-		if("Medical Records")
-			var/datum/data/record/R = locate(href_list["target"])
-			var/datum/data/record/M = locate(href_list["target"])
-			loc:mode = 441
-			mode = 441
-			if (R in data_core.general)
-				for (var/datum/data/record/E in data_core.medical)
-					if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-						M = E
-						break
-				active1 = R
-				active2 = M
-
-		if("Security Records")
-			var/datum/data/record/R = locate(href_list["target"])
-			var/datum/data/record/S = locate(href_list["target"])
-			loc:mode = 451
-			mode = 451
-			if (R in data_core.general)
-				for (var/datum/data/record/E in data_core.security)
-					if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-						S = E
-						break
-				active1 = R
-				active3 = S
-
 		if("Send Signal")
 			spawn( 0 )
 				radio:send_signal("ACTIVATE")
@@ -534,8 +468,8 @@
 			switch(href_list["statdisp"])
 				if("message")
 					post_status("message", message1, message2)
-				if("alert")
-					post_status("alert", href_list["alert"])
+				if("image")
+					post_status("image", href_list["image"])
 				if("setmsg1")
 					message1 = reject_bad_text(sanitize(input("Line 1", "Enter Message Text", message1) as text|null, 40), 40)
 					updateSelfDialog()

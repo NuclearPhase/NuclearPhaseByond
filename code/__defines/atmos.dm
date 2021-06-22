@@ -8,6 +8,8 @@
 #define MOLES_PHORON_VISIBLE 0.7 // Moles in a standard cell after which phoron is visible.
 #define MOLES_O2STANDARD     (MOLES_CELLSTANDARD * O2STANDARD) // O2 standard value (21%)
 #define MOLES_N2STANDARD     (MOLES_CELLSTANDARD * N2STANDARD) // N2 standard value (79%)
+#define MOLES_N2OUTWARDS     (MOLES_CELLSTANDARD)
+
 #define MOLES_O2ATMOS (MOLES_O2STANDARD*50)
 #define MOLES_N2ATMOS (MOLES_N2STANDARD*50)
 
@@ -93,6 +95,13 @@
 // Defines how much of certain gas do the Atmospherics tanks start with. Values are in kpa per tile (assuming 20C)
 #define ATMOSTANK_NITROGEN      90000 // A lot of N2 is needed to produce air mix, that's why we keep 90MPa of it
 #define ATMOSTANK_OXYGEN        40000 // O2 is also important for airmix, but not as much as N2 as it's only 21% of it.
-#define ATMOSTANK_CO2           25000 // CO2 and PH are not critically important for station, only for toxins and alternative coolants, no need to store a lot of those.
+#define ATMOSTANK_CO2           25000 // CO2, PH, and H2 are not critically important for station, only for toxins and alternative coolants, no need to store a lot of those.
 #define ATMOSTANK_PHORON        25000
+#define ATMOSTANK_PHORON_FUEL	15000
+#define ATMOSTANK_HYDROGEN      25000
+#define ATMOSTANK_HYDROGEN_FUEL 25000
 #define ATMOSTANK_NITROUSOXIDE  10000 // N2O doesn't have a real useful use, i guess it's on station just to allow refilling of sec's riot control canisters?
+#define ATMOSTANK_HYDROGEN      10000
+
+#define MAX_PUMP_PRESSURE		15000	// Maximal pressure setting for pumps and vents
+#define MAX_OMNI_PRESSURE		7500	// Maximal output(s) pressure for omni devices (filters/mixers)

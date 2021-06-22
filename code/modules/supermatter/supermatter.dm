@@ -64,9 +64,9 @@
 	var/emergency_alert = "CRYSTAL DELAMINATION IMMINENT."
 	var/explosion_point = 1000
 
-	light_color = "#8A8A00"
-	var/warning_color = "#B8B800"
-	var/emergency_color = "#D9D900"
+	light_color = "#8a8a00"
+	var/warning_color = "#b8b800"
+	var/emergency_color = "#d9d900"
 
 	var/grav_pulling = 0
 	// Time in ticks between delamination ('exploding') and exploding (as in the actual boom)
@@ -198,7 +198,7 @@
 	for(var/z in affected_z)
 		radiation_repository.z_radiate(locate(1, 1, z), DETONATION_RADS, 1)
 
-	for(var/mob/living/mob in living_mob_list_)
+	for(var/mob/living/mob in GLOB.living_mob_list_)
 		var/turf/TM = get_turf(mob)
 		if(!TM)
 			continue
@@ -209,7 +209,7 @@
 		to_chat(mob, "<span class='danger'>An invisible force slams you against the ground!</span>")
 
 	// Effect 2: Z-level wide electrical pulse
-	for(var/obj/machinery/power/apc/A in machines)
+	for(var/obj/machinery/power/apc/A in SSmachines.machinery)
 		if(!(A.z in affected_z))
 			continue
 
@@ -223,7 +223,7 @@
 		else
 			A.energy_fail(round(DETONATION_SHUTDOWN_APC * random_change))
 
-	for(var/obj/machinery/power/smes/buildable/S in machines)
+	for(var/obj/machinery/power/smes/buildable/S in SSmachines.machinery)
 		if(!(S.z in affected_z))
 			continue
 		// Causes SMESes to shut down for a bit
@@ -232,7 +232,7 @@
 
 	// Effect 3: Break solar arrays
 
-	for(var/obj/machinery/power/solar/S in machines)
+	for(var/obj/machinery/power/solar/S in SSmachines.machinery)
 		if(!(S.z in affected_z))
 			continue
 		if(prob(DETONATION_SOLAR_BREAK_CHANCE))
@@ -275,24 +275,21 @@
 	else
 		alert_msg = null
 	if(alert_msg)
-		if(!global_announcer)
-			global_announcer = new
-			log_debug("The Global Announcer was deleted, or missing.")
-		global_announcer.autosay(alert_msg, "Supermatter Monitor", "Engineering")
+		GLOB.global_announcer.autosay(alert_msg, "Supermatter Monitor", "Engineering")
 		//Public alerts
 		if((damage > emergency_point) && !public_alert)
-			global_announcer.autosay("WARNING: SUPERMATTER CRYSTAL DELAMINATION IMMINENT!", "Supermatter Monitor")
+			GLOB.global_announcer.autosay("WARNING: SUPERMATTER CRYSTAL DELAMINATION IMMINENT!", "Supermatter Monitor")
 			public_alert = 1
-			for(var/mob/M in player_list)
+			for(var/mob/M in GLOB.player_list)
 				var/turf/T = get_turf(M)
-				if(T && (T.z in using_map.station_levels) && !istype(M,/mob/new_player) && !isdeaf(M))
+				if(T && (T.z in GLOB.using_map.station_levels) && !istype(M,/mob/new_player) && !isdeaf(M))
 					sound_to(M, 'sound/ambience/matteralarm.ogg')
 		else if(safe_warned && public_alert)
-			global_announcer.autosay(alert_msg, "Supermatter Monitor")
+			GLOB.global_announcer.autosay(alert_msg, "Supermatter Monitor")
 			public_alert = 0
 
 
-/obj/machinery/power/supermatter/process()
+/obj/machinery/power/supermatter/Process()
 
 	var/turf/L = loc
 
@@ -378,7 +375,8 @@
 
 	for(var/mob/living/carbon/human/l in view(src, min(7, round(sqrt(power/6))))) // If they can see it without mesons on.  Bad on them.
 		if(!istype(l.glasses, /obj/item/clothing/glasses/meson))
-			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
+			var/effect = max(0, min(200, power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)))) )
+			l.adjust_hallucination(effect, 0.25*effect)
 
 
 	radiation_repository.radiate(src, power * 1.5) //Better close those shutters!
@@ -439,7 +437,7 @@
 	data["detonating"] = grav_pulling
 	data["energy"] = power
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "supermatter_crystal.tmpl", "Supermatter Crystal", 500, 300)
 		ui.set_initial_data(data)

@@ -21,6 +21,9 @@
 	proc/is_active(mob/living/silicon/pai/user)
 		return 0
 
+	proc/on_purchase(mob/living/silicon/pai/user)
+		return
+
 /datum/pai_software/directives
 	name = "Directives"
 	ram_cost = 0
@@ -36,7 +39,7 @@
 		data["prime"] = user.pai_law0
 		data["supplemental"] = user.pai_laws
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_directives.tmpl", "pAI Directives", 450, 600)
@@ -87,21 +90,21 @@
 	on_ui_interact(mob/living/silicon/pai/user, datum/nanoui/ui = null, force_open = 1)
 		var/data[0]
 
-		data["listening"] = user.radio.broadcasting
-		data["frequency"] = format_frequency(user.radio.frequency)
+		data["listening"] = user.silicon_radio.broadcasting
+		data["frequency"] = format_frequency(user.silicon_radio.frequency)
 
 		var/channels[0]
-		for(var/ch_name in user.radio.channels)
-			var/ch_stat = user.radio.channels[ch_name]
+		for(var/ch_name in user.silicon_radio.channels)
+			var/ch_stat = user.silicon_radio.channels[ch_name]
 			var/ch_dat[0]
 			ch_dat["name"] = ch_name
 			// FREQ_LISTENING is const in /obj/item/device/radio
-			ch_dat["listening"] = !!(ch_stat & user.radio.FREQ_LISTENING)
+			ch_dat["listening"] = !!(ch_stat & user.silicon_radio.FREQ_LISTENING)
 			channels[++channels.len] = ch_dat
 
 		data["channels"] = channels
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			ui = new(user, user, id, "pai_radio.tmpl", "Radio Configuration", 300, 150)
 			ui.set_initial_data(data)
@@ -111,7 +114,7 @@
 		var/mob/living/silicon/pai/P = usr
 		if(!istype(P)) return
 
-		P.radio.Topic(href, href_list)
+		P.silicon_radio.Topic(href, href_list)
 		return 1
 
 /datum/pai_software/crew_manifest
@@ -121,13 +124,11 @@
 	toggle = 0
 
 	on_ui_interact(mob/living/silicon/pai/user, datum/nanoui/ui=null, force_open=1)
-		data_core.get_manifest_list()
-
 		var/data[0]
 		// This is dumb, but NanoUI breaks if it has no data to send
-		data["manifest"] = PDA_Manifest
+		data["manifest"] = nano_crew_manifest()
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_manifest.tmpl", "Crew Manifest", 450, 600)
@@ -177,7 +178,7 @@
 
 		data["messages"] = messages
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_messenger.tmpl", "Digital Messenger", 450, 600)
@@ -214,117 +215,10 @@
 					return alert("Failed to send message: the recipient could not be reached.")
 				return 1
 
-/datum/pai_software/med_records
-	name = "Medical Records"
-	ram_cost = 15
-	id = "med_records"
-	toggle = 0
-
-	on_ui_interact(mob/living/silicon/pai/user, datum/nanoui/ui=null, force_open=1)
-		var/data[0]
-
-		var/records[0]
-		for(var/datum/data/record/general in sortRecord(data_core.general))
-			var/record[0]
-			record["name"] = general.fields["name"]
-			record["ref"] = "\ref[general]"
-			records[++records.len] = record
-
-		data["records"] = records
-
-		var/datum/data/record/G = user.medicalActive1
-		var/datum/data/record/M = user.medicalActive2
-		data["general"] = G ? G.fields : null
-		data["medical"] = M ? M.fields : null
-		data["could_not_find"] = user.medical_cannotfind
-
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
-		if(!ui)
-			// Don't copy-paste this unless you're making a pAI software module!
-			ui = new(user, user, id, "pai_medrecords.tmpl", "Medical Records", 450, 600)
-			ui.set_initial_data(data)
-			ui.open()
-			ui.set_auto_update(1)
-
-	Topic(href, href_list)
-		var/mob/living/silicon/pai/P = usr
-		if(!istype(P)) return
-
-		if(href_list["select"])
-			var/datum/data/record/record = locate(href_list["select"])
-			if(record)
-				var/datum/data/record/R = record
-				var/datum/data/record/M = null
-				if (!( data_core.general.Find(R) ))
-					P.medical_cannotfind = 1
-				else
-					P.medical_cannotfind = 0
-					for(var/datum/data/record/E in data_core.medical)
-						if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-							M = E
-					P.medicalActive1 = R
-					P.medicalActive2 = M
-			else
-				P.medical_cannotfind = 1
-			return 1
-
-/datum/pai_software/sec_records
-	name = "Security Records"
-	ram_cost = 15
-	id = "sec_records"
-	toggle = 0
-
-	on_ui_interact(mob/living/silicon/pai/user, datum/nanoui/ui=null, force_open=1)
-		var/data[0]
-
-		var/records[0]
-		for(var/datum/data/record/general in sortRecord(data_core.general))
-			var/record[0]
-			record["name"] = general.fields["name"]
-			record["ref"] = "\ref[general]"
-			records[++records.len] = record
-
-		data["records"] = records
-
-		var/datum/data/record/G = user.securityActive1
-		var/datum/data/record/S = user.securityActive2
-		data["general"] = G ? G.fields : null
-		data["security"] = S ? S.fields : null
-		data["could_not_find"] = user.security_cannotfind
-
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
-		if(!ui)
-			// Don't copy-paste this unless you're making a pAI software module!
-			ui = new(user, user, id, "pai_secrecords.tmpl", "Security Records", 450, 600)
-			ui.set_initial_data(data)
-			ui.open()
-			ui.set_auto_update(1)
-
-	Topic(href, href_list)
-		var/mob/living/silicon/pai/P = usr
-		if(!istype(P)) return
-
-		if(href_list["select"])
-			var/datum/data/record/record = locate(href_list["select"])
-			if(record)
-				var/datum/data/record/R = record
-				var/datum/data/record/S = null
-				if (!( data_core.general.Find(R) ))
-					P.securityActive1 = null
-					P.securityActive2 = null
-					P.security_cannotfind = 1
-				else
-					P.security_cannotfind = 0
-					for(var/datum/data/record/E in data_core.security)
-						if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
-							S = E
-					P.securityActive1 = R
-					P.securityActive2 = S
-			else
-				P.securityActive1 = null
-				P.securityActive2 = null
-				P.security_cannotfind = 1
-			return 1
+/datum/pai_software/messenger/on_purchase(mob/living/silicon/pai/user)
+	if(user && !user.pda)
+		user.pda = new(user)
+		user.pda.set_owner_rank_job(text("[]", user), "Personal Assistant")
 
 /datum/pai_software/door_jack
 	name = "Door Jack"
@@ -342,7 +236,7 @@
 		data["progress_b"] = user.hackprogress % 10
 		data["aborted"] = user.hack_aborted
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_doorjack.tmpl", "Door Jack", 300, 150)
@@ -373,7 +267,7 @@
 
 /mob/living/silicon/pai/proc/hackloop()
 	var/turf/T = get_turf_or_move(src.loc)
-	for(var/mob/living/silicon/ai/AI in player_list)
+	for(var/mob/living/silicon/ai/AI in GLOB.player_list)
 		if(T.loc)
 			to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
 		else
@@ -433,7 +327,7 @@
 				gases[++gases.len] = gas
 			data["gas"] = gases
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_atmosphere.tmpl", "Atmosphere Sensor", 350, 300)
@@ -466,7 +360,7 @@
 	name = "Universal Translator"
 	ram_cost = 35
 	id = "translator"
-	var/list/languages = list(LANGUAGE_UNATHI, LANGUAGE_SIIK_MAAS, LANGUAGE_SKRELLIAN, LANGUAGE_EAL, LANGUAGE_INDEPENDENT)
+	var/list/languages = list(LANGUAGE_UNATHI, LANGUAGE_SIIK_MAAS, LANGUAGE_SKRELLIAN, LANGUAGE_EAL, LANGUAGE_INDEPENDENT, LANGUAGE_SPACER, LANGUAGE_LUNAR)
 
 	toggle(mob/living/silicon/pai/user)
 		// 	Sol Common, Tradeband and Gutter are added with New() and are therefore the current default, always active languages
@@ -493,7 +387,7 @@
 		data["frequency"] = format_frequency(user.sradio.frequency)
 		data["code"] = user.sradio.code
 
-		ui = nanomanager.try_update_ui(user, user, id, ui, data, force_open)
+		ui = GLOB.nanomanager.try_update_ui(user, user, id, ui, data, force_open)
 		if(!ui)
 			// Don't copy-paste this unless you're making a pAI software module!
 			ui = new(user, user, id, "pai_signaller.tmpl", "Signaller", 320, 150)

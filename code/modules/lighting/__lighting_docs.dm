@@ -11,7 +11,7 @@ Changes from tg DAL:
 
   - Code:
 	  - Instead of one flat luminosity var, light is represented by 3 atom vars:
-		  - light_range; range in tiles of the light, used for calculating falloff,
+		  - light_range; diameter in tiles of the light, used for calculating falloff, Cannot be 1.
 		  - light_power; multiplier for the brightness of lights,
 		  - light_color; hex string representing the RGB colour of the light.
 	  - setLuminousity() is now set_light() and takes the three variables above.
@@ -61,7 +61,7 @@ atom/movable/lighting_overlay: (lighting_overlay.dm)
   - var/xoffset, var/yoffset; (only present when using sub-tile overlays) fractional offset of this overlay in the tile
 
   - proc/update_lumcount(delta_r, delta_g, delta_b):
-      - Change the lumcount vars and queue the overlay for update
+		- Change the lumcount vars and queue the overlay for update
   - proc/update_overlay()
-	  - Called by the lighting process to update the color of the overlay
+		- Called by the lighting process to update the color of the overlay
 */

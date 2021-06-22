@@ -48,7 +48,7 @@
 		if(S.zone) S.zone.rebuild()
 
 	var/turf/simulated/W = new N( locate(src.x, src.y, src.z) )
-	
+
 	W.opaque_counter = opaque_counter
 
 	if(ispath(N, /turf/simulated))
@@ -60,10 +60,9 @@
 		old_fire.RemoveFire()
 
 	if(tell_universe)
-		universe.OnTurfChange(W)
+		GLOB.universe.OnTurfChange(W)
 
-	if(air_master)
-		air_master.mark_for_update(src) //handle the addition of the new turf.
+	SSair.mark_for_update(src) //handle the addition of the new turf.
 
 	for(var/turf/space/S in range(W,1))
 		S.update_starlight()

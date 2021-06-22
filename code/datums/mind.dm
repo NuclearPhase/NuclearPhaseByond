@@ -80,7 +80,7 @@
 			current.verbs -= /datum/changeling/proc/EvolutionMenu
 		current.mind = null
 
-		nanomanager.user_transferred(current, new_character) // transfer active NanoUI instances to new user
+		GLOB.nanomanager.user_transferred(current, new_character) // transfer active NanoUI instances to new user
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
@@ -407,14 +407,14 @@
 			if("crystals")
 				if (usr.client.holder.rights & R_FUN)
 					var/obj/item/device/uplink/suplink = find_syndicate_uplink()
-					var/crystals
-					if (suplink)
-						crystals = suplink.uses
+					if(!suplink)
+						to_chat(usr, "<span class='warning'>Failed to find an uplink.</span>")
+						return
+					var/crystals = suplink.uses
 					crystals = input("Amount of telecrystals for [key]","Operative uplink", crystals) as null|num
-					if (!isnull(crystals))
-						if (suplink)
-							suplink.uses = crystals
-							log_and_message_admins("set the telecrystals for [key] to [crystals]")
+					if (!isnull(crystals) && !QDELETED(suplink))
+						suplink.uses = crystals
+						log_and_message_admins("set the telecrystals for [key] to [crystals]")
 
 	else if (href_list["obj_announce"])
 		var/obj_count = 1

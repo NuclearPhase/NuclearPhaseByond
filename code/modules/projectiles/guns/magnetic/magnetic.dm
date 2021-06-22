@@ -7,6 +7,7 @@
 	one_hand_penalty = 1
 	origin_tech = list(TECH_COMBAT = 5, TECH_MATERIAL = 4, TECH_ILLEGAL = 2, TECH_MAGNET = 4)
 	w_class = ITEM_SIZE_LARGE
+	combustion = 1
 
 	var/obj/item/weapon/cell/cell                              // Currently installed powercell.
 	var/obj/item/weapon/stock_parts/capacitor/capacitor        // Installed capacitor. Higher rating == faster charge between shots.
@@ -20,23 +21,21 @@
 	var/power_cost = 950                                       // Cost per fire, should consume almost an entire basic cell.
 	var/power_per_tick                                         // Capacitor charge per process(). Updated based on capacitor rating.
 
-/obj/item/weapon/gun/magnetic/initialize()
+/obj/item/weapon/gun/magnetic/Initialize()
+	START_PROCESSING(SSobj, src)
 	if(capacitor)
 		power_per_tick = (power_cost*0.15) * capacitor.rating
 	update_icon()
 	. = ..()
 
-/obj/item/weapon/gun/magnetic/New()
-	..()
-	processing_objects |= src
-
 /obj/item/weapon/gun/magnetic/Destroy()
-	qdel_null(cell)
-	qdel_null(loaded)
-	qdel_null(capacitor)
+	STOP_PROCESSING(SSobj, src)
+	QDEL_NULL(cell)
+	QDEL_NULL(loaded)
+	QDEL_NULL(capacitor)
 	. = ..()
 
-/obj/item/weapon/gun/magnetic/process()
+/obj/item/weapon/gun/magnetic/Process()
 	if(capacitor)
 		if(cell)
 			if(capacitor.charge < capacitor.max_charge && cell.checked_use(power_per_tick))
@@ -62,6 +61,7 @@
 		overlays_to_add += image(icon, "[icon_state]_loaded")
 
 	overlays = overlays_to_add
+	..()
 
 /obj/item/weapon/gun/magnetic/proc/show_ammo(var/mob/user)
 	if(loaded)
@@ -101,7 +101,7 @@
 			update_icon()
 			return
 
-		if(isscrewdriver(thing))
+		if(isScrewdriver(thing))
 			if(!capacitor)
 				to_chat(user, "<span class='warning'>\The [src] has no capacitor installed.</span>")
 				return

@@ -9,7 +9,6 @@
 /*
  * Morgue
  */
-#define ITEMSLIMIT 50
 
 /obj/structure/morgue
 	name = "morgue"
@@ -62,15 +61,10 @@
 	return
 
 /obj/structure/morgue/attack_hand(mob/user as mob)
-	var/limit
-
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
-			if (limit == ITEMSLIMIT)
-				break
 			if (!( A.anchored ))
 				A.forceMove(src)
-				limit++
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		qdel(src.connected)
 		src.connected = null
@@ -85,7 +79,6 @@
 			src.icon_state = "morgue0"
 			for(var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.connected.loc)
-
 			src.connected.icon_state = "morguet"
 			src.connected.set_dir(src.dir)
 		else
@@ -109,9 +102,9 @@
 			return
 		t = sanitizeSafe(t, MAX_NAME_LEN)
 		if (t)
-			src.name = text("Morgue- '[]'", t)
+			src.SetName(text("Morgue- '[]'", t))
 		else
-			src.name = "Morgue"
+			src.SetName("Morgue")
 	src.add_fingerprint(user)
 	return
 
@@ -155,14 +148,10 @@
 	return ..()
 
 /obj/structure/m_tray/attack_hand(mob/user as mob)
-	var/limit
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.loc)
-			if (limit == ITEMSLIMIT)
-				break
 			if (!( A.anchored ))
 				A.forceMove(src.connected)
-				limit++
 			//Foreach goto(26)
 		src.connected.connected = null
 		src.connected.update()
@@ -205,8 +194,8 @@
 	var/_wifi_id
 	var/datum/wifi/receiver/button/crematorium/wifi_receiver
 
-/obj/structure/crematorium/initialize()
-	..()
+/obj/structure/crematorium/Initialize()
+	. = ..()
 	if(_wifi_id)
 		wifi_receiver = new(_wifi_id, src)
 
@@ -254,7 +243,6 @@
 	return
 
 /obj/structure/crematorium/attack_hand(mob/user as mob)
-	var/limit
 //	if (cremating) AWW MAN! THIS WOULD BE SO MUCH MORE FUN ... TO WATCH
 //		user.show_message("<span class='warning'>Uh-oh, that was a bad idea.</span>", 1)
 //		to_chat(usr, "Uh-oh, that was a bad idea.")
@@ -266,12 +254,8 @@
 		return
 	if ((src.connected) && (src.locked == 0))
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
-			if (limit == ITEMSLIMIT)
-				break
 			if (!( A.anchored ))
 				A.forceMove(src)
-				limit++
-
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		//src.connected = null
 		qdel(src.connected)
@@ -302,9 +286,9 @@
 			return
 		t = sanitizeSafe(t, MAX_NAME_LEN)
 		if (t)
-			src.name = text("Crematorium- '[]'", t)
+			src.SetName(text("Crematorium- '[]'", t))
 		else
-			src.name = "Crematorium"
+			src.SetName("Crematorium")
 	src.add_fingerprint(user)
 	return
 
@@ -398,14 +382,10 @@
 	return ..()
 
 /obj/structure/c_tray/attack_hand(mob/user as mob)
-	var/limit
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.loc)
-			if (limit == ITEMSLIMIT)
-				break
 			if (!( A.anchored ))
 				A.forceMove(src.connected)
-				limit++
 			//Foreach goto(26)
 		src.connected.connected = null
 		src.connected.update()

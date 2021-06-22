@@ -4,6 +4,8 @@
 	var/list/stomach_contents = list()
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/antibodies = list()
+	var/datum/happiness_event/list/events = list()
+
 
 	var/life_tick = 0      // The amount of life ticks that have processed on this mob.
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed
@@ -12,6 +14,7 @@
 	//Active emote/pose
 	var/pose = null
 	var/list/chem_effects = list()
+	var/list/chem_doses = list()
 	var/datum/reagents/metabolism/bloodstr = null
 	var/datum/reagents/metabolism/ingested = null
 	var/datum/reagents/metabolism/touching = null
@@ -30,3 +33,17 @@
 	//the second is the message in question.
 	var/last_taste_time = 0
 	var/last_taste_text = ""
+
+	//For sad, thirsty, and dirty lads.
+	var/happiness = 0
+	var/thirst = THIRST_LEVEL_FILLED
+	var/hygiene = HYGIENE_LEVEL_NORMAL
+	var/my_hygiene_factor = HYGIENE_FACTOR
+	// organ-related variables, see organ.dm and human_organs.dm
+	var/list/internal_organs = list()
+	var/list/organs = list()
+	var/list/organs_by_name = list() // map organ names to organs
+	var/list/internal_organs_by_name = list() // so internal organs have less ickiness too
+
+	var/list/stasis_sources = list()
+	var/stasis_value

@@ -46,9 +46,9 @@
 			source_mineral = container.mineral.xarch_source_mineral
 
 	if(prob(75))
-		find_presence["phosphorus"] = rand(1, 500) / 100
+		find_presence[/datum/reagent/phosphorus] = rand(1, 500) / 100
 	if(prob(25))
-		find_presence["mercury"] = rand(1, 500) / 100
+		find_presence[/datum/reagent/mercury] = rand(1, 500) / 100
 	find_presence["chlorine"] = rand(500, 2500) / 100
 
 	for(var/datum/find/F in container.finds)
@@ -128,7 +128,7 @@
 		else
 			//create a new sample bag which we'll fill with rock samples
 			filled_bag = new /obj/item/weapon/evidencebag(src)
-			filled_bag.name = "sample bag"
+			filled_bag.SetName("sample bag")
 			filled_bag.desc = "a bag for holding research samples."
 
 			icon_state = "sampler1"

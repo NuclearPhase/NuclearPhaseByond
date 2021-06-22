@@ -1,33 +1,87 @@
-proc/agony_scream(var/mob/M)
-	var/screamsound = null
-	if(M.stat)//No dead or unconcious people screaming pls.
+/mob/proc/agony_scream()
+	if(stat)
 		return
+	var/screamsound = null
+	var/muzzled = istype(wear_mask, /obj/item/clothing/mask/muzzle)
+	var/message = null
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(H.isChild())
-			screamsound = pick('sound/voice/child_pain1.ogg', 'sound/voice/child_pain2.ogg')
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(!muzzled)
+			if(H.isMonkey())
+				screamsound = "sound/voice/monkey_pain[rand(1,3)].ogg"
 
-		else if(M.gender == MALE)
-			screamsound = pick('sound/voice/man_pain1.ogg','sound/voice/man_pain2.ogg','sound/voice/man_pain3.ogg')
+			//else if(H.isChild())
+			//	screamsound = "sound/voice/child_pain[rand(1,2)].ogg"
+
+			else if(src.gender == MALE)
+				screamsound = "sound/voice/man_pain[rand(1,3)].ogg"
+
+			else
+				screamsound = "sound/voice/woman_agony[rand(1,3)].ogg"
+			message = "screams in agony!"
 
 		else
-			screamsound = pick('sound/voice/woman_agony1.ogg','sound/voice/woman_agony2.ogg','sound/voice/woman_agony3.ogg')
-
+			message = "makes a loud noise!"
+			screamsound = "sound/voice/gagscream[rand(1,3)].wav"
 
 	if(screamsound)
-		playsound(M, screamsound, 25, 0, 1)
+		playsound(src, screamsound, 50, 0, 1)
 
-proc/gasp_sound(var/mob/M)
+	if(message)
+		custom_emote(2,message)
+
+/mob/proc/gasp_sound()
 	var/gaspsound = null
-	if(M.stat)
+	var/muzzled = istype(wear_mask, /obj/item/clothing/mask/muzzle)
+	if(stat)
 		return
 
-	if(M.gender == MALE)
-		gaspsound = pick('sound/voice/gasp_male1.ogg','sound/voice/gasp_male2.ogg','sound/voice/gasp_male3.ogg','sound/voice/gasp_male4.ogg','sound/voice/gasp_male5.ogg','sound/voice/gasp_male6.ogg','sound/voice/gasp_male7.ogg')
+	if(muzzled)
+		custom_emote(2,"[src.name] makes a muffled gasping noise.")
+		return
 
-	if(M.gender == FEMALE)
-		gaspsound = pick('sound/voice/gasp_female1.ogg','sound/voice/gasp_female2.ogg','sound/voice/gasp_female3.ogg','sound/voice/gasp_female4.ogg','sound/voice/gasp_female5.ogg','sound/voice/gasp_female6.ogg','sound/voice/gasp_female7.ogg')
+	if(gender == MALE)
+		gaspsound = "sound/voice/gasp_male[rand(1,7)].ogg"
+
+	if(gender == FEMALE)
+		gaspsound = "sound/voice/gasp_female[rand(1,7)].ogg"
 
 	if(gaspsound)
-		playsound(M, gaspsound, 25, 0, 1)
+		playsound(src, gaspsound, 25, 0, 1)
+
+
+/mob/proc/agony_moan()
+	if(stat)
+		return
+	var/moansound = null
+	var/message = null
+	if(stat)
+		return
+
+	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if(!muzzled)
+			if(H.isMonkey())
+				return
+
+			//if(H.isChild())
+			//	moansound = 'sound/voice/child_moan1.ogg'
+
+			else if(src.gender == MALE)
+				moansound = "sound/voice/male_moan[rand(1,3)].ogg"
+
+			else
+				moansound = "sound/voice/female_moan[rand(1,3)].ogg"
+
+			message = "moans."
+		else
+			message = "makes a loud noise!"
+			moansound = "sound/voice/gagscream[rand(1,3)].wav"
+
+	if(moansound)
+		playsound(src, moansound, 50, 0, 1)
+
+	if(message)
+		custom_emote(2,message)

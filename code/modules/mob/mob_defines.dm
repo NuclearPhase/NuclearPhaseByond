@@ -4,7 +4,7 @@
 
 	appearance_flags = PIXEL_SCALE
 	animate_movement = 2
-	flags = PROXMOVE
+	movable_flags = MOVABLE_FLAG_PROXMOVE
 
 	virtual_mob = /mob/observer/virtual/mob
 
@@ -39,9 +39,17 @@
 	var/obj/screen/stamina_icon = null
 	var/obj/screen/kick_icon = null
 	var/obj/screen/jump_icon = null
-	var/obj/screen/noise1 = null
-	var/obj/screen/noise2 = null
-	var/obj/screen/noise3 = null
+	var/obj/screen/noise = null
+	var/obj/screen/fixeye = null
+	var/obj/screen/rest = null
+	var/obj/screen/combat_icon = null
+	var/obj/screen/combat_intent_icon = null
+	var/obj/screen/surrender = null
+	var/obj/screen/happiness_icon = null
+	var/obj/screen/wield_icon = null
+
+	var/obj/screen/noise2 = null//unused
+	var/obj/screen/noise3 = null//unused
 
 	var/obj/screen/movable/ability_master/ability_master = null
 
@@ -98,8 +106,12 @@
 
 	var/shakecamera = 0
 	var/a_intent = I_HELP//Living
+	var/defense_intent = I_DODGE//Living. For dodging and parrying.
 	var/m_intent = "run"//Living
 	var/middle_click_intent = null //For doing different things with middle click.
+	var/combat_mode = 0//Living
+	var/using_alt_hud = 0 //For the lunahud.
+	var/silent = null 		//Living. Can't talk. Value goes down every life proc.
 	var/obj/buckled = null//Living
 	var/obj/item/l_hand = null//Living
 	var/obj/item/r_hand = null//Living
@@ -108,7 +120,7 @@
 	var/obj/item/clothing/mask/wear_mask = null//Carbon
 
 
-	var/datum/hud/hud_used = null
+//	var/datum/hud/hud_used = null
 
 	var/list/grabbed_by = list(  )
 
@@ -119,7 +131,7 @@
 //	var/job = null//Living
 
 	var/can_pull_size = ITEM_SIZE_NO_CONTAINER // Maximum w_class the mob can pull.
-	var/can_pull_mobs = MOB_PULL_LARGER       // Whether or not the mob can pull other mobs.
+	var/can_pull_mobs = MOB_PULL_SAME          // Whether or not the mob can pull other mobs.
 
 	var/datum/dna/dna = null//Carbon
 	var/list/active_genes=list()
@@ -171,6 +183,10 @@
 	var/memory = ""
 	var/flavor_text = ""
 
-	var/has_limbs = 1
+	var/nabbing = 0  // Whether a creature with a CAN_NAB tag is grabbing normally or in nab mode.
 
-	var/scrambling = 0
+	var/has_limbs = 1//For crawling
+
+	var/scrambling = 0//For crawling.
+
+	var/emote_cd = 0//Emote cooldown.

@@ -1,6 +1,6 @@
 /atom
 	var/level = 2
-	var/flags = 0
+	var/atom_flags
 	var/list/blood_DNA
 	var/was_bloodied
 	var/blood_color
@@ -17,12 +17,57 @@
 	//var/chem_is_open_container = 0
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
 	///Chemistry.
+
 	var/list/climbers = list()
 
+	var/initialized = FALSE
+
+/atom/New(loc, ...)
+	//. = ..() //uncomment if you are dumb enough to add a /datum/New() proc
+
+	if(GLOB.use_preloader && (src.type == GLOB._preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+		GLOB._preloader.load(src)
+
+	var/do_initialize = SSatoms.initialized
+	if(do_initialize > INITIALIZATION_INSSATOMS)
+		args[1] = do_initialize == INITIALIZATION_INNEW_MAPLOAD
+		if(SSatoms.InitAtom(src, args))
+			//we were deleted
+			return
+
+	var/list/created = SSatoms.created_atoms
+	if(created)
+		created += src
+
+	if(atom_flags & ATOM_FLAG_CLIMBABLE)
+		verbs += /atom/proc/climb_on
+
+	if(opacity)
+		updateVisibility(src)
+
+//Called after New if the map is being loaded. mapload = TRUE
+//Called from base of New if the map is not being loaded. mapload = FALSE
+//This base must be called or derivatives must set initialized to TRUE
+//must not sleep
+//Other parameters are passed from New (excluding loc), this does not happen if mapload is TRUE
+//Must return an Initialize hint. Defined in __DEFINES/subsystems.dm
+
+/atom/proc/Initialize(mapload, ...)
+	if(initialized)
+		crash_with("Warning: [src]([type]) initialized multiple times!")
+	initialized = TRUE
+
+	if(light_power && light_range)
+		update_light()
+
+	return INITIALIZE_HINT_NORMAL
+
+//called if Initialize returns INITIALIZE_HINT_LATELOAD
+/atom/proc/LateInitialize()
+	return
+
 /atom/Destroy()
-	if(reagents)
-		qdel(reagents)
-		reagents = null
+	QDEL_NULL(reagents)
 	. = ..()
 
 /atom/proc/reveal_blood()
@@ -57,7 +102,7 @@
 // returns true if open
 // false if closed
 /atom/proc/is_open_container()
-	return flags & OPENCONTAINER
+	return atom_flags & ATOM_FLAG_OPEN_CONTAINER
 
 /*//Convenience proc to see whether a container can be accessed in a certain way.
 
@@ -205,10 +250,11 @@ its easier to just keep the beam vertical.
 			f_name += "<span class='danger'>blood-stained</span> [name][infix]!"
 		else
 			f_name += "oil-stained [name][infix]."
+
 	if(!isobserver(user))
 		user.visible_message("<font size=1>[user.name] looks at [src].</font>")
 
-		if(get_dist(user,src) > 5 && !isobserver(user))//Don't get descriptions of things far away.
+		if(get_dist(user,src) > 5)//Don't get descriptions of things far away.
 			to_chat(user, "<span class='info'>It's too far away to see clearly.</span>")
 			return
 
@@ -230,6 +276,17 @@ its easier to just keep the beam vertical.
 	dir = new_dir
 	return TRUE
 
+/atom/proc/set_icon_state(var/new_icon_state)
+	if(has_extension(src, /datum/extension/base_icon_state))
+		var/datum/extension/base_icon_state/bis = get_extension(src, /datum/extension/base_icon_state)
+		bis.base_icon_state = new_icon_state
+		update_icon()
+	else
+		icon_state = new_icon_state
+
+/atom/proc/update_icon()
+	return
+
 /atom/proc/ex_act()
 	return
 
@@ -250,15 +307,14 @@ its easier to just keep the beam vertical.
 
 //returns 1 if made bloody, returns 0 otherwise
 /atom/proc/add_blood(mob/living/carbon/human/M as mob)
-
-	if(flags & NOBLOODY)
+	if(atom_flags & ATOM_FLAG_NO_BLOOD)
 		return 0
 
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
 	was_bloodied = 1
-	blood_color = "#A10808"
+	blood_color = COLOR_BLOOD_HUMAN
 	if(istype(M))
 		if (!istype(M.dna, /datum/dna))
 			M.dna = new /datum/dna(null)
@@ -286,12 +342,12 @@ its easier to just keep the beam vertical.
 		return 1
 
 /atom/proc/get_global_map_pos()
-	if(!islist(global_map) || isemptylist(global_map)) return
+	if(!islist(GLOB.global_map) || isemptylist(GLOB.global_map)) return
 	var/cur_x = null
 	var/cur_y = null
 	var/list/y_arr = null
-	for(cur_x=1,cur_x<=global_map.len,cur_x++)
-		y_arr = global_map[cur_x]
+	for(cur_x=1,cur_x<=GLOB.global_map.len,cur_x++)
+		y_arr = GLOB.global_map[cur_x]
 		cur_y = y_arr.Find(src.z)
 		if(cur_y)
 			break
@@ -365,63 +421,8 @@ its easier to just keep the beam vertical.
 /atom/movable/onDropInto(var/atom/movable/AM)
 	return loc // If onDropInto returns something, then dropInto will attempt to drop AM there.
 
-//Multi-z falling procs
-/atom/movable/can_fall()
-	return !anchored
-
-//Execution by grand piano!
-/atom/movable/proc/get_fall_damage()
-	return 42
-
-//If atom stands under open space, it can prevent fall, or not
-/atom/proc/can_prevent_fall()
-	return FALSE
-
-
 /atom/proc/InsertedContents()
 	return contents
-
-//Kicking
-/atom/proc/kick_act(mob/living/carbon/human/user)
-	//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or while being incapacitated (except lying), can't kick while legcuffed or while being locked in closet
-	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY) \
-		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed() || istype(user.loc, /obj/structure/closet))
-		return
-
-	if(user.handcuffed && prob(45) && !user.incapacitated(INCAPACITATION_FORCELYING))//User can fail to kick smbd if cuffed
-		user.visible_message("<span class='danger'>[user.name] loses \his balance while trying to kick \the [src].</span>", \
-					"<span class='warning'> You lost your balance.</span>")
-		user.Weaken(5)
-		return
-
-	if(user.middle_click_intent == "kick")//We're in kick mode, we can kick.
-		for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
-			var/obj/item/organ/affecting = user.get_organ(limbcheck)
-			if(!affecting)//Oh shit, we don't have have any legs, we can't kick.
-				return 0
-
-		user.setClickCooldown(DEFAULT_SLOW_COOLDOWN)
-		return 1 //We do have legs now though, so we can kick.
-
-//Jumping
-/atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
-	//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or while being incapacitated (except handcuffs) && No jumping vhile being legcuffed or locked in closet
-	if(user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY|INCAPACITATION_FORCELYING) || user.isinspace() \
-		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || user.legcuffed() || istype(user.loc, /obj/structure/closet))
-		return
-
-	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
-		var/obj/item/organ/affecting = user.get_organ(limbcheck)
-		if(!affecting)//Oh shit, we don't have have any legs, we can't jump.
-			return
-
-	//Nice, we can jump, let's do that then.
-	playsound(user, "sound/effects/jump_[user.gender == MALE ? "male" : "female"].ogg", 25)
-	playsound(user, user.gender == MALE ? 'sound/effects/jump_male.ogg' : 'sound/effects/jump_female.ogg', 25)
-	user.visible_message("[user] jumps.")
-	user.adjustStaminaLoss(rand(20,40))//Jumping is exhausting.
-	user.throw_at(target, 5, 0.5, user)
-	user.setClickCooldown(DEFAULT_SLOW_COOLDOWN)
 
 //all things climbable
 
@@ -431,6 +432,76 @@ its easier to just keep the beam vertical.
 		user.visible_message("<span class='warning'>[user.name] shakes \the [src].</span>", \
 					"<span class='notice'>You shake \the [src].</span>")
 		object_shaken()
+
+/atom/proc/climb_on()
+
+	set name = "Climb"
+	set desc = "Climbs onto an object."
+	set category = "Object"
+	set src in oview(1)
+
+	do_climb(usr)
+
+/atom/proc/can_climb(var/mob/living/user, post_climb_check=0)
+	if (!(atom_flags & ATOM_FLAG_CLIMBABLE) || !can_touch(user) || (!post_climb_check && (user in climbers)))
+		return 0
+
+	if (!user.Adjacent(src))
+		to_chat(user, "<span class='danger'>You can't climb there, the way is blocked.</span>")
+		return 0
+
+	var/obj/occupied = turf_is_crowded()
+	if(occupied)
+		to_chat(user, "<span class='danger'>There's \a [occupied] in the way.</span>")
+		return 0
+	return 1
+
+/atom/proc/can_touch(var/mob/user)
+	if (!user)
+		return 0
+	if(!Adjacent(user))
+		return 0
+	if (user.restrained() || user.buckled)
+		to_chat(user, "<span class='notice'>You need your hands and legs free for this.</span>")
+		return 0
+	if (user.incapacitated())
+		return 0
+	if (issilicon(user))
+		to_chat(user, "<span class='notice'>You need hands for this.</span>")
+		return 0
+	return 1
+
+/atom/proc/turf_is_crowded()
+	var/turf/T = get_turf(src)
+	if(!T || !istype(T))
+		return 0
+	for(var/atom/A in T.contents)
+		if(A.atom_flags & ATOM_FLAG_CLIMBABLE)
+			continue
+		if(A.density && !(A.atom_flags & ATOM_FLAG_CHECKS_BORDER)) //ON_BORDER structures are handled by the Adjacent() check.
+			return A
+	return 0
+
+/atom/proc/do_climb(var/mob/living/user)
+	if (!can_climb(user))
+		return
+
+	user.visible_message("<span class='warning'>\The [user] starts climbing onto \the [src]!</span>")
+	climbers |= user
+
+	if(!do_after(user,(issmall(user) ? 30 : 50), src))
+		climbers -= user
+		return
+
+	if (!can_climb(user, post_climb_check=1))
+		climbers -= user
+		return
+
+	user.forceMove(get_turf(src))
+
+	if (get_turf(user) == get_turf(src))
+		user.visible_message("<span class='warning'>\The [user] climbs onto \the [src]!</span>")
+	climbers -= user
 
 /atom/proc/object_shaken()
 	for(var/mob/living/M in climbers)
@@ -470,3 +541,52 @@ its easier to just keep the beam vertical.
 			H.UpdateDamageIcon()
 			H.updatehealth()
 	return
+
+/atom/MouseDrop_T(mob/target, mob/user)
+	var/mob/living/H = user
+	if(istype(H) && can_climb(H) && target == user)
+		do_climb(target)
+	else
+		return ..()
+
+//Kicking
+/atom/proc/kick_act(mob/living/carbon/human/user)
+	//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or while being incapacitated (except lying), can't kick while legcuffed or while being locked in closet
+	if(!Adjacent(user) || user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY) \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || istype(user.loc, /obj/structure/closet))
+		return
+
+	if(user.handcuffed && prob(45) && !user.incapacitated(INCAPACITATION_FORCELYING))//User can fail to kick smbd if cuffed
+		user.visible_message("<span class='danger'>[user.name] loses \his balance while trying to kick \the [src].</span>", \
+					"<span class='warning'> You lost your balance.</span>")
+		user.Weaken(1)
+		return
+
+	if(user.middle_click_intent == "kick")//We're in kick mode, we can kick.
+		for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
+			var/obj/item/organ/affecting = user.get_organ(limbcheck)
+			if(!affecting)//Oh shit, we don't have have any legs, we can't kick.
+				return 0
+
+		user.setClickCooldown(DEFAULT_SLOW_COOLDOWN)
+		return 1 //We do have legs now though, so we can kick.
+
+//Jumping
+/atom/proc/jump_act(atom/target, mob/living/carbon/human/user)
+	//No jumping on the ground dummy && No jumping in space && No jumping in straightjacket or while being incapacitated (except handcuffs) && No jumping vhile being legcuffed or locked in closet
+	if(user.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_KNOCKOUT|INCAPACITATION_BUCKLED_PARTIALLY|INCAPACITATION_BUCKLED_FULLY|INCAPACITATION_FORCELYING) || user.isinspace() \
+		|| istype(user.wear_suit, /obj/item/clothing/suit/straight_jacket) || istype(user.loc, /obj/structure/closet))
+		return
+
+	for(var/limbcheck in list(BP_L_LEG,BP_R_LEG))//But we need to see if we have legs.
+		var/obj/item/organ/affecting = user.get_organ(limbcheck)
+		if(!affecting)//Oh shit, we don't have have any legs, we can't jump.
+			return
+
+	//Nice, we can jump, let's do that then.
+	playsound(user, user.gender == MALE ? 'sound/effects/jump_male.ogg' : 'sound/effects/jump_female.ogg', 25)
+	user.visible_message("[user] jumps.")
+	user.adjustStaminaLoss(rand(20,40))//Jumping is exhausting.
+	user.throw_at(target, 5, 0.5, user)
+	user.setClickCooldown(DEFAULT_SLOW_COOLDOWN)
+

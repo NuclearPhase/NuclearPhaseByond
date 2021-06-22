@@ -4,11 +4,11 @@
 	icon = 'icons/mob/deity_big.dmi'
 	icon_state = "egg"
 	var/power_min = 10 //Below this amount you regenerate uplink TCs
-	var/power_tick = 10
 	pixel_x = -128
 	pixel_y = -128
 	health = 100
 	maxHealth = 100 //I dunno what to do with health at this point.
+	universal_understand = 1
 	var/eye_type = /mob/observer/eye/cult
 	var/list/minions = list() //Minds of those who follow him
 	var/list/structures = list() //The objs that this dude controls.
@@ -16,6 +16,7 @@
 	var/obj/item/device/uplink/contained/mob_uplink
 	var/datum/god_form/form
 	var/datum/current_boon
+	var/mob/living/following
 
 /mob/living/deity/New()
 	..()
@@ -27,24 +28,18 @@
 
 /mob/living/deity/Life()
 	. = ..()
-	if(. && mob_uplink.uses < power_min && --power_tick == 0)
-		mob_uplink.uses += 1
-		nanomanager.update_uis(mob_uplink)
-		power_tick = initial(power_tick)
+	if(. && mob_uplink.uses < power_min)
+		mob_uplink.uses += 1 + (!feats[DEITY_POWER_BONUS] ? 0 : feats[DEITY_POWER_BONUS])
+		GLOB.nanomanager.update_uis(mob_uplink)
 
 /mob/living/deity/death()
 	. = ..()
 	if(.)
 		for(var/m in minions)
 			var/datum/mind/M = m
-			if(M.learned_spells)
-				for(var/s in M.learned_spells)
-					var/spell/S = s
-					if(S.connected_god == src)
-						M.current.remove_spell(S)
-						qdel(S)
-			to_chat(M, "<font size='3'><span class='danger'>Your connection has been severed! \The [src] is no more!</span></font>")
-			sound_to(M, 'sound/hallucinations/far_noise.ogg')
+			remove_follower_spells(M)
+			to_chat(M.current, "<font size='3'><span class='danger'>Your connection has been severed! \The [src] is no more!</span></font>")
+			sound_to(M.current, 'sound/hallucinations/far_noise.ogg')
 			M.current.Weaken(10)
 		for(var/s in structures)
 			var/obj/structure/deity/S = s
@@ -55,25 +50,14 @@
 	minions.Cut()
 	eyeobj.release()
 	structures.Cut()
-	qdel_null(eyeobj)
-	qdel_null(form)
+	QDEL_NULL(eyeobj)
+	QDEL_NULL(form)
 	return ..()
 
-/mob/living/deity/verb/jump_to_follower()
+/mob/living/deity/verb/return_to_plane()
 	set category = "Godhood"
 
-	if(!minions)
-		return
-
-	var/list/could_follow = list()
-	for(var/m in minions)
-		var/datum/mind/mind = m
-		if(mind.current.stat != DEAD)
-			could_follow += mind.current
-
-	var/choice = input(src, "Jump to follower", "Teleport") as null|anything in could_follow
-	if(choice)
-		eyeobj.forceMove(get_turf(choice))
+	eyeobj.forceMove(get_turf(src))
 
 /mob/living/deity/verb/open_menu()
 	set name = "Open Menu"
@@ -118,7 +102,7 @@
 	form = new type(src)
 	to_chat(src, "<span class='notice'>You undergo a transformation into your new form!</span>")
 	spawn(1)
-		name = form.name
+		SetName(form.name)
 		var/newname = sanitize(input(src, "Choose a name for your new form.", "Name change", form.name) as text, MAX_NAME_LEN)
 		if(newname)
 			fully_replace_character_name(newname)

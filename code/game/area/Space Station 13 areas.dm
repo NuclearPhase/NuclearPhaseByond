@@ -70,9 +70,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	power_equip = 0
 	power_environ = 0
 	has_gravity = 0
-	ambience = list('sound/ambience/ambispace.ogg','sound/music/title2.ogg','sound/music/space.ogg','sound/music/main.ogg','sound/music/traitor.ogg')
+	area_flags = AREA_FLAG_EXTERNAL
+	//ambience = list('sound/ambience/ambispace.ogg','sound/music/title2.ogg','sound/music/space.ogg','sound/music/main.ogg','sound/music/traitor.ogg')
+	forced_ambience = list('sound/ambience/space_loop.ogg')
 
-/area/space/updateicon()
+/area/space/update_icon()
 	return
 
 area/space/atmosalert()
@@ -89,6 +91,20 @@ area/space/atmosalert()
 
 /area/space/partyalert()
 	return
+
+/area/outwards
+	name = "\improper Outwards"
+	icon_state = "outwards"
+	requires_power = 1
+	always_unpowered = 1
+	dynamic_lighting = 1
+	power_light = 0
+	power_equip = 0
+	power_environ = 0
+	has_gravity = 1
+	area_flags = AREA_FLAG_EXTERNAL
+	//ambience = list('sound/ambience/ambispace.ogg','sound/music/title2.ogg','sound/music/space.ogg','sound/music/main.ogg','sound/music/traitor.ogg')
+	//forced_ambience = list('sound/ambience/space_loop.ogg')
 
 //////////////////////
 //AREAS USED BY CODE//
@@ -129,7 +145,7 @@ area/space/atmosalert()
 	icon_state = "sec_prison"
 
 /area/maintenance
-	flags = AREA_RAD_SHIELDED
+	area_flags = AREA_FLAG_RAD_SHIELDED
 	sound_env = TUNNEL_ENCLOSED
 	turf_initializer = /decl/turf_initializer/maintenance
 
@@ -152,9 +168,6 @@ area/space/atmosalert()
 /area/shuttle/specops/centcom
 	icon_state = "shuttlered"
 
-/area/shuttle/specops/station
-	icon_state = "shuttlered2"
-
 /area/shuttle/syndicate_elite/mothership
 	icon_state = "shuttlered"
 
@@ -165,7 +178,7 @@ area/space/atmosalert()
 	name = "\improper Skipjack"
 	icon_state = "yellow"
 
-/area/supply/station
+/area/supply
 	name = "Supply Shuttle"
 	icon_state = "shuttle3"
 
@@ -176,8 +189,7 @@ area/space/atmosalert()
 ////////////
 //SHUTTLES//
 ////////////
-//shuttle areas must contain at least two areas in a subgroup if you want to move a shuttle from one
-//place to another. Look at escape shuttle for example.
+//shuttles only need starting area, movement is handled by landmarks
 //All shuttles should now be under shuttle since we have smooth-wall code.
 
 /area/shuttle

@@ -5,7 +5,7 @@
 	icon_state = "fire_extinguisher0"
 	item_state = "fire_extinguisher"
 	hitsound = 'sound/weapons/smash.ogg'
-	flags = CONDUCT
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	throwforce = 10
 	w_class = ITEM_SIZE_NORMAL
 	throw_speed = 2
@@ -36,7 +36,7 @@
 
 /obj/item/weapon/extinguisher/New()
 	create_reagents(max_water)
-	reagents.add_reagent("water", max_water)
+	reagents.add_reagent(/datum/reagent/water, max_water)
 	..()
 
 /obj/item/weapon/extinguisher/examine(mob/user)

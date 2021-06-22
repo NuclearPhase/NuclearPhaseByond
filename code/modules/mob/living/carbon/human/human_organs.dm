@@ -4,11 +4,6 @@
 		eyes.update_colour()
 		regenerate_icons()
 
-/mob/living/carbon/var/list/internal_organs = list()
-/mob/living/carbon/human/var/list/organs = list()
-/mob/living/carbon/human/var/list/organs_by_name = list() // map organ names to organs
-/mob/living/carbon/human/var/list/internal_organs_by_name = list() // so internal organs have less ickiness too
-
 /mob/living/carbon/human/proc/get_bodypart_name(var/zone)
 	var/obj/item/organ/external/E = get_organ(zone)
 	if(E) . = E.name
@@ -34,7 +29,7 @@
 
 	//processing internal organs is pretty cheap, do that first.
 	for(var/obj/item/organ/I in internal_organs)
-		I.process()
+		I.Process()
 
 	handle_stance()
 	handle_grasp()
@@ -49,7 +44,7 @@
 			bad_external_organs -= E
 			continue
 		else
-			E.process()
+			E.Process()
 
 			if (!lying && !buckled && world.time - l_move_time < 15)
 			//Moving around with fractured ribs won't do you any good
@@ -159,10 +154,10 @@
 		return
 
 	var/obj/item/thing = get_equipped_item(disarm_slot)
-	
+
 	if(!thing)
 		return
-	
+
 	drop_from_inventory(thing)
 
 	if(affected.robotic >= ORGAN_ROBOT)
@@ -175,7 +170,7 @@
 		spawn(10)
 			qdel(spark_system)
 
-	else 
+	else
 		var/grasp_name = affected.name
 		if((affected.body_part in list(ARM_LEFT, ARM_RIGHT)) && affected.children.len)
 			var/obj/item/organ/external/hand = pick(affected.children)
@@ -193,15 +188,22 @@
 		else
 			visible_message("<B>\The [src]</B> drops what they were holding in their [grasp_name]!")
 
-
-//Handles chem traces
-/mob/living/carbon/human/proc/handle_trace_chems()
-	//New are added for reagents to random organs.
-	for(var/datum/reagent/A in reagents.reagent_list)
-		var/obj/item/organ/O = pick(organs)
-		O.trace_chemicals[A.name] = 100
-
 /mob/living/carbon/human/proc/sync_organ_dna()
 	var/list/all_bits = internal_organs|organs
 	for(var/obj/item/organ/O in all_bits)
 		O.set_dna(dna)
+
+/mob/living/proc/is_asystole()
+	return FALSE
+
+/mob/living/carbon/human/is_asystole()
+	if(isSynthetic())
+		var/obj/item/organ/internal/cell/C = internal_organs_by_name[BP_CELL]
+		if(istype(C))
+			if(!C.is_usable())
+				return TRUE
+	else if(should_have_organ(BP_HEART))
+		var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+		if(!istype(heart) || !heart.is_working())
+			return TRUE
+	return FALSE

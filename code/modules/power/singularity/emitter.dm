@@ -2,7 +2,10 @@
 
 /obj/machinery/power/emitter
 	name = "emitter"
-	desc = "It is a heavy duty industrial laser."
+	desc = "A massive heavy industrial laser. This design is a fixed installation, capable of shooting in only one direction."
+	description_info = "You must secure this in place with a wrench and weld it to the floor before using it. The emitter will only fire if it is installed above a cable endpoint. Clicking will toggle it on and off, at which point, so long as it remains powered, it will fire in a single direction in bursts of four."
+	description_fluff = "Lasers like this one have been in use for ages, in applications such as mining, cutting, and in the startup sequence of many advanced space station and starship engines."
+	description_antag = "This baby is capable of slicing through walls, sealed lockers, and people."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "emitter"
 	anchored = 0
@@ -36,18 +39,18 @@
 	set name = "Rotate"
 	set category = "Object"
 	set src in oview(1)
-	
+
 	if(usr.incapacitated())
 		return
-    
+
 	if (src.anchored)
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
 	src.set_dir(turn(src.dir, 90))
 	return 1
 
-/obj/machinery/power/emitter/initialize()
-	..()
+/obj/machinery/power/emitter/Initialize()
+	. = ..()
 	if(state == 2 && anchored)
 		connect_to_network()
 		if(_wifi_id)
@@ -99,7 +102,7 @@
 /obj/machinery/power/emitter/emp_act(var/severity)
 	return 1
 
-/obj/machinery/power/emitter/process()
+/obj/machinery/power/emitter/Process()
 	if(stat & (BROKEN))
 		return
 	if(src.state != 2 || (!powernet && active_power_usage))
@@ -145,7 +148,7 @@
 
 /obj/machinery/power/emitter/attackby(obj/item/W, mob/user)
 
-	if(istype(W, /obj/item/weapon/wrench))
+	if(isWrench(W))
 		if(active)
 			to_chat(user, "Turn off [src] first.")
 			return
@@ -168,7 +171,7 @@
 				to_chat(user, "<span class='warning'>\The [src] needs to be unwelded from the floor.</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(isWelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(active)
 			to_chat(user, "Turn off [src] first.")

@@ -41,22 +41,21 @@ datum/controller/vote
 				result()
 				for(var/client/C in voting)
 					if(C)
-						C << browse(null,"window=vote")
+						C << browse(null,"window=vote;size=450x740")
 				reset()
 			else
 				for(var/client/C in voting)
 					if(C)
-						C << browse(vote.interface(C),"window=vote")
+						C << browse(vote.interface(C),"window=vote;size=450x740")
 
 				voting.Cut()
 
 	proc/autotransfer()
-		return
-		//initiate_vote("crew_transfer","the server", 1)
-		//log_debug("The server has called a crew transfer vote")
+		initiate_vote("crew_transfer","the server", 1)
+		log_debug("The server has called a crew transfer vote")
 
 	proc/autogamemode()
-		return//No, autogamemode vote is not something I want.
+		return
 		//initiate_vote("gamemode","the server", 1)
 		//log_debug("The server has called a gamemode vote")
 
@@ -91,7 +90,7 @@ datum/controller/vote
 
 		//default-vote for everyone who didn't vote
 		if(!config.vote_no_default && choices.len)
-			var/non_voters = (clients.len - total_votes)
+			var/non_voters = (GLOB.clients.len - total_votes)
 			if(non_voters > 0)
 				if(mode == "restart")
 					choices["Continue Playing"] += non_voters
@@ -247,7 +246,7 @@ datum/controller/vote
 										spawn(10)
 											autotransfer()
 				if("map")
-					var/datum/map/M = all_maps[.[1]]
+					var/datum/map/M = GLOB.all_maps[.[1]]
 					fdel("use_map")
 					text2file(M.path, "use_map")
 
@@ -325,7 +324,8 @@ datum/controller/vote
 						if (config.allow_extra_antags && !antag_add_finished)
 							choices.Add("Add Antagonist")
 					else
-						if (get_security_level() == "red" || get_security_level() == "delta")
+						var/decl/security_state/security_state = decls_repository.get_decl(GLOB.using_map.security_state)
+						if (security_state.current_security_level_is_same_or_higher_than(security_state.high_security_level) && !automatic)
 							to_chat(initiator_key, "The current alert status is too high to call for a crew transfer!")
 							return 0
 						if(ticker.current_state <= GAME_STATE_SETTING_UP)
@@ -354,13 +354,13 @@ datum/controller/vote
 				if("map")
 					if(!config.allow_map_switching)
 						return 0
-					for(var/name in all_maps)
+					for(var/name in GLOB.all_maps)
 						choices.Add(name)
 				if("custom")
-					question = cp1251_to_utf8(rhtml_encode(input(usr,"What is the vote for?") as text|null))
+					question = sanitizeSafe(input(usr,"What is the vote for?") as text|null)
 					if(!question)	return 0
 					for(var/i=1,i<=10,i++)
-						var/option = cp1251_to_utf8(capitalize(rhtml_encode(input(usr,"Please enter an option or hit cancel to finish") as text|null)))
+						var/option = capitalize(sanitize(input(usr,"Please enter an option or hit cancel to finish") as text|null))
 						if(!option || mode || !usr.client)	break
 						choices.Add(option)
 				else
@@ -370,7 +370,7 @@ datum/controller/vote
 			started_time = world.time
 			var/text = "[capitalize(mode)] vote started by [initiator]."
 			if(mode == "custom")
-				text += "\n[utf8_to_cp1251(question)]"
+				text += "\n[question]"
 
 			log_vote(text)
 			to_world("<font color='purple'><b>[text]</b>\nType <b>vote</b> or click <a href='?src=\ref[src]'>here</a> to place your votes.\nYou have [config.vote_period/10] seconds to vote.</font>")
@@ -493,7 +493,7 @@ datum/controller/vote
 			switch(href_list["vote"])
 				if("close")
 					voting -= usr.client
-					usr << browse(null, "window=vote")
+					usr << browse(null, "window=vote;size=450x740")
 					return
 				if("cancel")
 					if(usr.client.holder)
@@ -556,4 +556,4 @@ datum/controller/vote/proc/is_addantag_allowed(var/automatic)
 	set name = "Vote"
 
 	if(vote)
-		src << browse(vote.interface(client),"window=vote")
+		src << browse(vote.interface(client),"window=vote;size=450x740")

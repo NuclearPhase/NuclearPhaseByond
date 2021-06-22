@@ -29,8 +29,8 @@
 	return
 
 /obj/item/device/mmi
-	name = "man-machine interface"
-	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity."
+	name = "\improper Man-Machine Interface"
+	desc = "A complex life support shell that interfaces between a brain and electronic devices."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
 	w_class = ITEM_SIZE_NORMAL
@@ -49,11 +49,11 @@
 	if(istype(O,/obj/item/organ/internal/brain) && !brainmob) //Time to stick a brain in it --NEO
 
 		var/obj/item/organ/internal/brain/B = O
-		if(B.health <= 0)
+		if(B.damage >= B.max_damage)
 			to_chat(user, "<span class='warning'>That brain is well and truly dead.</span>")
 			return
-		else if(!B.brainmob)
-			to_chat(user, "<span class='notice'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
+		else if(!B.brainmob || !B.can_use_mmi)
+			to_chat(user, "<span class='notice'>This brain is completely useless to you.</span>")
 			return
 
 		user.visible_message("<span class='notice'>\The [user] sticks \a [O] into \the [src].</span>")
@@ -67,9 +67,9 @@
 
 		user.drop_item()
 		brainobj = O
-		brainobj.loc = src
+		brainobj.forceMove(src)
 
-		name = "man-machine interface ([brainmob.real_name])"
+		SetName("[initial(name)]: ([brainmob.real_name])")
 		icon_state = "mmi_full"
 
 		locked = 1
@@ -100,7 +100,7 @@
 		to_chat(user, "<span class='notice'>You upend the MMI, spilling the brain onto the floor.</span>")
 		var/obj/item/organ/internal/brain/brain
 		if (brainobj)	//Pull brain organ out of MMI.
-			brainobj.loc = user.loc
+			brainobj.forceMove(user.loc)
 			brain = brainobj
 			brainobj = null
 		else	//Or make a new one if empty.
@@ -112,16 +112,16 @@
 		brainmob = null//Set mmi brainmob var to null
 
 		icon_state = "mmi_empty"
-		name = "man-machine interface"
+		SetName(initial(name))
 
 /obj/item/device/mmi/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->robot people.
 	brainmob = new(src)
-	brainmob.name = H.real_name
+	brainmob.SetName(H.real_name)
 	brainmob.real_name = H.real_name
 	brainmob.dna = H.dna
 	brainmob.container = src
 
-	name = "Man-Machine Interface: [brainmob.real_name]"
+	SetName("[initial(name)]: [brainmob.real_name]")
 	icon_state = "mmi_full"
 	locked = 1
 	return
@@ -137,7 +137,7 @@
 	if(isrobot(loc))
 		var/mob/living/silicon/robot/borg = loc
 		borg.mmi = null
-	qdel_null(brainmob)
+	QDEL_NULL(brainmob)
 	return ..()
 
 /obj/item/device/mmi/radio_enabled

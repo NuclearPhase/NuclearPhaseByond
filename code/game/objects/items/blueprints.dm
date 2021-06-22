@@ -56,7 +56,7 @@
 	var/area/A = get_area()
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
-<small>Property of [using_map.company_name]. For heads of staff only. Store in high-secure storage.</small><hr>
+<small>Property of [GLOB.using_map.company_name]. For heads of staff only. Store in high-secure storage.</small><hr>
 "}
 	switch (get_area_type())
 		if (AREA_SPACE)
@@ -105,7 +105,7 @@ move an amendment</a> to the drawing, or <a href='?src=\ref[src];action=delete_a
 	if(is_type_in_list(A, SPECIALS))
 		return AREA_SPECIAL
 
-	if(A.z in using_map.station_levels)
+	if(A.z in GLOB.using_map.station_levels)
 		return AREA_STATION
 
 	return AREA_SPECIAL
@@ -133,7 +133,7 @@ move an amendment</a> to the drawing, or <a href='?src=\ref[src];action=delete_a
 		to_chat(usr, "<span class='warning'>Name too long.</span>")
 		return
 	var/area/A = new
-	A.name = str
+	A.SetName(str)
 	//var/ma
 	//ma = A.master ? "[A.master]" : "(null)"
 //	log_debug(create_area: <br>A.name=[A.name]<br>A.tag=[A.tag]<br>A.master=[ma]")
@@ -172,7 +172,7 @@ move an amendment</a> to the drawing, or <a href='?src=\ref[src];action=delete_a
 		to_chat(usr, "<span class='warning'>Text too long.</span>")
 		return
 	set_area_machinery_title(A,str,prevname)
-	A.name = str
+	A.SetName(str)
 	to_chat(usr, "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>")
 	interact()
 	return
@@ -195,15 +195,15 @@ move an amendment</a> to the drawing, or <a href='?src=\ref[src];action=delete_a
 		return
 
 	for(var/obj/machinery/alarm/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
+		M.SetName(replacetext(M.name,oldtitle,title))
 	for(var/obj/machinery/power/apc/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
+		M.SetName(replacetext(M.name,oldtitle,title))
 	for(var/obj/machinery/atmospherics/unary/vent_scrubber/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
+		M.SetName(replacetext(M.name,oldtitle,title))
 	for(var/obj/machinery/atmospherics/unary/vent_pump/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
+		M.SetName(replacetext(M.name,oldtitle,title))
 	for(var/obj/machinery/door/M in A)
-		M.name = replacetext(M.name,oldtitle,title)
+		M.SetName(replacetext(M.name,oldtitle,title))
 	//TODO: much much more. Unnamed airlocks, cameras, etc.
 
 /obj/item/blueprints/proc/check_tile_is_border(var/turf/T2,var/dir)
@@ -239,7 +239,7 @@ move an amendment</a> to the drawing, or <a href='?src=\ref[src];action=delete_a
 			return ROOM_ERR_TOOLARGE
 		var/turf/T = pending[1] //why byond havent list::pop()?
 		pending -= T
-		for (var/dir in cardinal)
+		for (var/dir in GLOB.cardinal)
 			var/skip = 0
 			for (var/obj/structure/window/W in T)
 				if(dir == W.dir || (W.dir in list(NORTHEAST,SOUTHEAST,NORTHWEST,SOUTHWEST)))

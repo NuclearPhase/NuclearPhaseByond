@@ -34,7 +34,7 @@
 			if(varName in trans.vars)
 				trans.vars[varName] = newVars[varName]
 
-		trans.name = "[trans.name] ([M])"
+		trans.SetName("[trans.name] ([M])")
 		if(istype(M,/mob/living/carbon/human) && drop_items)
 			for(var/obj/item/I in M.contents)
 				if(istype(I,/obj/item/organ))
@@ -55,12 +55,12 @@
 		M.forceMove(trans) //move inside the new dude to hide him.
 		M.status_flags |= GODMODE //dont want him to die or breathe or do ANYTHING
 		transformed_dudes[trans] = M
-		death_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
-		destroyed_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
-		destroyed_event.register(M, src, /spell/targeted/shapeshift/proc/destroyed_transformer)
+		GLOB.death_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
+		GLOB.destroyed_event.register(trans,src,/spell/targeted/shapeshift/proc/stop_transformation)
+		GLOB.destroyed_event.register(M, src, /spell/targeted/shapeshift/proc/destroyed_transformer)
 		if(duration)
 			spawn(duration)
-				stop_transformation(M)
+				stop_transformation(trans)
 
 /spell/targeted/shapeshift/proc/destroyed_transformer(var/mob/target) //Juuuuust in case
 	var/mob/current = transformed_dudes[target]
@@ -88,9 +88,9 @@
 
 /spell/targeted/shapeshift/proc/remove_target(var/mob/living/target)
 	var/mob/current = transformed_dudes[target]
-	destroyed_event.unregister(target,src)
-	death_event.unregister(current,src)
-	destroyed_event.unregister(current,src)
+	GLOB.destroyed_event.unregister(target,src)
+	GLOB.death_event.unregister(current,src)
+	GLOB.destroyed_event.unregister(current,src)
 	transformed_dudes[target] = null
 	transformed_dudes -= target
 

@@ -6,7 +6,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 
-	flags = NOBLUDGEON
+	item_flags = ITEM_FLAG_NO_BLUDGEON
 
 	//Has a list of items that it can hold.
 	var/list/can_hold = list(
@@ -59,7 +59,8 @@
 	can_hold = list(
 		/obj/item/weapon/reagent_containers/glass,
 		/obj/item/weapon/reagent_containers/pill,
-		/obj/item/weapon/storage/pill_bottle
+		/obj/item/weapon/reagent_containers/ivbag,
+		/obj/item/weapon/storage/pill_bottle,
 		)
 
 /obj/item/weapon/gripper/research //A general usage gripper, used for toxins/robotics/xenobio/etc
@@ -75,6 +76,7 @@
 		/obj/item/borg/upgrade,
 		/obj/item/device/flash,
 		/obj/item/organ/internal/brain,
+		/obj/item/organ/internal/posibrain,
 		/obj/item/stack/cable_coil,
 		/obj/item/weapon/circuitboard,
 		/obj/item/slime_extract,
@@ -243,7 +245,7 @@
 
 				A.cell.add_fingerprint(user)
 				A.cell.update_icon()
-				A.updateicon()
+				A.update_icon()
 				A.cell.loc = src
 				A.cell = null
 

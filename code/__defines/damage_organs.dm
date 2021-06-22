@@ -45,6 +45,11 @@
 #define DROPLIMB_BLUNT 1
 #define DROPLIMB_BURN 2
 
+// Robotics hatch_state defines.
+#define HATCH_CLOSED 0
+#define HATCH_UNSCREWED 1
+#define HATCH_OPENED 2
+
 // These control the amount of blood lost from burns. The loss is calculated so
 // that dealing just enough burn damage to kill the player will cause the given
 // proportion of their max blood volume to be lost
@@ -66,5 +71,8 @@
 #define INFECTION_LEVEL_TWO   500
 #define INFECTION_LEVEL_THREE 1000
 
-//Staminaloss value what causes exhaustion
-#define EXHAUSTED_STAMINALOSS 120
+//Blood levels. These are percentages based on the species blood_volume far.
+#define BLOOD_VOLUME_SAFE    85
+#define BLOOD_VOLUME_OKAY    75
+#define BLOOD_VOLUME_BAD     60
+#define BLOOD_VOLUME_SURVIVE 40

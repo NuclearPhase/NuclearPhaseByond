@@ -7,7 +7,7 @@
 	plane = OBJ_PLANE
 	layer = BELOW_TABLE_LAYER
 
-	flags = CONDUCT
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	force = 5.0
 	w_class = ITEM_SIZE_TINY
 	slot_flags = SLOT_EARS
@@ -24,10 +24,12 @@
 	..()
 	radio = new(src)
 	camera = new(src)
-	listening_objects += src
+	GLOB.listening_objects += src
 
 /obj/item/device/spy_bug/Destroy()
-	listening_objects -= src
+	QDEL_NULL(radio)
+	QDEL_NULL(camera)
+	GLOB.listening_objects -= src
 	return ..()
 
 /obj/item/device/spy_bug/examine(mob/user)
@@ -67,11 +69,12 @@
 	var/list/obj/machinery/camera/spy/cameras = new()
 
 /obj/item/device/spy_monitor/New()
+	..()
 	radio = new(src)
-	listening_objects += src
+	GLOB.listening_objects += src
 
 /obj/item/device/spy_monitor/Destroy()
-	listening_objects -= src
+	GLOB.listening_objects -= src
 	return ..()
 
 /obj/item/device/spy_monitor/examine(mob/user)

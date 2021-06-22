@@ -49,29 +49,33 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 				name = body.real_name
 			else
 				if(gender == MALE)
-					name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+					name = capitalize(pick(GLOB.first_names_male)) + " " + capitalize(pick(GLOB.last_names))
 				else
-					name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
+					name = capitalize(pick(GLOB.first_names_female)) + " " + capitalize(pick(GLOB.last_names))
 
 		mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 	else
 		spawn(10) // wait for the observer mob to receive the client's key
 			mind = new /datum/mind(key)
 			mind.current = src
-	if(!T)	T = pick(latejoin | latejoin_cryo | latejoin_gateway)			//Safety in case we cannot find the body's position
+	if(!T)	T = pick(GLOB.latejoin | GLOB.latejoin_cryo | GLOB.latejoin_gateway)			//Safety in case we cannot find the body's position
 	forceMove(T)
 
 	if(!name)							//To prevent nameless ghosts
-		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
+		name = capitalize(pick(GLOB.first_names_male)) + " " + capitalize(pick(GLOB.last_names))
 	real_name = name
 
 	if(cult)
 		cult.add_ghost_magic(src)
 
 	ghost_multitool = new(src)
+
+	GLOB.ghost_mob_list += src
+
 	..()
 
 /mob/observer/ghost/Destroy()
+	GLOB.ghost_mob_list -= src
 	stop_following()
 	qdel(ghost_multitool)
 	ghost_multitool = null
@@ -84,7 +88,7 @@ var/global/list/image/ghost_sightless_images = list() //this is a list of images
 /mob/observer/ghost/Topic(href, href_list)
 	if (href_list["track"])
 		if(istype(href_list["track"],/mob))
-			var/mob/target = locate(href_list["track"]) in mob_list
+			var/mob/target = locate(href_list["track"]) in SSmobs.mob_list
 			if(target)
 				ManualFollow(target)
 		else
@@ -155,7 +159,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	if(stat == DEAD)
 		announce_ghost_joinleave(ghostize(1))
-	else if(istype(loc, /obj/machinery/cryopod/))
+	else
 		var/response
 		if(src.client && src.client.holder)
 			response = alert(src, "You have the ability to Admin-Ghost. The regular Ghost verb will announce your presence to dead chat. Both variants will allow you to return to your body using 'aghost'.\n\nWhat do you wish to do?", "Are you sure you want to ghost?", "Ghost", "Admin Ghost", "Stay in body")
@@ -272,14 +276,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		ghost_to_turf(T)
 	else
 		to_chat(src, "<span class='warning'>Invalid coordinates.</span>")
-/mob/observer/ghost/verb/follow(input in get_follow_targets())
+/mob/observer/ghost/verb/follow(var/datum/follow_holder/fh in get_follow_targets())
 	set category = "Ghost"
 	set name = "Follow"
 	set desc = "Follow and haunt a mob."
 
-	var/target = get_follow_targets()[input]
-	if(!target) return
-	ManualFollow(target)
+	if(!fh.show_entry()) return
+	ManualFollow(fh.followed_instance)
 
 /mob/observer/ghost/proc/ghost_to_turf(var/turf/target_turf)
 	if(check_is_holy_turf(target_turf))
@@ -295,9 +298,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	stop_following()
 	following = target
-	moved_event.register(following, src, /atom/movable/proc/move_to_turf)
-	dir_set_event.register(following, src, /atom/proc/recursive_dir_set)
-	destroyed_event.register(following, src, /mob/observer/ghost/proc/stop_following)
+	GLOB.moved_event.register(following, src, /atom/movable/proc/move_to_turf)
+	GLOB.dir_set_event.register(following, src, /atom/proc/recursive_dir_set)
+	GLOB.destroyed_event.register(following, src, /mob/observer/ghost/proc/stop_following)
 
 	to_chat(src, "<span class='notice'>Now following \the [following].</span>")
 	move_to_turf(following, loc, following.loc)
@@ -305,9 +308,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/observer/ghost/proc/stop_following()
 	if(following)
 		to_chat(src, "<span class='notice'>No longer following \the [following]</span>")
-		moved_event.unregister(following, src)
-		dir_set_event.unregister(following, src)
-		destroyed_event.unregister(following, src)
+		GLOB.moved_event.unregister(following, src)
+		GLOB.dir_set_event.unregister(following, src)
+		GLOB.destroyed_event.unregister(following, src)
 		following = null
 
 /mob/observer/ghost/move_to_turf(var/atom/movable/am, var/old_loc, var/new_loc)
@@ -334,6 +337,15 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(t)
 		print_atmos_analysis(src, atmosanalyzer_scan(t))
 
+/mob/observer/ghost/verb/check_radiation()
+	set name = "Check Radiation"
+	set category = "Ghost"
+
+	var/turf/t = get_turf(src)
+	if(t)
+		var/rads = radiation_repository.get_rads_at_turf(t)
+		to_chat(src, "<span class='notice'>Radiation level: [rads ? rads : "0"] Bq.</span>")
+
 /mob/observer/ghost/verb/become_mouse()
 	set name = "Become mouse"
 	set category = "Ghost"
@@ -346,7 +358,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	var/turf/T = get_turf(src)
-	if(!T || (T.z in using_map.admin_levels))
+	if(!T || (T.z in GLOB.using_map.admin_levels))
 		to_chat(src, "<span class='warning'>You may not spawn as a mouse on this Z-level.</span>")
 		return
 
@@ -358,7 +370,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/mob/living/simple_animal/mouse/host
 	var/obj/machinery/atmospherics/unary/vent_pump/vent_found
 	var/list/found_vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/v in machines)
+	for(var/obj/machinery/atmospherics/unary/vent_pump/v in SSmachines.machinery)
 		if(!v.welded && v.z == T.z)
 			found_vents.Add(v)
 	if(found_vents.len)
@@ -379,7 +391,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	var/dat
 	dat += "<h4>Crew Manifest</h4>"
-	dat += data_core.get_manifest()
+	dat += html_crew_manifest()
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
 
@@ -442,7 +454,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	return 1
 
 /mob/proc/can_admin_interact()
-    return 0
+	return 0
 
 /mob/observer/ghost/can_admin_interact()
 	return check_rights(R_ADMIN, 0, src)
@@ -528,7 +540,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	alpha = pre_alpha
 	plane = pre_plane
 	layer = pre_layer
-	invisibility = pre_invis
+	set_invisibility(pre_invis)
+	transform = null	//make goast stand up
 
 /mob/observer/ghost/verb/respawn()
 	set name = "Respawn"

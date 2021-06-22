@@ -16,7 +16,7 @@
 // Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
 /proc/sanitizeSQL(var/t as text)
 	var/sqltext = dbcon.Quote(t);
-	return copytext(sqltext, 2, lentext(sqltext));//Quote() adds quotes around input, we already do that
+	return copytext(sqltext, 2, length(sqltext));//Quote() adds quotes around input, we already do that
 
 /*
  * Text sanitization
@@ -44,7 +44,7 @@
 		//In addition to processing html, html_encode removes byond formatting codes like "\ red", "\ i" and other.
 		//It is important to avoid double-encode text, it can "break" quotes and some other characters.
 		//Also, keep in mind that escaped characters don't work in the interface (window titles, lower left corner of the main window, etc.)
-		input = rhtml_encode(input)
+		input = html_encode(input)
 	else
 		//If not need encode text, simply remove < and >
 		//note: we can also remove here byond formatting codes: 0xFF + next byte
@@ -64,7 +64,7 @@
 	return sanitize(replace_characters(input, list(">"=" ","<"=" ", "\""="'")), max_length, encode, trim, extra)
 
 //Filters out undesirable characters from names
-/proc/sanitizeName(var/input, var/max_length = MAX_NAME_LEN, var/allow_numbers = 0)
+/proc/sanitizeName(var/input, var/max_length = MAX_NAME_LEN, var/allow_numbers = 0, var/force_first_letter_uppercase = TRUE)
 	if(!input || length(input) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
@@ -83,8 +83,10 @@
 
 			// a  .. z
 			if(97 to 122)			//Lowercase Letters
-				if(last_char_group<2)		output += ascii2text(ascii_char-32)	//Force uppercase first character
-				else						output += ascii2text(ascii_char)
+				if(last_char_group<2 && force_first_letter_uppercase)
+					output += ascii2text(ascii_char-32)	//Force uppercase first character
+				else
+					output += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 4
 
@@ -143,7 +145,7 @@
 
 //Old variant. Haven't dared to replace in some places.
 /proc/sanitize_old(var/t,var/list/repl_chars = list("\n"="#","\t"="#"))
-	return rhtml_encode(replace_characters(t,repl_chars))
+	return html_encode(replace_characters(t,repl_chars))
 
 /*
  * Text searches
@@ -257,9 +259,9 @@
 //This is used for fingerprints
 /proc/stringmerge(var/text,var/compare,replace = "*")
 	var/newtext = text
-	if(lentext(text) != lentext(compare))
+	if(length(text) != length(compare))
 		return 0
-	for(var/i = 1, i < lentext(text), i++)
+	for(var/i = 1, i < length(text), i++)
 		var/a = copytext(text,i,i+1)
 		var/b = copytext(compare,i,i+1)
 		//if it isn't both the same letter, or if they are both the replacement character
@@ -279,7 +281,7 @@
 	if(!text || !character)
 		return 0
 	var/count = 0
-	for(var/i = 1, i <= lentext(text), i++)
+	for(var/i = 1, i <= length(text), i++)
 		var/a = copytext(text,i,i+1)
 		if(a == character)
 			count++
@@ -294,8 +296,8 @@
 //Used in preferences' SetFlavorText and human's set_flavor verb
 //Previews a string of len or less length
 proc/TextPreview(var/string,var/len=40)
-	if(lentext(string) <= len)
-		if(!lentext(string))
+	if(length(string) <= len)
+		if(!length(string))
 			return "\[...\]"
 		else
 			return string
@@ -304,14 +306,14 @@ proc/TextPreview(var/string,var/len=40)
 
 //alternative copytext() for encoded text, doesn't break html entities (&#34; and other)
 /proc/copytext_preserve_html(var/text, var/first, var/last)
-	return rhtml_encode(copytext(html_decode(text), first, last))
+	return html_encode(copytext(html_decode(text), first, last))
 
 //For generating neat chat tag-images
 //The icon var could be local in the proc, but it's a waste of resources
 //	to always create it and then throw it out.
 /var/icon/text_tag_icons = new('./icons/chattags.dmi')
 /proc/create_text_tag(var/tagname, var/tagdesc = tagname, var/client/C = null)
-	if(!(C && C.is_preference_enabled(/datum/client_preference/chat_tags)))
+	if(!(C && C.get_preference_value(/datum/client_preference/chat_tags) == GLOB.PREF_SHOW))
 		return tagdesc
 	return "<IMG src='\ref[text_tag_icons.icon]' class='text_tag' iconstate='[tagname]'" + (tagdesc ? " alt='[tagdesc]'" : "") + ">"
 
@@ -385,6 +387,7 @@ proc/TextPreview(var/string,var/len=40)
 	t = replacetext(t, "\[logo\]", "<img src = ntlogo.png>")
 	t = replacetext(t, "\[bluelogo\]", "<img src = bluentlogo.png>")
 	t = replacetext(t, "\[solcrest\]", "<img src = sollogo.png>")
+	t = replacetext(t, "\[terraseal\]", "<img src = terralogo.png>")
 	t = replacetext(t, "\[editorbr\]", "")
 	return t
 
@@ -396,3 +399,67 @@ proc/TextPreview(var/string,var/len=40)
 	newKey += pick("diamond", "beer", "mushroom", "assistant", "clown", "captain", "twinkie", "security", "nuke", "small", "big", "escape", "yellow", "gloves", "monkey", "engine", "nuclear", "ai")
 	newKey += pick("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
 	return newKey
+
+//Used for applying byonds text macros to strings that are loaded at runtime
+/proc/apply_text_macros(string)
+	var/next_backslash = findtext(string, "\\")
+	if(!next_backslash)
+		return string
+
+	var/leng = length(string)
+
+	var/next_space = findtext(string, " ", next_backslash + 1)
+	if(!next_space)
+		next_space = leng - next_backslash
+
+	if(!next_space)	//trailing bs
+		return string
+
+	var/base = next_backslash == 1 ? "" : copytext(string, 1, next_backslash)
+	var/macro = lowertext(copytext(string, next_backslash + 1, next_space))
+	var/rest = next_backslash > leng ? "" : copytext(string, next_space + 1)
+
+	//See http://www.byond.com/docs/ref/info.html#/DM/text/macros
+	switch(macro)
+		//prefixes/agnostic
+		if("the")
+			rest = text("\the []", rest)
+		if("a")
+			rest = text("\a []", rest)
+		if("an")
+			rest = text("\an []", rest)
+		if("proper")
+			rest = text("\proper []", rest)
+		if("improper")
+			rest = text("\improper []", rest)
+		if("roman")
+			rest = text("\roman []", rest)
+		//postfixes
+		if("th")
+			base = text("[]\th", rest)
+		if("s")
+			base = text("[]\s", rest)
+		if("he")
+			base = text("[]\he", rest)
+		if("she")
+			base = text("[]\she", rest)
+		if("his")
+			base = text("[]\his", rest)
+		if("himself")
+			base = text("[]\himself", rest)
+		if("herself")
+			base = text("[]\herself", rest)
+		if("hers")
+			base = text("[]\hers", rest)
+
+	. = base
+	if(rest)
+		. += .(rest)
+
+/proc/deep_string_equals(var/A, var/B)
+	if (length(A) != length(B))
+		return FALSE
+	for (var/i = 1 to length(A))
+		if (text2ascii(A, i) != text2ascii(B, i))
+			return FALSE
+	return TRUE

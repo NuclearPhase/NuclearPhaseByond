@@ -6,6 +6,7 @@
 	filename = "arcadec"					// File name, as shown in the file browser program.
 	filedesc = "Unknown Game"				// User-Friendly name. In this case, we will generate a random name in constructor.
 	program_icon_state = "game"				// Icon state of this program's screen.
+	program_menu_icon = "script"
 	extended_desc = "Fun for the whole family! Probably not an AAA title, but at least you can download it on the corporate network.."		// A nice description.
 	size = 5								// Size in GQ. Integers only. Smaller sizes should be used for utility/low use programs (like this one), while large sizes are for important programs.
 	requires_ntnet = 0						// This particular program does not require NTNet network conectivity...
@@ -58,7 +59,7 @@
 
 // ui_interact handles transfer of data to NanoUI. Keep in mind that data you pass from here is actually sent to the client. In other words, don't send anything you don't want a client
 // to see, and don't send unnecessarily large amounts of data (due to laginess).
-/datum/nano_module/arcade_classic/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = default_state)
+/datum/nano_module/arcade_classic/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
 	var/list/data = host.initial_data()
 
 	data["player_health"] = player_health
@@ -69,7 +70,7 @@
 	data["gameover"] = gameover
 	data["information"] = information
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "arcade_classic.tmpl", "Defeat [enemy_name]", 500, 350, state = state)
 		if(host.update_layout())

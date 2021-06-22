@@ -5,7 +5,7 @@
 	transforming = 1
 	canmove = 0
 	icon = null
-	invisibility = 101
+	set_invisibility(101)
 	update_canmove()
 	remove_from_dead_mob_list()
 
@@ -31,7 +31,7 @@
 	transforming = 1
 	canmove = 0
 	icon = null
-	invisibility = 101
+	set_invisibility(101)
 
 	animation = new(loc)
 	animation.icon_state = "blank"
@@ -47,7 +47,7 @@
 		if(src)			qdel(src)
 
 
-/mob/proc/death(gibbed,deathmessage="seizes up and falls limp...")
+/mob/proc/death(gibbed,deathmessage="seizes up and falls limp...", show_dead_message = "You have died.")
 
 	if(stat == DEAD)
 		return 0
@@ -85,9 +85,9 @@
 	if(mind) mind.store_memory("Time of death: [stationtime2text()]", 0)
 	switch_from_living_to_dead_mob_list()
 
-	updateicon()
+	update_icon()
 
 	if(ticker && ticker.mode)
 		ticker.mode.check_win()
-	to_chat(src,"<span class='deadsay'>You are dead.</span>")
+	to_chat(src,"<span class='deadsay'>[show_dead_message]</span>")
 	return 1

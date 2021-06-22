@@ -17,9 +17,18 @@
 		return 1
 	return 0
 
-/proc/default_parry_check(mob/user, mob/attacker, atom/damage_source)
+/proc/default_parry_check(mob/living/user, mob/attacker, atom/damage_source)
 	//parry only melee attacks
 	if(istype(damage_source, /obj/item/projectile) || (attacker && get_dist(user, attacker) > 1) || user.incapacitated())
+		return 0
+
+	if(!user.combat_mode)//If you're not in combat mode you won't parry.
+		return 0
+
+	if(user.defense_intent != I_PARRY)//If you're not on parry intent, you won't parry.
+		return 0
+
+	if(!user.skillcheck(user.melee_skill, 60, 0))//Need at least 60 skill to be able to parry effectively.
 		return 0
 
 	//block as long as they are not directly behind us
@@ -33,7 +42,7 @@
 	name = "shield"
 	var/base_block_chance = 50
 
-/obj/item/weapon/shield/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+/obj/item/weapon/shield/handle_shield(mob/living/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
 	if(user.incapacitated())
 		return 0
 
@@ -53,7 +62,7 @@
 	desc = "A shield adept at blocking blunt objects from connecting with the torso of the shield wielder."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "riot"
-	flags = CONDUCT
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BACK
 	force = 5.0
 	throwforce = 5.0
@@ -65,9 +74,9 @@
 	attack_verb = list("shoved", "bashed")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
-/obj/item/weapon/shield/riot/handle_shield(mob/user)
+/obj/item/weapon/shield/riot/handle_shield(mob/living/user)
 	. = ..()
-	if(.) playsound(user.loc, 'sound/weapons/Genhit.ogg', 50, 1)
+	if(.) playsound(user.loc, 'sound/effects/shieldhit.ogg', 50, 1)
 
 /obj/item/weapon/shield/riot/get_block_chance(mob/user, var/damage, atom/damage_source = null, mob/attacker = null)
 	if(istype(damage_source, /obj/item/projectile))
@@ -102,9 +111,9 @@
 	matter = list(DEFAULT_WALL_MATERIAL = 1000, "Wood" = 1000)
 	attack_verb = list("shoved", "bashed")
 
-/obj/item/weapon/shield/buckler/handle_shield(mob/user)
+/obj/item/weapon/shield/buckler/handle_shield(mob/living/user)
 	. = ..()
-	if(.) playsound(user.loc, 'sound/weapons/Genhit.ogg', 50, 1)
+	if(.) playsound(user.loc, 'sound/items/buckler_block.ogg', 50, 1)
 
 /obj/item/weapon/shield/buckler/get_block_chance(mob/user, var/damage, atom/damage_source = null, mob/attacker = null)
 	if(istype(damage_source, /obj/item/projectile))
@@ -120,7 +129,7 @@
 	desc = "A shield capable of stopping most projectile and melee attacks. It can be retracted, expanded, and stored anywhere."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "eshield0" // eshield1 for expanded
-	flags = CONDUCT
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	force = 3.0
 	throwforce = 5.0
 	throw_speed = 1
@@ -130,7 +139,7 @@
 	attack_verb = list("shoved", "bashed")
 	var/active = 0
 
-/obj/item/weapon/shield/energy/handle_shield(mob/user)
+/obj/item/weapon/shield/energy/handle_shield(mob/living/user)
 	if(!active)
 		return 0 //turn it on first!
 	. = ..()
@@ -178,7 +187,7 @@
 /obj/item/weapon/shield/energy/update_icon()
 	icon_state = "eshield[active]"
 	if(active)
-		set_light(1.5, 1.5, "#006AFF")
+		set_light(1.5, 1.5, "#006aff")
 	else
 		set_light(0)
 

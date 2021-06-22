@@ -19,6 +19,7 @@ datum/track/New(var/title_name, var/audio)
 	use_power = 1
 	idle_power_usage = 10
 	active_power_usage = 100
+	clicksound = 'sound/machines/buttonbeep.ogg'
 
 	var/playing = 0
 	var/volume = 20
@@ -45,13 +46,11 @@ datum/track/New(var/title_name, var/audio)
 	StopPlaying()
 	. = ..()
 
+/obj/machinery/media/jukebox/powered()
+	return anchored && ..()
+
 /obj/machinery/media/jukebox/power_change()
 	. = ..()
-	if(!anchored)
-		stat |= NOPOWER
-	else
-		stat &= ~NOPOWER
-
 	if(stat & (NOPOWER|BROKEN) && playing)
 		StopPlaying()
 
@@ -171,16 +170,10 @@ datum/track/New(var/title_name, var/audio)
 	qdel(src)
 
 /obj/machinery/media/jukebox/attackby(obj/item/W as obj, mob/user as mob)
-	src.add_fingerprint(user)
-
-	if(istype(W, /obj/item/weapon/wrench))
-		if(playing)
-			StopPlaying()
-		user.visible_message("<span class='warning'>[user] has [anchored ? "un" : ""]secured \the [src].</span>", "<span class='notice'>You [anchored ? "un" : ""]secure \the [src].</span>")
-		anchored = !anchored
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(isWrench(W))
+		add_fingerprint(user)
+		wrench_floor_bolts(user, 0)
 		power_change()
-		update_icon()
 		return
 	return ..()
 
@@ -196,7 +189,7 @@ datum/track/New(var/title_name, var/audio)
 	playing = 0
 	update_use_power(1)
 	update_icon()
-	qdel_null(sound_token)
+	QDEL_NULL(sound_token)
 
 
 /obj/machinery/media/jukebox/proc/StartPlaying()
@@ -205,7 +198,8 @@ datum/track/New(var/title_name, var/audio)
 		return
 
 	// Jukeboxes cheat massively and actually don't share id. This is only done because it's music rather than ambient noise.
-	sound_token = sound_player.PlayLoopingSound(src, sound_id, current_track.sound, volume = volume, range = 7, falloff = 3, prefer_mute = TRUE)
+	// It also has the "ignore_vis" flag so it can be heard through walls and zlevels
+	sound_token = sound_player.PlayLoopingSound(src, sound_id, current_track.sound, volume = volume, range = 14, falloff = 3, prefer_mute = TRUE, ignore_vis = TRUE)
 
 	playing = 1
 	update_use_power(2)

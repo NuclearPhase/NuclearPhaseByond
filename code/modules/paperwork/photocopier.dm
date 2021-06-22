@@ -9,7 +9,8 @@
 	idle_power_usage = 30
 	active_power_usage = 200
 	power_channel = EQUIP
-	flags = OBJ_ANCHORABLE|OBJ_CLIMBABLE
+	atom_flags = ATOM_FLAG_CLIMBABLE
+	obj_flags = OBJ_FLAG_ANCHORABLE
 	var/obj/item/copyitem = null	//what's in the copier!
 	var/copies = 1	//how many copies to print!
 	var/toner = 30 //how much toner is left! woooooo~
@@ -85,7 +86,7 @@
 
 		if(toner >= 5)
 			var/mob/living/silicon/tempAI = usr
-			var/obj/item/device/camera/siliconcam/camera = tempAI.aiCamera
+			var/obj/item/device/camera/siliconcam/camera = tempAI.silicon_camera
 
 			if(!camera)
 				return
@@ -150,12 +151,12 @@
 		c.info = "<font color = #101010>"
 	else			//no toner? shitty copies for you!
 		c.info = "<font color = #808080>"
-	var/copied = rhtml_decode(copy.info)
+	var/copied = html_decode(copy.info)
 	copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
 	copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
 	c.info += copied
 	c.info += "</font>"//</font>
-	c.name = copy.name // -- Doohl
+	c.SetName(copy.name) // -- Doohl
 	c.fields = copy.fields
 	c.stamps = copy.stamps
 	c.stamped = copy.stamped
@@ -219,7 +220,7 @@
 	p.loc = src.loc
 	p.update_icon()
 	p.icon_state = "paper_words"
-	p.name = bundle.name
+	p.SetName(bundle.name)
 	return p
 
 /obj/item/device/toner

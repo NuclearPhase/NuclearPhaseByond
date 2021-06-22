@@ -7,6 +7,14 @@ meteor_act
 
 */
 
+/obj/item/proc/get_attack_name()
+	if(sharp && edge)
+		return "slices"
+	else if(sharp && !edge)
+		return "stabs"
+	else
+		return "hits"
+
 /mob/living/carbon/human/bullet_act(var/obj/item/projectile/P, var/def_zone)
 
 	def_zone = check_zone(def_zone)
@@ -22,16 +30,32 @@ meteor_act
 			P.on_hit(src, 100, def_zone)
 			return 100
 
-	//Shrapnel
-	if(!(species.flags & NO_EMBED) && P.can_embed())
-		var/obj/item/organ/external/organ = get_organ(def_zone)
-		var/armor = getarmor_organ(organ, "bullet")
-		if(prob(20 + max(P.damage - armor, -10)))
-			var/obj/item/weapon/material/shard/shrapnel/SP = new()
-			SP.name = (P.name != "shrapnel")? "[P.name] shrapnel" : "shrapnel"
-			SP.desc = "[SP.desc] It looks like it was fired from [P.shot_from]."
-			SP.loc = organ
-			organ.embed(SP)
+	var/obj/item/organ/external/organ = get_organ(def_zone)
+	var/armor = getarmor_organ(organ, P.check_armour)
+	var/penetrating_damage = ((P.damage + P.armor_penetration) * P.penetration_modifier) - armor
+
+	//Organ damage
+	if(organ.internal_organs.len && prob(35 + max(penetrating_damage, -12.5)))
+		var/damage_amt = min((P.damage * P.penetration_modifier), penetrating_damage) //So we don't factor in armor_penetration as additional damage
+		if(damage_amt > 0)
+		// Damage an internal organ
+			var/list/victims = list()
+			var/list/possible_victims = shuffle(organ.internal_organs.Copy())
+			for(var/obj/item/organ/internal/I in possible_victims)
+				if(I.damage < I.max_damage && (prob((I.relative_size) * (1 / max(1, victims.len)))))
+					victims += I
+			if(victims.len)
+				for(var/obj/item/organ/victim in victims)
+					damage_amt /= 2
+					victim.take_damage(damage_amt)
+
+	//Embed or sever artery
+	if(P.can_embed() && !(species.species_flags & SPECIES_FLAG_NO_EMBED) && prob(22.5 + max(penetrating_damage, -10)) && !(prob(50) && (organ.sever_artery())))
+		var/obj/item/weapon/material/shard/shrapnel/SP = new()
+		SP.SetName((P.name != "shrapnel")? "[P.name] shrapnel" : "shrapnel")
+		SP.desc = "[SP.desc] It looks like it was fired from [P.shot_from]."
+		SP.loc = organ
+		organ.embed(SP)
 
 	var/blocked = ..(P, def_zone)
 
@@ -98,11 +122,13 @@ meteor_act
 		return 0
 	var/protection = 0
 	var/list/protective_gear = list(head, wear_mask, wear_suit, w_uniform, gloves, shoes)
-	for(var/gear in protective_gear)
-		if(gear && istype(gear ,/obj/item/clothing))
-			var/obj/item/clothing/C = gear
-			if(istype(C) && C.body_parts_covered & def_zone.body_part)
-				protection = add_armor(protection, C.armor[type])
+	for(var/obj/item/clothing/gear in protective_gear)
+		if(gear.body_parts_covered & def_zone.body_part)
+			protection = add_armor(protection, gear.armor[type])
+		if(gear.accessories.len)
+			for(var/obj/item/clothing/accessory/bling in gear.accessories)
+				if(bling.body_parts_covered & def_zone.body_part)
+					protection = add_armor(protection, bling.armor[type])
 	return protection
 
 /mob/living/carbon/human/proc/check_head_coverage()
@@ -117,10 +143,10 @@ meteor_act
 	return 0
 
 //Used to check if they can be fed food/drinks/pills
-/mob/living/carbon/human/proc/check_mouth_coverage()
+/mob/living/carbon/human/check_mouth_coverage()
 	var/list/protective_gear = list(head, wear_mask, wear_suit, w_uniform)
 	for(var/obj/item/gear in protective_gear)
-		if(istype(gear) && (gear.body_parts_covered & FACE) && !(gear.item_flags & FLEXIBLEMATERIAL))
+		if(istype(gear) && (gear.body_parts_covered & FACE) && !(gear.item_flags & ITEM_FLAG_FLEXIBLEMATERIAL))
 			return gear
 	return null
 
@@ -131,55 +157,11 @@ meteor_act
 		if(.) return
 	return 0
 
-
-/mob/living/carbon/human/attack_throat(var/obj/item/W, var/obj/item/weapon/grab/G, var/mob/user)
-	. = ..()
-	if(.)
-		var/obj/item/organ/external/head = get_organ(BP_HEAD)
-		if(head) head.sever_artery()
-
-/mob/living/carbon/human/proc/check_attack_tendons(var/obj/item/W, var/mob/living/user, var/target_zone)
-
-	if(!W.edge || !W.force || W.damtype != BRUTE)
-		return FALSE
-	var/obj/item/organ/external/affecting = get_organ(target_zone)
-	if(!affecting || affecting.is_stump() || !affecting.has_tendon || (affecting.status & ORGAN_TENDON_CUT))
-		return FALSE
-
-	var/obj/item/weapon/grab/grab
-	if(user.a_intent == I_HURT)
-		for(var/obj/item/weapon/grab/G in src.grabbed_by)
-			if(G.assailant == user && G.state >= GRAB_NECK)
-				grab = G
-				break
-	if(!grab)
-		return FALSE
-
-	user.visible_message("<span class='danger'>\The [user] begins to cut \the [src]'s [affecting.tendon_name] with \the [W]!</span>")
-	user.next_move = world.time + 20
-
-	if(!do_after(user, 20, progress=0))
-		return FALSE
-	if(!grab || grab.assailant != user || grab.affecting != src)
-		return FALSE
-	if(!affecting || affecting.is_stump() || !affecting.sever_tendon())
-		return FALSE
-
-	user.visible_message("<span class='danger'>\The [user] cut \the [src]'s [affecting.tendon_name] with \the [W]!</span>")
-	if(W.hitsound) playsound(loc, W.hitsound, 50, 1, -1)
-	grab.last_action = world.time
-	flick(grab.hud.icon_state, grab.hud)
-	admin_attack_log(user, src, "hamstrung their victim", "was hamstrung", "hamstrung")
-
-	return TRUE
-
 /mob/living/carbon/human/resolve_item_attack(obj/item/I, mob/living/user, var/target_zone)
 
-	if(check_attack_throat(I, user))
-		return null
-
-	if(check_attack_tendons(I, user, target_zone))
-		return null
+	for (var/obj/item/grab/G in grabbed_by)
+		if(G.resolve_item_attack(user, I, target_zone))
+			return null
 
 	if(user == src) // Attacking yourself can't miss
 		return target_zone
@@ -198,22 +180,56 @@ meteor_act
 		to_chat(user, "<span class='danger'>They are missing that limb!</span>")
 		return null
 
+	var/blocked = run_armor_check(hit_zone, "melee", I.armor_penetration, "Your armor has protected your [affecting.name].", "Your armor has softened the blow to your [affecting.name].")
+
+
+	if(blocked == 100)
+		visible_message("<span class='danger'>[user] [I.get_attack_name()] [src]'s [affecting.name] with the [I], but it does no damage!")
+		return null
+
+	if(hit_zone == BP_CHEST || hit_zone == BP_MOUTH || hit_zone == BP_THROAT || hit_zone == BP_HEAD)//If we're lying and we're trying to aim high, we won't be able to hit.
+		if(user.lying && !src.lying)
+			to_chat(user, "<span class='notice'><b>I can't reach their [affecting.name]!</span></b>")
+			return null
+
 	return hit_zone
 
 /mob/living/carbon/human/hit_with_weapon(obj/item/I, mob/living/user, var/effective_force, var/hit_zone)
+
 	var/obj/item/organ/external/affecting = get_organ(hit_zone)
 	if(!affecting)
 		return //should be prevented by attacked_with_item() but for sanity.
 
-	visible_message("<span class='danger'>[src] has been [I.attack_verb.len? pick(I.attack_verb) : "attacked"] in the [affecting.name] with [I.name] by [user]!</span>")
-	receive_damage()
+	var/aim_zone = user.zone_sel.selecting
+
+
+	var/obj/item/organ/external/aimed = get_organ(aim_zone)
+
+	var/organ_hit = affecting.name//This is spaghetti, but it's done so that it recognizes when you hit the throat, and when you hit something else instead.
+
+	if(aim_zone == BP_THROAT)
+		organ_hit = "throat"
 
 	var/blocked = run_armor_check(hit_zone, "melee", I.armor_penetration, "Your armor has protected your [affecting.name].", "Your armor has softened the blow to your [affecting.name].")
+
+
+	if(hit_zone != aim_zone && (aim_zone != BP_MOUTH) &&  (aim_zone != BP_THROAT) && (aim_zone != BP_EYES))//This is ugly but it works.
+		visible_message("<span class='danger'>[user] aimed for [src]\'s [aimed.name], but [I.get_attack_name()] \his [organ_hit] instead. [(blocked < 20 && blocked > 1)  ? "Slight damage was done." : ""]</span>")
+
+	else if(blocked < 20 && blocked > 1)//This is ugly and it doesn't work.
+		visible_message("<span class='danger'>[user] [I.get_attack_name()] [src]\'s [organ_hit] with the [I.name]! Slight damage was done.<span class='danger'>")//visible_message("<span class='danger'>[src] has been [I.attack_verb.len? pick(I.attack_verb) : "attacked"] in the [organ_hit] with [I.name] by [user]! It only did a little damage!</span>")
+
+	else
+		visible_message("<span class='danger'>[user] [I.get_attack_name()] [src]\'s [organ_hit] with the [I.name]!<span class='danger'>")//visible_message("<span class='danger'>[src] has been [I.attack_verb.len? pick(I.attack_verb) : "attacked"] in the [organ_hit] with [I.name] by [user]!</span>")
+
+	receive_damage()
+
 	standard_weapon_hit_effects(I, user, effective_force, blocked, hit_zone)
 
 	return blocked
 
 /mob/living/carbon/human/standard_weapon_hit_effects(obj/item/I, mob/living/user, var/effective_force, var/blocked, var/hit_zone)
+	hit_zone = user.zone_sel.selecting
 	var/obj/item/organ/external/affecting = get_organ(hit_zone)
 	if(!affecting)
 		return 0
@@ -231,8 +247,35 @@ meteor_act
 		return 0
 
 	if(effective_force > 10 || effective_force >= 5 && prob(33))
-		forcesay(hit_appends)	//forcesay checks stat already
-	if((I.damtype == BRUTE || I.damtype == PAIN) && prob(25 + (effective_force * 2)))
+		forcesay(GLOB.hit_appends)	//forcesay checks stat already
+
+	//Ok this block of text handles cutting arteries, tendons, and limbs off.
+	//First we cut an artery, the reason for that, is that arteries are funninly enough, not that lethal, and don't have the biggest impact. They'll still make you bleed out, but they're less immediately lethal.
+	if(I.sharp && prob(I.sharpness * 2) && !(affecting.status & ORGAN_ARTERY_CUT))
+		affecting.sever_artery()
+		if(affecting.artery_name == "cartoid artery")
+			src.visible_message("<span class='danger'>[user] slices [src]'s throat!</span>")
+		else
+			src.visible_message("<span class='danger'>[user] slices open [src]'s [affecting.artery_name] artery!</span>")
+
+	//Next tendon, which disables the limb, but does not remove it, making it easier to fix, and less lethal, than losing it.
+	else if(I.sharp && (I.sharpness * 2) && !(affecting.status & ORGAN_TENDON_CUT) && affecting.has_tendon)//Yes this is the same exactly probability again. But I'm running it seperate because I don't want the two to be exclusive.
+		affecting.sever_tendon()
+		src.visible_message("<span class='danger'>[user] slices open [src]'s [affecting.tendon_name] tendon!</span>")
+
+	//Finally if we pass all that, we cut the limb off. This should reduce the number of one hit sword kills.
+	else if(I.sharp && I.edge)
+		if(prob(I.sharpness * strToDamageModifier(user.str)))
+			affecting.droplimb(0, DROPLIMB_EDGE)
+
+	var/obj/item/organ/external/head/O = locate(/obj/item/organ/external/head) in src.organs
+
+	if(I.damtype == BRUTE && !I.edge && prob(I.force * (hit_zone == BP_MOUTH ? 6 : 0)) && O)//Knocking out teeth.
+		if(O.knock_out_teeth(get_dir(user, src), round(rand(28, 38) * ((I.force*1.5)/100))))
+			src.visible_message("<span class='danger'>[src]'s teeth sail off in an arc!</span>", \
+								"<span class='userdanger'>[src]'s teeth sail off in an arc!</span>")
+
+	else if((I.damtype == BRUTE || I.damtype == PAIN) && prob(25 + (effective_force * 2)))//Knocking them out.
 		if(!stat)
 			if(headcheck(hit_zone))
 				//Harder to score a stun but if you do it lasts a bit longer
@@ -246,13 +289,8 @@ meteor_act
 					apply_effect(6, WEAKEN, blocked)
 		//Apply blood
 		attack_bloody(I, user, effective_force, hit_zone)
-
-	if(I.damtype == BRUTE)
-		var/obj/item/organ/external/head/O = locate(/obj/item/organ/external/head) in src.organs
-		if(prob(I.force * (hit_zone == BP_MOUTH ? 10 : 0)) && O) //Will the teeth fly out?
-			if(O.knock_out_teeth(get_dir(user, src), round(rand(28, 38) * ((I.force*1.5)/100))))
-				src.visible_message("<span class='danger'>[src]'s teeth sail off in an arc!</span>", \
-									"<span class='userdanger'>[src]'s teeth sail off in an arc!</span>")
+	//if(user.skillcheck(user.melee_skill,0,0) == CRIT_SUCCESS)
+	//	resolve_critical_hit()
 
 	return 1
 
@@ -262,7 +300,7 @@ meteor_act
 
 	//make non-sharp low-force weapons less likely to be bloodied
 	if(W.sharp || prob(effective_force*4))
-		if(!(W.flags & NOBLOODY))
+		if(!(W.atom_flags & ATOM_FLAG_NO_BLOOD))
 			W.add_blood(src)
 	else
 		return //if the weapon itself didn't get bloodied than it makes little sense for the target to be bloodied either
@@ -291,6 +329,16 @@ meteor_act
 					update_inv_glasses(0)
 			if(BP_CHEST)
 				bloody_body(src)
+
+	//All this is copypasta'd from projectile code. Basically there's a cool splat animation when someone gets hit by something.
+	var/splatter_dir = dir
+	var/turf/target_loca = get_turf(src)
+	splatter_dir = get_dir(attacker, target_loca)
+	target_loca = get_step(target_loca, splatter_dir)
+	var/blood_color = "#C80000"
+	blood_color = src.species.blood_color
+	new /obj/effect/overlay/temp/dir_setting/bloodsplatter(target_loca, splatter_dir, blood_color)
+	target_loca.add_blood(src)
 
 /mob/living/carbon/human/proc/projectile_hit_bloody(obj/item/projectile/P, var/effective_force, var/hit_zone)
 	if(P.damage_type != BRUTE || P.nodamage)
@@ -344,10 +392,6 @@ meteor_act
 
 //this proc handles being hit by a thrown atom
 /mob/living/carbon/human/hitby(atom/movable/AM as mob|obj,var/speed = THROWFORCE_SPEED_DIVISOR)
-	if(istype(AM, /mob/living))
-		var/chance = prob(50)
-		if(chance) src.Weaken(5)
-		take_impact_damage(AM)
 	if(istype(AM,/obj/))
 		var/obj/O = AM
 
@@ -385,6 +429,7 @@ meteor_act
 
 		if(!zone)
 			visible_message("<span class='notice'>\The [O] misses [src] narrowly!</span>")
+			playsound(loc, 'sound/weapons/punchmiss.ogg', 50, 1)
 			return
 
 		O.throwing = 0		//it hit, so stop moving
@@ -533,7 +578,7 @@ meteor_act
 		return
 	if(user == src)//Can't kick yourself dummy.
 		return
-	
+
 	var/hit_zone = user.zone_sel.selecting
 	var/too_high_message = "You can't reach that high."
 	var/obj/item/organ/external/affecting = get_organ(hit_zone)
@@ -572,10 +617,67 @@ meteor_act
 				to_chat(user, too_high_message)
 				return
 
-	playsound(user.loc, 'sound/weapons/kick.ogg', 50, 0)
+	var/kickdam = rand(0,15)
 	user.adjustStaminaLoss(rand(10,15))//Kicking someone is a big deal.
-	apply_damage(rand(0,15), BRUTE, hit_zone, armour)
-	user.visible_message("<span class=danger>[user] kicks [src] in the [affecting.name]!<span>")
-	admin_attack_log(user, src, "Has kicked [src]", "Has been kicked by [user].")
-	
-	
+	if(kickdam)
+		playsound(user.loc, 'sound/weapons/kick.ogg', 50, 0)
+		apply_damage(kickdam, BRUTE, hit_zone, armour)
+		user.visible_message("<span class=danger>[user] kicks [src] in the [affecting.name]!<span>")
+		admin_attack_log(user, src, "Has kicked [src]", "Has been kicked by [user].")
+	else
+		user.visible_message("<span class=danger>[user] tried to kick [src] in the [affecting.name], but missed!<span>")
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+
+
+//We crit failed, let's see what happens to us.
+/mob/living/proc/resolve_critical_miss(var/obj/item/I)
+	var/result = rand(1,3)
+
+	if(!I)
+		visible_message("<span class='danger'>[src] punches themself in the face!</span>")
+		attack_hand(src)
+		return
+
+	switch(result)
+		if(1)//They drop their weapon.
+			visible_message("<span class='danger'><big>CRITICAL FAILURE! \The [I] flies out of [src]'s hand!</big></span>")
+			drop_from_inventory(I)
+			throw_at(get_edge_target_turf(I, pick(GLOB.alldirs)), rand(1,3), throw_speed)//Throw that sheesh away
+			return
+		if(2)
+			visible_message("<span class='danger'><big>CRITICAL FAILURE! [src] botches the attack, stumbles, and falls!</big></span>")
+			playsound(loc, 'sound/weapons/punchmiss.ogg', 50, 1)
+			Weaken(1)
+			Stun(3)
+			return
+		if(3)
+			visible_message("<span class='danger'><big>CRITICAL FAILURE! [src] botches the attack and hits themself!</big></span>")
+			attackby(I, src)
+
+/mob/living/proc/resolve_critical_hit()
+	var/result = rand(1,3)
+
+	switch(result)
+		if(1)
+			visible_message("<span class='danger'><big>CRITICAL HIT! IT MUST BE PAINFUL</big></span>")
+			apply_damage(rand(5,10), BRUTE)
+			return
+
+		if(2)
+			visible_message("<span class='danger'><big>CRITICAL HIT! [src] is stunned!</big></span>")
+			Weaken(1)
+			Stun(3)
+			return
+
+		if(3)
+			visible_message("<span class='danger'><big>CRITICAL HIT! [src] is knocked unconcious by the blow!</big></span>")
+			apply_effect(20, PARALYZE)
+			return
+
+/*
+//Add screaming here.
+/mob/living/carbon/human/IgniteMob()
+	..()
+	if(!stat &&)
+
+*/

@@ -19,14 +19,13 @@
 			break
 
 /obj/machinery/computer/operating/attack_ai(mob/user)
-	add_fingerprint(user)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
 
 
 /obj/machinery/computer/operating/attack_hand(mob/user)
-	add_fingerprint(user)
+	..()
 	if(stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
@@ -47,17 +46,7 @@
 		dat += {"
 <B>Patient Information:</B><BR>
 <BR>
-<B>Name:</B> [src.victim.real_name]<BR>
-<B>Age:</B> [src.victim.age]<BR>
-<B>Blood Type:</B> [src.victim.b_type]<BR>
-<BR>
-<B>Health:</B> [src.victim.health]<BR>
-<B>Brute Damage:</B> [src.victim.getBruteLoss()]<BR>
-<B>Toxins Damage:</B> [src.victim.getToxLoss()]<BR>
-<B>Fire Damage:</B> [src.victim.getFireLoss()]<BR>
-<B>Suffocation Damage:</B> [src.victim.getOxyLoss()]<BR>
-<B>Patient Status:</B> [src.victim.stat ? "Non-Responsive" : "Stable"]<BR>
-<B>Heartbeat rate:</B> [victim.get_pulse(GETPULSE_TOOL)]<BR>
+[medical_scan_results(victim, 1)]
 "}
 	else
 		src.victim = null
@@ -69,15 +58,6 @@
 	user << browse(dat, "window=op")
 	onclose(user, "op")
 
-
-/obj/machinery/computer/operating/Topic(href, href_list)
-	if(..())
-		return 1
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.set_machine(src)
-	return
-
-
-/obj/machinery/computer/operating/process()
+/obj/machinery/computer/operating/Process()
 	if(..())
 		src.updateDialog()

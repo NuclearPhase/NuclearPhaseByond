@@ -4,6 +4,8 @@
 	appearance_flags = TILE_BOUND
 	glide_size = 8
 
+	var/movable_flags
+
 	var/last_move = null
 	var/anchored = 0
 	// var/elevation = 2    - not used anywhere
@@ -19,13 +21,6 @@
 	var/mob/pulledby = null
 	var/item_state = null // Used to specify the item state for the on-mob overlays.
 
-	var/auto_init = 1
-
-/atom/movable/New()
-	..()
-	if(auto_init && (initialization_stage & INITIALIZATION_HAS_BEGUN))
-		initialize()
-
 /atom/movable/Destroy()
 	. = ..()
 	for(var/atom/movable/AM in src)
@@ -36,10 +31,6 @@
 		if (pulledby.pulling == src)
 			pulledby.pulling = null
 		pulledby = null
-
-/atom/movable/proc/initialize()
-	if(QDELETED(src))
-		crash_with("GC: -- [type] had initialize() called after qdel() --")
 
 /atom/movable/Bump(var/atom/A, yes)
 	if(src.throwing)
@@ -108,7 +99,7 @@
 		for(var/atom/A in get_turf(src))
 			if(A == src) continue
 			if(istype(A,/mob/living))
-				if(A:lying && !src:lying) continue
+				if(A:lying) continue
 				src.throw_impact(A,speed)
 			if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
@@ -239,19 +230,22 @@
 	return
 
 /atom/movable/proc/touch_map_edge()
-	if(!z || (z in using_map.sealed_levels))
+	if(!simulated)
 		return
 
-	if(!universe.OnTouchMapEdge(src))
+	if(!z || (z in GLOB.using_map.sealed_levels))
 		return
 
-	if(using_map.use_overmap)
+	if(!GLOB.universe.OnTouchMapEdge(src))
+		return
+
+	if(GLOB.using_map.use_overmap)
 		overmap_spacetravel(get_turf(src), src)
 		return
 
 	var/new_x
 	var/new_y
-	var/new_z = using_map.get_transit_zlevel(z)
+	var/new_z = GLOB.using_map.get_transit_zlevel(z)
 	if(new_z)
 		if(x <= TRANSITIONEDGE)
 			new_x = world.maxx - TRANSITIONEDGE - 2

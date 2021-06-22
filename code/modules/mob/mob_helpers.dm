@@ -88,17 +88,17 @@ proc/getsensorlevel(A)
 
 //The base miss chance for the different defence zones
 var/list/global/base_miss_chance = list(
-	BP_HEAD = 40,
+	BP_HEAD = 50,
 	BP_CHEST = 10,
 	BP_GROIN = 20,
-	BP_L_LEG = 20,
-	BP_R_LEG = 20,
-	BP_L_ARM = 20,
-	BP_R_ARM = 20,
+	BP_L_LEG = 50,
+	BP_R_LEG = 50,
+	BP_L_ARM = 30,
+	BP_R_ARM = 30,
 	BP_L_HAND = 50,
 	BP_R_HAND = 50,
-	BP_L_FOOT = 50,
-	BP_R_FOOT = 50,
+	BP_L_FOOT = 60,
+	BP_R_FOOT = 60,
 )
 
 //Used to weight organs when an organ is hit randomly (i.e. not a directed, aimed attack).
@@ -123,6 +123,8 @@ var/list/global/organ_rel_size = list(
 		if(BP_EYES)
 			zone = BP_HEAD
 		if(BP_MOUTH)
+			zone = BP_HEAD
+		if(BP_THROAT)
 			zone = BP_HEAD
 	return zone
 
@@ -160,12 +162,15 @@ var/list/global/organ_rel_size = list(
 	zone = check_zone(zone)
 
 	if(!ranged_attack)
+		// target isn't trying to fight
+		if(target.a_intent == I_HELP)
+			return zone
 		// you cannot miss if your target is prone or restrained
 		if(target.buckled || target.lying)
 			return zone
 		// if your target is being grabbed aggressively by someone you cannot miss either
-		for(var/obj/item/weapon/grab/G in target.grabbed_by)
-			if(G.state >= GRAB_AGGRESSIVE)
+		for(var/obj/item/grab/G in target.grabbed_by)
+			if(G.stop_move())
 				return zone
 
 	var/miss_chance = 10
@@ -207,8 +212,9 @@ var/list/global/organ_rel_size = list(
 	return t
 
 proc/slur(phrase)
-	var/leng=lentext(phrase)
-	var/counter=lentext(phrase)
+	phrase = html_decode(phrase)
+	var/leng=length(phrase)
+	var/counter=length(phrase)
 	var/newphrase=""
 	var/newletter=""
 	while(counter>=1)
@@ -219,24 +225,24 @@ proc/slur(phrase)
 			if(lowertext(newletter)=="a")	newletter="ah"
 			if(lowertext(newletter)=="c")	newletter="k"
 		switch(rand(1,15))
-			if(1,3,5,8)	newletter="[rlowertext(newletter)]"
-			if(2,4,6,15)	newletter="[ruppertext(newletter)]"
+			if(1,3,5,8)	newletter="[lowertext(newletter)]"
+			if(2,4,6,15)	newletter="[uppertext(newletter)]"
 			if(7)	newletter+="'"
 			if(9,10)	newletter="<b>[newletter]</b>"
-			//if(11,12)	newletter="<big>[newletter]</big>"
-			//if(13)	newletter="<small>[newletter]</small>"
-		newphrase+="[newletter]"
-		counter-=1
+			if(11,12)	newletter="<big>[newletter]</big>"
+			if(13)	newletter="<small>[newletter]</small>"
+		newphrase+="[newletter]";counter-=1
 	return newphrase
 
 /proc/stutter(n)
-	var/te = n
+	var/te = html_decode(n)
+	var/t = ""//placed before the message. Not really sure what it's for.
 	n = length(n)//length of the entire word
-	var/list/t = list()
-	var/p = 1//1 is the start of any word
+	var/p = null
+	p = 1//1 is the start of any word
 	while(p <= n)//while P, which starts at 1 is less or equal to N which is the length.
 		var/n_letter = copytext(te, p, p + 1)//copies text from a certain distance. In this case, only one letter at a time.
-		if (prob(80) && (rlowertext(n_letter) in LIST_OF_CONSONANT))
+		if (prob(80) && (ckey(n_letter) in list("b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z")))
 			if (prob(10))
 				n_letter = text("[n_letter]-[n_letter]-[n_letter]-[n_letter]")//replaces the current letter with this instead.
 			else
@@ -247,9 +253,9 @@ proc/slur(phrase)
 						n_letter = null
 					else
 						n_letter = text("[n_letter]-[n_letter]")
-		t += n_letter //since the above is ran through for each letter, the text just adds up back to the original word.
+		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
-	return sanitize(t.Join(null))
+	return sanitize(t)
 
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
@@ -270,6 +276,7 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	return returntext
 
 /proc/lisp(message, intensity=100) //Intensity = how hard will the dude be lisped
+	message = html_decode(message)
 	message = prob(intensity) ? replacetext(message, "f", "ph") : message
 	message = prob(intensity) ? replacetext(message, "t", "ph") : message
 	message = prob(intensity) ? replacetext(message, "s", "sh") : message
@@ -279,13 +286,32 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	message = prob(intensity) ? replacetext(message, "k", "gh") : message
 	return message
 
+/proc/tongueless(message)
+	message = html_decode(message)
+	message = replacetext(message, "c", "h")
+	message = replacetext(message, "d", "a")
+	message = replacetext(message, "i", "a")
+	message = replacetext(message, "k", "a")
+	message = replacetext(message, "j", "a")
+	message = replacetext(message, "l", "a")
+	message = replacetext(message, "n", "a")
+	message = replacetext(message, "q", "h")
+	message = replacetext(message, "r", "a")
+	message = replacetext(message, "s", "h")
+	message = replacetext(message, "t", "a")
+	message = replacetext(message, "v", "h")
+	message = replacetext(message, "x", "a")
+	message = replacetext(message, "y", "a")
+	message = replacetext(message, "z", "h")
+	return message
+
 /proc/ninjaspeak(n)
 /*
 The difference with stutter is that this proc can stutter more than 1 letter
 The issue here is that anything that does not have a space is treated as one word (in many instances). For instance, "LOOKING," is a word, including the comma.
 It's fairly easy to fix if dealing with single letters but not so much with compounds of letters./N
 */
-	var/te = rhtml_decode(n)
+	var/te = html_decode(n)
 	var/t = ""
 	n = length(n)
 	var/p = 1
@@ -333,7 +359,7 @@ It's fairly easy to fix if dealing with single letters but not so much with comp
 
 
 /proc/findname(msg)
-	for(var/mob/M in mob_list)
+	for(var/mob/M in SSmobs.mob_list)
 		if (M.real_name == text("[msg]"))
 			return 1
 	return 0
@@ -402,10 +428,10 @@ proc/is_blind(A)
 	return 0
 
 /proc/broadcast_security_hud_message(var/message, var/broadcast_source)
-	broadcast_hud_message(message, broadcast_source, sec_hud_users, /obj/item/clothing/glasses/hud/security)
+	broadcast_hud_message(message, broadcast_source, GLOB.sec_hud_users, /obj/item/clothing/glasses/hud/security)
 
 /proc/broadcast_medical_hud_message(var/message, var/broadcast_source)
-	broadcast_hud_message(message, broadcast_source, med_hud_users, /obj/item/clothing/glasses/hud/health)
+	broadcast_hud_message(message, broadcast_source, GLOB.med_hud_users, /obj/item/clothing/glasses/hud/health)
 
 /proc/broadcast_hud_message(var/message, var/broadcast_source, var/list/targets, var/icon)
 	var/turf/sourceturf = get_turf(broadcast_source)
@@ -416,7 +442,7 @@ proc/is_blind(A)
 
 /proc/mobs_in_area(var/area/A)
 	var/list/mobs = new
-	for(var/mob/living/M in mob_list)
+	for(var/mob/living/M in SSmobs.mob_list)
 		if(get_area(M) == A)
 			mobs += M
 	return mobs
@@ -530,11 +556,11 @@ proc/is_blind(A)
 		if(id)
 			perpname = id.registered_name
 
-		var/datum/data/record/R = find_security_record("name", perpname)
-		if(check_records && !R && !isMonkey())
+		var/datum/computer_file/crew_record/CR = get_crewmember_record(perpname)
+		if(check_records && !CR && !isMonkey())
 			threatcount += 4
 
-		if(check_arrest && R && (R.fields["criminal"] == "*Arrest*"))
+		if(check_arrest && CR && (CR.get_criminalStatus() == GLOB.arrest_security_status))
 			threatcount += 4
 
 	return threatcount
@@ -598,7 +624,7 @@ proc/is_blind(A)
 /mob/proc/fully_replace_character_name(var/new_name, var/in_depth = TRUE)
 	if(!new_name || new_name == real_name)	return 0
 	real_name = new_name
-	name = new_name
+	SetName(new_name)
 	if(mind)
 		mind.name = new_name
 	if(dna)

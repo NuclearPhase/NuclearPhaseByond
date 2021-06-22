@@ -113,31 +113,33 @@ Please contact me on #coderbus IRC. ~Carn x
 
 //Human Overlays Indexes/////////
 #define MUTATIONS_LAYER			1
-#define DAMAGE_LAYER			2
-#define SURGERY_LEVEL			3		//bs12 specific.
-#define UNDERWEAR_LAYER         4
-#define UNIFORM_LAYER			5
-#define ID_LAYER				6
-#define SHOES_LAYER				7
-#define GLOVES_LAYER			8
-#define BELT_LAYER				9
-#define SUIT_LAYER				10
-#define TAIL_LAYER				11		//bs12 specific. this hack is probably gonna come back to haunt me
-#define GLASSES_LAYER			12
-#define BELT_LAYER_ALT			13
-#define SUIT_STORE_LAYER		14
-#define BACK_LAYER				15
-#define HAIR_LAYER				16		//TODO: make part of head layer?
-#define EARS_LAYER				17
-#define FACEMASK_LAYER			18
-#define HEAD_LAYER				19
-#define COLLAR_LAYER			20
-#define HANDCUFF_LAYER			21
-#define L_HAND_LAYER			22
-#define R_HAND_LAYER			23
-#define FIRE_LAYER				24		//If you're on fire
-#define TARGETED_LAYER			25		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			25
+#define SKIN_LAYER				2
+#define DAMAGE_LAYER			3
+#define SURGERY_LEVEL			4		//bs12 specific.
+#define UNDERWEAR_LAYER         5
+#define UNIFORM_LAYER			6
+#define ID_LAYER				7
+#define SHOES_LAYER				8
+#define GLOVES_LAYER			9
+#define BELT_LAYER				10
+#define SUIT_LAYER				11
+#define TAIL_LAYER				12		//bs12 specific. this hack is probably gonna come back to haunt me
+#define GLASSES_LAYER			13
+#define BELT_LAYER_ALT			14
+#define SUIT_STORE_LAYER		15
+#define BACK_LAYER				16
+#define HAIR_LAYER				17		//TODO: make part of head layer?
+#define GOGGLES_LAYER			18
+#define EARS_LAYER				19
+#define FACEMASK_LAYER			20
+#define HEAD_LAYER				21
+#define COLLAR_LAYER			22
+#define HANDCUFF_LAYER			23
+#define L_HAND_LAYER			24
+#define R_HAND_LAYER			25
+#define FIRE_LAYER				26		//If you're on fire
+#define TARGETED_LAYER			27		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			27
 //////////////////////////////////
 
 /mob/living/carbon/human
@@ -153,8 +155,7 @@ Please contact me on #coderbus IRC. ~Carn x
 	overlays.Cut()
 
 	if (icon_update)
-
-		if(cloaked)
+		if(is_cloaked())
 
 			icon = 'icons/mob/human.dmi'
 			icon_state = "blank"
@@ -165,8 +166,11 @@ Please contact me on #coderbus IRC. ~Carn x
 				else if(istype(entry, /list))
 					for(var/inner_entry in entry)
 						overlays += inner_entry
-		else
 
+			if(species.has_floating_eyes)
+				overlays |= species.get_eyes(src)
+
+		else
 			icon = stand_icon
 			icon_state = null
 
@@ -178,6 +182,9 @@ Please contact me on #coderbus IRC. ~Carn x
 						overlays += inner_entry
 			if(species.has_floating_eyes)
 				overlays |= species.get_eyes(src)
+
+	if(auras)
+		overlays |= auras
 
 	var/matrix/M = matrix()
 	if(lying && !species.prone_icon) //Only rotate them if we're not drawing a specific icon for being prone.
@@ -276,16 +283,22 @@ var/global/list/damage_icon_parts = list()
 		if(isnull(part) || part.is_stump())
 			icon_key += "0"
 			continue
+		for(var/M in part.markings)
+			icon_key += "[M][part.markings[M]["color"]]"
 		if(part)
 			icon_key += "[part.species.get_race_key(part.owner)]"
 			icon_key += "[part.dna.GetUIState(DNA_UI_GENDER)]"
 			icon_key += "[part.s_tone]"
+			icon_key += "[part.s_base]"
 			if(part.s_col && part.s_col.len >= 3)
 				icon_key += "[rgb(part.s_col[1],part.s_col[2],part.s_col[3])]"
+				icon_key += "[part.s_col_blend]"
 			if(part.body_hair && part.h_col && part.h_col.len >= 3)
 				icon_key += "[rgb(part.h_col[1],part.h_col[2],part.h_col[3])]"
 			else
 				icon_key += "#000000"
+			for(var/M in part.markings)
+				icon_key += "[M][part.markings[M]["color"]]"
 		if(part.robotic >= ORGAN_ROBOT)
 			icon_key += "2[part.model ? "-[part.model]": ""]"
 		else if(part.status & ORGAN_DEAD)
@@ -307,7 +320,7 @@ var/global/list/damage_icon_parts = list()
 			var/icon/temp = part.get_icon()
 			//That part makes left and right legs drawn topmost and lowermost when human looks WEST or EAST
 			//And no change in rendering for other parts (they icon_position is 0, so goes to 'else' part)
-			if(part.icon_position&(LEFT|RIGHT))
+			if(part.icon_position & (LEFT | RIGHT))
 				var/icon/temp2 = new('icons/mob/human.dmi',"blank")
 				temp2.Insert(new/icon(temp,dir=NORTH),dir=NORTH)
 				temp2.Insert(new/icon(temp,dir=SOUTH),dir=SOUTH)
@@ -321,6 +334,8 @@ var/global/list/damage_icon_parts = list()
 				if(part.icon_position & RIGHT)
 					temp2.Insert(new/icon(temp,dir=WEST),dir=WEST)
 				base_icon.Blend(temp2, ICON_UNDERLAY)
+			else if(part.icon_position & UNDER)
+				base_icon.Blend(temp, ICON_UNDERLAY)
 			else
 				base_icon.Blend(temp, ICON_OVERLAY)
 
@@ -344,25 +359,24 @@ var/global/list/damage_icon_parts = list()
 	//END CACHED ICON GENERATION.
 	stand_icon.Blend(base_icon,ICON_OVERLAY)
 
-	if(update_icons)
-		update_icons()
-
 	//tail
 	update_tail_showing(0)
+
+	if(update_icons)
+		update_icons()
 
 //UNDERWEAR OVERLAY
 
 /mob/living/carbon/human/proc/update_underwear(var/update_icons=1)
-	overlays_standing[UNDERWEAR_LAYER] = null
+	overlays_standing[UNDERWEAR_LAYER] = list()
+	for(var/entry in worn_underwear)
+		var/obj/item/underwear/UW = entry
 
-	if(species.appearance_flags & HAS_UNDERWEAR)
-		overlays_standing[UNDERWEAR_LAYER] = list()
-		for(var/category in all_underwear)
-			var/datum/category_item/underwear/UWI = all_underwear[category]
-			var/image/standing = UWI.generate_image(all_underwear_metadata[category])
-			if(standing)
-				standing.appearance_flags = RESET_COLOR
-				overlays_standing[UNDERWEAR_LAYER] += standing
+		var/image/I = image(icon = UW.icon, icon_state = UW.icon_state)
+		I.appearance_flags = RESET_COLOR
+		I.color = UW.color
+
+		overlays_standing[UNDERWEAR_LAYER] += I
 
 	if(update_icons)   update_icons()
 
@@ -383,6 +397,10 @@ var/global/list/damage_icon_parts = list()
 
 	overlays_standing[HAIR_LAYER]	= head_organ.get_hair_icon()
 
+	if(update_icons)   update_icons()
+
+/mob/living/carbon/human/proc/update_skin(var/update_icons=1)
+	overlays_standing[SKIN_LAYER] = species.update_skin(src)
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_mutations(var/update_icons=1)
@@ -422,6 +440,7 @@ var/global/list/damage_icon_parts = list()
 
 	update_mutations(0)
 	update_body(0)
+	update_skin(0)
 	update_underwear(0)
 	update_hair(0)
 	update_inv_w_uniform(0)
@@ -460,13 +479,13 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_wear_id(var/update_icons=1)
-	if(wear_id)
-		if(w_uniform && w_uniform:displays_id)
-			overlays_standing[ID_LAYER] = wear_id.get_mob_overlay(src,slot_wear_id_str)
-		else
-			overlays_standing[ID_LAYER]	= null
-	else
-		overlays_standing[ID_LAYER]	= null
+	var/image/id_overlay
+	if(wear_id && istype(w_uniform, /obj/item/clothing/under))
+		var/obj/item/clothing/under/U = w_uniform
+		if(U.displays_id && !U.rolled_down)
+			id_overlay = wear_id.get_mob_overlay(src,slot_wear_id_str)
+
+	overlays_standing[ID_LAYER]	= id_overlay
 
 	BITSET(hud_updateflag, ID_HUD)
 	BITSET(hud_updateflag, WANTED_HUD)
@@ -487,9 +506,11 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_glasses(var/update_icons=1)
 	if(glasses)
-		overlays_standing[GLASSES_LAYER] = glasses.get_mob_overlay(src,slot_glasses_str)
+		overlays_standing[glasses.use_alt_layer ? GOGGLES_LAYER : GLASSES_LAYER] = glasses.get_mob_overlay(src,slot_glasses_str)
+		overlays_standing[glasses.use_alt_layer ? GLASSES_LAYER : GOGGLES_LAYER] = null
 	else
 		overlays_standing[GLASSES_LAYER]	= null
+		overlays_standing[GOGGLES_LAYER]	= null
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_inv_ears(var/update_icons=1)
@@ -512,7 +533,7 @@ var/global/list/damage_icon_parts = list()
 	if(update_icons)   update_icons()
 
 /mob/living/carbon/human/update_inv_shoes(var/update_icons=1)
-	if(shoes && !(wear_suit && wear_suit.flags_inv & HIDESHOES))
+	if(shoes && !((wear_suit && wear_suit.flags_inv & HIDESHOES) || (w_uniform && w_uniform.flags_inv & HIDESHOES)))
 		overlays_standing[SHOES_LAYER] = shoes.get_mob_overlay(src,slot_shoes_str)
 	else
 		if(feet_blood_DNA && species.blood_mask)
@@ -539,16 +560,8 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_belt(var/update_icons=1)
 	if(belt)
-		var/belt_layer = BELT_LAYER
-		if(istype(belt, /obj/item/weapon/storage/belt))
-			var/obj/item/weapon/storage/belt/ubelt = belt
-			if(ubelt.show_above_suit)
-				overlays_standing[BELT_LAYER] = null
-				belt_layer = BELT_LAYER_ALT
-			else
-				overlays_standing[BELT_LAYER_ALT] = null
-
-		overlays_standing[belt_layer] = belt.get_mob_overlay(src,slot_belt_str)
+		overlays_standing[belt.use_alt_layer ? BELT_LAYER_ALT : BELT_LAYER] = belt.get_mob_overlay(src,slot_belt_str)
+		overlays_standing[belt.use_alt_layer ? BELT_LAYER : BELT_LAYER_ALT] = null
 	else
 		overlays_standing[BELT_LAYER] = null
 		overlays_standing[BELT_LAYER_ALT] = null
@@ -654,7 +667,7 @@ var/global/list/damage_icon_parts = list()
 		var/species_tail_anim = species.get_tail_animation(src)
 		if(!species_tail_anim) species_tail_anim = 'icons/effects/species.dmi'
 		tail_icon = new/icon(species_tail_anim)
-		tail_icon.Blend(rgb(r_skin, g_skin, b_skin), ICON_ADD)
+		tail_icon.Blend(rgb(r_skin, g_skin, b_skin), species.tail_blend)
 		// The following will not work with animated tails.
 		var/use_species_tail = species.get_tail_hair(src)
 		if(use_species_tail)
@@ -744,8 +757,8 @@ var/global/list/damage_icon_parts = list()
 	overlays_standing[SURGERY_LEVEL] = null
 	var/image/total = new
 	for(var/obj/item/organ/external/E in organs)
-		if(E.open)
-			var/image/I = image("icon"='icons/mob/surgery.dmi', "icon_state"="[E.icon_name][round(E.open)]", "layer"=-SURGERY_LEVEL)
+		if(E.robotic < ORGAN_ROBOT && E.open())
+			var/image/I = image("icon"='icons/mob/surgery.dmi', "icon_state"="[E.icon_name][round(E.open())]", "layer"=-SURGERY_LEVEL)
 			total.overlays += I
 	total.appearance_flags = RESET_COLOR
 	overlays_standing[SURGERY_LEVEL] = total

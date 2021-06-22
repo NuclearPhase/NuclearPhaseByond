@@ -1,18 +1,36 @@
+//Snowflake proc for railings
+/obj/structure/proc/neighbor_turf_passable()
+	var/turf/T = get_step(src, src.dir)
+	if(!T || !istype(T))
+		return 0
+	if(T.density == 1)
+		return 0
+	for(var/obj/O in T.contents)
+		if(istype(O,/obj/structure))
+			if(istype(O,/obj/structure/railing))
+				return 1
+			else if(O.density == 1)
+				return 0
+	return 1
+
+//actually railing code
 /obj/structure/railing
 	name = "railing"
-	desc = "A standart steel railing. Prevents from human stupidity."
+	desc = "A standard steel railing. Prevents human stupidity."
 	icon = 'icons/obj/railing.dmi'
 	density = 1
 	throwpass = 1
-	flags = OBJ_CLIMBABLE | ON_BORDER
-	layer = 3.2//Just above doors
+	//layer = 3.2//Just above doors 	//Layers mean nothing.
+	plane = ABOVE_HUMAN_PLANE // They go ontop of humans.
 	//pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
+	atom_flags = ATOM_FLAG_CHECKS_BORDER
+	atom_flags = ATOM_FLAG_CLIMBABLE
 	icon_state = "railing0"
 	var/broken = 0
 	var/health=70
 	var/maxhealth=70
-	//var/LeftSide = list(0,0,0)// ГЌГіГ¦Г­Г» Г¤Г«Гї ГµГ°Г Г­ГҐГ­ГЁГї Г¤Г Г­Г­Г»Гµ
+	//var/LeftSide = list(0,0,0)// Нужны для хранения данных
 	//var/RightSide = list(0,0,0)
 	var/check = 0
 
@@ -20,15 +38,13 @@
 	..()
 	if (constructed)	//player-constructed railings
 		anchored = 0
-	if(flags == OBJ_CLIMBABLE)
-		verbs += /obj/structure/proc/climb_on
 	if(src.anchored)
 		spawn(5)
 			update_icon(0)
 
 /obj/structure/railing/Destroy()
 	anchored = null
-	flags = null
+	atom_flags = null
 	broken = 1
 	for(var/obj/structure/railing/R in oview(src, 1))
 		R.update_icon()
@@ -36,14 +52,19 @@
 
 /obj/structure/railing/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(!mover)
-		return 1
+		return TRUE
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
-		return 1
+	if(istype(mover) && mover.checkpass(PASS_FLAG_TABLE))
+		return TRUE
+
+	if (locate(/obj/structure/table) in get_turf(mover))
+		return TRUE
+
 	if(get_dir(loc, target) == dir)
 		return !density
 	else
-		return 1
+		return TRUE
+//32 и 4 - в той же клетке
 
 /obj/structure/railing/examine(mob/user)
 	. = ..()
@@ -69,38 +90,38 @@
 	//if (!anchored) return
 	var/Rturn = turn(src.dir, -90)
 	var/Lturn = turn(src.dir, 90)
-
-	for(var/obj/structure/railing/R in src.loc)// ГЂГ­Г Г«ГЁГ§ ГЄГ«ГҐГІГЄГЁ, ГЈГ¤ГҐ Г­Г ГµГ®Г¤ГЁГІГ±Гї Г±Г Г¬ Г®ГЎГєГҐГЄГІ
-		if ((R.dir == Lturn) && R.anchored)//ГЏГ°Г®ГўГҐГ°ГЄГ  Г«ГҐГўГ®Г© Г±ГІГ®Г°Г®Г­Г»
+//Thanks ruskies, comments that i don't understand
+	for(var/obj/structure/railing/R in src.loc)// Анализ клетки, где находится сам объект
+		if ((R.dir == Lturn) && R.anchored)//Проверка левой стороны
 			//src.LeftSide[1] = 1
 			check |= 32
 			if (UpdateNeighbors)
 				R.update_icon(0)
-		if ((R.dir == Rturn) && R.anchored)//ГЏГ°Г®ГўГҐГ°ГЄГ  ГЇГ°Г ГўГ®Г© Г±ГІГ®Г°Г®Г­Г»
+		if ((R.dir == Rturn) && R.anchored)//Проверка правой стороны
 			//src.RightSide[1] = 1
 			check |= 2
 			if (UpdateNeighbors)
 				R.update_icon(0)
 
-	for (var/obj/structure/railing/R in get_step(src, Lturn))//ГЂГ­Г Г«ГЁГ§ Г«ГҐГўГ®Г© ГЄГ«ГҐГІГЄГЁ Г®ГІ Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГї Г®ГЎГєГҐГЄГІГ 
+	for (var/obj/structure/railing/R in get_step(src, Lturn))//Анализ левой клетки от направления объекта
 		if ((R.dir == src.dir) && R.anchored)
 			//src.LeftSide[2] = 1
 			check |= 16
 			if (UpdateNeighbors)
 				R.update_icon(0)
-	for (var/obj/structure/railing/R in get_step(src, Rturn))//ГЂГ­Г Г«ГЁГ§ ГЇГ°Г ГўГ®Г© ГЄГ«ГҐГІГЄГЁ Г®ГІ Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГї Г®ГЎГєГҐГЄГІГ 
+	for (var/obj/structure/railing/R in get_step(src, Rturn))//Анализ правой клетки от направления объекта
 		if ((R.dir == src.dir) && R.anchored)
 			//src.RightSide[2] = 1
 			check |= 1
 			if (UpdateNeighbors)
 				R.update_icon(0)
 
-	for (var/obj/structure/railing/R in get_step(src, (Lturn + src.dir)))//ГЂГ­Г Г«ГЁГ§ ГЇГҐГ°ГҐГ¤Г­ГҐГ©-Г«ГҐГўГ®Г© Г¤ГЁГ ГЈГ®Г­Г Г«ГЁ Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГї Г®ГЎГєГҐГЄГІГ .
+	for (var/obj/structure/railing/R in get_step(src, (Lturn + src.dir)))//Анализ передней-левой диагонали относительно направления объекта.
 		if ((R.dir == Rturn) && R.anchored)
 			check |= 64
 			if (UpdateNeighbors)
 				R.update_icon(0)
-	for (var/obj/structure/railing/R in get_step(src, (Rturn + src.dir)))//ГЂГ­Г Г«ГЁГ§ ГЇГҐГ°ГҐГ¤Г­ГҐГ©-ГЇГ°Г ГўГ®Г© Г¤ГЁГ ГЈГ®Г­Г Г«ГЁ Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г® Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГї Г®ГЎГєГҐГЄГІГ .
+	for (var/obj/structure/railing/R in get_step(src, (Rturn + src.dir)))//Анализ передней-правой диагонали относительно направления объекта.
 		if ((R.dir == Lturn) && R.anchored)
 			check |= 4
 			if (UpdateNeighbors)
@@ -108,9 +129,9 @@
 
 
 /*	for(var/obj/structure/railing/R in get_step(src, src.dir))
-		if ((R.dir == Lturn) && R.anchored)//ГЏГ°Г®ГўГҐГ°ГЄГ  Г«ГҐГўГ®Г© Г±ГІГ®Г°Г®Г­Г»
+		if ((R.dir == Lturn) && R.anchored)//Проверка левой стороны
 			src.LeftSide[3] = 1
-		if ((R.dir == Rturn) && R.anchored)//ГЏГ°Г®ГўГҐГ°ГЄГ  ГЇГ°Г ГўГ®Г© Г±ГІГ®Г°Г®Г­Г»
+		if ((R.dir == Rturn) && R.anchored)//Проверка правой стороны
 			src.RightSide[3] = 1*/
 	//check <<"check: [check]"
 	//world << "dir = [src.dir]"
@@ -124,7 +145,7 @@
 		icon_state = "railing0"
 	else
 		icon_state = "railing1"
-		//Г«ГҐГўГ Гї Г±ГІГ®Г°Г®Г­Г 
+		//левая сторона
 		if (check & 32)
 			overlays += image ('icons/obj/railing.dmi', src, "corneroverlay")
 			//world << "32 check"
@@ -202,7 +223,7 @@
 	return
 
 /obj/structure/railing/CheckExit(atom/movable/O as mob|obj, target as turf)
-	if(istype(O) && O.checkpass(PASSTABLE))
+	if(istype(O) && O.checkpass(PASS_FLAG_TABLE))
 		return 1
 	if(get_dir(O.loc, target) == dir)
 		return 0
@@ -240,15 +261,15 @@
 			return
 
 	// Handle harm intent grabbing/tabling.
-	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
+	if(istype(W, /obj/item/grab) && get_dist(src,user)<2)
+		var/obj/item/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			var/obj/occupied = turf_is_crowded()
 			if(occupied)
 				user << "<span class='danger'>There's \a [occupied] in the way.</span>"
 				return
-			if (G.state < 2)
+			if (G.current_grab < 2)
 				if(user.a_intent == I_HURT)
 					if (prob(15))	M.Weaken(5)
 					M.apply_damage(8,def_zone = "head")

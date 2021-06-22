@@ -9,15 +9,15 @@
 	var/hud_updateflag = 0
 
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS // what a joke
-	var/bruteloss = 0 //Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
-	var/oxyloss = 0   //Oxygen depravation damage (no air in lungs)
-	var/toxloss = 0   //Toxic damage caused by being poisoned or radiated
-	var/fireloss = 0  //Burn damage caused by being way too hot, too cold or burnt.
-	var/staminaloss = 0	//Stamina damage, or exhaustion. You recover it slowly naturally, and are stunned if it gets too high.
+	//var/bruteloss = 0 //Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
+	//var/oxyloss = 0   //Oxygen depravation damage (no air in lungs)
+	//var/toxloss = 0   //Toxic damage caused by being poisoned or radiated
+	//var/fireloss = 0  //Burn damage caused by being way too hot, too cold or burnt.
 	//var/halloss = 0   //Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
 
-	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
-	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
+	var/lisp = 0
+	var/staminaloss = 0
+	var/tongueless = 0
 
 	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
 
@@ -36,7 +36,7 @@
 	var/list/datum/action/actions = list()
 
 	var/update_slimes = 1
-	var/silent = null 		// Can't talk. Value goes down every life proc.
+//	var/silent = null 		// Can't talk. Value goes down every life proc.
 	var/on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks
 
@@ -48,8 +48,9 @@
 	var/ear_damage = null	//Carbon
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
-	var/lisp = null			//Carbon
 
 	var/job = null//Living
+	var/list/obj/aura/auras = null //Basically a catch-all aura/force-field thing.
 
-	var/doing_something = 0	//Like pulling teeth?
+	var/obj/screen/cells = null
+	var/list/in_vision_cones = list()

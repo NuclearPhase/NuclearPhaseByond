@@ -11,6 +11,7 @@
 	w_class = ITEM_SIZE_NORMAL
 	matter = list(DEFAULT_WALL_MATERIAL = 1000)
 	screen_shake = 0
+	combustion = 1
 
 	var/caliber = "357"		//determines which casings will fit
 	var/handle_casings = EJECT_CASINGS	//determines how spent casings should be handled
@@ -30,8 +31,8 @@
 	var/auto_eject = 0			//if the magazine should automatically eject itself when empty.
 	var/auto_eject_sound = null
 
-	var/is_jammed = 0           //Whether this gun is jammed
-	var/jam_chance = 0          //Chance it jams on fire
+	//var/is_jammed = 0           //Whether this gun is jammed
+	//var/jam_chance = 0          //Chance it jams on fire
 
 	var/unload_sound 	= 'sound/weapons/guns/interact/pistol_magout.ogg'
 	var/reload_sound 	= 'sound/weapons/guns/interact/pistol_magin.ogg'
@@ -41,7 +42,7 @@
 	//var/magazine_states = 0
 	//var/list/icon_keys = list()		//keys
 	//var/list/ammo_states = list()	//values
-	var/magazine_based = 1
+	var/casingsound = 'sound/weapons/guns/misc/casingfall1.ogg'
 
 /obj/item/weapon/gun/projectile/New()
 	..()
@@ -55,6 +56,7 @@
 
 /obj/item/weapon/gun/projectile/consume_next_projectile()
 	if(!is_jammed && prob(jam_chance))
+		playsound(src.loc, 'sound/effects/jam.ogg', 50, 1)
 		src.visible_message("<span class='danger'>\The [src] jams!</span>")
 		is_jammed = 1
 	if(is_jammed)
@@ -89,7 +91,7 @@
 	switch(handle_casings)
 		if(EJECT_CASINGS) //eject casing onto ground.
 			chambered.loc = get_turf(src)
-			playsound(src.loc, casing_sound, 50, 1)
+			playsound(get_turf(src), casingsound, 100, 1)
 		if(CYCLE_CASINGS) //cycle the casing back to the end.
 			if(ammo_magazine)
 				ammo_magazine.stored_ammo += chambered
@@ -161,11 +163,7 @@
 //attempts to unload src. If allow_dump is set to 0, the speedloader unloading method will be disabled
 /obj/item/weapon/gun/projectile/proc/unload_ammo(mob/user, var/allow_dump=1)
 	if(is_jammed)
-		user.visible_message("\The [user] begins to unjam [src].", "You clear the jam and unload [src]")
-		if(!do_after(user, 4, src))
-			return
-		is_jammed = 0
-		playsound(src.loc, 'sound/weapons/flipblade.ogg', 50, 1)
+		unjam(user)
 	if(ammo_magazine)
 		user.put_in_hands(ammo_magazine)
 		user.visible_message("[user] removes [ammo_magazine] from [src].", "<span class='notice'>You remove [ammo_magazine] from [src].</span>")
@@ -233,7 +231,6 @@
 		to_chat(user, "<span class='warning'>It looks jammed.</span>")
 	if(ammo_magazine)
 		to_chat(user, "It has \a [ammo_magazine] loaded.")
-	if(!magazine_based)
 		to_chat(user, "[inexactAmmo()]")
 	
 	return

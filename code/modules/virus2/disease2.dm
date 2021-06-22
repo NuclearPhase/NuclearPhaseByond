@@ -1,3 +1,5 @@
+LEGACY_RECORD_STRUCTURE(virus_records, virus_record)
+
 /datum/disease2/disease
 	var/infectionchance = 70
 	var/speed = 1
@@ -95,8 +97,8 @@
 
 	clicks += speed
 	//Virus food speeds up disease progress
-	if(mob.reagents.has_reagent("virusfood"))
-		mob.reagents.remove_reagent("virusfood", REM)
+	if(mob.reagents.has_reagent(/datum/reagent/nutriment/virus_food))
+		mob.reagents.remove_reagent(/datum/reagent/nutriment/virus_food, REM)
 		clicks += 10
 
 	//Moving to the next stage
@@ -190,9 +192,9 @@
 var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/name()
-	.= "stamm #[add_zero("[uniqueID]", 4)]"
+	.= "strain #[add_zero("[uniqueID]", 4)]"
 	if ("[uniqueID]" in virusDB)
-		var/datum/data/record/V = virusDB["[uniqueID]"]
+		var/datum/computer_file/data/virus_record/V = virusDB["[uniqueID]"]
 		.= V.fields["name"]
 
 /datum/disease2/disease/proc/get_basic_info()
@@ -222,7 +224,7 @@ var/global/list/virusDB = list()
 /datum/disease2/disease/proc/addToDB()
 	if ("[uniqueID]" in virusDB)
 		return 0
-	var/datum/data/record/v = new()
+	var/datum/computer_file/data/virus_record/v = new()
 	v.fields["id"] = uniqueID
 	v.fields["name"] = name()
 	v.fields["description"] = get_info()

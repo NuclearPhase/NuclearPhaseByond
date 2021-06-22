@@ -11,7 +11,7 @@
 	if(!skip_sort)
 		usable_emotes = sortAssoc(usable_emotes)
 
-/mob/initialize()
+/mob/Initialize()
 	. = ..()
 	update_emotes()
 
@@ -86,6 +86,7 @@
 		/decl/emote/audible/grumble,
 		/decl/emote/audible/groan,
 		/decl/emote/audible/moan,
+		/decl/emote/audible/grunt,
 		/decl/emote/human,
 		/decl/emote/human/deathgasp,
 		/decl/emote/audible/giggle,
@@ -119,6 +120,10 @@
 		/decl/emote/visible/dap,
 		/decl/emote/visible/signal,
 		/decl/emote/visible/handshake,
+		/decl/emote/human/poo,
+		/decl/emote/human/pee,
+		/decl/emote/audible/clearthroat,
+		/decl/emote/audible/hem
 	)
 
 /mob/living/silicon/robot

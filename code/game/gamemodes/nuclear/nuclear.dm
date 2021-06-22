@@ -12,7 +12,7 @@ var/list/nuke_disks = list()
 		colony of sizable population and considerable wealth causes it to often be the target of various \
 		attempts of robbery, fraud and other malicious actions."
 	config_tag = "mercenary"
-	required_players = 25
+	required_players = 15
 	required_enemies = 1
 	end_on_antag_death = 1
 	var/nuke_off_station = 0 //Used for tracking if the syndies actually haul the nuke to the station
@@ -34,7 +34,7 @@ var/list/nuke_disks = list()
 	var/disk_rescued = 1
 	for(var/obj/item/weapon/disk/nuclear/D in world)
 		var/disk_area = get_area(D)
-		if(!is_type_in_list(disk_area, using_map.post_round_safe_areas))
+		if(!is_type_in_list(disk_area, GLOB.using_map.post_round_safe_areas))
 			disk_rescued = 0
 			break
 	var/crew_evacuated = (evacuation_controller.has_evacuated())

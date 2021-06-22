@@ -65,6 +65,12 @@
 		<option value='?_src_=vars;emp=\ref[src]'>Trigger EM pulse</option>
 		"}
 
+/mob/living/get_view_variables_options()
+	return ..() + {"
+		<option value='?_src_=vars;addaura=\ref[src]'>Add Aura</option>
+		<option value='?_src_=vars;removeaura=\ref[src]'>Remove Aura</option>
+		"}
+
 /mob/living/carbon/human/get_view_variables_options()
 	return ..() + {"
 		<option value='?_src_=vars;setspecies=\ref[src]'>Set Species</option>
@@ -139,7 +145,7 @@
 	return ..() + list("bound_x", "bound_y", "bound_height", "bound_width", "bounds", "step_x", "step_y", "step_size")
 
 /client/VV_static()
-	return ..() + list("holder")
+	return ..() + list("holder", "prefs")
 
 /datum/admins/VV_static()
 	return vars

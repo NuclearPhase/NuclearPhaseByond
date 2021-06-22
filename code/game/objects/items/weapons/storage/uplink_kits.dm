@@ -34,6 +34,14 @@
 		/obj/item/weapon/implantpad
 		)
 
+/obj/item/weapon/storage/box/syndie_kit/imp_imprinting
+	name = "box (I)"
+	startswith = list(
+		/obj/item/weapon/implanter/imprinting,
+		/obj/item/weapon/implantpad,
+		/obj/item/weapon/reagent_containers/hypospray/autoinjector/mindbreaker
+		)
+
 // Space suit uplink kit
 /obj/item/weapon/storage/backpack/satchel/syndie_kit/space
 	//name = "\improper EVA gear pack"
@@ -96,10 +104,18 @@
 
 /obj/item/weapon/storage/backpack/satchel/syndie_kit/revolver
 	name = "\improper Tough operator"
-	desc = "Revolver with ammunition."
+	desc = ".357 revolver, with ammunition."
 	startswith = list(
 		/obj/item/weapon/gun/projectile/revolver,
 		/obj/item/ammo_magazine/a357
+	)
+
+/obj/item/weapon/storage/backpack/satchel/syndie_kit/revolver2
+	name = "\improper Dandy tough operator"
+	desc = ".44 magnum revolver, with ammunition."
+	startswith = list(
+		/obj/item/weapon/gun/projectile/revolver/webley,
+		/obj/item/ammo_magazine/c44
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/toxin
@@ -110,6 +126,13 @@
 		/obj/item/weapon/reagent_containers/syringe
 	)
 
+/obj/item/weapon/storage/box/syndie_kit/syringegun
+	startswith = list(
+		/obj/item/weapon/gun/launcher/syringe/disguised,
+		/obj/item/weapon/syringe_cartridge = 4,
+		/obj/item/weapon/reagent_containers/syringe = 4
+	)
+
 /obj/item/weapon/storage/box/syndie_kit/cigarette
 	name = "\improper Tricky smokes"
 	desc = "Comes with the following brands of cigarettes, in this order: 2xFlash, 2xSmoke, 1xMindBreaker, 1xTricordrazine. Avoid mixing them up."
@@ -118,27 +141,27 @@
 	..()
 	var/obj/item/weapon/storage/fancy/cigarettes/pack
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("aluminum" = 1, "potassium" = 1, "sulfur" = 1))
+	fill_cigarre_package(pack, list(/datum/reagent/aluminum = 1, /datum/reagent/potassium = 1, /datum/reagent/sulfur = 1))
 	pack.desc += " 'F' has been scribbled on it."
 
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("aluminum" = 1, "potassium" = 1, "sulfur" = 1))
+	fill_cigarre_package(pack, list(/datum/reagent/aluminum = 1, /datum/reagent/potassium = 1, /datum/reagent/sulfur = 1))
 	pack.desc += " 'F' has been scribbled on it."
 
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("potassium" = 1, "sugar" = 1, "phosphorus" = 1))
+	fill_cigarre_package(pack, list(/datum/reagent/potassium = 1, /datum/reagent/sugar = 1, /datum/reagent/phosphorus = 1))
 	pack.desc += " 'S' has been scribbled on it."
 
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("potassium" = 1, "sugar" = 1, "phosphorus" = 1))
+	fill_cigarre_package(pack, list(/datum/reagent/potassium = 1, /datum/reagent/sugar = 1, /datum/reagent/phosphorus = 1))
 	pack.desc += " 'S' has been scribbled on it."
 
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("anti_toxin" = 1, "silicon" = 1, "hydrazine" = 1))
+	fill_cigarre_package(pack, list(/datum/reagent/dylovene = 1, /datum/reagent/silicon = 1, /datum/reagent/hydrazine = 1))
 	pack.desc += " 'MB' has been scribbled on it."
 
 	pack = new /obj/item/weapon/storage/fancy/cigarettes(src)
-	fill_cigarre_package(pack, list("tricordrazine" = 4))
+	fill_cigarre_package(pack, list(/datum/reagent/tricordrazine = 4))
 	pack.desc += " 'T' has been scribbled on it."
 
 	new /obj/item/weapon/flame/lighter/zippo(src)
@@ -162,8 +185,8 @@
 		/obj/item/weapon/storage/box/sniperammo
 	)
 
-/obj/item/weapon/storage/secure/briefcase/heavysniper/New()
-	..()
+/obj/item/weapon/storage/secure/briefcase/heavysniper/Initialize()
+	. = ..()
 	make_exact_fit()
 
 /obj/item/weapon/storage/secure/briefcase/money
@@ -174,6 +197,6 @@
 	name = "armor satchel"
 	desc = "A satchel for when you don't want to try a diplomatic approach."
 	startswith = list(
-		/obj/item/clothing/suit/storage/vest/merc,
+		/obj/item/clothing/suit/armor/pcarrier/merc,
 		/obj/item/clothing/head/helmet/merc
 	)

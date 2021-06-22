@@ -104,6 +104,24 @@ proc/listclearnulls(list/list)
 		result = first ^ second
 	return result
 
+/proc/assoc_merge_add(var/value_a, var/value_b)
+	return value_a + value_b
+
+// This proc merges two associative lists
+/proc/merge_assoc_lists(var/list/a, var/list/b, var/merge_method, var/default_if_null_value = null)
+	. = list()
+	for(var/key in a)
+		var/a_value = a[key]
+		a_value = isnull(a_value) ? default_if_null_value : a_value
+		.[key] = a_value
+	for(var/key in b)
+		var/b_value = b[key]
+		b_value = isnull(b_value) ? default_if_null_value : b_value
+		if(!(key in .))
+			.[key] = b_value
+		else
+			.[key] = call(merge_method)(.[key], b_value)
+
 //Pretends to pick an element based on its weight but really just seems to pick a random element.
 /proc/pickweight(list/L)
 	var/total = 0
@@ -173,6 +191,12 @@ proc/listclearnulls(list/list)
 	for(var/i in L)
 		. |= i
 
+// Return a list of the values in an assoc list (including null)
+/proc/list_values(var/list/L)
+	. = list()
+	for(var/e in L)
+		. += L[e]
+
 //Mergesort: divides up the list into halves to begin the sort
 /proc/sortKey(var/list/client/L, var/order = 1)
 	if(isnull(L) || L.len < 2)
@@ -223,45 +247,6 @@ proc/listclearnulls(list/list)
 	if(Li <= L.len)
 		return (result + L.Copy(Li, 0))
 	return (result + R.Copy(Ri, 0))
-
-
-
-
-//Mergesort: Specifically for record datums in a list.
-/proc/sortRecord(var/list/datum/data/record/L, var/field = "name", var/order = 1)
-	if(isnull(L))
-		return list()
-	if(L.len < 2)
-		return L
-	var/middle = L.len / 2 + 1
-	return mergeRecordLists(sortRecord(L.Copy(0, middle), field, order), sortRecord(L.Copy(middle), field, order), field, order)
-
-//Mergsort: does the actual sorting and returns the results back to sortRecord
-/proc/mergeRecordLists(var/list/datum/data/record/L, var/list/datum/data/record/R, var/field = "name", var/order = 1)
-	var/Li=1
-	var/Ri=1
-	var/list/result = new()
-	if(!isnull(L) && !isnull(R))
-		while(Li <= L.len && Ri <= R.len)
-			var/datum/data/record/rL = L[Li]
-			if(isnull(rL))
-				L -= rL
-				continue
-			var/datum/data/record/rR = R[Ri]
-			if(isnull(rR))
-				R -= rR
-				continue
-			if(sorttext(rL.fields[field], rR.fields[field]) == order)
-				result += L[Li++]
-			else
-				result += R[Ri++]
-
-		if(Li <= L.len)
-			return (result + L.Copy(Li, 0))
-	return (result + R.Copy(Ri, 0))
-
-
-
 
 //Mergesort: any value in a list
 /proc/sortList(var/list/L)
@@ -406,6 +391,30 @@ proc/listclearnulls(list/list)
 	var/list/out = insertion_sort_numeric_list_ascending(L)
 	//world.log << "	output: [out.len]"
 	return reverselist(out)
+
+
+// Insert an object A into a sorted list using cmp_proc (/code/_helpers/cmp.dm) for comparison.
+// Use ADD_SORTED(list, A, cmp_proc)
+
+// Return the index using dichotomic search
+/proc/FindElementIndex(atom/A, list/L, cmp)
+	var/i = 1
+	var/j = L.len
+	var/mid
+
+	while(i < j)
+		mid = round((i+j)/2)
+
+		if(call(cmp)(L[mid],A) < 0)
+			i = mid + 1
+		else
+			j = mid
+
+	if(i == 1 || i ==  L.len) // Edge cases
+		return (call(cmp)(L[i],A) > 0) ? i : i+1
+	else
+		return i
+
 
 /proc/dd_sortedObjectList(var/list/L, var/cache=list())
 	if(L.len < 2)
@@ -629,6 +638,15 @@ proc/dd_sortedTextList(list/incoming)
 
 	values += value
 
+/proc/duplicates(var/list/L)
+	. = list()
+	var/list/checked = list()
+	for(var/value in L)
+		if(value in checked)
+			. |= value
+		else
+			checked += value
+
 /proc/assoc_by_proc(var/list/plain_list, var/get_initial_value)
 	. = list()
 	for(var/entry in plain_list)
@@ -692,3 +710,15 @@ proc/dd_sortedTextList(list/incoming)
 			L.Swap(start++,end--)
 
 	return L
+
+//Copies a list, and all lists inside it recusively
+//Does not copy any other reference type
+/proc/deepCopyList(list/l)
+	if(!islist(l))
+		return l
+	. = l.Copy()
+	for(var/i = 1 to l.len)
+		if(islist(.[i]))
+			.[i] = .(.[i])
+
+#define IS_VALID_INDEX(list, index) (list.len && index > 0 && index <= list.len)

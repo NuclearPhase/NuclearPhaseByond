@@ -130,7 +130,6 @@
 
 	if(emagged && istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/F = A
-		var/obj/structure/catwalk/C = A
 		busy = 1
 		update_icons()
 		if(F.flooring)
@@ -138,24 +137,12 @@
 			if(do_after(src, 50, F))
 				F.break_tile_to_plating()
 				addTiles(1)
-		else if(locate(/obj/structure/catwalk, A))  // Emaged nekowalk destroy
-			visible_message("<span class='warning'>[src] begins to dismatle \the [C.name]!</span>")
-			var/message = pick("Cats dont like it, so i do a favor for them!", "No animals were harmed in the process!", "Nya~!", "M.E.O.W!")
-			say(message)
-			playsound(loc, "robot_talk_heavy", 100, 0, 0)
-			if(do_after(src, 50, C))
-				if(istype(A, /turf/space) || istype(A, /turf/simulated/open))
-					new /obj/structure/lattice(locate(A.x, A.y, A.z)) // Spawning lattice under floorbot to allow it destroy more and more!
-				else
-					addTiles(1)
-				qdel(C)
 		else
 			visible_message("<span class='danger'>[src] begins to tear through the floor!</span>")
 			if(do_after(src, 150, F)) // Extra time because this can and will kill.
 				F.ReplaceWithLattice()
 				addTiles(1)
 		target = null
-		busy = 0
 		update_icons()
 	else if(istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/F = A
@@ -178,7 +165,6 @@
 					F.set_flooring(get_flooring_data(floor_build_type))
 					addTiles(-1)
 			target = null
-			busy = 0
 			update_icons()
 	else if(istype(A, /obj/item/stack/tile/floor) && amount < maxAmount)
 		var/obj/item/stack/tile/floor/T = A
@@ -191,7 +177,6 @@
 				T.use(eaten)
 				addTiles(eaten)
 		target = null
-		busy = 0
 		update_icons()
 	else if(istype(A, /obj/item/stack/material) && amount + 4 <= maxAmount)
 		var/obj/item/stack/material/M = A
@@ -227,6 +212,8 @@
 		amount = 0
 	else if(amount > maxAmount)
 		amount = maxAmount
+	busy = FALSE
+
 
 /* Assembly */
 
@@ -297,7 +284,7 @@
 		qdel(W)
 		var/turf/T = get_turf(user.loc)
 		var/mob/living/bot/floorbot/A = new /mob/living/bot/floorbot(T)
-		A.name = created_name
+		A.SetName(created_name)
 		to_chat(user, "<span class='notice'>You add the robot arm to the odd looking toolbox assembly! Boop beep!</span>")
 		user.drop_from_inventory(src)
 		qdel(src)

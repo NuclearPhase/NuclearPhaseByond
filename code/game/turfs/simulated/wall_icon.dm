@@ -15,10 +15,10 @@
 		explosion_resistance = reinf_material.explosion_resistance
 
 	if(reinf_material)
-		name = "reinforced [material.display_name] wall"
+		SetName("reinforced [material.display_name] [initial(name)]")
 		desc = "It seems to be a section of hull reinforced with [reinf_material.display_name] and plated with [material.display_name]."
 	else
-		name = "[material.display_name] wall"
+		SetName("[material.display_name] [initial(name)]")
 		desc = "It seems to be a section of hull plated with [material.display_name]."
 
 	set_opacity(material.opacity >= 0.5)
@@ -45,30 +45,35 @@
 
 	if(!density)
 		I = image('icons/turf/wall_masks.dmi', "[material.icon_base]fwall_open")
-		I.color = material.icon_colour
+		if(material.apply_icon_colour_to_walls)
+			I.color = material.icon_colour
 		overlays += I
 		return
 
 	for(var/i = 1 to 4)
 		I = image('icons/turf/wall_masks.dmi', "[material.icon_base][wall_connections[i]]", dir = 1<<(i-1))
-		I.color = material.icon_colour
+		if(material.apply_icon_colour_to_walls)
+			I.color = material.icon_colour
 		overlays += I
 
 	if(reinf_material)
 		if(construction_stage != null && construction_stage < 6)
 			I = image('icons/turf/wall_masks.dmi', "reinf_construct-[construction_stage]")
-			I.color = reinf_material.icon_colour
+			if(reinf_material.apply_icon_colour_to_walls)
+				I.color = reinf_material.icon_colour
 			overlays += I
 		else
 			if("[reinf_material.icon_reinf]0" in icon_states('icons/turf/wall_masks.dmi'))
 				// Directional icon
 				for(var/i = 1 to 4)
 					I = image('icons/turf/wall_masks.dmi', "[reinf_material.icon_reinf][wall_connections[i]]", dir = 1<<(i-1))
-					I.color = reinf_material.icon_colour
+					if(reinf_material.apply_icon_colour_to_walls)
+						I.color = reinf_material.icon_colour
 					overlays += I
 			else
 				I = image('icons/turf/wall_masks.dmi', reinf_material.icon_reinf)
-				I.color = reinf_material.icon_colour
+				if(reinf_material.apply_icon_colour_to_walls)
+					I.color = reinf_material.icon_colour
 				overlays += I
 
 	if(damage != 0)

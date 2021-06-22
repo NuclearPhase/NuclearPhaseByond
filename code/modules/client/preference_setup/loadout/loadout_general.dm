@@ -49,10 +49,7 @@
 /datum/gear/coffeecup
 	display_name = "coffee cup"
 	path = /obj/item/weapon/reagent_containers/food/drinks/coffeecup
-
-/datum/gear/coffeecup/New()
-	..()
-	gear_tweaks += new/datum/gear_tweak/path(/obj/item/weapon/reagent_containers/food/drinks/coffeecup)
+	flags = GEAR_HAS_TYPE_SELECTION
 
 /datum/gear/boot_knife
 	display_name = "boot knife"
@@ -72,7 +69,7 @@
 		var/obj/item/weapon/storage/lunchbox/lunchbox = lunchbox_type
 		if(!initial(lunchbox.filled))
 			lunchboxes[initial(lunchbox.name)] = lunchbox_type
-	gear_tweaks += new/datum/gear_tweak/path(sortAssoc(lunchboxes))
+	gear_tweaks += new/datum/gear_tweak/path(lunchboxes)
 	gear_tweaks += new/datum/gear_tweak/contents(lunchables_lunches(), lunchables_snacks(), lunchables_drinks())
 
 /datum/gear/towel
@@ -95,3 +92,8 @@
 	plushes["spider plush"] = /obj/item/toy/plushie/spider
 	plushes["farwa plush"] = /obj/item/toy/plushie/farwa
 	gear_tweaks += new /datum/gear_tweak/path(plushes)
+
+/datum/gear/workvisa
+	display_name = "work visa"
+	description = "A work visa issued by the Sol Central Government for the purpose of work."
+	path = /obj/item/weapon/paper/workvisa

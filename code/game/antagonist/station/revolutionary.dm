@@ -27,10 +27,8 @@ var/datum/antagonist/revolutionary/revs
 	faction_indicator = "hudrevolutionary"
 	faction_invisible = 1
 	faction = "revolutionary"
-
-	blacklisted_jobs = list("AI", "Cyborg")
-	restricted_jobs = list("Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
-	protected_jobs = list("Security Officer", "Warden", "Detective")
+	restricted_jobs = list(/datum/job/captain, /datum/job/hop, /datum/job/hos, /datum/job/chief_engineer, /datum/job/rd, /datum/job/cmo, /datum/job/lawyer)
+	protected_jobs = list(/datum/job/officer, /datum/job/warden, /datum/job/detective)
 
 
 /datum/antagonist/revolutionary/New()
@@ -41,8 +39,8 @@ var/datum/antagonist/revolutionary/revs
 	if(!..())
 		return
 	global_objectives = list()
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(!player.mind || player.stat==2 || !(player.mind.assigned_role in command_positions))
+	for(var/mob/living/carbon/human/player in SSmobs.mob_list)
+		if(!player.mind || player.stat==2 || !(player.mind.assigned_role in GLOB.command_positions))
 			continue
 		var/datum/objective/rev/rev_obj = new
 		rev_obj.target = player.mind

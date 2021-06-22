@@ -4,7 +4,7 @@
 	icon_state = "smoke"
 	extended_desc = "This smoke generator creates clouds of smoke on command.  It can also hold liquids inside, which will go \
 	into the smoke clouds when activated."
-	flags = OPENCONTAINER
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 20
 	cooldown_per_use = 30 SECONDS
 	inputs = list()
@@ -30,7 +30,7 @@
 	icon_state = "injector"
 	extended_desc = "This autoinjector can push reagents into another container or someone else outside of the machine.  The target \
 	must be adjacent to the machine, and if it is a person, they cannot be wearing thick clothing."
-	flags = OPENCONTAINER
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 20
 	cooldown_per_use = 6 SECONDS
 	inputs = list("target ref", "injection amount" = 5)
@@ -80,7 +80,7 @@
 	extended_desc = "This is a pump, which will move liquids from the source ref to the target ref.  The third pin determines \
 	how much liquid is moved per pulse, between 0 and 50.  The pump can move reagents to any open container inside the machine, or \
 	outside the machine if it is next to the machine.  Note that this cannot be used on entities."
-	flags = OPENCONTAINER
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 8
 	inputs = list("source ref", "target ref", "injection amount" = 10)
 	outputs = list()
@@ -115,7 +115,7 @@
 	desc = "Stores liquid inside, and away from electrical components.  Can store up to 60u."
 	icon_state = "reagent_storage"
 	extended_desc = "This is effectively an internal beaker."
-	flags = OPENCONTAINER
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 4
 	inputs = list()
 	outputs = list("volume used")
@@ -133,7 +133,8 @@
 	desc = "Stores liquid inside, and away from electrical components.  Can store up to 60u.  This will also suppress reactions."
 	icon_state = "reagent_storage_cryo"
 	extended_desc = "This is effectively an internal cryo beaker."
-	flags = OPENCONTAINER | NOREACT
+	atom_flags = ATOM_FLAG_NO_REACT
+	atom_flags = ATOM_FLAG_OPEN_CONTAINER
 	complexity = 8
 	inputs = list()
 	outputs = list("volume used")
@@ -254,14 +255,14 @@
 // These procs do not relocate the grenade, that's the callers responsibility
 /obj/item/integrated_circuit/manipulation/grenade/proc/attach_grenade(var/obj/item/weapon/grenade/G)
 	attached_grenade = G
-	destroyed_event.register(attached_grenade, src, /obj/item/integrated_circuit/manipulation/grenade/proc/detach_grenade)
+	GLOB.destroyed_event.register(attached_grenade, src, /obj/item/integrated_circuit/manipulation/grenade/proc/detach_grenade)
 	size += G.w_class
 	desc += " \An [attached_grenade] is attached to it!"
 
 /obj/item/integrated_circuit/manipulation/grenade/proc/detach_grenade()
 	if(!attached_grenade)
 		return
-	destroyed_event.unregister(attached_grenade, src, /obj/item/integrated_circuit/manipulation/grenade/proc/detach_grenade)
+	GLOB.destroyed_event.unregister(attached_grenade, src, /obj/item/integrated_circuit/manipulation/grenade/proc/detach_grenade)
 	attached_grenade = null
 	size = initial(size)
 	desc = initial(desc)
@@ -296,7 +297,7 @@
 		playsound(src, 'sound/effects/sparks2.ogg', 50, 1)
 		return
 
-	if(isnum(step_dir) && (!step_dir || (step_dir in cardinal)))
+	if(isnum(step_dir) && (!step_dir || (step_dir in GLOB.cardinal)))
 		rift_location = get_step(rift_location, step_dir) || rift_location
 	else
 		rift_location = get_step(rift_location, dir) || rift_location
@@ -306,7 +307,7 @@
 	else
 		var/turf/destination = get_random_turf_in_range(src, 10)
 		if(destination)
-			new /obj/effect/portal(rift_location, destination)
+			new /obj/effect/portal(rift_location, destination, 30 SECONDS, 33)
 		else
 			playsound(src, 'sound/effects/sparks2.ogg', 50, 1)
 

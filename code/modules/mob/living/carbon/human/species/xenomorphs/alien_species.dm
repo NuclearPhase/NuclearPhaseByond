@@ -11,7 +11,6 @@
 	health_hud_intensity = 1
 
 	icon_template = 'icons/mob/human_races/xenos/r_xenos_drone.dmi'
-	use_eye_icon = 'icons/mob/human_races/xenos/r_xenos_drone.dmi'
 	has_floating_eyes = TRUE
 
 	// temp until someone who isn't me makes some for this icon set
@@ -36,14 +35,14 @@
 	cold_level_2 = -1
 	cold_level_3 = -1
 
-	flags = NO_SCAN | NO_PAIN | NO_SLIP | NO_POISON | NO_EMBED
+	species_flags = SPECIES_FLAG_NO_SCAN | SPECIES_FLAG_NO_PAIN | SPECIES_FLAG_NO_SLIP | SPECIES_FLAG_NO_POISON | SPECIES_FLAG_NO_EMBED
 	appearance_flags = HAS_EYE_COLOR | HAS_SKIN_COLOR
 
 	spawn_flags = SPECIES_IS_RESTRICTED
 
 	reagent_tag = IS_XENOS
 
-	blood_color = "#05EE05"
+	blood_color = "#05ee05"
 	flesh_color = "#282846"
 	base_color =  "#00060c"
 
@@ -123,7 +122,7 @@
 
 	alien_number++ //Keep track of how many aliens we've had so far.
 	H.real_name = "alien [caste_name] ([alien_number])"
-	H.name = H.real_name
+	H.SetName(H.real_name)
 
 	..()
 
@@ -134,7 +133,7 @@
 	var/datum/gas_mixture/environment = T.return_air()
 	if(!environment) return
 
-	var/obj/effect/plant/plant = locate() in T
+	var/obj/effect/vine/plant = locate() in T
 	if((environment.gas["phoron"] > 0 || (plant && plant.seed && plant.seed.name == "xenomorph")) && !regenerate(H))
 		var/obj/item/organ/internal/xenos/plasmavessel/P = H.internal_organs_by_name["plasma vessel"]
 		P.stored_plasma += weeds_plasma_rate
@@ -220,7 +219,7 @@
 	weeds_plasma_rate = 5
 	caste_name = "hunter"
 	slowdown = -2
-	total_health = 150
+	total_health = 300
 	base_color = "#001a33"
 
 	icobase = 'icons/mob/human_races/xenos/r_xenos_hunter.dmi'
@@ -239,7 +238,6 @@
 		/mob/living/proc/ventcrawl,
 		/mob/living/carbon/human/proc/pry_open,
 		/mob/living/carbon/human/proc/tackle,
-		/mob/living/carbon/human/proc/gut,
 		/mob/living/carbon/human/proc/leap,
 		/mob/living/carbon/human/proc/psychic_whisper,
 		/mob/living/carbon/human/proc/regurgitate
@@ -250,8 +248,8 @@
 	weeds_plasma_rate = 10
 	caste_name = "sentinel"
 	slowdown = 0
-	total_health = 125
 	base_color = "#00284d"
+	total_health = 250
 	icobase = 'icons/mob/human_races/xenos/r_xenos_sentinel.dmi'
 	deform =  'icons/mob/human_races/xenos/r_xenos_sentinel.dmi'
 
@@ -277,7 +275,7 @@
 /datum/species/xenos/queen
 
 	name = "Xenophage Queen"
-	total_health = 250
+	total_health = 500
 	weeds_heal_rate = 5
 	weeds_plasma_rate = 20
 	caste_name = "queen"
@@ -319,10 +317,10 @@
 	// Make sure only one official queen exists at any point.
 	if(!alien_queen_exists(1,H))
 		H.real_name = "alien queen ([alien_number])"
-		H.name = H.real_name
+		H.SetName(H.real_name)
 	else
 		H.real_name = "alien princess ([alien_number])"
-		H.name = H.real_name
+		H.SetName(H.real_name)
 
 /datum/hud_data/alien
 

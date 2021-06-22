@@ -57,7 +57,7 @@
 			doors_closing = 0
 			open_doors()
 			control_panel_interior.audible_message("\The [current_floor.ext_panel] buzzes loudly.")
-			playsound(control_panel_interior.loc, 'sound/machines/buzz-two.ogg', 50, 1)
+			playsound(control_panel_interior.loc, "sound/machines/buzz-two.ogg", 50, 1)
 			return 0
 
 	doors_closing = 0 // The doors weren't open, so they are done closing
@@ -99,7 +99,7 @@
 	origin.move_contents_to(destination)
 
 	if((locate(/obj/machinery/power) in destination) || (locate(/obj/structure/cable) in destination))
-		makepowernets()
+		SSmachines.makepowernets()
 
 	current_floor = next_floor
 	control_panel_interior.visible_message("The elevator [moving_upwards ? "rises" : "descends"] smoothly.")
