@@ -7,6 +7,7 @@
 "g" = (/turf/simulated/wall,/area/sector_e)
 "h" = (/obj/machinery/light_switch{pixel_x = 25},/turf/simulated/floor/tiled,/area/sector_e)
 "i" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled,/area/sector_e)
+"j" = (/turf/simulated/wall/r_wall,/area/space)
 "k" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled,/area/sector_e)
 "l" = (/obj/machinery/atmospherics/unary/vent_pump/on,/turf/simulated/floor/tiled,/area/sector_e)
 "m" = (/obj/machinery/atmospherics/pipe/simple/visible{icon_state = "intact"; dir = 5},/turf/simulated/floor/tiled,/area/sector_e)
@@ -35,6 +36,17 @@
 "J" = (/obj/effect/landmark/test/space_turf,/turf/space,/area/space)
 "K" = (/obj/structure/cable{d1 = 0; d2 = 9; icon_state = "0-9"; pixel_y = 0},/turf/simulated/floor/tiled,/area/sector_e)
 "L" = (/obj/item/device/multitool,/turf/simulated/floor/tiled,/area/sector_e)
+"M" = (/obj/machinery/door/blast/regular,/turf/simulated/floor/tiled/dark,/area/space)
+"N" = (/turf/simulated/floor/tiled/dark,/area/space)
+"O" = (/obj/machinery/door/blast/regular/open,/turf/simulated/floor,/area/space)
+"P" = (/obj/machinery/door/blast/regular,/turf/simulated/floor,/area/space)
+"Q" = (/turf/simulated/floor,/area/space)
+"R" = (/obj/structure/grille,/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 4},/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 1},/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 8},/turf/simulated/floor,/area/space)
+"S" = (/obj/structure/grille,/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 4},/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 8},/turf/simulated/floor,/area/space)
+"T" = (/obj/structure/grille,/obj/structure/window/phoronreinforced,/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 4},/obj/structure/window/phoronreinforced{icon_state = "phoronrwindow"; dir = 8},/turf/simulated/floor,/area/space)
+"U" = (/turf/simulated/open,/area/space)
+"V" = (/obj/structure/grille,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/tiled/dark,/area/space)
+"W" = (/obj/structure/grille,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/tiled/dark,/area/space)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -114,27 +126,27 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabcccdgggggdcccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabceeegHfEgccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabceeegfffgccchbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabieeegfffgccckbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabccccgcgggclccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabccccccccccmnobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabpcccccqccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabccccrcccccsntbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabccccccxAccuccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabicvvvLccBccckbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabwCvvvcccBccFcbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabGDvvvcBcIccBcbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabyKczccBcczcccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaJaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajMMMMMMMjaaa
+aaaaaaaaaaaaaaaaabcccdgggggdcccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajjjNNNNNNNjjja
+aaaaaaaaaaaaaaaaabceeegHfEgccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNja
+aaaaaaaaaaaaaaaaabceeegfffgccchbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajjNNNNNNNNNNNjj
+aaaaaaaaaaaaaaaaabieeegfffgccckbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabccccgcgggclccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajOOOOOjPPPPPjaaaajjjjjjjNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabccccccccccmnobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQjQQQQQjaaaajNNNNNjNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabpcccccqccccccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQRQQQQQjaaaajNNNNNjNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabccccrcccccsntbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQSQQQQQjaaaajNNNNNjNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabccccccxAccuccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQSQQQQQjaaaajNNNNNjNNNNNNNNNNNNNj
+aaaaaaaaaaaaaaaaabicvvvLccBccckbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQTQQQQQjaaaajNNNNNjjjjjNNNNNjjjjj
+aaaaaaaaaaaaaaaaabwCvvvcccBccFcbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajQQQQQjQQQQQjjjjjjNNNNNNjNNNNNNNNNNNja
+aaaaaaaaaaaaaaaaabGDvvvcBcIccBcbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajPPPPPjOOOOOjNNNNjNNNNNNjNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaabyKczccBcczcccbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNjVWjNjjjNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNNNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNNNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNNNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaJaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNNNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNNNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNjNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNjNUUUUUUUUUNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajNNNNNNNNNNNNNNNNNNNNNNNjNNNNNNNNNNNja
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjja
 "}
