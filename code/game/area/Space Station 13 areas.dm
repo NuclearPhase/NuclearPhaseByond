@@ -90,6 +90,36 @@ area/space/atmosalert()
 /area/space/partyalert()
 	return
 
+<<<<<<< Updated upstream
+=======
+/area/outwards
+	name = "\improper Outwards"
+	icon_state = "outwards"
+	requires_power = 1
+	always_unpowered = 1
+	dynamic_lighting = 1
+	power_light = 0
+	power_equip = 0
+	power_environ = 0
+	has_gravity = 1
+	area_flags = AREA_FLAG_EXTERNAL
+	//ambience = list('sound/ambience/ambispace.ogg','sound/music/title2.ogg','sound/music/space.ogg','sound/music/main.ogg','sound/music/traitor.ogg')
+	//forced_ambience = list('sound/ambience/space_loop.ogg')
+
+/area/catacomb
+	name = "\improper Catacombs"
+	icon_state = "catacombs"
+	requires_power = 1
+	always_unpowered = 1
+	dynamic_lighting = 1
+	power_light = 0
+	power_equip = 0
+	power_environ = 0
+	has_gravity = 1
+	area_flags = AREA_FLAG_EXTERNAL
+	ambience = list('sound/ambience/ambispace.ogg','sound/music/title2.ogg','sound/music/space.ogg','sound/music/main.ogg','sound/music/traitor.ogg')
+	forced_ambience = list('sound/ambience/space_loop.ogg')
+>>>>>>> Stashed changes
 //////////////////////
 //AREAS USED BY CODE//
 //////////////////////
