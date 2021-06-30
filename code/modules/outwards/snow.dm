@@ -5,20 +5,20 @@
 	density = 0
 	anchored = 1
 	icon = 'icons/effects/outwards.dmi'
-	icon_state = "footsteps0"
+	icon_state = "footsteps_boot1"
 	mouse_opacity = 0
 	dir = SOUTH
 
 /obj/effect/decal/cleanable/outwards/snow_footsteps/New()
 	..()
-	spawn(5 * 60 * TICKS_IN_SECOND) // 5 minutes
+	spawn(5 MINUTES)
 		qdel(src)
-	icon_state = "footsteps[rand(0,3)]"
+	icon_state = "footsteps_boot[rand(1,3)]"
 
 /turf/simulated/floor/outwards/snow
 	name = "snow"
-	icon = 'icons/turf/snow.dmi'
-	icon_state = "snow"
+	icon = 'icons/turf/outwards.dmi'
+	icon_state = "snow_1"
 	initial_flooring = null
 	initial_gas = list("nitrogen" = MOLES_N2OUTWARDS)
 	temperature = 4
@@ -39,13 +39,11 @@
 
 	var/atom/movable/A = H
 	if(A && A.loc == src && ticker && ticker.mode)
-		// Okay, so let's make it so that people can travel z levels but not nuke disks!
-		// if(ticker.mode.name == "mercenary")	return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
 			A.touch_map_edge()
 
 /turf/simulated/floor/outwards/snow/New()
-	icon_state = pick("snow[rand(0,12)]", "snow")
+	icon_state = "snow_[rand(1,12)]"
 	..()
 
 /turf/simulated/floor/outwards/snow/CanZPass(atom/A, direction)
@@ -54,4 +52,4 @@
 			return 0
 		else if(direction == UP)
 			return 0
-	return 1
+	return 1 

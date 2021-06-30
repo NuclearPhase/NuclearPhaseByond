@@ -43,9 +43,7 @@ var/global/list/datum/masslift/masslifts = list()
 	var/depth = 0
 	var/wait_end = 0
 	var/obj/effect/masslift_transit/transit
-	var/turf/T
-	var/turf/Tup
-	var/turf/Tdown
+	var/datum/cord/C
 	var/last = 0
 
 	var/list/targets = list()
@@ -58,8 +56,8 @@ var/global/list/datum/masslift/masslifts = list()
 	. = ..()
 	masslifts -= src
 
-/datum/masslift/proc/get_zlevel()
-	var/D = round(depth)
+/datum/masslift/proc/get_zlevel(lvl)
+	var/D = round(lvl)
 
 	switch(D)
 		if(0)
@@ -94,77 +92,63 @@ var/global/list/datum/masslift/masslifts = list()
 /datum/masslift/proc/get_distance_by_power(power) // KWt
 	return power / 100
 
-/datum/masslift/proc/gen_ts()
-	Tup = get_step(T, UP)
-	Tdown = get_step(T, DOWN)
-
-/datum/masslift/proc/transit(var/turf/from)
+/datum/masslift/proc/transit()
 	for(var/obj/effect/masslift_transit/T in masslift_transits)
 		if(!T.busy)
 			transit = T
 			break
+	. = transit ? TRUE : FALSE
+	if(transit)
+		get_area(C.to_turf()).move_contents_to(get_area(transit), with_gases = TRUE)
 
-	gen_ts()
-	get_area(from).move_contents_to(get_area(transit), with_gases = TRUE)
-
-/datum/masslift/proc/from_transit(var/turf/dest)
+/datum/masslift/proc/from_transit(var/datum/cord/dest)
 	transit.busy = FALSE
-	get_area(transit).move_contents_to(get_area(dest), with_gases = TRUE)
+	get_area(transit).move_contents_to(get_area(dest.to_turf()), with_gases = TRUE)
 	transit = null
 
 /datum/masslift/proc/work()
 	if(wait_end > 0)
 		if(world.time > wait_end)
 			wait_end = 0
-
-			if(status == MASSLIFT_STATE_WAIT)
-				transit(T)
-				status = MASSLIFT_STATE_BUSY
-			else
-				status = MASSLIFT_STATE_DESCENT
+			status = MASSLIFT_STATE_DESCENT
 		else
 			return
 
-	if(status == MASSLIFT_STATE_DESCENT && targets.len)
-		status = MASSLIFT_STATE_BUSY
-		transit(T)
-
 	if(istype(cable) && status == MASSLIFT_STATE_BUSY)
 		var/dist = get_distance_by_power(cable.power)
-		var/dir = 0
 		if(targets[1] < depth)
 			depth = max(targets[1], depth - dist)
-			dir = 1
 		else
 			depth = min(targets[1], depth + dist)
-			dir = -1
 
-		if(abs(depth - targets[1]) < 1)
-			wait_end = world.time + 15 * TICKS_IN_SECOND
-			status = MASSLIFT_STATE_DESCENT
-			targets.Cut(1, 1)
-
-			from_transit(dir < 0 ? Tdown : Tup)
-			last = depth
-
-	if(get_zlevel() > 0 && status == MASSLIFT_STATE_BUSY)
+	if(get_zlevel(depth) > 0 && status == MASSLIFT_STATE_BUSY)
 		status = MASSLIFT_STATE_WAIT
-		wait_end = world.time + 15 * TICKS_IN_SECOND
+		wait_end = world.time + 15 SECONDS
 
 		if(depth > last)
-			from_transit(Tdown)
-		else if(depth < last)
-			from_transit(Tup)
+			from_transit(C.make_step(DOWN))
+		else
+			from_transit(C.make_step(UP))
+		last = depth
+
+		if(get_zlevel(depth) == get_zlevel(targets[1]))
+			targets.Remove(round(depth))
+			status = MASSLIFT_STATE_DESCENT
+
+	if(status == MASSLIFT_STATE_DESCENT && targets.len && transit())
+		status = MASSLIFT_STATE_BUSY
+		last = depth
+		wait_end = 0
 
 /obj/machinery/masslift_panel
 	name = "panel"
 	icon = 'icons/obj/objects.dmi'
-	icon_state = "launcherbtt"
+	icon_state = "lift"
 	desc = "Lift controller"
 	anchored = 1.0
 	use_power = 1
-	idle_power_usage = 8
-	active_power_usage = 16
+	idle_power_usage = 64
+	active_power_usage = 128
 	var/lift_id = "lift"
 	var/cable_id = "id"
 	var/datum/masslift/lift
@@ -178,7 +162,7 @@ var/global/list/datum/masslift/masslifts = list()
 			lift = masslift
 			break
 
-	lift?.T = get_turf(loc)
+	lift?.C = get_cord(loc)
 	lift?.depth = lift.zlevel2depth(loc.z)
 
 /obj/machinery/masslift_panel/proc/find_cable()

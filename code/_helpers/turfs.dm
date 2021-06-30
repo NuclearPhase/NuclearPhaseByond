@@ -161,7 +161,7 @@
 	new_turf.transport_properties_from(source)
 
 	for(var/obj/O in source)
-		if(!O.can_be_transfered)
+		if(istype(O, /obj/effect/landmark))
 			continue
 		if(O.simulated)
 			O.forceMove(new_turf)
@@ -179,7 +179,7 @@
 	new_turf.transport_properties_from(source)
 
 	for(var/obj/O in source)
-		if(!O.can_be_transfered)
+		if(istype(O, /obj/effect/landmark))
 			continue
 		if(O.simulated)
 			O.forceMove(new_turf)
@@ -188,9 +188,9 @@
 		if(isEye(M)) continue // If we need to check for more mobs, I'll add a variable
 		M.forceMove(new_turf)
 
-	QDEL_NULL(new_turf.air.gas)
-	new_turf.air.gas = source.air.gas.Copy()
-	new_turf.air.temperature = source.air.temperature
-	new_turf.air.update_values()
+	new_turf.air?.gas.Cut()
+	new_turf.air?.gas = source?.air.gas.Copy()
+	new_turf.air?.temperature = source?.air.temperature
+	new_turf.air?.update_values()
 
 	return new_turf
