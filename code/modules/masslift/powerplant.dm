@@ -7,6 +7,7 @@
 
 	anchored = 0
 	density = 1
+	
 
 /obj/machinery/power/massslift/powerplant/unit/attackby(obj/item/O, mob/user)
 	. = ..()
@@ -52,6 +53,8 @@
 	idle_power_usage = 10000
 
 	var/datum/masslift/lift
+	var/ncable_id = null
+	var/will_be_anchored = FALSE
 
 /obj/machinery/power/massslift/powerplant/core/proc/update_cable()
 	var/obj/masslift/cable/C = locate(/obj/masslift/cable, loc)
@@ -62,10 +65,15 @@
 	if(!istype(C))
 		var/obj/masslift/cable/Cu = locate(/obj/masslift/cable, get_step(src, UP))
 		var/obj/masslift/cable/cab = new /obj/masslift/cable(loc)
-		cab.cable_id = Cu ? Cu.cable_id : get_random_masslift_id()
+		cab.cable_id = Cu ? Cu.cable_id : (ncable_id || get_random_masslift_id())
 		cable = cab.get_cable()
 
 /obj/machinery/power/massslift/powerplant/core/Process()
+	if(!anchored && will_be_anchored)
+		will_be_anchored = FALSE
+		anchored = TRUE
+		lift = new
+		
 	if(!anchored || !powered())
 		return
 
