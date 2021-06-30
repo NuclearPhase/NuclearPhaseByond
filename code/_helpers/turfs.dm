@@ -161,7 +161,7 @@
 	new_turf.transport_properties_from(source)
 
 	for(var/obj/O in source)
-		if(istype(O, /obj/effect/landmark))
+		if(istype(O, /obj/effect/))
 			continue
 		if(O.simulated)
 			O.forceMove(new_turf)
@@ -179,7 +179,7 @@
 	new_turf.transport_properties_from(source)
 
 	for(var/obj/O in source)
-		if(istype(O, /obj/effect/landmark))
+		if(istype(O, /obj/effect/))
 			continue
 		if(O.simulated)
 			O.forceMove(new_turf)
