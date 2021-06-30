@@ -40,13 +40,11 @@ proc/get_random_masslift_id()
 	cable = locate(/obj/masslift/cable, get_step(src, DOWN))
 	if(cable)
 		var/id = cable.cable_id
-		cable = new /obj/masslift/cable(get_turf(src))
+		cable = new /obj/masslift/cable(loc)
 		cable.cable_id = id
-
 
 /obj/masslift/extender/Initialize()
 	update()
-	START_PROCESSING(SSobj, src)
 
 /obj/masslift/extender/Process()
 	if(!cable)
