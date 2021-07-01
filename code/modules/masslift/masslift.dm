@@ -29,6 +29,7 @@ var/global/list/obj/effect/masslift_transit/masslift_transits = list()
 /obj/effect/masslift_transit/Initialize()
 	. = ..()
 	masslift_transits |= src
+	icon_state = ""
 
 /obj/effect/masslift_transit/Destroy()
 	. = ..()
@@ -92,6 +93,43 @@ var/global/list/datum/masslift/masslifts = list()
 /datum/masslift/proc/get_distance_by_power(power) // KWt
 	return power / 100
 
+/datum/masslift/proc/apply_move_effect(var/mob/living/carbon/human/H)
+	shake_camera(H, 20, 3)
+	var/is_safe = H.buckled
+
+	if(!is_safe && H.grab_restrained())
+		for(var/obj/item/grab/G in H.grabbed_by)
+			if(G.assailant.buckled)
+				is_safe = TRUE
+				break
+
+	if(is_safe)
+		return
+
+	if(get_distance_by_power(cable.power) > 100)
+		H.gib() // ;(
+		return
+
+	H.Paralyse(1)
+	if(depth > last)
+		switch(rand(1, 3))
+			if(1 to 2) // body fall
+				for(var/organ in list(BP_GROIN, BP_CHEST))
+					H.apply_damage(get_distance_by_power(cable.power) * 0.5, BRUTE, organ)
+			if(3) // head fall
+				H.apply_damage(get_distance_by_power(cable.power) * 0.25, BRUTE, BP_HEAD)
+
+	else
+		switch(rand(1, 6))
+			if(1 to 3) // legs hit
+				for(var/organ in pick(list(BP_L_LEG, BP_L_FOOT, BP_R_FOOT), list(BP_R_LEG, BP_R_FOOT, BP_L_FOOT)))
+					H.apply_damage(get_distance_by_power(cable.power) * 0.8, BRUTE, organ)
+			if(4 to 5) // body hit
+				for(var/organ in list(BP_GROIN, BP_CHEST))
+					H.apply_damage(get_distance_by_power(cable.power) * 0.5, BRUTE, organ)
+
+			if(6) // head hit
+				H.apply_damage(get_distance_by_power(cable.power) * 0.25, BRUTE, BP_HEAD)
 /datum/masslift/proc/transit()
 	for(var/obj/effect/masslift_transit/T in masslift_transits)
 		if(!T.busy)
@@ -101,10 +139,16 @@ var/global/list/datum/masslift/masslifts = list()
 	if(transit)
 		get_area(C.to_turf()).move_contents_to(get_area(transit), with_gases = TRUE)
 
+	for(var/mob/living/carbon/human/H in mobs_in_area(get_area(transit)))
+		apply_move_effect(H)
+
+
 /datum/masslift/proc/from_transit(var/datum/cord/dest)
 	transit.busy = FALSE
 	get_area(transit).move_contents_to(get_area(dest.to_turf()), with_gases = TRUE)
 	transit = null
+	for(var/mob/living/carbon/human/H in mobs_in_area(get_area(dest.to_turf())))
+		apply_move_effect(H)
 
 /datum/masslift/proc/work()
 	if(wait_end > 0)
@@ -142,8 +186,8 @@ var/global/list/datum/masslift/masslifts = list()
 
 /obj/machinery/masslift_panel
 	name = "panel"
-	icon = 'icons/obj/objects.dmi'
-	icon_state = "lift"
+	icon = 'icons/obj/masslift.dmi'
+	icon_state = "panel"
 	desc = "Lift controller"
 	anchored = 1.0
 	use_power = 1
@@ -173,6 +217,53 @@ var/global/list/datum/masslift/masslifts = list()
 /obj/machinery/masslift_panel/attack_hand(mob/user)
 	ui_interact(user)
 	..()
+
+/*
+
+/obj/machinery/masslift_panel/tg_ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	find_lift()
+	find_cable()
+	if(!istype(lift))
+		return
+
+	ui = tgui_process.try_update_ui(user, src, ui_key, ui, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "masslift_panel", name, 300, 300, master_ui, state)
+		ui.set_autoupdate(1)
+		ui.open()
+
+/obj/machinery/masslift_panel/ui_data(mob/user)
+	var/list/data = list()
+
+	var/status = "?"
+	switch(lift.status)
+		if(MASSLIFT_STATE_OFF)
+			status = "OFF"
+		if(MASSLIFT_STATE_DESCENT)
+			status = "Descent"
+		if(MASSLIFT_STATE_BUSY)
+			status = "Transit"
+		if(MASSLIFT_STATE_WAIT)
+			status = "Waiting"
+		if(MASSLIFT_STATE_FALL)
+			status = "Falling"
+	data["status"] = status
+	data["depth"] = lift.depth
+	data["zlevel"] = lift.get_zlevel(Floor(lift.depth, 100))
+	data["depth_max"] = lift.zlevel2depth(1)
+	data["requests"] = lift.targets
+
+	return data
+
+/obj/machinery/masslift_panel/ui_act(action, params)
+	if(..())
+		return TRUE
+	switch(action)
+		if("request")
+			var/val = params["zlevel"]
+			lift?.request(val)
+
+*/
 
 /obj/machinery/masslift_panel/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	find_lift()
@@ -217,14 +308,50 @@ var/global/list/datum/masslift/masslifts = list()
 		if(istype(lift))
 			lift.request(val)
 
+/obj/machinery/masslift_panel/update_icon()
+	. = ..()
+	overlays.Cut()
+
+	if(!istype(lift))
+		return
+
+	var/level = lift.get_zlevel(Floor(lift.depth, 100))
+	if(level < 1 || level > 5)
+		level = lift.get_zlevel(lift.last)
+	overlays += image(icon, "[level]")
+	if(lift.status != MASSLIFT_STATE_OFF)
+		overlays += image(icon, "on")
+
+	var/status = null
+	switch(lift.status)
+		if(MASSLIFT_STATE_DESCENT)
+			status = "descent"
+		if(MASSLIFT_STATE_BUSY)
+			status = "busy"
+		if(MASSLIFT_STATE_WAIT)
+			status = "wait"
+		if(MASSLIFT_STATE_FALL)
+			status = "fall"
+
+	if(status)
+		overlays += image(icon, status)
+
 /obj/machinery/masslift_panel/Process()
 	lift?.work()
+	update_icon()
 
-/obj/machinery/elevatorstatuspanel
-	name = "elevator status panel"
-	icon = 'icons/obj/elevator_panel.dmi'
-	icon_state = "panel_off"
-/obj/machinery/elevatorstatusdisplay
-	name = "elevator status panel"
-	icon = 'icons/obj/elevator_panel.dmi'
-	icon_state = "status"
+/obj/machinery/masslift_panel/control_interact(mob/living/carbon/human/H, obj/machinery/controller/C)
+	if(!istype(lift))
+		return
+	
+	if(lift.zlevel2depth(get_z(C)) in lift.targets)
+		return
+
+	lift.request(get_z(C))
+
+/obj/machinery/controller/lift_button
+	name = "lift request button"
+	icon = 'icons/obj/masslift.dmi'
+	icon_state = "request"
+	desc = "Lift request button"
+	ccontrol = new /datum/control/custom

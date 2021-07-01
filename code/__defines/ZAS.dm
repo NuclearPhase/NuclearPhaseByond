@@ -36,16 +36,16 @@ var/list/gzn_check = list(NORTH, SOUTH, EAST, WEST, UP, DOWN)
 		if (B.z < A.z) { \
 			if (!istype(A, /turf/simulated/open)) { \
 				ret = BLOCKED; \
-			} else { \
-				ret = ZONE_BLOCKED; \
-			} \
+			} /*else {*/ \
+				/*ret = ZONE_BLOCKED;*/ \
+			/*}*/ \
 		} \
 		else { \
 			if (!istype(B, /turf/simulated/open)) { \
 				ret = BLOCKED; \
-			} else { \
-				ret = ZONE_BLOCKED; \
-			} \
+			} /*else {*/ \
+				/*ret = ZONE_BLOCKED;*/ \
+			/*}*/ \
 		} \
 	} \
 	else if (A.blocks_air & ZONE_BLOCKED || B.blocks_air & ZONE_BLOCKED) { \
