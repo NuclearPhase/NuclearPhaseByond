@@ -215,10 +215,8 @@ var/global/list/datum/masslift/masslifts = list()
 	lift.cable = masslift_cables[cable_id]
 
 /obj/machinery/masslift_panel/attack_hand(mob/user)
-	ui_interact(user)
+	tg_ui_interact(user)
 	..()
-
-/*
 
 /obj/machinery/masslift_panel/tg_ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
 	find_lift()
@@ -262,51 +260,6 @@ var/global/list/datum/masslift/masslifts = list()
 		if("request")
 			var/val = params["zlevel"]
 			lift?.request(val)
-
-*/
-
-/obj/machinery/masslift_panel/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	find_lift()
-	find_cable()
-	if(!istype(lift))
-		return
-
-	var/list/data = list()
-
-	var/status = "?"
-	switch(lift.status)
-		if(MASSLIFT_STATE_OFF)
-			status = "OFF"
-		if(MASSLIFT_STATE_DESCENT)
-			status = "Descent"
-		if(MASSLIFT_STATE_BUSY)
-			status = "Transit"
-		if(MASSLIFT_STATE_WAIT)
-			status = "Waiting"
-		if(MASSLIFT_STATE_FALL)
-			status = "FALL"
-	data["status"] = status
-	data["depth"] = lift.depth
-	//data["targets"] = lift.targets
-
-	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "massliftpanel.tmpl", "Lift Panel", 520, 410)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-
-		ui.set_auto_update()
-		// open the new ui window
-		ui.open()
-
-/obj/machinery/masslift_panel/Topic(href, href_list)
-	..()
-	if(href_list["target"])
-		var/val = text2num(href_list["target"])
-		if(istype(lift))
-			lift.request(val)
 
 /obj/machinery/masslift_panel/update_icon()
 	. = ..()
