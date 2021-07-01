@@ -219,3 +219,23 @@
 	desc = "A strange chair, not from around here."
 	base_icon = "bogchair"
 	icon_state = "bogchair_preview"
+
+/obj/structure/bed/chair/elevator
+	name = "elevator seat"
+	desc = "A comfortable, secure seat. Holds you in place during extreme altitude drops."
+	base_icon = "shuttle_chair"
+	icon_state = "shuttle_chair_preview"
+	buckle_movable = FALSE
+
+/obj/structure/bed/chair/elevator/post_buckle_mob()
+	if(buckled_mob)
+		playsound(src.loc, 'sound/effects/metal_close.ogg', 50, 1)
+		base_icon = "shuttle_chair-b"
+	else
+		base_icon = "shuttle_chair"
+		var/image/I = image(icon, "[base_icon]_special")
+		I.layer = ABOVE_HUMAN_LAYER
+		if(material_alteration & MATERIAL_ALTERATION_COLOR)
+			I.color = material.icon_colour
+		overlays |= I
+	..()
