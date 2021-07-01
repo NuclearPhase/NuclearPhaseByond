@@ -84,7 +84,7 @@
 "bF" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
 "bG" = (/obj/effect/floor_decal/industrial/warning/dust,/turf/simulated/floor/plating,/area/masslift)
 "bH" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/plating,/area/masslift)
-"bI" = (/obj/effect/landmark/start{name = "JoinLate"},/turf/simulated/floor/plating,/area/masslift)
+"bI" = (/obj/effect/wingrille_spawn/reinforced,/turf/simulated/floor/tiled/dark,/area/masslift)
 "bJ" = (/obj/effect/landmark/start,/turf/simulated/floor/wood,/area/sector_b)
 "bK" = (/obj/structure/sign/warning/secure_area,/turf/simulated/wall/r_wall,/area/sector_b)
 "bL" = (/obj/structure/sign/warning/fall,/turf/simulated/wall/r_wall,/area/sector_b)
@@ -116,17 +116,17 @@
 "cl" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced/polarized,/turf/simulated/floor/tiled/white,/area/sector_b)
 "cm" = (/obj/effect/landmark/start,/turf/simulated/floor/tiled/dark,/area/sector_b)
 "cn" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor/tiled/white,/area/sector_b)
-"co" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 1},/obj/machinery/light,/turf/simulated/floor/plating,/area/masslift)
+"co" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 1},/obj/machinery/light/small,/turf/simulated/floor/plating,/area/masslift)
 "cp" = (/obj/structure/catwalk,/obj/effect/landmark/start,/turf/simulated/open,/area/sector_b)
 "cq" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
 "cr" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 1},/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/turf/simulated/floor/plating,/area/masslift)
 "cs" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
 "ct" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
-"cu" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 8},/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
-"cv" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 4},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
-"cw" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; step_y = 24},/turf/simulated/floor/tiled/dark,/area/sector_b)
-"cx" = (/turf/simulated/wall/r_wall,/area/masslift)
-"cy" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 1},/obj/machinery/masslift_panel{pixel_y = 32; tag = "control@lift_controller@1"},/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/masslift)
+"cu" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 8},/obj/machinery/light/small{icon_state = "bulb1"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
+"cv" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 4},/obj/machinery/light/small{icon_state = "bulb1"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
+"cw" = (/obj/effect/wingrille_spawn/reinforced,/obj/machinery/elevatorstatuspanel,/turf/simulated/floor/tiled/dark,/area/masslift)
+"cx" = (/obj/effect/wingrille_spawn/reinforced,/obj/machinery/elevatorstatusdisplay,/turf/simulated/floor/tiled/dark,/area/masslift)
+"cy" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 1},/obj/machinery/masslift_panel{pixel_y = 32},/obj/machinery/light/small{icon_state = "bulb1"; dir = 1},/turf/simulated/floor/plating,/area/masslift)
 "cz" = (/obj/structure/railing,/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
 "cA" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 8},/obj/effect/floor_decal/industrial/warning/dust/corner{icon_state = "warningcorner_dust"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
 "cB" = (/obj/structure/railing{icon_state = "mcorneroverlay"},/obj/effect/floor_decal/industrial/warning/dust/corner,/turf/simulated/floor/plating,/area/masslift)
@@ -226,12 +226,12 @@ bpbpbpbpaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacaZajajadadadadadadadadadadadad
 bpbpbpbpbpaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadbababababaadaIaIadbbaIaIbcadaIaIadbhbWbCbCbCbCbCbCbCbYbhadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadaxaxaxaxaxbeaIaIadaIaIaIaIadaIaIadcbcccdcdcdcdcdcdcdcecfadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaeaeaeaeaeadaxaxaxaxaxadadadadadaYaIadadadbLadcgcdcdchchcochchcdcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpaaaaaaaaanaaaaaaaaaaaaatacacacbfafafbgafafafafafafafafafafafafafafbgafafafafafafafafafafafafafafafafafafadagaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaebucwaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpaaaaaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcucxbhbhbhcxcvcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatcpacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaabiajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajbpajajajadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgbIcdbAbCcycrbDcdcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpaaaaaaaaanaaaaaaaaaaaaatacacacbfafafbgafafafafafafafafafafafafafafbgafafafafafafafafafafafafafafafafafafadagaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaebuaeaebdcgcdcsbIbIbIbIbIctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpaaaaaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcsbIbhbhbhbIctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcubIbhbhbhbIcvcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatcpacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcsbIbhbhbhbIctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaabiajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajbpajajajadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaebdcgcdcscwcxbIbIbIctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgcdcdbAbCcycrbDcdcdcqadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpbpaaaaaaaaaabpbpbpaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadczcAcdbFbGbGbGbHcdcBcCadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaabpbpbpbpbpaabpbpaaaaaaaaaaaabpbpaabpbpbpbpbpbpbpaaaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadbhcDbGbGbGbGbGbGbGcEbhadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadadadadadadadadadadadadadbpbpbpbpbpbpbpbpbpbpbp

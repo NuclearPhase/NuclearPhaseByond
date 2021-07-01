@@ -1347,6 +1347,7 @@
 #include "code\modules\clothing\under\jobs\security.dm"
 #include "code\modules\clothing\under\xenos\bogani.dm"
 #include "code\modules\clothing\underwear\base.dm"
+#include "code\modules\control\control.dm"
 #include "code\modules\crafting\crafting.dm"
 #include "code\modules\crafting\parts\lathe_items.dm"
 #include "code\modules\crafting\recipes\guns.dm"

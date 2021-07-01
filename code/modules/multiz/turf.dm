@@ -216,3 +216,6 @@
 /turf/simulated/open/Destroy()
 	src.clean_up()
 	. = ..()
+
+/turf/simulated/open/air
+	initial_gas = list("oxygen" = MOLES_O2STANDARD, "nitrogen" = MOLES_N2STANDARD)

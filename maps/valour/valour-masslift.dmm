@@ -1,7 +1,7 @@
 "a" = (/turf/unsimulated/floor/rescue_base,/area/space)
 "b" = (/turf/unsimulated/mineral,/area/space)
-"c" = (/obj/effect/masslift_transit,/turf/space,/area/masslift/b)
-"d" = (/turf/space,/area/masslift/b)
+"c" = (/obj/effect/masslift_transit,/turf/space,/area/syndicate_mothership/elite_squad)
+"d" = (/turf/space,/area/syndicate_mothership/elite_squad)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
