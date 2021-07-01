@@ -171,6 +171,11 @@
 /obj/machinery/light/small/red
 	light_type = /obj/item/weapon/light/bulb/red
 
+/obj/machinery/light/floor
+	name = "floorlight"
+	icon_state = "floor1"
+	base_state = "floor"
+
 /obj/machinery/light/spot
 	name = "spotlight"
 	desc = "A more robust socket for light tubes that demand more power."

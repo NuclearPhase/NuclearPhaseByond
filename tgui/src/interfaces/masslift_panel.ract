@@ -1,0 +1,21 @@
+<ui-display title='Depth: {{adata.depth}}'>
+</ui-display>
+
+<ui-display title='Lift panel'>
+    <ui-section>
+        <ui-bar min='0' max='{{data.depth_max}}' value='{{adata.depth}}'>{{adata.depth}} km</ui-bar>
+    </ui-section>
+    <ui-section>
+        <ui-button state='{{data.active1 == 1 ? "disabled" : null}}' action='request' params='{"zlevel": "1"}'>1</ui-button>
+        <ui-button state='{{data.active2 == 1 ? "disabled" : null}}' action='request' params='{"zlevel": "2"}'>2</ui-button>
+        <ui-button state='{{data.active3 == 1 ? "disabled" : null}}' action='request' params='{"zlevel": "3"}'>3</ui-button>
+        <ui-button state='{{data.active4 == 1 ? "disabled" : null}}' action='request' params='{"zlevel": "4"}'>4</ui-button>
+        <ui-button state='{{data.active5 == 1 ? "disabled" : null}}' action='request' params='{"zlevel": "5"}'>5</ui-button>
+    </ui-section>
+</ui-display>
+
+<ui-display title='Requests:'>
+    {{#each data.requests}}
+        {{.}}<br>
+    {{/each}}
+</ui-display>
