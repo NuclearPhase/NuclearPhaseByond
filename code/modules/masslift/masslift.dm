@@ -219,3 +219,12 @@ var/global/list/datum/masslift/masslifts = list()
 
 /obj/machinery/masslift_panel/Process()
 	lift?.work()
+
+/obj/machinery/elevatorstatuspanel
+	name = "elevator status panel"
+	icon = 'icons/obj/elevator_panel.dmi'
+	icon_state = "panel_off"
+/obj/machinery/elevatorstatusdisplay
+	name = "elevator status panel"
+	icon = 'icons/obj/elevator_panel.dmi'
+	icon_state = "status"
