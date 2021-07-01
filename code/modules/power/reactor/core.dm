@@ -1,6 +1,9 @@
-#define CRIT_TEMPERATURE 120000
-#define DEPLETION_MODIFIER 1.2
-#define CASING_HEAT_CONDUCTIVITY 0.001 //How much of overall produced heat are radiated outside
+#define MINIMUM_REACTION_TEMPERATURE 11000000
+#define MAXIMUM_REACTION_TEMPERATURE 24000000
+
+#define CRIT_TEMPERATURE 12000 //Temperature at which the hull starts burning
+#define DEPLETION_MODIFIER 0.05 //How much fuel depletes in two seconds
+#define CASING_HEAT_CONDUCTIVITY 0.00001 //How much of overall produced heat are radiated outside
 
 
 
@@ -15,22 +18,23 @@
 	name = "C.C.F.R"
 	desc = "Closed Confinement Fusion Reactor"
 	anchored = TRUE
+	
 	// Variables essential for operation
-	var/rtemperature = 400 //Temperature of the plasma
-	var/htemperature = 131 //Temperature of the reactor hull
+	var/rtemperature = T0C //Temperature of the plasma
+	var/htemperature = T20C //Temperature of the reactor hull
 	var/superstructure_integrity = 100 //Integrity of the reactor containment
 	var/pressure = 0 //Pressure in the reaction chamber
-	var/power = 0 //The power that the reactor is consuming only by itself
+	var/power = 0 //Reactivity
 	var/power_modifier = 1
 	var/list/fuel_cells = list()
-	var/fuel_power
+	var/fuel_power = 0
 	// Enviromental variables
 	var/isOperating = 0
 	var/hasFuel = 0
-	var/isBreached = 0
-	var/isRunaway = 0
+	var/isBreached = 0 //Is cryostat breached
+	var/isRunaway = 0 //The reactor starts fusing the materials it's made of
 	var/hasCoolant = 0
-	var/isOverloaded = 0
+	var/isOverloaded = 0 //Too much power provided by the lasers, resulting in increase of temperature
 	var/isCoolantMolten = 0
 	var/CoolantMeltingPoint = 0
 	var/InjectingFuel = 0
@@ -58,91 +62,45 @@
 					msg = "<span class='notice'>[src] looks factory new.</span>"
 			. += msg
 
-/obj/machinery/power/reactor/core/proc/rstartup()
-	if(!hasCoolant)
-		src.visible_message("<span class='warning'>\The [src] shudders visibly, something is wrong!</span>")
-	if(!OperationalLasers)
-		src.visible_message("<span class='warning'>\The [src] beeps loudly, yet there is no lasers firing!</span>")
-		return
-	if(superstructure_integrity < 80)
-		src.visible_message("<span class='warning'>\The [src] beeps loudly, you see smoke coming out of intakes!</span>")
-		return
-	isOperating = 1
-	src.visible_message("<span class='warning'>\The intakes of the [src] open widely, making a nasty pumping noise!</span>")
-	sleep(50)
-	src.visible_message("<span class='warning'>\The [src] visibly comes alive!</span>")
-	// Lights on animation here please
-	sleep(50)
-	src.visible_message("<span class='warning'>\The lasers begin to spin up, stand clear!</span>")
-	// Spinup animation here please
-	sleep(100)
-	ignition()
-	return
-
-/obj/machinery/power/reactor/core/proc/ignition()
-	if(!hasFuel)
-		superstructure_integrity = superstructure_integrity - rand(1,10)
-		return
-
-/obj/machinery/power/reactor/core/proc/rshutdown()
-
 /obj/machinery/power/reactor/core/proc/process() // Just a timer with some vital things
-	if(rtemperature > CoolantMeltingPoint)
-		isCoolantMolten = 1
-	else
-		isCoolantMolten = 0
-	if(rtemperature > UNSTABLE_TEMPERATURE)
-		eventprocess()
-	fuel_power = 0 //Reset the fuel calculation
-	if(hasFuel)
-		for(var/obj/item/rfuel_rod/FC in fuel_cells)
-			fuel_power += FC.fuel_power
-			var/depletionmodifier = OperationalLasers * DEPLETION_MODIFIER
-			//FR.deplete(depletionmodifier)
 	temperatureprocess()
 	//SSradiation.radiate(src, rtemperature * DEPLETION_MODIFIER / 10)
 
 /obj/machinery/power/reactor/core/proc/temperatureprocess()
 
-/obj/machinery/power/reactor/core/proc/eventprocess()
-	var/severity = rand(1,100) //Chances of bad events.
-	if(CritState)
-		switch(severity)
-			if(0 to 10)
-				for(var/obj/machinery/light/L in SSmachines.machinery)
-					if(prob(25))
-						L.flicker()
-			if(10 to 20)
-				src.visible_message("<span class='boldwarning'>\The [src] shudders as it cools itself by releasing extremely hot air!</span>")
-				var/diff = rand(1,1000)
-				rtemperature = rtemperature - diff
-				var/datum/gas_mixture/environment = loc.return_air()
-				environment.add_thermal_energy(diff)
-			if(20 to 30)
-				for(var/obj/machinery/power/apc/A in SSmachines.machinery)
-					if(prob(25))
-						A.overload_lighting()
-			if(30 to 95)
-				var/loss = rand(1,5)
-				if(superstructure_integrity > loss)
-					superstructure_integrity = superstructure_integrity - loss
-			if(95 to 100)
-				for(var/obj/machinery/power/apc/A in SSmachines.machinery)
-					if(prob(75))
-						A.overload_lighting()
-				//SSradiation.radiate(src, rtemperature * fuel_power)
-	else
-		if(prob(5) && !CritState)
-			CritState = 1
-	return
+
+
+//REACTIVITY CALCULATION
+	/*fuel_power = 0
+	for(var/obj/item/rfuel_rod/FC in fuel_cells)
+			fuel_power += FC.fuel_power
+			FC.deplete(DEPLETION_MODIFIER)*/
+
+//HULL TEMPERATURE CALCULATION
+	var/release = rtemperature / CASING_HEAT_CONDUCTIVITY
+	rtemperature = rtemperature - release
+	htemperature = htemperature + release
+	var/datum/gas_mixture/environment = loc.return_air()
+	var/diff = environment.temperature - htemperature
+	environment.add_thermal_energy(diff)
+
+//PRESSURE CALCULATION
+
+
+
+//INTERNAL TEMPERATURE CALCULATION
+	if(rtemperature < MINIMUM_REACTION_TEMPERATURE)
+		return //No reaction
+	
+
+//COOLANT CALCULATION
+
+
+
 /obj/item/rfuel_cell
 	name = "Fuel Cell"
 	var/fuel_power = 150
-/*/obj/item/rfuel_cell/proc/deplete(var/E)
-	if(fuel_power < 5)
-		var/obj/machinery/power/fusion/core/C = locate() in SSmachines.machinery
-		if(!C.CritState) //No shutdown because of fuel running out in critical state
-			C.rshutdown()
-	var/deplamount = rand(0.1,0.3) * E
-	fuel_power = fuel_power - deplamount
-	return*/
+
+/obj/item/rfuel_cell/proc/deplete(var/D)
+	fuel_power = fuel_power - D
+	return
