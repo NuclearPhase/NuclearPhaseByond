@@ -9,3 +9,5 @@
 #define WATT *1
 #define KWATT *1000
 #define MWATT *1000000
+
+#define OHM *1

@@ -22,6 +22,9 @@
 	var/voltage = 0
 	var/newvoltage = 0
 
+/datum/powernet/proc/get_heat(var/resistance) // {OHM} -> {K}, simple joule lenz's law implementation
+	return (get_amperage() ** 2 * resistance)
+
 /datum/powernet/proc/get_amperage()
 	return min(avail, viewload)
 
@@ -30,7 +33,7 @@
 
 /datum/powernet/proc/get_wattage()
 	return get_amperage() * get_voltage()
- 
+
 /datum/powernet/proc/add_power(a, v)
 	if(v >= get_voltage())
 		newavail *= get_voltage() / v
@@ -55,6 +58,8 @@
 //This is for machines that might adjust their power consumption using this data.
 // {W}
 /datum/powernet/proc/last_surplus()
+	if(!get_voltage())
+		return 0
 	return max(avail - viewload / get_voltage(), 0) * get_voltage()
 
 /datum/powernet/proc/draw_power(var/w)
@@ -163,6 +168,15 @@
 	smes_newavail = 0
 	voltage = newvoltage
 	newvoltage = 0
+
+	var/gresistance = 0 // some dispersion simulating
+	for(var/obj/structure/cable/C in cables)
+		gresistance += C.resistance * 10
+
+	for(var/obj/structure/cable/C in cables)
+		var/turf/T = get_turf(C)
+		var/datum/gas_mixture/environment = T.return_air()
+		environment.add_thermal_energy(get_heat(C.resistance) * max(0.25, (100 - (gresistance - C.resistance)) / 100))
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)

@@ -5,6 +5,8 @@
     var/obj/machinery/power/transformator/connected = null
     var/max_cap = 25 AMPER
 
+    efficiency = 0.75
+
 /obj/machinery/power/transformator/Process()
     if(!connected)
         connected = locate(/obj/machinery/power/transformator, get_step(src, dir))

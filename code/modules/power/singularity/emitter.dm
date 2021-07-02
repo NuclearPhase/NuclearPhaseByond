@@ -16,7 +16,7 @@
 	use_power = 0	//uses powernet power, not APC power
 	active_power_usage = 100 KILOWATTS
 
-	var/efficiency = 0.3	// Energy efficiency. 30% at this time, so 100kW load means 30kW laser pulses.
+	var/efficiency_ = 0.3	// Energy efficiency. 30% at this time, so 100kW load means 30kW laser pulses.
 	var/active = 0
 	var/powered = 0
 	var/fire_delay = 100
@@ -134,7 +134,7 @@
 
 		//need to calculate the power per shot as the emitter doesn't fire continuously.
 		var/burst_time = (min_burst_delay + max_burst_delay)/2 + 2*(burst_shots-1)
-		var/power_per_shot = (active_power_usage * efficiency) * (burst_time/10) / burst_shots
+		var/power_per_shot = (active_power_usage * efficiency_) * (burst_time/10) / burst_shots
 
 		if(prob(35))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

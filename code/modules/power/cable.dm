@@ -24,6 +24,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 var/list/possible_cable_coil_colours
 
+#define CABLE_1MM2_RESISTANCE 0.25 OHM
 /obj/structure/cable
 	level = 1
 	anchored =1
@@ -32,6 +33,7 @@ var/list/possible_cable_coil_colours
 	desc = "A flexible superconducting cable for heavy-duty power transfer."
 	icon = 'icons/obj/power_cond_white.dmi'
 	icon_state = "0-1"
+	var/resistance = CABLE_1MM2_RESISTANCE / 1000 // 1000 mm^2
 	var/d1 = 0
 	var/d2 = 1
 
@@ -43,7 +45,6 @@ var/list/possible_cable_coil_colours
 
 
 /obj/structure/cable/drain_power(var/drain_check, var/surge, var/amount = 0)
-
 	if(drain_check)
 		return 1
 
@@ -51,6 +52,11 @@ var/list/possible_cable_coil_colours
 	if(!PN) return 0
 
 	return PN.draw_power(amount)
+
+/obj/structure/cable/heavy
+	resistance = CABLE_1MM2_RESISTANCE / 10000 // 10000 mm^2
+	icon = 'icons/obj/power_cond_heavy.dmi'
+	color = null
 
 /obj/structure/cable/yellow
 	color = COLOR_YELLOW
@@ -121,7 +127,7 @@ var/list/possible_cable_coil_colours
 	return "[round(powernet.get_wattage())] W"
 
 /obj/structure/cable/proc/get_voltage()
-	if(powernet.get_voltage() >= 1 KVOLT)
+	if(powernet.get_voltage() >= 1 MVOLT)
 		return "[round(powernet.get_voltage()/(1 MVOLT), 0.01)] MV"
 	if(powernet.get_voltage() >= 1 KVOLT)
 		return "[round(powernet.get_voltage()/(1 KVOLT), 0.01)] kV"
