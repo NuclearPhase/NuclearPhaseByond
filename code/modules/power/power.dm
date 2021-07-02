@@ -14,6 +14,7 @@
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
+	var/efficiency = 1	
 
 /obj/machinery/power/Initialize()
 	. = ..()
@@ -42,20 +43,27 @@
 		powernet.trigger_warning()
 		return powernet.draw_power(amount)
 
-/obj/machinery/power/proc/add_avail(var/amount)
+/obj/machinery/power/proc/add_power(var/a, var/v = 1 KVOLT)
 	if(powernet)
-		powernet.newavail += amount
+		powernet.add_power(a, v)
 		return 1
 	return 0
 
-/obj/machinery/power/proc/draw_power(var/amount)
+/obj/machinery/power/proc/draw_power(var/amount, var/efficiency = 0)
+	if(efficiency == 0)
+		efficiency = src.efficiency
 	if(powernet)
-		return powernet.draw_power(amount)
+		var/resistance = (powernet.get_voltage() ** 2) / (amount * (1 - efficiency))
+		var/heat_draw = powernet.draw_power(powernet.get_voltage() * 2 * resistance)
+		var/turf/T = get_turf(src)
+		var/datum/gas_mixture/environment = T.return_air()
+		environment.add_thermal_energy(powernet.get_heat(resistance))
+		return powernet.draw_power(amount) + heat_draw
 	return 0
 
 /obj/machinery/power/proc/surplus()
 	if(powernet)
-		return powernet.avail-powernet.load
+		return powernet.last_surplus()
 	else
 		return 0
 

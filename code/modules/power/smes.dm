@@ -81,7 +81,7 @@
 		return
 	update_icon()
 
-/obj/machinery/power/smes/add_avail(var/amount)
+/obj/machinery/power/smes/add_power(var/amount)
 	if(..(amount))
 		powernet.smes_newavail += amount
 		return 1
@@ -176,7 +176,7 @@
 	if(output_attempt && (!output_pulsed && !output_cut) && powernet && charge)
 		output_used = min( charge/CELLRATE, output_level)		//limit output to that stored
 		remove_charge(output_used)			// reduce the storage (may be recovered in /restore() if excessive)
-		add_avail(output_used)				// add output to powernet (smes side)
+		add_power(output_used)				// add output to powernet (smes side)
 		outputting = 2
 	else if(!powernet || !charge)
 		outputting = 1

@@ -47,6 +47,8 @@
 	name = "\improper Lift Maintenance"
 	icon_state = "lift-maintenance"
 
+//
+
 /area/sector_c/lift_zone
 	name = "\improper Lift Zone"
 	icon_state = "lift-zone"
@@ -66,3 +68,30 @@
 /area/sector_a/lift_zone
 	name = "\improper Lift Zone"
 	icon_state = "lift-zone"
+
+///
+
+/area/sector_a/engineering
+	icon = 'icons/turf/areas.dmi'
+	name = "\improper Engineering"
+	icon_state = "engineering"
+
+/area/sector_b/engineering
+	icon = 'icons/turf/areas.dmi'
+	name = "\improper Engineering"
+	icon_state = "engineering"
+
+/area/sector_c/engineering
+	icon = 'icons/turf/areas.dmi'
+	name = "\improper Engineering"
+	icon_state = "engineering"
+
+/area/sector_d/engineering
+	icon = 'icons/turf/areas.dmi'
+	name = "\improper Engineering"
+	icon_state = "engineering"
+
+/area/sector_e/engineering
+	icon = 'icons/turf/areas.dmi'
+	name = "\improper Engineering"
+	icon_state = "engineering"

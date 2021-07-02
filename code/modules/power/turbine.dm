@@ -128,7 +128,7 @@
 		return
 	lastgen = ((compressor.rpm / TURBGENQ)**TURBGENG) *TURBGENQ
 
-	add_avail(lastgen)
+	add_power(lastgen)
 	var/newrpm = ((compressor.gas_contained.temperature) * compressor.gas_contained.total_moles)/4
 	newrpm = max(0, newrpm)
 

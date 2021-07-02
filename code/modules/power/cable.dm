@@ -24,6 +24,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 var/list/possible_cable_coil_colours
 
+#define CABLE_1MM2_RESISTANCE 0.25 OHM
 /obj/structure/cable
 	level = 1
 	anchored =1
@@ -32,6 +33,7 @@ var/list/possible_cable_coil_colours
 	desc = "A flexible superconducting cable for heavy-duty power transfer."
 	icon = 'icons/obj/power_cond_white.dmi'
 	icon_state = "0-1"
+	var/resistance = CABLE_1MM2_RESISTANCE / 1000 // 1000 mm^2
 	var/d1 = 0
 	var/d2 = 1
 
@@ -43,7 +45,6 @@ var/list/possible_cable_coil_colours
 
 
 /obj/structure/cable/drain_power(var/drain_check, var/surge, var/amount = 0)
-
 	if(drain_check)
 		return 1
 
@@ -51,6 +52,11 @@ var/list/possible_cable_coil_colours
 	if(!PN) return 0
 
 	return PN.draw_power(amount)
+
+/obj/structure/cable/heavy
+	resistance = CABLE_1MM2_RESISTANCE / 10000 // 10000 mm^2
+	icon = 'icons/obj/power_cond_heavy.dmi'
+	color = null
 
 /obj/structure/cable/yellow
 	color = COLOR_YELLOW
@@ -103,6 +109,8 @@ var/list/possible_cable_coil_colours
 		// following code taken from attackby (multitool)
 		if(powernet && (powernet.avail > 0))
 			to_chat(user, "<span class='warning'>[get_wattage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_amperage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_voltage()] in power network.</span>")
 		else
 			to_chat(user, "<span class='warning'>The cable is not powered.</span>")
 	return
@@ -112,11 +120,25 @@ var/list/possible_cable_coil_colours
 ///////////////////////////////////
 
 /obj/structure/cable/proc/get_wattage()
-	if(powernet.avail >= 1000000000)
-		return "[round(powernet.avail/1000000, 0.01)] MW"
-	if(powernet.avail >= 1000000)
-		return "[round(powernet.avail/1000, 0.01)] kW"
-	return "[round(powernet.avail)] W"
+	if(powernet.get_wattage() >= (1 MWATT))
+		return "[round(powernet.get_wattage()/(1 MWATT), 0.01)] MW"
+	if(powernet.get_wattage() >= (1 KWATT))
+		return "[round(powernet.get_wattage()/(1 KWATT), 0.01)] kW"
+	return "[round(powernet.get_wattage())] W"
+
+/obj/structure/cable/proc/get_voltage()
+	if(powernet.get_voltage() >= 1 MVOLT)
+		return "[round(powernet.get_voltage()/(1 MVOLT), 0.01)] MV"
+	if(powernet.get_voltage() >= 1 KVOLT)
+		return "[round(powernet.get_voltage()/(1 KVOLT), 0.01)] kV"
+	return "[round(powernet.get_voltage())] V"
+
+/obj/structure/cable/proc/get_amperage()
+	if(powernet.get_amperage() >= 1 MAMPER)
+		return "[round(powernet.get_amperage()/(1 MAMPER), 0.01)] MA"
+	if(powernet.get_amperage() >= 1 KAMPER)
+		return "[round(powernet.get_amperage()/(1 KAMPER), 0.01)] kA"
+	return "[round(powernet.get_amperage())] A"
 
 //If underfloor, hide the cable
 /obj/structure/cable/hide(var/i)
@@ -195,6 +217,8 @@ var/list/possible_cable_coil_colours
 
 		if(powernet && (powernet.avail > 0))		// is it powered?
 			to_chat(user, "<span class='warning'>[get_wattage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_amperage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_voltage()] in power network.</span>")
 
 		else
 			to_chat(user, "<span class='warning'>The cable is not powered.</span>")
