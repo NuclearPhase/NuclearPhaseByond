@@ -42,9 +42,9 @@
 		powernet.trigger_warning()
 		return powernet.draw_power(amount)
 
-/obj/machinery/power/proc/add_avail(var/amount)
+/obj/machinery/power/proc/add_power(var/a, var/v = 24)
 	if(powernet)
-		powernet.newavail += amount
+		powernet.add_power(a, v)
 		return 1
 	return 0
 
@@ -55,7 +55,7 @@
 
 /obj/machinery/power/proc/surplus()
 	if(powernet)
-		return powernet.avail-powernet.load
+		return powernet.last_surplus()
 	else
 		return 0
 

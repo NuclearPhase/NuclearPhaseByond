@@ -105,7 +105,7 @@
 	React()
 
 	// Dump power to our powernet.
-	owned_core.add_avail(FUSION_ENERGY_PER_K * plasma_temperature)
+	owned_core.add_power(FUSION_ENERGY_PER_K * plasma_temperature)
 
 	// Energy decay.
 	if(plasma_temperature >= 1)

@@ -70,7 +70,7 @@
 "br" = (/turf/simulated/wall/r_wall,/area/catacombs)
 "bs" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/wall/r_wall,/area/sector_b)
 "bt" = (/obj/structure/sign/warning/caution,/turf/simulated/wall/r_wall,/area/sector_b)
-"bu" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/turf/simulated/floor/tiled/dark,/area/sector_b)
+"bu" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/obj/machinery/power/transformator{coef = 10; dir = 4},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "bv" = (/obj/structure/lattice,/turf/simulated/open,/area/catacombs)
 "bw" = (/obj/effect/decal/cleanable/liquid_fuel,/turf/simulated/floor/tiled/dark,/area/sector_b)
 "bx" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/tiled/dark,/area/sector_b)
@@ -124,7 +124,7 @@
 "ct" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
 "cu" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 8},/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
 "cv" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 4},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
-"cw" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; step_y = 24},/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cw" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; step_y = 24},/obj/machinery/power/transformator{dir = 8},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "cx" = (/turf/simulated/wall/r_wall,/area/masslift)
 "cy" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 1},/obj/machinery/masslift_panel{pixel_y = 32; tag = "control@lift_controller@1"},/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/masslift)
 "cz" = (/obj/structure/railing,/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
@@ -133,6 +133,13 @@
 "cC" = (/obj/structure/railing,/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/plating,/area/masslift)
 "cD" = (/obj/structure/railing{icon_state = "railing0"; dir = 8},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
 "cE" = (/obj/structure/railing{icon_state = "railing0"; dir = 4},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/plating,/area/masslift)
+"cF" = (/obj/item/device/multitool,/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cG" = (/obj/item/weapon/wrench,/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cH" = (/obj/machinery/power/debug_items/infinite_generator,/obj/structure/cable,/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cI" = (/obj/item/weapon/crowbar,/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cJ" = (/obj/item/stack/material/phoron/fifty,/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cK" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/tiled/dark,/area/sector_b)
+"cL" = (/obj/structure/cable,/obj/machinery/power/debug_items/infinite_cable_powersink,/turf/simulated/floor/tiled/dark,/area/sector_b)
 
 (1,1,1) = {"
 ababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababbpbpbpbpbpbpbpbpbpbp
@@ -226,11 +233,11 @@ bpbpbpbpaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacaZajajadadadadadadadadadadadad
 bpbpbpbpbpaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadbababababaadaIaIadbbaIaIbcadaIaIadbhbWbCbCbCbCbCbCbCbYbhadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadaxaxaxaxaxbeaIaIadaIaIaIaIadaIaIadcbcccdcdcdcdcdcdcdcecfadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpaaaaaaaaaaaaanaaaaaaaaaaaaatacacacapaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaanaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaeaeaeaeaeadaxaxaxaxaxadadadadadaYaIadadadbLadcgcdcdchchcochchcdcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpaaaaaaaaanaaaaaaaaaaaaatacacacbfafafbgafafafafafafafafafafafafafafbgafafafafafafafafafafafafafafafafafafadagaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaebucwaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpaaaaaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcucxbhbhbhcxcvcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatcpacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecmaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaabiajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajbpajajajadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpaaaaaaaaanaaaaaaaaaaaaatacacacbfafafbgafafafafafafafafafafafafafafbgafafafafafafafafafafafafafafafafafafadagaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecFbucwaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpaaaaaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecGcKcKaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecIcJcHcLaebdcgcdcucxbhbhbhcxcvcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpaaanaaaaaaaaaaaaatcpacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaecJcJaeaeaebdcgcdcscxbhbhbhcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaabiajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajajbpajajajadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaecJaeaiaeaebdcgcdcscxcxcxcxcxctcdcqadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgbIcdbAbCcycrbDcdcdcqadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpbpaaaaaaaaaabpbpbpaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadczcAcdbFbGbGbGbHcdcBcCadbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaabpbpbpbpbpaabpbpaaaaaaaaaaaabpbpaabpbpbpbpbpbpbpaaaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadbhcDbGbGbGbGbGbGbGcEbhadbpbpbpbpbpbpbpbpbpbpbp

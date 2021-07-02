@@ -30,7 +30,7 @@
 	var/power_generation_rate = 1000000
 
 /obj/machinery/power/debug_items/infinite_generator/Process()
-	add_avail(power_generation_rate)
+	add_power(power_generation_rate)
 
 /obj/machinery/power/debug_items/infinite_generator/show_info(var/mob/user)
 	..()

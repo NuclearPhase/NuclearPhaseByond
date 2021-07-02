@@ -2,9 +2,9 @@
 	var/list/cables = list()	// all cables & junctions
 	var/list/nodes = list()		// all connected machines
 
-	var/load = 0				// the current load on the powernet, increased by each machine at processing
+	var/load = 0				// the current load on the powernet, increased by each machine at processing {A}
 	var/newavail = 0			// what available power was gathered last tick, then becomes...
-	var/avail = 0				//...the current available power in the powernet
+	var/avail = 0				//...the current available power in the powernet {A}
 	var/viewload = 0			// the load as it appears on the power console (gradually updated)
 	var/number = 0				// Unused //TODEL
 
@@ -19,6 +19,23 @@
 	var/netexcess = 0			// excess power on the powernet (typically avail-load)
 
 	var/problem = 0				// If this is not 0 there is some sort of issue in the powernet. Monitors will display warnings.
+	var/voltage = 0
+	var/newvoltage = 0
+
+/datum/powernet/proc/get_amperage()
+	return min(avail, viewload)
+
+/datum/powernet/proc/get_voltage()
+	return voltage
+
+/datum/powernet/proc/get_wattage()
+	return get_amperage() * get_voltage()
+ 
+/datum/powernet/proc/add_power(a, v)
+	if(v >= get_voltage())
+		newavail *= get_voltage() / v
+		newavail += a
+		newvoltage = v
 
 /datum/powernet/New()
 	START_PROCESSING_POWERNET(src)
@@ -36,11 +53,12 @@
 
 //Returns the amount of excess power (before refunding to SMESs) from last tick.
 //This is for machines that might adjust their power consumption using this data.
+// {W}
 /datum/powernet/proc/last_surplus()
-	return max(avail - load, 0)
+	return max(avail - viewload / get_voltage(), 0) * get_voltage()
 
-/datum/powernet/proc/draw_power(var/amount)
-	var/draw = between(0, amount, avail - load)
+/datum/powernet/proc/draw_power(var/w)
+	var/draw = between(0, w, last_surplus())
 	load += draw
 	return draw
 
@@ -143,6 +161,8 @@
 	smes_demand = 0
 	newavail = 0
 	smes_newavail = 0
+	voltage = newvoltage
+	newvoltage = 0
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)

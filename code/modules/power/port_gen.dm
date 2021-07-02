@@ -32,7 +32,7 @@
 
 /obj/machinery/power/port_gen/Process()
 	if(active && HasFuel() && !IsBroken() && anchored && powernet)
-		add_avail(power_gen * power_output)
+		add_power(power_gen * power_output)
 		UseFuel()
 		src.updateDialog()
 	else

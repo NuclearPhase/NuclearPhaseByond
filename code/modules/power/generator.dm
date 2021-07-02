@@ -132,7 +132,7 @@
 	if(genlev != lastgenlev)
 		lastgenlev = genlev
 		update_icon()
-	add_avail(effective_gen)
+	add_power(effective_gen)
 
 /obj/machinery/power/generator/attack_ai(mob/user)
 	attack_hand(user)

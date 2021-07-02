@@ -283,4 +283,4 @@
 
 	var/power_generated = kin_to_el_ratio * turbine.kin_energy
 	turbine.kin_energy -= power_generated
-	add_avail(power_generated)
+	add_power(power_generated)

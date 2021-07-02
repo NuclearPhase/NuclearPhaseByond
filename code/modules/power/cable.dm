@@ -103,6 +103,8 @@ var/list/possible_cable_coil_colours
 		// following code taken from attackby (multitool)
 		if(powernet && (powernet.avail > 0))
 			to_chat(user, "<span class='warning'>[get_wattage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_amperage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_voltage()] in power network.</span>")
 		else
 			to_chat(user, "<span class='warning'>The cable is not powered.</span>")
 	return
@@ -112,11 +114,25 @@ var/list/possible_cable_coil_colours
 ///////////////////////////////////
 
 /obj/structure/cable/proc/get_wattage()
-	if(powernet.avail >= 1000000000)
-		return "[round(powernet.avail/1000000, 0.01)] MW"
-	if(powernet.avail >= 1000000)
-		return "[round(powernet.avail/1000, 0.01)] kW"
-	return "[round(powernet.avail)] W"
+	if(powernet.get_wattage() >= (1 MWATT))
+		return "[round(powernet.get_wattage()/(1 MWATT), 0.01)] MW"
+	if(powernet.get_wattage() >= (1 KWATT))
+		return "[round(powernet.get_wattage()/(1 KWATT), 0.01)] kW"
+	return "[round(powernet.get_wattage())] W"
+
+/obj/structure/cable/proc/get_voltage()
+	if(powernet.get_voltage() >= 1 KVOLT)
+		return "[round(powernet.get_voltage()/(1 MVOLT), 0.01)] MV"
+	if(powernet.get_voltage() >= 1 KVOLT)
+		return "[round(powernet.get_voltage()/(1 KVOLT), 0.01)] kV"
+	return "[round(powernet.get_voltage())] V"
+
+/obj/structure/cable/proc/get_amperage()
+	if(powernet.get_amperage() >= 1 MAMPER)
+		return "[round(powernet.get_amperage()/(1 MAMPER), 0.01)] MA"
+	if(powernet.get_amperage() >= 1 KAMPER)
+		return "[round(powernet.get_amperage()/(1 KAMPER), 0.01)] kA"
+	return "[round(powernet.get_amperage())] A"
 
 //If underfloor, hide the cable
 /obj/structure/cable/hide(var/i)
@@ -195,6 +211,8 @@ var/list/possible_cable_coil_colours
 
 		if(powernet && (powernet.avail > 0))		// is it powered?
 			to_chat(user, "<span class='warning'>[get_wattage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_amperage()] in power network.</span>")
+			to_chat(user, "<span class='warning'>[get_voltage()] in power network.</span>")
 
 		else
 			to_chat(user, "<span class='warning'>The cable is not powered.</span>")
