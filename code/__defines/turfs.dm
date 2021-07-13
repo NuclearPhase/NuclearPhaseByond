@@ -8,3 +8,4 @@
 #define TURF_HAS_CORNERS        128
 #define TURF_IS_FRAGILE         256
 #define TURF_ACID_IMMUNE        512
+#define RANGE_TURFS(CENTER, RADIUS) block(locate(max(CENTER.x-(RADIUS), 1), max(CENTER.y-(RADIUS),1), CENTER.z), locate(min(CENTER.x+(RADIUS), world.maxx), min(CENTER.y+(RADIUS), world.maxy), CENTER.z))

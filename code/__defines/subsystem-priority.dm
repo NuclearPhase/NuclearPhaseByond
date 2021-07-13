@@ -5,6 +5,7 @@
 
 // SS_TICKER
 // < none >
+#define SS_PRIORITY_ICON_UPDATE 20
 
 #define SS_PRIORITY_DEFAULT 50          // Default priority for both normal and background processes
 

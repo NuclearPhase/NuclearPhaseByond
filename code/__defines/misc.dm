@@ -218,3 +218,5 @@
 
 #define SUPPLY_SECURITY_ELEVATED 1
 #define SUPPLY_SECURITY_HIGH 2
+
+#define AREA_FLAG_NO_MODIFY         16 // turf in this area cannot be dismantled.
