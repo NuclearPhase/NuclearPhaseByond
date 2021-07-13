@@ -5,8 +5,10 @@
 	var/integrity = 100
 	var/id = null
 	var/broke = 0
+	var/break_state
 	anchored = 1
 	density = 1
+
 
 /obj/machinery/power/reactor/laser/Initialize()
 	. = ..()
@@ -35,6 +37,7 @@
 	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
 	description_info = "This part of the laser focuses the laser and aligns it properly."
 	icon_state = "nosecone"
+	break_state = "nosecone_broken"
 	var/gen //Generator reference
 	var/sup //Supply reference
 
@@ -59,25 +62,31 @@
 	sup.power_stored = 0
 
 /obj/machinery/power/reactor/laser/nosecone/Process(var/cap, var/sup)
-
-
-
+	if(gen.broke)
+		return
+	if(sup.broke)
+		return
 	if(broke)
 		return
+
 	if(!sup.shoot_point <= sup.power_stored)
 		return
-	if(max_power =- power_stored) //Overcharge
+
+	if(max_power <= power_stored) //Overcharge
 		playsound(src.loc, 'sound/effects/alert.ogg', 25, 1)
 		src.visible_message("<span class='warning'>Alarm comes out of the capacitor array, it is about to discharge!.</span>")
 		sup.power_stored = sup.power_stored *  2.5
 		sleep(20.5)
-		src.visible_message("<span class='warning'>An extremely bright flash blinds you!.</span>")
 		shoot()
 		for(var/mob/living/carbon/M in hear(7, get_turf(src)))
-			M.flash_eyes()
-			M.Stun(2)
-			M.Weaken(10)
+			if(eye_safety < FLASH_PROTECTION_MODERATE)
+				M.flash_eyes()
+				M.Stun(2)
+				M.Weaken(10)
+				to_chat(M, "<span class='warning'>An extremely bright flash blinds you!.</span>")
 		return
+	else
+		shoot()
 
 /obj/machinery/power/reactor/laser/nosecone/proc/get_beam()
 	return new /obj/item/projectile/beam/reactor(get_turf(src))
@@ -86,14 +95,16 @@
 	name = "laser active zone"
 	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
 	icon_state = "generator"
+	break_state = "generator_broken"
 
 /obj/machinery/power/reactor/laser/supplysystem
 	name = "laser power supply system"
 	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
 	icon_state = "supply"
+	break_state = "supply_broken"
 	var/power_stored = 0
 	var/max_power = 600000 //Temporary
-	var/shoot_point = 500000 //The amount of power on which the laser will automatically shoot. Defaults at 500000
+	var/shoot_point = 400000 //The amount of power on which the laser will automatically shoot. Defaults at 400000
 
 /obj/machinery/power/reactor/laser/supplysystem/Initialize()
 	. = ..()
@@ -101,5 +112,5 @@
 
 /obj/machinery/power/reactor/laser/supplysystem/Process()
 	power_stored = avail()
-
+	
 

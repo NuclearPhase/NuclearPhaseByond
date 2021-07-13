@@ -1,46 +1,55 @@
-/obj/machinery/power/fusion/rswitch
-	name = "Switch"
-	var/iswitchable = 1 //Can you press it
-	var/iposition = 0 //0 = off, 1 = on
-	var/iobject //Basically the object the switch will interact with
-/obj/machinery/power/fusion/rswitch/attack_hand(user)
+/*/*
+	Control - interface to link buttons, switches and other to objects.
+*/
+
+// controller obj.
+/obj/machinery/controller/
+	var/linked_id = "" // keep in mind, this id is a tag of /obj/.
+					   // keep format: control@[name]@[number]
+	var/obj/linked = null
+
+// datum to hold info used to interact with obj.
+
+/datum/control/custom
+	/*interacting will call control_interact and no extra acts*/
+
+/datum/control/logical_switch
+	var/state = FALSE
+
+/obj/var/datum/control/ccontrol = null
+
+// calls when human interacts with controller, info in control var.
+/obj/proc/control_interact(/mob/living/carbon/human/, /obj/machinery/controller/)
+////
+
+/obj/machinery/controller/proc/update_linked()
+	if(linked && linked.tag == linked_id)
+		return
+	linked = locate(linked_id)
+
+/obj/machinery/controller/Initialize()
 	. = ..()
-	sinteract()
-/obj/machinery/power/fusion/rswitch/sinteract()
-	if(iswitchable && iobject)
-		if(!iposition)
-			iposition = 1
-			iobject.Signal(1)
-			//Sound and icon here
-			sleep(20)
-		else
-			iposition = 0
-			iobject.Signal(0)
-			//Sound and icon here
-			sleep(20)
-	else
-		//Sound here
-/obj/machinery/power/fusion/rswitch/dangerous
-	name = "Secure Switch"
-/obj/machinery/power/fusion/rswitch/dangerous/attack_hand(mob/user)
+	update_linked()
+
+/obj/machinery/controller/Process()
 	. = ..()
-	if(alert("Switching [src] may lead to bad circumstances. Continue?", "Switching confirmation", "Yes", "No") == "Yes")
-		sinteract()
-/obj/machinery/power/fusion/rswitch/rbutton
-	name = "Button"
+	update_linked()
 
-/obj/machinery/power/fusion/rswitch/coolantpump/inner
-	name = "Exchanger to Reactor"
-	desc = "A switch that controls station Alpha coolant pumps"
+/obj/machinery/controller/attack_hand(mob/living/carbon/human/H)
+	..()
+	if(istype(linked?.ccontrol, /datum/control/logical_switch))
+		var/datum/control/logical_switch/LS = linked.ccontrol
+		LS.state = !LS.state
 
-/obj/machinery/power/fusion/rswitch/coolantpump/outer
-	name = "Reactor to Exchanger"
-	desc = "A switch that controls station Alpha coolant pumps"
+	linked?.control_interact(H, src)
+*/
 
-/obj/machinery/power/fusion/rswitch/aircooling
-	name = "Air Cooling"
-	desc = "A switch that controls reactor atmosphere cooling"
 
-/obj/machinery/power/fusion/rswitch/watercooling
-	name = "Liquid Cooling"
-	desc = "Brings liquid cooling system online, yet decreases reactor fuel efficiency"
+/obj/machinery/reactorpanel //A huge information display
+	name = "Primary reactor information panel"
+	desc = "A huge display that shows all the information you need to not blow up the C.C.F.R."
+	icon = 'icons/obj/reactor_panel.dmi'
+	icon_state = "offline"
+
+/obj/machinery/reactorpanel/update_icon()
+	. = ..()
