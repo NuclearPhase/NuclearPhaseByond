@@ -38,8 +38,7 @@
 	description_info = "This part of the laser focuses the laser and aligns it properly."
 	icon_state = "nosecone"
 	break_state = "nosecone_broken"
-	var/gen //Generator reference
-	var/sup //Supply reference
+
 
 /obj/machinery/power/reactor/laser/nosecone/Initialize()
 	. = ..()
@@ -105,7 +104,8 @@
 	var/power_stored = 0
 	var/max_power = 600000 //Temporary
 	var/shoot_point = 400000 //The amount of power on which the laser will automatically shoot. Defaults at 400000
-
+/obj/machinery/power/reactor/laser/supplysystem/New()
+	
 /obj/machinery/power/reactor/laser/supplysystem/Initialize()
 	. = ..()
 	connect_to_network()

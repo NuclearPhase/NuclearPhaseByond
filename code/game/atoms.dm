@@ -595,3 +595,6 @@ its easier to just keep the beam vertical.
 
 /atom/proc/set_color(var/color)
 	src.color = color
+
+/atom/proc/on_update_icon()
+	return

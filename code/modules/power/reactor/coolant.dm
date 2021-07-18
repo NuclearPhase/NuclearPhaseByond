@@ -5,13 +5,6 @@
     //icon_state = ""
     var/overheating = FALSE
 
-/obj/machinery/coolantpiping/update_icon()
-     . = ..()
-    if(overheating)
-        icon_state = "overheating"
-    else
-        icon_state = "stale"
-
 /obj/machinery/coolantpiping/examine(mob/user, distance, infix, suffix)
     . = ..()
     if(overheating)

@@ -619,8 +619,6 @@
 			return global.moving_levels;
 		if("multi_point_spawns")
 			return global.multi_point_spawns;
-		if("name_to_material")
-			return global.name_to_material;
 		if("narsie_behaviour")
 			return global.narsie_behaviour;
 		if("narsie_cometh")
@@ -1652,8 +1650,6 @@
 			global.moving_levels=newval;
 		if("multi_point_spawns")
 			global.multi_point_spawns=newval;
-		if("name_to_material")
-			global.name_to_material=newval;
 		if("narsie_behaviour")
 			global.narsie_behaviour=newval;
 		if("narsie_cometh")

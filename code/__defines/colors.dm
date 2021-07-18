@@ -62,3 +62,6 @@
 #define	PIPE_COLOR_ORANGE      "#b95a00"
 
 #define COLOR_BLOOD_HUMAN "#a10808"
+
+#define COLOR_STEEL            "#a8b0b2"
+#define COLOR_GOLD             "#ffcc33"

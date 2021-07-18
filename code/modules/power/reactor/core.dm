@@ -28,10 +28,16 @@
 	var/pressure = 0 //Pressure in the reaction chamber
 	var/power = 0 //Reactivity
 	var/power_modifier = 1
-	var/list/fuel_cells = list()
-	var/list/laser_receivers = list()
+	var/global/list/laser_receivers = list()
+	var/global/RREACTOR
+	var/list/rfuel_cells
 	var/fuel_power = 0 //Amount of fuel
-
+	pixel_y = 144
+	pixel_x = 144
+	bound_height = 144
+	bound_width = 144
+	bound_x = 144
+	bound_y = 144
 	// Enviromental variables
 	var/isOperating = FALSE
 	var/hasFuel = FALSE
@@ -47,21 +53,22 @@
 	var/isCoolantMolten = FALSE
 	var/hasCoolant = FALSE
 
+/obj/machinery/power/reactor/core/New()
+	RREACTOR = src
 
+/obj/machinery/power/reactor/core/proc/handle_sound()
+	
+	
 /obj/machinery/power/reactor/core/proc/process() // Just a timer with some vital things
 	temperatureprocess()
 	//SSradiation.radiate(src, rtemperature * DEPLETION_MODIFIER / 10)
 
 /obj/machinery/power/reactor/core/proc/temperatureprocess()
-
-
-
 //REACTIVITY CALCULATION
-	/*fuel_power = 0
-	for(var/obj/item/rfuel_rod/FC in fuel_cells)
-			fuel_power += FC.fuel_power
-			FC.deplete(DEPLETION_MODIFIER)*/
-
+	fuel_power = 0
+	for(var/obj/item/rfuel_cell/FC in rfuel_cells)
+		fuel_power = fuel_power + FC.fuel_power
+		FC.deplete()
 //HULL TEMPERATURE CALCULATION
 	if(!isBreached)
 		var/release = rtemperature / CASING_HEAT_CONDUCTIVITY
@@ -103,7 +110,34 @@
 
 //Failures themed stuff
 /obj/machinery/power/reactor/core/proc/collapse() //Final stage of the meltdown
+	src.visible_message("<span class='boldwarning'>The superstructure of the [src] collapses!</span>")
+	new /obj/structure/plasmaball(loc)
+	qdel(src)
 
+/obj/structure/plasmaball
+	name = "escaped plasma"
+	desc = "An extremely large ball of plasma. You feel hopeless."
+	icon = 'icons/obj/plasmaball.dmi'
+
+/obj/structure/plasmaball/New()
+	playsound(playsound(src.loc, 'sound/weapons/emitter2.ogg', 150, 1)) //Temporary sound
+	for(var/mob/living/carbon/M in hear(7, get_turf(src)))
+		M.flash_eyes()
+		M.Stun(2)
+		M.Weaken(10)
+		to_chat(M, "<span class='warning'>You hear an extremely loud noise, after which comes silence...</span>")
+	Cycle()
+
+/obj/structure/plasmaball/proc/Cycle()
+	icon_state = "13x13"
+	spawn(750)
+	icon_state = "3x3"
+	spawn(400)
+	icon_state = "explode"
+	spawn(50)
+	Explode()
+
+/obj/structure/plasmaball/proc/Explode()
 
 //Fuel
 /obj/item/rfuel_cell
@@ -111,5 +145,28 @@
 	var/fuel_power = 150
 
 /obj/item/rfuel_cell/proc/deplete(D)
-	fuel_power = fuel_power - D
-	return
+	if(fuel_power <= D)
+		fuel_power = 0
+	else
+		fuel_power - fuel_power - D
+
+/obj/machinery/power/reactor/fuel_injector
+	name = "fuel injector"
+	desc = "Fuel cell holder."
+	var/locked = FALSE
+	var/melted = FALSE
+
+/obj/machinery/power/reactor/fuel_injector/first
+	var/global/FI1
+/obj/machinery/power/reactor/fuel_injector/first/New()
+	FI1 = src
+
+/obj/machinery/power/reactor/fuel_injector/second
+	var/global/FI2
+/obj/machinery/power/reactor/fuel_injector/second/New()
+	FI2 = src
+
+/obj/machinery/power/reactor/fuel_injector/third
+	var/global/FI3
+/obj/machinery/power/reactor/fuel_injector/third/New()
+	FI3 = src
