@@ -95,7 +95,7 @@
 "bQ" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 8},/turf/simulated/floor/plating,/area/sector_e)
 "bR" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 4},/turf/simulated/floor/plating,/area/sector_e)
 "bS" = (/obj/machinery/light{icon_state = "tube1"; dir = 1},/turf/simulated/floor/tiled/dark,/area/sector_e)
-"bT" = (/obj/effect/floor_decal/turf/shaft,/turf/simulated/floor/plating,/area/sector_e)
+"bT" = (/obj/effect/floor_decal/turf/shaft,/turf/simulated/floor/plating,/area/masslift/e)
 "bU" = (/obj/machinery/camera/autoname{icon_state = "camera"; dir = 4},/turf/simulated/floor/tiled/freezer,/area/sector_e)
 "bV" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/freezer,/area/sector_e)
 "bW" = (/obj/machinery/camera/autoname{icon_state = "camera"; dir = 1},/obj/machinery/light,/turf/simulated/floor/tiled/dark,/area/sector_e)
