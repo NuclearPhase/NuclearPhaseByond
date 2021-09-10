@@ -30,7 +30,7 @@
 			nv++
 		if (!nv)
 			break
-		var/obj/item/weapon/spacecash/bundle/bling = new(T)
+		var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/bling = new(T)
 		bling.worth = nv
 		bling.update_icon()
 		if(projectile_vomit)
@@ -64,14 +64,14 @@
 		to_chat(user, "<span class='warning'>There's no money in [src].</span>")
 		return
 
-	var/obj/item/weapon/spacecash/bling = new /obj/item/weapon/spacecash/bundle()
+	var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bling = new /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle()
 	bling.worth = receptacle_value
 	bling.update_icon()
 	user.put_in_hands(bling)
 	to_chat(user, "<span class='notice'>You eject [receptacle_value] thaler from [src]'s receptacle.</span>")
 	receptacle_value = 0
 
-/obj/item/weapon/gun/launcher/money/proc/absorb_cash(var/obj/item/weapon/spacecash/bling, mob/user)
+/obj/item/weapon/gun/launcher/money/proc/absorb_cash(var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bling, mob/user)
 	if(!istype(bling) || !bling.worth || bling.worth < 1)
 		to_chat(user, "<span class='warning'>[src] refuses to pick up [bling].</span>")
 		return
@@ -85,7 +85,7 @@
 	if(!receptacle_value || receptacle_value < 1)
 		return null
 
-	var/obj/item/weapon/spacecash/bling = new /obj/item/weapon/spacecash/bundle()
+	var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bling = new /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle()
 	if(receptacle_value >= dispensing)
 		bling.worth = dispensing
 		receptacle_value -= dispensing
@@ -114,8 +114,8 @@
 		return ..()
 
 /obj/item/weapon/gun/launcher/money/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spacecash/))
-		var/obj/item/weapon/spacecash/bling = W
+	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/protein_package/))
+		var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bling = W
 		if(bling.worth < 1)
 			to_chat(user, "<span class='warning'>You can't seem to get the bills to slide into the receptacle.</span>")
 			return

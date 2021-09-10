@@ -57,8 +57,8 @@
 	RREACTOR = src
 
 /obj/machinery/power/reactor/core/proc/handle_sound()
-	
-	
+
+
 /obj/machinery/power/reactor/core/proc/process() // Just a timer with some vital things
 	temperatureprocess()
 	//SSradiation.radiate(src, rtemperature * DEPLETION_MODIFIER / 10)
@@ -148,7 +148,7 @@
 	if(fuel_power <= D)
 		fuel_power = 0
 	else
-		fuel_power - fuel_power - D
+		fuel_power -= D
 
 /obj/machinery/power/reactor/fuel_injector
 	name = "fuel injector"

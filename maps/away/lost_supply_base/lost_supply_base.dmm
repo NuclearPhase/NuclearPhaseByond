@@ -124,7 +124,7 @@
 "ct" = (/obj/machinery/atmospherics/pipe/simple/hidden/supply,/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,/turf/simulated/floor/tiled/airless,/area/lost_supply_base)
 "cu" = (/obj/item/stack/tile/floor_dark{pixel_x = 5; pixel_y = -3},/turf/simulated/floor/tiled/airless,/area/lost_supply_base)
 "cv" = (/turf/simulated/wall,/area/lost_supply_base/common)
-"cw" = (/obj/machinery/food_replicator,/turf/simulated/floor/tiled/airless,/area/lost_supply_base/common)
+"cw" = (/obj/machinery/food_compressor,/turf/simulated/floor/tiled/airless,/area/lost_supply_base/common)
 "cx" = (/obj/structure/table/standard,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/light{dir = 1},/obj/machinery/power/apc{dir = 1; name = "north bump"; pixel_x = 0; pixel_y = 24},/turf/simulated/floor/tiled/airless,/area/lost_supply_base/common)
 "cy" = (/obj/machinery/gibber,/turf/simulated/floor/tiled/airless,/area/lost_supply_base/common)
 "cz" = (/obj/structure/closet/secure_closet/freezer/meat,/obj/machinery/cooker/oven,/turf/simulated/floor/tiled/airless,/area/lost_supply_base/common)

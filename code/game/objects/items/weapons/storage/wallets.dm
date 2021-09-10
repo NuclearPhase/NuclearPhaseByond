@@ -7,7 +7,7 @@
 	max_w_class = ITEM_SIZE_SMALL //Don't worry, see can_hold[]
 	max_storage_space = 8
 	can_hold = list(
-		/obj/item/weapon/spacecash,
+		/obj/item/weapon/reagent_containers/food/snacks/protein_package,
 		/obj/item/weapon/card,
 		/obj/item/clothing/mask/smokable,
 		/obj/item/weapon/lipstick,
@@ -89,10 +89,10 @@
 
 /obj/item/weapon/storage/wallet/random/New()
 	..()
-	var/item1_type = pick( /obj/item/weapon/spacecash/bundle/c10,/obj/item/weapon/spacecash/bundle/c100,/obj/item/weapon/spacecash/bundle/c1000,/obj/item/weapon/spacecash/bundle/c20,/obj/item/weapon/spacecash/bundle/c200,/obj/item/weapon/spacecash/bundle/c50, /obj/item/weapon/spacecash/bundle/c500)
+	var/item1_type = pick( /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c10,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c100,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c1000,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c20,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c200,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c50, /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c500)
 	var/item2_type
 	if(prob(50))
-		item2_type = pick( /obj/item/weapon/spacecash/bundle/c10,/obj/item/weapon/spacecash/bundle/c100,/obj/item/weapon/spacecash/bundle/c1000,/obj/item/weapon/spacecash/bundle/c20,/obj/item/weapon/spacecash/bundle/c200,/obj/item/weapon/spacecash/bundle/c50, /obj/item/weapon/spacecash/bundle/c500)
+		item2_type = pick( /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c10,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c100,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c1000,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c20,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c200,/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c50, /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c500)
 	var/item3_type = pick( /obj/item/weapon/coin/silver, /obj/item/weapon/coin/silver, /obj/item/weapon/coin/gold, /obj/item/weapon/coin/iron, /obj/item/weapon/coin/iron, /obj/item/weapon/coin/iron )
 
 	spawn(2)

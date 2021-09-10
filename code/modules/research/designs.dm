@@ -2153,7 +2153,7 @@ CIRCUITS BELOW
 	name = "food replicator"
 	id = "freplicator"
 	req_tech = list(TECH_BIO = 3, TECH_DATA = 3)
-	build_path = /obj/item/weapon/circuitboard/replicator
+	build_path = /obj/item/weapon/circuitboard/food_compressor
 	sort_string = "WAAAR"
 
 /datum/design/circuit/aicore

@@ -867,12 +867,12 @@ obj/random/obstruction/spawn_choices()
 	icon_state = "spacecash1"
 
 /obj/random/cash/spawn_choices()
-	return list(/obj/item/weapon/spacecash/bundle/c1 = 4,
-				/obj/item/weapon/spacecash/bundle/c10 = 3,
-				/obj/item/weapon/spacecash/bundle/c20 = 3,
-				/obj/item/weapon/spacecash/bundle/c50 = 2,
-				/obj/item/weapon/spacecash/bundle/c100 = 2,
-				/obj/item/weapon/spacecash/bundle/c1000 = 1)
+	return list(/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c1 = 4,
+				/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c10 = 3,
+				/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c20 = 3,
+				/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c50 = 2,
+				/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c100 = 2,
+				/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c1000 = 1)
 
 /obj/random/maintenance //Clutter and loot for maintenance and away missions
 	name = "random maintenance item"

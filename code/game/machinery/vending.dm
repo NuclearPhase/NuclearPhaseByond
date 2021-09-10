@@ -161,12 +161,8 @@
 		if (I) //for IDs and PDAs and wallets with IDs
 			paid = pay_with_card(I,W)
 			handled = 1
-		else if (istype(W, /obj/item/weapon/spacecash/ewallet))
-			var/obj/item/weapon/spacecash/ewallet/C = W
-			paid = pay_with_ewallet(C)
-			handled = 1
-		else if (istype(W, /obj/item/weapon/spacecash/bundle))
-			var/obj/item/weapon/spacecash/bundle/C = W
+		else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle))
+			var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/C = W
 			paid = pay_with_cash(C)
 			handled = 1
 
@@ -177,7 +173,7 @@
 			GLOB.nanomanager.update_uis(src)
 			return // don't smack that machine with your 2 thalers
 
-	if (I || istype(W, /obj/item/weapon/spacecash))
+	if (I || istype(W, /obj/item/weapon/reagent_containers/food/snacks/protein_package))
 		attack_hand(user)
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver))
@@ -224,7 +220,7 @@
 /**
  *  Receive payment with cashmoney.
  */
-/obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/bundle/cashmoney)
+/obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/cashmoney)
 	if(currently_vending.price > cashmoney.worth)
 		// This is not a status display message, since it's something the character
 		// themselves is meant to see BEFORE putting the money in
@@ -243,23 +239,6 @@
 	// Vending machines have no idea who paid with cash
 	credit_purchase("(cash)")
 	return 1
-
-/**
- * Scan a chargecard and deduct payment from it.
- *
- * Takes payment for whatever is the currently_vending item. Returns 1 if
- * successful, 0 if failed.
- */
-/obj/machinery/vending/proc/pay_with_ewallet(var/obj/item/weapon/spacecash/ewallet/wallet)
-	visible_message("<span class='info'>\The [usr] swipes \the [wallet] through \the [src].</span>")
-	if(currently_vending.price > wallet.worth)
-		src.status_message = "Insufficient funds on chargecard."
-		src.status_error = 1
-		return 0
-	else
-		wallet.worth -= currently_vending.price
-		credit_purchase("[wallet.owner_name] (chargecard)")
-		return 1
 
 /**
  * Scan a card and attempt to transfer payment from associated account.

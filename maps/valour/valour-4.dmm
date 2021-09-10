@@ -54,7 +54,7 @@
 "bb" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/freezer,/area/sector_b)
 "bc" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/freezer,/area/sector_b)
 "bd" = (/obj/machinery/door/airlock/masslift,/turf/simulated/floor/tiled/dark,/area/sector_c/lift_zone)
-"be" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; step_y = 24},/turf/simulated/floor/tiled/dark,/area/sector_b)
+"be" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; pixel_y = 24},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "bf" = (/obj/structure/railing{icon_state = "corneroverlay"; dir = 8},/obj/structure/railing{icon_state = "railing1"; dir = 8},/obj/structure/railing{icon_state = "frontoverlay_r"; dir = 8},/obj/structure/railing{icon_state = "railing1"},/obj/structure/railing{icon_state = "frontoverlay_l"},/turf/simulated/open,/area/sector_b)
 "bg" = (/obj/structure/lattice,/obj/structure/railing,/turf/simulated/open,/area/sector_b)
 "bh" = (/turf/simulated/open,/area/masslift)

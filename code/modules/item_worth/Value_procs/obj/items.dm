@@ -31,5 +31,5 @@
 /obj/item/weapon/material/Value()
 	return material.value * worth_multiplier
 
-/obj/item/weapon/spacecash/Value()
+/obj/item/weapon/reagent_containers/food/snacks/protein_package/Value()
 	return worth

@@ -2,9 +2,9 @@
 #error T_BOARD macro is not defined but we need it!
 #endif
 
-/obj/item/weapon/circuitboard/replicator
+/obj/item/weapon/circuitboard/food_compressor
 	name = T_BOARD("food replicator")
-	build_path = /obj/machinery/food_replicator
+	build_path = /obj/machinery/food_compressor
 	board_type = "machine"
 	origin_tech = list(TECH_DATA = 2)
 	req_components = list(
