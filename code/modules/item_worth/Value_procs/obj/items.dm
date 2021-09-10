@@ -32,4 +32,4 @@
 	return material.value * worth_multiplier
 
 /obj/item/weapon/reagent_containers/food/snacks/protein_package/Value()
-	return worth
+	return 1

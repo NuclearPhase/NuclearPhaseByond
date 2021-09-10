@@ -53,7 +53,7 @@
 	//let's make hold a substantial amount.
 	var/created_size = 0
 	for(var/i = 1 to 200) //sanity loop limit
-		var/obj/item/cash_type = pick(3; /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c1000, 4; /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c500, 5; /obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/c200)
+		var/obj/item/cash_type = pick(3; /obj/item/protein_package/p10, 10; /obj/item/protein_package/p5)
 		var/bundle_size = initial(cash_type.w_class) / 2
 		if(created_size + bundle_size <= storage_capacity)
 			created_size += bundle_size

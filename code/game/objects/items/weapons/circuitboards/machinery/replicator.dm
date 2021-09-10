@@ -4,7 +4,7 @@
 
 /obj/item/weapon/circuitboard/food_compressor
 	name = T_BOARD("food replicator")
-	build_path = /obj/machinery/food_compressor
+	build_path = /obj/machinery/power/food_compressor
 	board_type = "machine"
 	origin_tech = list(TECH_DATA = 2)
 	req_components = list(

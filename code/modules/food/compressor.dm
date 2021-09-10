@@ -1,8 +1,8 @@
-/obj/machinery/food_compressor
+/obj/machinery/power/food_compressor
 	name = "replicator"
 	desc = "like a microwave, except better."
 	icon = 'icons/obj/vending.dmi'
-	icon_state = "soda"
+	icon_state = "compressor"
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -12,9 +12,9 @@
 	var/protein_max = 100
 	var/protein_per = 10
 	var/protein_extract_eff = 0.25
-	var/power_use = 75000
+	var/power_use = 2.5 KWATT
 
-/obj/machinery/food_compressor/New()
+/obj/machinery/power/food_compressor/New()
 	..()
 	component_parts = list()
 	component_parts += new /obj/item/weapon/circuitboard/food_compressor(src)
@@ -23,10 +23,10 @@
 
 	RefreshParts()
 
-/obj/machinery/food_compressor/proc/add_protein(amount)
-	protein = Clamp(protein + amount * protein_extract_eff, 0, biomass_max)
+/obj/machinery/power/food_compressor/proc/add_protein(amount)
+	protein = Clamp(protein + amount * protein_extract_eff, 0, protein_max)
 
-/obj/machinery/food_compressor/attackby(var/obj/item/O, var/mob/user)
+/obj/machinery/power/food_compressor/attackby(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/S = O
 		user.drop_item(O)
@@ -44,6 +44,8 @@
 				add_protein(P.volume)
 			qdel(G)
 
+	state_status()
+
 	if(default_deconstruction_screwdriver(user, O))
 		return
 	else if(default_deconstruction_crowbar(user, O))
@@ -53,7 +55,7 @@
 	else
 		..()
 
-/obj/machinery/food_compressor/update_icon()
+/obj/machinery/power/food_compressor/update_icon()
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]-broken"
 	else if(!(stat & NOPOWER))
@@ -61,21 +63,21 @@
 	else
 		icon_state = "[initial(icon_state)]-off"
 
-/obj/machinery/food_compressor/proc/state_status()
-	audible_message("<b>\The [src]</b> states, \"Protein is [protein / (protein_max * 100)]%, can dispence [round(protein / 10)] packages.\"")
+/obj/machinery/power/food_compressor/proc/state_status()
+	audible_message("<b>\The [src]</b> states, \"Protein is [(protein / protein_max) * 100]%, can dispence [round(protein / 10)] packages.\"")
 
-/obj/machinery/food_compressor/proc/dispence()
+/obj/machinery/power/food_compressor/proc/dispence()
 	var/dispence_number = round(protein / 10)
 
 	for(var/i in 1 to dispence_number)
-		if(use_power(power_use) < power_use)
+		if(draw_power(power_use) < power_use)
 			audible_message("<b>\The [src]</b> states, \"Not enough power.\"")
 			return
 		
-		var/obj/item/weapon/reagent_containers/food/snacks/protein_package = new(loc)
+		new /obj/item/weapon/reagent_containers/food/snacks/protein_package(loc)
 		protein -= 10
 
-/obj/machinery/food_compressor/RefreshParts()
+/obj/machinery/power/food_compressor/RefreshParts()
 	protein_extract_eff = 0
 	protein_max = 0
 	power_use = 55000
@@ -87,24 +89,13 @@
 			protein_extract_eff += 0.25 * P.rating
 			power_use += 10000 * P.rating
 
-/obj/machinery/food_compressor/proc/queue_dish(var/text)
-	if(!(text in menu))
-		return
-
-	if(!queued_dishes)
-		queued_dishes = list()
-
-	queued_dishes += text
-	if(world.time > make_time)
-		start_making = 1
-
-/obj/machinery/food_compressor/attack_hand(mob/user)
+/obj/machinery/power/food_compressor/attack_hand(mob/user)
 	. = ..()
 	dispence()
 	src.audible_message("<b>\The [src]</b> rumbles and vibrates.")
 	playsound(src.loc, 'sound/machines/juicer.ogg', 50, 1)
 
-/obj/machinery/food_compressor/examine(mob/user)
+/obj/machinery/power/food_compressor/examine(mob/user)
 	. = ..(user)
 	if(panel_open)
 		to_chat(user, "The maintenance hatch is open.")

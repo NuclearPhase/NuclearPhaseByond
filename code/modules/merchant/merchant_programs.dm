@@ -135,7 +135,7 @@
 		last_comms = "PAD NOT CONNECTED. CANNOT TRANSFER"
 		return
 	var/turf/T = get_turf(pad)
-	var/obj/item/weapon/reagent_containers/food/snacks/protein_package/bundle/B = new(T)
+	var/obj/item/weapon/reagent_containers/food/snacks/protein_package/B = new(T)
 	B.worth = bank
 	bank = 0
 	B.update_icon()
