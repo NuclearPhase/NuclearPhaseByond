@@ -62,7 +62,7 @@
 		return 0
 	return max(avail - viewload / get_voltage(), 0) * get_voltage()
 
-/datum/powernet/proc/draw_power(w)
+/datum/powernet/proc/draw_power(var/w)
 	var/draw = between(0, w, last_surplus())
 	load += draw
 	return draw

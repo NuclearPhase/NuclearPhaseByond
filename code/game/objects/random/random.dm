@@ -860,6 +860,20 @@ obj/random/obstruction/spawn_choices()
 				/obj/item/clothing/accessory/kneepads = 3,
 				/obj/item/clothing/accessory/stethoscope = 2)
 
+/obj/random/cash
+	name = "random currency"
+	desc = "LOADSAMONEY!"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "spacecash1"
+
+/obj/random/cash/spawn_choices()
+	return list(/obj/item/weapon/spacecash/bundle/c1 = 4,
+				/obj/item/weapon/spacecash/bundle/c10 = 3,
+				/obj/item/weapon/spacecash/bundle/c20 = 3,
+				/obj/item/weapon/spacecash/bundle/c50 = 2,
+				/obj/item/weapon/spacecash/bundle/c100 = 2,
+				/obj/item/weapon/spacecash/bundle/c1000 = 1)
+
 /obj/random/maintenance //Clutter and loot for maintenance and away missions
 	name = "random maintenance item"
 	desc = "This is a random maintenance item."
@@ -909,7 +923,8 @@ something, make sure it's not in one of the other lists.*/
 				/obj/random/hat = 10,
 				/obj/random/suit = 20,
 				/obj/random/clothing = 30,
-				/obj/random/accessory = 20)
+				/obj/random/accessory = 20,
+				/obj/random/cash = 10)
 
 /obj/random/loot /*Better loot for away missions and salvage */
 	name = "random loot"

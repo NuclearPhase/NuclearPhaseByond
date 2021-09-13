@@ -25,7 +25,6 @@ var/global/list/obj/effect/masslift_transit/masslift_transits = list()
 /area/masslift/b
 /area/masslift/c
 /area/masslift/d
-/area/masslift/e
 
 /obj/effect/masslift_transit/Initialize()
 	. = ..()
@@ -297,7 +296,7 @@ var/global/list/datum/masslift/masslifts = list()
 /obj/machinery/masslift_panel/control_interact(mob/living/carbon/human/H, obj/machinery/controller/C)
 	if(!istype(lift))
 		return
-
+	
 	if(lift.zlevel2depth(get_z(C)) in lift.targets)
 		return
 

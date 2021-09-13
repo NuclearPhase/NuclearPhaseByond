@@ -154,6 +154,12 @@
 	hard_drive.store_file(new/datum/computer_file/program/alarm_monitor())
 	hard_drive.store_file(new/datum/computer_file/program/aidiag())
 
+// Merchant
+/obj/item/modular_computer/console/preset/merchant/install_default_programs()
+	..()
+	hard_drive.store_file(new/datum/computer_file/program/merchant())
+	hard_drive.store_file(new/datum/computer_file/program/wordprocessor())
+
 // Library
 /obj/item/modular_computer/console/preset/library/install_default_programs()
 	..()

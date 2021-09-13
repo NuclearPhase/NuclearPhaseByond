@@ -56,7 +56,7 @@
 
 	injectable = 1
 
-/datum/reagent/nutriment/protein
+/datum/reagent/nutriment/protein // Bad for Skrell!
 	name = "animal protein"
 	taste_description = "some sort of protein"
 	color = "#440000"

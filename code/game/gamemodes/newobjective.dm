@@ -1209,7 +1209,7 @@ datum
 
 				check_completion()
 					var/held_credits = 0
-					for(var/obj/item/weapon/reagent_containers/food/snacks/protein_package/M in owner.current.get_contents())
+					for(var/obj/item/weapon/spacecash/M in owner.current.get_contents())
 						held_credits += M.worth
 					if(held_credits >= steal_amount)
 						return 1

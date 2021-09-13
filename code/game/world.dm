@@ -105,6 +105,7 @@
 	plant_controller = new()
 
 	// This is kinda important. Set up details of what the hell things are made of.
+	populate_material_list()
 
 	if(config.generate_map)
 		GLOB.using_map.perform_map_generation()

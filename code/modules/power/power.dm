@@ -14,7 +14,7 @@
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
-	var/efficiency = 0.95
+	var/efficiency = 1	
 
 /obj/machinery/power/Initialize()
 	. = ..()
@@ -50,7 +50,6 @@
 	return 0
 
 /obj/machinery/power/proc/draw_power(var/amount, var/efficiency = 0)
-	ASSERT(efficiency < 1) // infinity engine is prohibited
 	if(efficiency == 0)
 		efficiency = src.efficiency
 	if(powernet)

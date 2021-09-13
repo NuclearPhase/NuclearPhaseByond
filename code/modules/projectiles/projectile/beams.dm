@@ -204,12 +204,3 @@
 	name = "heavy shock beam"
 	damage = 20
 	agony  = 10
-
-/obj/item/projectile/beam/reactor
-	name = "laser beam"
-	icon_state = "reactor"
-	fire_sound = 'sound/weapons/emitter.ogg'
-	damage = 0 // The actual damage is computed in /code/modules/power/reactor/lasers.dm
-	muzzle_type = /obj/effect/projectile/laser/reactor/muzzle
-	tracer_type = /obj/effect/projectile/laser/reactor/tracer
-	impact_type = /obj/effect/projectile/laser/reactor/impact

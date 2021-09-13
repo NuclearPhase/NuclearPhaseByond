@@ -1,116 +1,119 @@
-
-
-/obj/machinery/power/reactor/laser
-	icon = 'icons/obj/lasers.dmi'
-	var/integrity = 100
-	var/id = null
-	var/broke = 0
-	var/break_state
-	anchored = 1
-	density = 1
-
-
-/obj/machinery/power/reactor/laser/Initialize()
-	. = ..()
-
-
-/obj/machinery/power/reactor/laser/emp_act(var/severity)
-	take_damage(severity)
-	return 1
-
-/obj/machinery/power/reactor/laser/proc/take_damage(var/amount)
-	var/diff = integrity - amount
-	if(!diff <= 0)
-		integrity = integrity - amount
-	else
-		integrity = 0
-		critfail()
-
-/obj/machinery/power/reactor/laser/proc/critfail()
-	broke = 1
-	log_and_message_admins("[src] experienced critical failure")
-	//icon_state = "broken"
-	playsound(src.loc, get_sfx("explosion"), 25, 1)
-
 /obj/machinery/power/reactor/laser/nosecone // Calculates everything
 	name = "laser focus nosecone"
 	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
 	description_info = "This part of the laser focuses the laser and aligns it properly."
-	icon_state = "nosecone"
-	break_state = "nosecone_broken"
+	icon = 'icons/obj/singularity.dmi'
+	icon_state = "emitter"
+	anchored = 1
+	density = 1
+	req_access = list(access_engine_equip)
+	var/id = null
 
 
-/obj/machinery/power/reactor/laser/nosecone/Initialize()
+
+	var/_wifi_id
+	var/datum/wifi/receiver/button/emitter/wifi_receiver
+
+
+/obj/machinery/power/emitter/Initialize()
 	. = ..()
-	
 
-/obj/machinery/power/reactor/laser/nosecone/Destroy()
+/obj/machinery/power/emitter/Destroy()
 	log_and_message_admins("deleted \the [src]")
 	investigate_log("<font color='red'>deleted</font> at ([x],[y],[z])","reactor")
 	return ..()
 
-/obj/machinery/power/reactor/laser/nosecone/attack_hand(mob/user as mob)
+/obj/machinery/power/emitter/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
 
-/obj/machinery/power/reactor/laser/nosecone/proc/activate(mob/user as mob)
-
-/obj/machinery/power/reactor/laser/nosecone/proc/shoot()
-	var/obj/item/projectile/beam/reactor/A = get_beam()
-	A.damage = sup.power_stored
-	A.launch( get_step(src.loc, src.dir) )
-	sup.power_stored = 0
-
-/obj/machinery/power/reactor/laser/nosecone/Process(var/cap, var/sup)
-	if(gen.broke)
-		return
-	if(sup.broke)
-		return
-	if(broke)
-		return
-
-	if(!sup.shoot_point <= sup.power_stored)
-		return
-
-	if(max_power <= power_stored) //Overcharge
-		playsound(src.loc, 'sound/effects/alert.ogg', 25, 1)
-		src.visible_message("<span class='warning'>Alarm comes out of the capacitor array, it is about to discharge!.</span>")
-		sup.power_stored = sup.power_stored *  2.5
-		sleep(20.5)
-		shoot()
-		for(var/mob/living/carbon/M in hear(7, get_turf(src)))
-			if(eye_safety < FLASH_PROTECTION_MODERATE)
-				M.flash_eyes()
-				M.Stun(2)
-				M.Weaken(10)
-				to_chat(M, "<span class='warning'>An extremely bright flash blinds you!.</span>")
-		return
+/obj/machinery/power/emitter/proc/activate(mob/user as mob)
+	if(state == 2)
+		if(!powernet)
+			to_chat(user, "\The [src] isn't connected to a wire.")
+			return 1
+		if(!src.locked)
+			if(src.active==1)
+				src.active = 0
+				to_chat(user, "You turn off \the [src].")
+				log_and_message_admins("turned off \the [src]")
+				investigate_log("turned <font color='red'>off</font> by [user.key]","singulo")
+			else
+				src.active = 1
+				to_chat(user, "You turn on \the [src].")
+				src.shot_number = 0
+				src.fire_delay = get_initial_fire_delay()
+				log_and_message_admins("turned on \the [src]")
+				investigate_log("turned <font color='green'>on</font> by [user.key]","singulo")
+			update_icon()
+		else
+			to_chat(user, "<span class='warning'>The controls are locked!</span>")
 	else
-		shoot()
+		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
+		return 1
 
-/obj/machinery/power/reactor/laser/nosecone/proc/get_beam()
-	return new /obj/item/projectile/beam/reactor(get_turf(src))
 
-/obj/machinery/power/reactor/laser/generator
-	name = "laser active zone"
-	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
-	icon_state = "generator"
-	break_state = "generator_broken"
+/obj/machinery/power/emitter/emp_act(var/severity)
+	return 1
 
-/obj/machinery/power/reactor/laser/supplysystem
-	name = "laser power supply system"
-	desc = "A massive and heavy industrial laser, capable of releasing gigawatts of power."
-	icon_state = "supply"
-	break_state = "supply_broken"
-	var/power_stored = 0
-	var/max_power = 600000 //Temporary
-	var/shoot_point = 400000 //The amount of power on which the laser will automatically shoot. Defaults at 400000
-/obj/machinery/power/reactor/laser/supplysystem/New()
-	
-/obj/machinery/power/reactor/laser/supplysystem/Initialize()
-	. = ..()
-	connect_to_network()
+/obj/machinery/power/emitter/Process()
+	if(stat & (BROKEN))
+		return
+	if(src.state != 2 || (!powernet && active_power_usage))
+		src.active = 0
+		update_icon()
+		return
+	if(((src.last_shot + src.fire_delay) <= world.time) && (src.active == 1))
 
-/obj/machinery/power/reactor/laser/supplysystem/Process()
-	power_stored = avail()
-	
+		var/actual_load = draw_power(active_power_usage)
+		if(actual_load >= active_power_usage) //does the laser have enough power to shoot?
+			if(!powered)
+				powered = 1
+				update_icon()
+				investigate_log("regained power and turned <font color='green'>on</font>","singulo")
+		else
+			if(powered)
+				powered = 0
+				update_icon()
+				investigate_log("lost power and turned <font color='red'>off</font>","singulo")
+			return
 
+		src.last_shot = world.time
+		if(src.shot_number < burst_shots)
+			src.fire_delay = get_burst_delay()
+			src.shot_number ++
+		else
+			src.fire_delay = get_rand_burst_delay()
+			src.shot_number = 0
+
+		//need to calculate the power per shot as the emitter doesn't fire continuously.
+		var/burst_time = (min_burst_delay + max_burst_delay)/2 + 2*(burst_shots-1)
+		var/power_per_shot = (active_power_usage * efficiency) * (burst_time/10) / burst_shots
+
+		if(prob(35))
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(5, 1, src)
+			s.start()
+
+		var/obj/item/projectile/beam/emitter/A = get_emitter_beam()
+		playsound(src.loc, A.fire_sound, 25, 1)
+		A.damage = round(power_per_shot/EMITTER_DAMAGE_POWER_TRANSFER)
+		A.launch( get_step(src.loc, src.dir) )
+
+/obj/machinery/power/emitter/emag_act(var/remaining_charges, var/mob/user)
+	if(!emagged)
+		locked = 0
+		emagged = 1
+		user.visible_message("[user.name] emags [src].","<span class='warning'>You short out the lock.</span>")
+		return 1
+
+/obj/machinery/power/emitter/proc/get_initial_fire_delay()
+	return 100
+
+/obj/machinery/power/emitter/proc/get_rand_burst_delay()
+	return rand(min_burst_delay, max_burst_delay)
+
+/obj/machinery/power/emitter/proc/get_burst_delay()
+	return 2
+
+/obj/machinery/power/emitter/proc/get_emitter_beam()
+	return new /obj/item/projectile/beam/emitter(get_turf(src))

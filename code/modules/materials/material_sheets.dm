@@ -314,34 +314,3 @@
 
 /obj/item/stack/material/glass/phoronrglass/ten
 	amount = 10
-
-/obj/item/stack/material/titanium
-	name = "titanium"
-	icon_state = "sheet"
-	default_type = MATERIAL_TITANIUM
-
-/obj/item/stack/material/titanium/ten
-	amount = 10
-
-/obj/item/stack/material/titanium/fifty
-	amount = 50
-
-/obj/item/stack/material/aliumium
-	name = "alien alloy"
-	icon_state = "sheet"
-	default_type = MATERIAL_ALIENALLOY
-
-/obj/item/stack/material/aliumium/ten
-	amount = 10
-
-/obj/item/stack/material/aluminium
-	name = "aluminium"
-	icon_state = "sheet-sheen"
-	item_state = "sheet-shiny"
-	default_type = MATERIAL_ALUMINIUM
-
-/obj/item/stack/material/aluminium/ten
-	amount = 10
-
-/obj/item/stack/material/aluminium/fifty
-	amount = 50

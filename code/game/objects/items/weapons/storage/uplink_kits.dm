@@ -191,7 +191,7 @@
 
 /obj/item/weapon/storage/secure/briefcase/money
 
-	startswith = list(/obj/item/protein_package/p10 = 10)
+	startswith = list(/obj/item/weapon/spacecash/bundle/c1000 = 10)
 
 /obj/item/weapon/storage/backpack/satchel/syndie_kit/armor
 	name = "armor satchel"

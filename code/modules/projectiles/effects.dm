@@ -182,20 +182,3 @@
 	light_range = 5
 	light_power = 1
 	light_color = COLOR_MUZZLE_FLASH
-
-//----------------------------
-// laser/emitter beam
-//----------------------------
-/obj/effect/projectile/laser/reactor/
-	light_range = 10
-	light_power = 15
-	light_color = COLOR_DEEP_SKY_BLUE
-
-/obj/effect/projectile/laser/reactor/tracer
-	icon_state = "laser/reactor"
-
-/obj/effect/projectile/laser/reactor/muzzle
-	icon_state = "muzzle_laser/reactor"
-
-/obj/effect/projectile/laser/reactor/impact
-	icon_state = "impact_laser/reactor"

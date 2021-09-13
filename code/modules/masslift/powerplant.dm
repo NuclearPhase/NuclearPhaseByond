@@ -62,10 +62,11 @@
 	if(istype(C) && istype(cable))
 		return
 
-	var/obj/masslift/cable/Cu = locate(/obj/masslift/cable, get_step(src, UP))
-	var/obj/masslift/cable/cab = new /obj/masslift/cable(loc)
-	cab.cable_id = Cu ? Cu.cable_id : (ncable_id || get_random_masslift_id())
-	cable = cab.get_cable()
+	if(!istype(C))
+		var/obj/masslift/cable/Cu = locate(/obj/masslift/cable, get_step(src, UP))
+		var/obj/masslift/cable/cab = new /obj/masslift/cable(loc)
+		cab.cable_id = Cu ? Cu.cable_id : (ncable_id || get_random_masslift_id())
+		cable = cab.get_cable()
 
 /obj/machinery/power/massslift/powerplant/core/Process()
 	if(!anchored && will_be_anchored)

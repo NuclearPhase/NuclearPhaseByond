@@ -95,13 +95,3 @@
 	icon = 'icons/turf/areas.dmi'
 	name = "\improper Engineering"
 	icon_state = "engineering"
-
-/// B
-/area/sector_b/hydro
-	icon = 'icons/turf/areas.dmi'
-	name = "\improper Hydroponics"
-	icon_state = "hydro"
-/area/sector_b/hydro_storage
-	icon = 'icons/turf/areas.dmi'
-	name = "\improper Hydroponics storage"
-	icon_state = "hydrostorage"

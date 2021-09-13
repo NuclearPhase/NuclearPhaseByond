@@ -143,6 +143,12 @@
 	containername = "\improper cards crate"
 	supply_method = /decl/supply_method/randomized
 
+/decl/hierarchy/supply_pack/miscellaneous/eftpos
+	contains = list(/obj/item/device/eftpos)
+	name = "EFTPOS scanner"
+	cost = 10
+	containername = "\improper EFTPOS crate"
+
 /decl/hierarchy/supply_pack/miscellaneous/hats
 	num_contained = 4
 	contains = list(/obj/item/clothing/head/collectable/chef,
