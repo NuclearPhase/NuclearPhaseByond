@@ -1,20 +1,16 @@
 /turf/simulated/wall
 	name = "wall"
-	desc = "A huge chunk of metal used to separate rooms."
+	desc = "A huge chunk of metal used to seperate rooms."
 	icon = 'icons/turf/wall_masks.dmi'
 	icon_state = "generic"
 	opacity = 1
-	density = TRUE
+	density = 1
 	blocks_air = 1
 	thermal_conductivity = WALL_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 312500 //a little over 5 cm thick , 312500 for 1 m by 2.5 m by 0.25 m plasteel wall
 
 	var/damage = 0
-	var/max_damage = 0
 	var/damage_overlay = 0
-	var/force_damage_threshhold = 0 // Minimum amount of requried force to damage the wall
-	var/brute_armor = 0
-	var/burn_armor = 0
 	var/global/damage_overlays[16]
 	var/active
 	var/can_open = 0
@@ -24,28 +20,23 @@
 	var/construction_stage
 	var/hitsound = 'sound/weapons/Genhit.ogg'
 	var/list/wall_connections = list("0", "0", "0", "0")
-	var/list/other_connections = list("0", "0", "0", "0")
 	var/floor_type = /turf/simulated/floor/plating //turf it leaves after destruction
-	var/paint_color
-	var/stripe_color
-	var/global/list/wall_stripe_cache = list()
-	var/list/blend_turfs = list(/turf/simulated/wall/cult, /turf/simulated/wall/wood, /turf/simulated/wall/walnut, /turf/simulated/wall/maple, /turf/simulated/wall/mahogany, /turf/simulated/wall/ebony)
-	var/list/blend_objects = list(/obj/machinery/door, /obj/structure/grille, /obj/structure/window/reinforced/full, /obj/structure/window/reinforced/polarized/full, /obj/structure/window/shuttle, /obj/structure/window/phoronreinforced/full) // Objects which to blend with
-	var/list/noblend_objects = list(/obj/machinery/door/window) //Objects to avoid blending with (such as children of listed blend objects.)
 
 /turf/simulated/wall/New(var/newloc, var/materialtype, var/rmaterialtype)
 	..(newloc)
 	icon_state = "blank"
 	if(!materialtype)
 		materialtype = DEFAULT_WALL_MATERIAL
-	material = SSmaterials.get_material_by_name(materialtype)
+	material = get_material_by_name(materialtype)
 	if(!isnull(rmaterialtype))
-		reinf_material = SSmaterials.get_material_by_name(rmaterialtype)
+		reinf_material = get_material_by_name(rmaterialtype)
 	update_material()
 	hitsound = material.hitsound
+	processing_turfs |= src
 
-/turf/simulated/wall/Initialize()
-	set_extension(src, /datum/extension/penetration/proc_call, .proc/CheckPenetration)
+/turf/simulated/wall/Destroy()
+	processing_turfs -= src
+	dismantle_wall(null,null,1)
 	. = ..()
 
 // Walls always hide the stuff below them.
@@ -57,36 +48,13 @@
 	var/obj/O = A
 	return (istype(O) && O.hides_under_flooring()) || ..()
 
-/turf/simulated/wall/Process(wait, times_fired)
-	var/how_often = max(round(2 SECONDS/wait), 1)
-	if(times_fired % how_often)
-		return //We only work about every 2 seconds
+/turf/simulated/wall/process()
+	// Calling parent will kill processing
 	if(!radiate())
 		return PROCESS_KILL
 
 /turf/simulated/wall/proc/get_material()
 	return material
-
-/turf/simulated/wall/proc/calculate_damage_data()
-	// Max damage (Health)
-	max_damage = material.integrity
-	if (reinf_material)
-		max_damage += round(reinf_material.integrity / 2)
-
-	// Minimum force required to damage the wall
-	force_damage_threshhold = material.hardness * 2.5
-	if (reinf_material)
-		force_damage_threshhold += round(reinf_material.hardness * 1.25)
-	force_damage_threshhold = round(force_damage_threshhold / 10)
-
-	// Brute and burn armor
-	brute_armor = material.brute_armor * 0.5
-	burn_armor = material.burn_armor * 0.5
-	if (reinf_material)
-		brute_armor += reinf_material.brute_armor * 0.5
-		burn_armor += reinf_material.burn_armor * 0.5
-	brute_armor = round(brute_armor)
-	burn_armor = round(burn_armor)
 
 /turf/simulated/wall/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj,/obj/item/projectile/beam))
@@ -96,11 +64,11 @@
 
 	var/proj_damage = Proj.get_structure_damage()
 
-	if(Proj.damage_type == BURN && burn_armor)
-		proj_damage /= burn_armor
-	else if(Proj.damage_type == BRUTE && brute_armor)
-		proj_damage /= brute_armor
-	proj_damage = round(proj_damage)
+	if(reinf_material)
+		if(Proj.damage_type == BURN)
+			proj_damage /= reinf_material.burn_armor
+		else if(Proj.damage_type == BRUTE)
+			proj_damage /= reinf_material.brute_armor
 
 	//cap the amount of damage, so that things like emitters can't destroy walls in one hit.
 	var/damage = min(proj_damage, 100)
@@ -108,14 +76,16 @@
 	take_damage(damage)
 	return
 
-/turf/simulated/wall/hitby(AM as mob|obj, var/datum/thrownthing/TT)
-	if(!ismob(AM))
-		var/obj/O = AM
-		var/tforce = O.throwforce
-		playsound(src, hitsound, tforce >= 15? 60 : 25, TRUE)
-		if (tforce >= force_damage_threshhold)
-			take_damage(tforce)
+/turf/simulated/wall/hitby(AM as mob|obj, var/speed=THROWFORCE_SPEED_DIVISOR)
 	..()
+	if(ismob(AM))
+		return
+
+	var/tforce = AM:throwforce * (speed/THROWFORCE_SPEED_DIVISOR)
+	if (tforce < 15)
+		return
+
+	take_damage(tforce)
 
 /turf/simulated/wall/proc/clear_plants()
 	for(var/obj/effect/overlay/wallrot/WR in src)
@@ -126,33 +96,27 @@
 			plant.update_icon()
 			plant.pixel_x = 0
 			plant.pixel_y = 0
+		plant.update_neighbors()
 
 /turf/simulated/wall/ChangeTurf(var/newtype)
 	clear_plants()
-	. = ..(newtype)
-	var/turf/new_turf = .
-	for (var/turf/simulated/wall/W in RANGE_TURFS(new_turf, 1))
-		if (W == src)
-			continue
-		W.update_connections()
-		W.queue_icon_update()
+	return ..(newtype)
 
 //Appearance
 /turf/simulated/wall/examine(mob/user)
-	. = ..()
+	. = ..(user)
 
 	if(!damage)
 		to_chat(user, "<span class='notice'>It looks fully intact.</span>")
 	else
-		var/dam = damage / max_damage
+		var/dam = damage / material.integrity
 		if(dam <= 0.3)
 			to_chat(user, "<span class='warning'>It looks slightly damaged.</span>")
 		else if(dam <= 0.6)
 			to_chat(user, "<span class='warning'>It looks moderately damaged.</span>")
 		else
 			to_chat(user, "<span class='danger'>It looks heavily damaged.</span>")
-	if(paint_color)
-		to_chat(user, "<span class='notice'>It has a coat of paint applied.</span>")
+
 	if(locate(/obj/effect/overlay/wallrot) in src)
 		to_chat(user, "<span class='warning'>There is fungus growing on [src].</span>")
 
@@ -174,25 +138,27 @@
 	return
 
 /turf/simulated/wall/proc/take_damage(dam)
-	var/area/A = get_area(src)
-	if(dam && A.can_modify_area())
+	if(dam)
 		damage = max(0, damage + dam)
 		update_damage()
 	return
 
 /turf/simulated/wall/proc/update_damage()
-	var/cap = max_damage
+	var/cap = material.integrity
+	if(reinf_material)
+		cap += reinf_material.integrity
+
 	if(locate(/obj/effect/overlay/wallrot) in src)
 		cap = cap / 10
 
 	if(damage >= cap)
-		dismantle_wall(TRUE)
+		dismantle_wall()
 	else
 		update_icon()
 
 	return
 
-/turf/simulated/wall/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air
+/turf/simulated/wall/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
 	burn(exposed_temperature)
 
 /turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
@@ -220,7 +186,7 @@
 			O.forceMove(src)
 
 	clear_plants()
-	material = SSmaterials.get_material_by_name("placeholder")
+	material = get_material_by_name("placeholder")
 	reinf_material = null
 	update_connections(1)
 
@@ -262,7 +228,7 @@
 	O.desc = "Looks hot."
 	O.icon = 'icons/effects/fire.dmi'
 	O.icon_state = "2"
-	O.anchored = TRUE
+	O.anchored = 1
 	O.set_density(1)
 	O.plane = LIGHTING_PLANE
 	O.layer = FIRE_LAYER
@@ -285,6 +251,9 @@
 	if(!total_radiation)
 		return
 
+	radiation_repository.radiate(src, total_radiation)
+	return total_radiation
+
 /turf/simulated/wall/proc/burn(temperature)
 	if(material.combustion_effect(src, temperature, 0.7))
 		spawn(2)
@@ -294,19 +263,3 @@
 				W.burn((temperature/4))
 			for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
 				D.ignite(temperature/4)
-
-/turf/simulated/wall/get_color()
-	return paint_color
-
-/turf/simulated/wall/set_color(var/color)
-	paint_color = color
-	update_icon()
-
-/turf/simulated/wall/proc/CheckPenetration(var/base_chance, var/damage)
-	return round(damage / max_damage * 180)
-
-/turf/simulated/wall/can_engrave()
-	return (material && material.hardness >= 10 && material.hardness <= 100)
-
-/turf/simulated/wall/is_wall()
-	return TRUE
