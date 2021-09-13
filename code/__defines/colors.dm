@@ -19,7 +19,6 @@
 #define COLOR_TEAL             "#33cccc"
 #define COLOR_RED              "#ff0000"
 #define COLOR_PINK             "#ff00ff"
-#define COLOR_SOL              "#436b8e"
 #define COLOR_ORANGE           "#ff9900"
 #define COLOR_YELLOW           "#ffff00"
 #define COLOR_GRAY             "#808080"
@@ -43,7 +42,6 @@
 #define COLOR_WHITE            "#ffffff"
 #define COLOR_NT_RED           "#9d2300"
 #define COLOR_GUNMETAL         "#80868e"
-#define COLOR_WALL_GUNMETAL    "#353a42"
 #define COLOR_MUZZLE_FLASH     "#ffffb2"
 #define COLOR_CHESTNUT         "#996633"
 #define COLOR_BEASTY_BROWN     "#663300"
@@ -62,6 +60,3 @@
 #define	PIPE_COLOR_ORANGE      "#b95a00"
 
 #define COLOR_BLOOD_HUMAN "#a10808"
-
-#define COLOR_STEEL            "#a8b0b2"
-#define COLOR_GOLD             "#ffcc33"
