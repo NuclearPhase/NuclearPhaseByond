@@ -33,7 +33,7 @@ var/global/pu_denominations = list(10, 5, 4, 3, 2, 1)
 	return cash
 
 /obj/item/protein_package/attack_self(mob/user)
-	var/amount = input(usr, "How many PP do you want to take? (0 to [num-1])", "Take PP", 1) as num
+	var/amount = input(usr, "How many PP do you wanna take? (0 to [num-1])", "Take PP", 1) as num
 	amount = round(Clamp(amount, 0, num - 1))
 	if(!amount)
 		return

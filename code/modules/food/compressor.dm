@@ -33,6 +33,7 @@
 		for(var/datum/reagent/nutriment/protein/P in S.reagents.reagent_list)
 			add_protein(P.volume)
 		qdel(O)
+		state_status()
 	else if(istype(O, /obj/item/weapon/storage/plants))
 		if(!O.contents || !O.contents.len)
 			return
@@ -43,8 +44,8 @@
 			for(var/datum/reagent/nutriment/protein/P in S.reagents.reagent_list)
 				add_protein(P.volume)
 			qdel(G)
+		state_status()
 
-	state_status()
 
 	if(default_deconstruction_screwdriver(user, O))
 		return
@@ -64,7 +65,7 @@
 		icon_state = "[initial(icon_state)]-off"
 
 /obj/machinery/power/food_compressor/proc/state_status()
-	audible_message("<b>\The [src]</b> states, \"Protein is [(protein / protein_max) * 100]%, can dispence [round(protein / 10)] packages.\"")
+	audible_message("<b>\The [src]</b> states, \"Protein is [round((protein / protein_max) * 100)]%, can dispence [round(protein / 10)] packages.\"")
 
 /obj/machinery/power/food_compressor/proc/dispence()
 	var/dispence_number = round(protein / 10)
@@ -80,14 +81,14 @@
 /obj/machinery/power/food_compressor/RefreshParts()
 	protein_extract_eff = 0
 	protein_max = 0
-	power_use = 55000
+	power_use = initial(power_use) - 2 KWATT
 	for(var/obj/item/weapon/stock_parts/P in component_parts)
 		if(istype(P, /obj/item/weapon/stock_parts/matter_bin))
 			protein_max += 100 * P.rating
-			power_use += 10000 * P.rating
+			power_use += P.rating KWATT
 		if(istype(P, /obj/item/weapon/stock_parts/micro_laser))
 			protein_extract_eff += 0.25 * P.rating
-			power_use += 10000 * P.rating
+			power_use += P.rating KWATT
 
 /obj/machinery/power/food_compressor/attack_hand(mob/user)
 	. = ..()
