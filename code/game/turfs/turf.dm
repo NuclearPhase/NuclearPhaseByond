@@ -231,9 +231,6 @@ var/const/enterloopsanity = 100
 				L.Add(t)
 	return L
 
-/turf/proc/can_engrave()
-	return FALSE
-
 /turf/proc/process()
 	return PROCESS_KILL
 
@@ -275,6 +272,3 @@ var/const/enterloopsanity = 100
 		if(isliving(AM))
 			var/mob/living/M = AM
 			M.turf_collision(src, speed)
-
-/turf/proc/is_wall()
-	return FALSE

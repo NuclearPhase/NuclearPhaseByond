@@ -57,13 +57,18 @@ var/list/name_to_material
 	if(!.)
 		log_error("Unable to acquire material by name '[name]'")
 
+/proc/material_display_name(name)
+	var/material/material = get_material_by_name(name)
+	if(material)
+		return material.display_name
+	return null
+
 // Material definition and procs follow.
 /material
 	var/name	                          // Unique name for use in indexing the list.
 	var/display_name                      // Prettier name for display.
 	var/adjective_name
 	var/use_name
-	var/wall_name = "wall" 
 	var/flags = 0                         // Various status modifiers.
 	var/sheet_singular_name = "sheet"
 	var/sheet_plural_name = "sheets"
@@ -104,18 +109,6 @@ var/list/name_to_material
 	var/rod_product
 	var/wire_product
 	var/list/window_options = list()
-
-	// Mining behavior.
-	var/alloy_product
-	var/ore_name
-	var/ore_desc
-	var/ore_smelts_to
-	var/ore_compresses_to
-	var/ore_result_amount
-	var/ore_spread_chance
-	var/ore_scan_icon
-	var/ore_icon_overlay
-	var/sale_price
 
 	// Damage values.
 	var/hardness = 60            // Prob of wall destruction by hulk, used for edge damage in weapons.
@@ -899,6 +892,3 @@ var/list/name_to_material
 	ignition_point = T0C+232
 	melting_point = T0C+300
 	conductive = 0
-
-/material/proc/get_wall_texture()
-	return
