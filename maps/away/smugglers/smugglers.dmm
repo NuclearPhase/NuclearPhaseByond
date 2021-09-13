@@ -120,7 +120,7 @@
 "cq" = (/obj/structure/toilet{dir = 8},/turf/simulated/floor/airless/ceiling,/area/smugglers/dorms)
 "cr" = (/obj/structure/bed/chair{dir = 4},/obj/machinery/light,/obj/random/trash,/turf/simulated/floor/tiled,/area/smugglers/dorms)
 "cs" = (/obj/structure/table/standard,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/paper/smug_3,/obj/item/weapon/flame/lighter/random,/obj/random/coin,/turf/simulated/floor/tiled,/area/smugglers/dorms)
-"ct" = (/obj/structure/table/standard,/obj/effect/decal/cleanable/dirt,/obj/item/weapon/spacecash/bundle/c10,/obj/random/smokes,/obj/random/snack,/turf/simulated/floor/tiled,/area/smugglers/dorms)
+"ct" = (/obj/structure/table/standard,/obj/effect/decal/cleanable/dirt,/obj/item/protein_package/p10,/obj/random/smokes,/obj/random/snack,/turf/simulated/floor/tiled,/area/smugglers/dorms)
 "cu" = (/obj/structure/bed/chair{dir = 8},/obj/machinery/light,/turf/simulated/floor/tiled,/area/smugglers/dorms)
 "cv" = (/obj/structure/closet,/obj/effect/decal/cleanable/dirt,/obj/random/medical,/obj/random/medical,/obj/random/tech_supply,/obj/random/action_figure,/turf/simulated/floor/tiled,/area/smugglers/dorms)
 "cw" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor/tiled,/area/smugglers/dorms)

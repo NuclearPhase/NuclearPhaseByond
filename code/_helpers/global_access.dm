@@ -47,12 +47,16 @@
 			return global.SSfastprocess;
 		if("SSgarbage")
 			return global.SSgarbage;
+		if("SSicon_update")
+			return global.SSicon_update;
 		if("SSlegacy")
 			return global.SSlegacy;
 		if("SSmachines")
 			return global.SSmachines;
 		if("SSmapping")
 			return global.SSmapping;
+		if("SSmaterials")
+			return global.SSmaterials;
 		if("SSmobs")
 			return global.SSmobs;
 		if("SSobj")
@@ -87,8 +91,6 @@
 			return global._client_preferences_by_key;
 		if("_client_preferences_by_type")
 			return global._client_preferences_by_type;
-		if("account_hack_attempted")
-			return global.account_hack_attempted;
 		if("actor")
 			return global.actor;
 		if("additional_antag_types")
@@ -165,8 +167,6 @@
 			return global.all_grabstates;
 		if("all_languages")
 			return global.all_languages;
-		if("all_money_accounts")
-			return global.all_money_accounts;
 		if("all_objectives")
 			return global.all_objectives;
 		if("all_robolimbs")
@@ -255,6 +255,8 @@
 			return global.changelog_hash;
 		if("channel_to_radio_key")
 			return global.channel_to_radio_key;
+		if("chapter_type")
+			return global.chapter_type;
 		if("chargen_robolimbs")
 			return global.chargen_robolimbs;
 		if("checked_for_inactives")
@@ -289,6 +291,8 @@
 			return global.contamination_overlay;
 		if("controller_iteration")
 			return global.controller_iteration;
+		if("crafting_recipes")
+			return global.crafting_recipes;
 		if("create_mob_html")
 			return global.create_mob_html;
 		if("create_object_html")
@@ -335,8 +339,6 @@
 			return global.deity;
 		if("delta_index")
 			return global.delta_index;
-		if("department_accounts")
-			return global.department_accounts;
 		if("department_radio_keys")
 			return global.department_radio_keys;
 		if("description_icons")
@@ -353,8 +355,6 @@
 			return global.dreams;
 		if("dummy_lighting_corner")
 			return global.dummy_lighting_corner;
-		if("economic_species_modifier")
-			return global.economic_species_modifier;
 		if("empty_playable_ai_cores")
 			return global.empty_playable_ai_cores;
 		if("endgame_exits")
@@ -561,6 +561,14 @@
 			return global.maploader;
 		if("mark")
 			return global.mark;
+		if("masslift_cables")
+			return global.masslift_cables;
+		if("masslift_cables_id")
+			return global.masslift_cables_id;
+		if("masslift_transits")
+			return global.masslift_transits;
+		if("masslifts")
+			return global.masslifts;
 		if("master_controller")
 			return global.master_controller;
 		if("master_mode")
@@ -633,8 +641,6 @@
 			return global.news_network;
 		if("newscaster_standard_feeds")
 			return global.newscaster_standard_feeds;
-		if("next_account_number")
-			return global.next_account_number;
 		if("next_duration_update")
 			return global.next_duration_update;
 		if("next_station_date_change")
@@ -655,8 +661,6 @@
 			return global.nttransfer_uid;
 		if("nuke_disks")
 			return global.nuke_disks;
-		if("num_financial_terminals")
-			return global.num_financial_terminals;
 		if("ore_data")
 			return global.ore_data;
 		if("ores_by_type")
@@ -859,8 +863,6 @@
 			return global.sqlpass;
 		if("sqlport")
 			return global.sqlport;
-		if("station_account")
-			return global.station_account;
 		if("station_date")
 			return global.station_date;
 		if("stool_cache")
@@ -985,8 +987,6 @@
 			return global.uplink_random_selections_;
 		if("valid_bloodtypes")
 			return global.valid_bloodtypes;
-		if("vendor_account")
-			return global.vendor_account;
 		if("ventcrawl_machinery")
 			return global.ventcrawl_machinery;
 		if("view_variables_dont_expand")
@@ -1003,10 +1003,6 @@
 			return global.vsc;
 		if("wax_recipes")
 			return global.wax_recipes;
-		if("weighted_mundaneevent_locations")
-			return global.weighted_mundaneevent_locations;
-		if("weighted_randomevent_locations")
-			return global.weighted_randomevent_locations;
 		if("whitelist")
 			return global.whitelist;
 		if("whitelisted_species")
@@ -1080,12 +1076,16 @@
 			global.SSfastprocess=newval;
 		if("SSgarbage")
 			global.SSgarbage=newval;
+		if("SSicon_update")
+			global.SSicon_update=newval;
 		if("SSlegacy")
 			global.SSlegacy=newval;
 		if("SSmachines")
 			global.SSmachines=newval;
 		if("SSmapping")
 			global.SSmapping=newval;
+		if("SSmaterials")
+			global.SSmaterials=newval;
 		if("SSmobs")
 			global.SSmobs=newval;
 		if("SSobj")
@@ -1120,8 +1120,6 @@
 			global._client_preferences_by_key=newval;
 		if("_client_preferences_by_type")
 			global._client_preferences_by_type=newval;
-		if("account_hack_attempted")
-			global.account_hack_attempted=newval;
 		if("actor")
 			global.actor=newval;
 		if("additional_antag_types")
@@ -1198,8 +1196,6 @@
 			global.all_grabstates=newval;
 		if("all_languages")
 			global.all_languages=newval;
-		if("all_money_accounts")
-			global.all_money_accounts=newval;
 		if("all_objectives")
 			global.all_objectives=newval;
 		if("all_robolimbs")
@@ -1288,6 +1284,8 @@
 			global.changelog_hash=newval;
 		if("channel_to_radio_key")
 			global.channel_to_radio_key=newval;
+		if("chapter_type")
+			global.chapter_type=newval;
 		if("chargen_robolimbs")
 			global.chargen_robolimbs=newval;
 		if("checked_for_inactives")
@@ -1322,6 +1320,8 @@
 			global.contamination_overlay=newval;
 		if("controller_iteration")
 			global.controller_iteration=newval;
+		if("crafting_recipes")
+			global.crafting_recipes=newval;
 		if("create_mob_html")
 			global.create_mob_html=newval;
 		if("create_object_html")
@@ -1368,8 +1368,6 @@
 			global.deity=newval;
 		if("delta_index")
 			global.delta_index=newval;
-		if("department_accounts")
-			global.department_accounts=newval;
 		if("department_radio_keys")
 			global.department_radio_keys=newval;
 		if("description_icons")
@@ -1386,8 +1384,6 @@
 			global.dreams=newval;
 		if("dummy_lighting_corner")
 			global.dummy_lighting_corner=newval;
-		if("economic_species_modifier")
-			global.economic_species_modifier=newval;
 		if("empty_playable_ai_cores")
 			global.empty_playable_ai_cores=newval;
 		if("endgame_exits")
@@ -1594,6 +1590,14 @@
 			global.maploader=newval;
 		if("mark")
 			global.mark=newval;
+		if("masslift_cables")
+			global.masslift_cables=newval;
+		if("masslift_cables_id")
+			global.masslift_cables_id=newval;
+		if("masslift_transits")
+			global.masslift_transits=newval;
+		if("masslifts")
+			global.masslifts=newval;
 		if("master_controller")
 			global.master_controller=newval;
 		if("master_mode")
@@ -1666,8 +1670,6 @@
 			global.news_network=newval;
 		if("newscaster_standard_feeds")
 			global.newscaster_standard_feeds=newval;
-		if("next_account_number")
-			global.next_account_number=newval;
 		if("next_duration_update")
 			global.next_duration_update=newval;
 		if("next_station_date_change")
@@ -1688,8 +1690,6 @@
 			global.nttransfer_uid=newval;
 		if("nuke_disks")
 			global.nuke_disks=newval;
-		if("num_financial_terminals")
-			global.num_financial_terminals=newval;
 		if("ore_data")
 			global.ore_data=newval;
 		if("ores_by_type")
@@ -1892,8 +1892,6 @@
 			global.sqlpass=newval;
 		if("sqlport")
 			global.sqlport=newval;
-		if("station_account")
-			global.station_account=newval;
 		if("station_date")
 			global.station_date=newval;
 		if("stool_cache")
@@ -2018,8 +2016,6 @@
 			global.uplink_random_selections_=newval;
 		if("valid_bloodtypes")
 			global.valid_bloodtypes=newval;
-		if("vendor_account")
-			global.vendor_account=newval;
 		if("ventcrawl_machinery")
 			global.ventcrawl_machinery=newval;
 		if("view_variables_dont_expand")
@@ -2036,10 +2032,6 @@
 			global.vsc=newval;
 		if("wax_recipes")
 			global.wax_recipes=newval;
-		if("weighted_mundaneevent_locations")
-			global.weighted_mundaneevent_locations=newval;
-		if("weighted_randomevent_locations")
-			global.weighted_randomevent_locations=newval;
 		if("whitelist")
 			global.whitelist=newval;
 		if("whitelisted_species")
@@ -2089,9 +2081,11 @@
 	"SSatoms",
 	"SSfastprocess",
 	"SSgarbage",
+	"SSicon_update",
 	"SSlegacy",
 	"SSmachines",
 	"SSmapping",
+	"SSmaterials",
 	"SSmobs",
 	"SSobj",
 	"SSopen_space",
@@ -2148,7 +2142,6 @@
 	"all_grabobjects",
 	"all_grabstates",
 	"all_languages",
-	"all_money_accounts",
 	"all_objectives",
 	"all_robolimbs",
 	"all_species",
@@ -2193,6 +2186,7 @@
 	"cargo_supply_packs",
 	"changelog_hash",
 	"channel_to_radio_key",
+	"chapter_type",
 	"chargen_robolimbs",
 	"checked_for_inactives",
 	"chemical_reaction_logs",
@@ -2210,6 +2204,7 @@
 	"config",
 	"contamination_overlay",
 	"controller_iteration",
+	"crafting_recipes",
 	"create_mob_html",
 	"create_object_html",
 	"create_turf_html",
@@ -2233,7 +2228,6 @@
 	"defer_powernet_rebuild",
 	"deity",
 	"delta_index",
-	"department_accounts",
 	"department_radio_keys",
 	"description_icons",
 	"diary",
@@ -2242,7 +2236,6 @@
 	"doppler_arrays",
 	"dreams",
 	"dummy_lighting_corner",
-	"economic_species_modifier",
 	"empty_playable_ai_cores",
 	"endgame_exits",
 	"endgame_safespawns",
@@ -2273,9 +2266,6 @@
 	"follow_repository",
 	"forced_ambiance_list",
 	"fruit_icon_cache",
-	"fuel_injectors",
-	"fusion_cores",
-	"fusion_reactions",
 	"game_id",
 	"game_version",
 	"game_year",
@@ -2291,7 +2281,6 @@
 	"global_vars_",
 	"godcult",
 	"gravity_is_on",
-	"gyrotrons",
 	"gzn_check",
 	"hadevent",
 	"hazard_overlays",
@@ -2350,6 +2339,10 @@
 	"map_sectors",
 	"maploader",
 	"mark",
+	"masslift_cables",
+	"masslift_cables_id",
+	"masslift_transits",
+	"masslifts",
 	"master_controller",
 	"master_mode",
 	"matchmaker",
@@ -2386,7 +2379,6 @@
 	"navbeacons",
 	"news_network",
 	"newscaster_standard_feeds",
-	"next_account_number",
 	"next_duration_update",
 	"next_station_date_change",
 	"ninjas",
@@ -2397,7 +2389,6 @@
 	"ntnrc_uid",
 	"nttransfer_uid",
 	"nuke_disks",
-	"num_financial_terminals",
 	"ore_data",
 	"ores_by_type",
 	"organ_cache",
@@ -2499,7 +2490,6 @@
 	"sqllogin",
 	"sqlpass",
 	"sqlport",
-	"station_account",
 	"station_date",
 	"stool_cache",
 	"stored_shock_by_ref",
@@ -2562,7 +2552,6 @@
 	"uplink_purchase_repository",
 	"uplink_random_selections_",
 	"valid_bloodtypes",
-	"vendor_account",
 	"ventcrawl_machinery",
 	"view_variables_dont_expand",
 	"view_variables_no_assoc",
@@ -2571,8 +2560,6 @@
 	"vote",
 	"vsc",
 	"wax_recipes",
-	"weighted_mundaneevent_locations",
-	"weighted_randomevent_locations",
 	"whitelist",
 	"whitelisted_species",
 	"wireColours",

@@ -83,11 +83,6 @@ var/const/EXTRA_COST_FACTOR = 1.25
 	path = /obj/item/weapon/extinguisher
 	category = "General"
 
-/datum/autolathe/recipe/jar
-	name = "jar"
-	path = /obj/item/glass_jar
-	category = "General"
-
 /datum/autolathe/recipe/crowbar
 	name = "crowbar"
 	path = /obj/item/weapon/crowbar
