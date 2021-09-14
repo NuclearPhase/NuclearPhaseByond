@@ -51,7 +51,7 @@ proc/overmap_spacetravel(var/turf/space/T, var/atom/movable/A)
 	if (!T || !A)
 		return
 
-	if(!istype(T, /turf/space) && !istype(T, /turf/simulated/floor/outwards/snow/))
+	if(!istype(T, /turf/space) && !istype(T, /turf/unsimulated/floor/outwards/snow/))
 		return
 
 	var/obj/effect/overmap/M = map_sectors["[T.z]"]

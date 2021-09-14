@@ -88,8 +88,37 @@
 			if(istype(other) && other.zone == T.zone && !(other.c_airblock(T) & AIR_BLOCKED) && get_dist(src, other) <= 1)
 				. |= dir
 
-/turf/simulated/update_air_properties()
+/turf/simulated/var/last_cooling = -1
 
+/turf/simulated/proc/cool()
+	if(last_cooling < 0)
+		last_cooling = world.time
+		return
+
+	var/period = world.time - last_cooling
+	if(period < 1 SECOND)
+		return
+	if(!air)
+		return
+
+	var/amount
+	switch(z)
+		if(5)
+			amount = -80
+		if(4)
+			amount = -40
+		if(3)
+			amount = -30
+		if(2)
+			amount = -20
+		if(1)
+			amount = -10
+	amount *= period / 1 SECOND
+	air.add_thermal_energy(amount)
+	
+
+/turf/simulated/update_air_properties()
+	cool()
 	if(zone && zone.invalid) //this turf's zone is in the process of being rebuilt
 		c_copy_air() //not very efficient :(
 		zone = null //Easier than iterating through the list at the zone.
