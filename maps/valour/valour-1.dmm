@@ -1,6 +1,6 @@
-"aa" = (/turf/simulated/outwards/stone,/area/space)
+"aa" = (/turf/unsimulated/outwards/stone,/area/space)
 "ab" = (/turf/simulated/wall/r_wall,/area/sector_e)
-"ac" = (/turf/simulated/outwards/stone,/area/sector_e)
+"ac" = (/turf/unsimulated/outwards/stone,/area/sector_e)
 "ad" = (/turf/simulated/floor/asteroid,/area/sector_e)
 "ae" = (/turf/simulated/floor/tiled/dark,/area/sector_e)
 "af" = (/turf/simulated/floor/plating,/area/sector_e)

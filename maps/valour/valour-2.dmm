@@ -2,8 +2,8 @@
 "b" = (/turf/simulated/wall/r_wall,/area/sector_d)
 "c" = (/obj/machinery/door/airlock/masslift,/turf/simulated/floor/tiled,/area/sector_d)
 "d" = (/turf/simulated/open/air,/area/masslift/d)
-"e" = (/turf/simulated/outwards/stone,/area/space)
-"f" = (/turf/simulated/outwards/stone,/area/sector_d)
+"e" = (/turf/unsimulated/outwards/stone,/area/space)
+"f" = (/turf/unsimulated/outwards/stone,/area/sector_d)
 
 (1,1,1) = {"
 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee

@@ -1,4 +1,4 @@
-"aa" = (/turf/simulated/outwards/stone,/area/outwards)
+"aa" = (/turf/unsimulated/outwards/stone,/area/outwards)
 "ab" = (/turf/unsimulated/floor/outwards/snow,/area/outwards)
 "ac" = (/obj/random/junk,/turf/unsimulated/floor/outwards/snow,/area/outwards)
 "ad" = (/turf/simulated/wall/r_wall,/area/outwards)
