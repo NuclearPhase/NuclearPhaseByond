@@ -1515,7 +1515,6 @@
 #include "code\modules\materials\material_sheets.dm"
 #include "code\modules\materials\material_synth.dm"
 #include "code\modules\materials\materials.dm"
-#include "code\modules\materials\definitions\materials_metal.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\alloys.dm"
 #include "code\modules\mining\coins.dm"

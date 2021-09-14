@@ -47,16 +47,12 @@
 			return global.SSfastprocess;
 		if("SSgarbage")
 			return global.SSgarbage;
-		if("SSicon_update")
-			return global.SSicon_update;
 		if("SSlegacy")
 			return global.SSlegacy;
 		if("SSmachines")
 			return global.SSmachines;
 		if("SSmapping")
 			return global.SSmapping;
-		if("SSmaterials")
-			return global.SSmaterials;
 		if("SSmobs")
 			return global.SSmobs;
 		if("SSobj")
@@ -1076,16 +1072,12 @@
 			global.SSfastprocess=newval;
 		if("SSgarbage")
 			global.SSgarbage=newval;
-		if("SSicon_update")
-			global.SSicon_update=newval;
 		if("SSlegacy")
 			global.SSlegacy=newval;
 		if("SSmachines")
 			global.SSmachines=newval;
 		if("SSmapping")
 			global.SSmapping=newval;
-		if("SSmaterials")
-			global.SSmaterials=newval;
 		if("SSmobs")
 			global.SSmobs=newval;
 		if("SSobj")
