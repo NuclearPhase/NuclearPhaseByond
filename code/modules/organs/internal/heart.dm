@@ -21,17 +21,31 @@
 	max_damage = 100
 	var/open
 	var/nc
+	influenced_gormones = list(
+		/datum/reagent/gormone/adrenaline,
+		/datum/reagent/gormone/noradrenaline,
+		/datum/reagent/gormone/dopamine
+	)
 
-/obj/item/organ/internal/heart/Initialize()
-	. = ..()
+/obj/item/organ/internal/heart/influence_gormone(T, amount)
+	if(isgormone(T, adrenaline))
+		owner.add_chemical_effect(CE_PULSE, amount * 2.5)
+		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.06)
+	if(isgormone(T, noradrenaline))
+		owner.add_chemical_effect(CE_PRESSURE, amount * 3)
+		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * -0.01)
+		owner.add_chemical_effect(CE_PULSE, amount)
+	if(isgormone(T, dopamine))
+		owner.add_chemical_effect(CE_PRESSURE, amount * 5)
+		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
+		if(amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
+			++rythme
+
+
 /obj/item/organ/internal/heart/die()
 	if(dead_icon)
 		icon_state = dead_icon
 	..()
-
-/obj/item/organ/internal/heart/robotize()
-	. = ..()
-	icon_state = "heart-prosthetic"
 
 /obj/item/organ/internal/heart/Process()
 	if(owner)
@@ -48,7 +62,7 @@
 	..()
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
-	pulse = max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))
+	pulse = Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)))
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
@@ -56,7 +70,7 @@
 /obj/item/organ/internal/heart/proc/make_nc()
 	nc = BLOOD_PRESSURE_NORMAL + sumListAssoc(blood_pressure_modificators) - pressure
 	nc /= (pressure / pulse)
-	nc = Clamp(nc, -20, 20)
+	nc = Clamp(nc, -40, 20)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
 	make_nc()
@@ -143,7 +157,7 @@
 	var/infarct_strength = 0
 	if(/datum/organ_disease/infarct in diseases)
 		var/datum/organ_disease/infarct/I = locate() in diseases
-		infarct_strength = strength
+		infarct_strength = I.strength
 
 	ischemia = min(ischemia, 100 + infarct_strength)
 	
@@ -151,11 +165,10 @@
 		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
-		generate_up_to_gormone(/datum/reagent/gormone/marker/troponin_t, damage / max_damage * 2)
+		make_up_to_gormone(/datum/reagent/gormone/marker/troponin_t, damage / max_damage * 2)
 
 
 /obj/item/organ/internal/heart/proc/handle_blood()
-
 	if(!owner)
 		return
 

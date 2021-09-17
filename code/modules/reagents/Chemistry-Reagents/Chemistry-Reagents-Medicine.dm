@@ -190,11 +190,42 @@
 
 /datum/reagent/nitroglycerin
 	name = "Nitroglycerin"
-	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
+	description = "Nitroglycerin is a drug used to reduce CO, increase coronary refill to reduce heart ischemia."
 	taste_description = "oil"
 	reagent_state = LIQUID
 	color = "#808080"
 
 /datum/reagent/nitroglycerin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	..()
-	M.add_chemical_effect(CE_PULSE, 2)
+	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - volume * 0.05, 0.6, 1))
+
+/datum/reagent/atropine
+	name = "Atropine"
+	description = "Atropine is a drug what increases HR. Used in severe bradycardia cases"
+	reagent_state = LIQUID
+	color = "#a76"
+
+/datum/reagent/atropine/affect_blood(mob/living/carbon/human/H, alien, removed)
+	..()
+	H.add_chemical_effect(CE_PULSE, volume * 5)
+
+/datum/reagent/adenosine
+	name = "Adenosine"
+	description = "Adenosine is a drug used to produce controlled AV blockade."
+	reagent_state = LIQUID
+	color = "#a76"
+	metabolism = 0.5
+
+/datum/reagent/adenosine/affect_blood(mob/living/carbon/human/H, alien, removed)
+	// initial rush.
+	if(volume > 1 && H.chem_doses[type] < 1 && H.get_rythme() >= RYTHME_AFIB)
+		H.make_heart_rate(-90, "adenosine_av_blockage")
+	else if(volume > 1 && H.chem_doses[type] < 1 && H.get_rythme() == RYTHME_NORM)
+		if(prob(1) && H.get_rythme() < RYTHME_ASYSTOLE)
+			H.set_rythme(RYTHME_VFIB)
+	else
+		H.make_heart_rate(-30, "adenosine_av_blockage")
+		if(H.get_rythme() == RYTHME_AFIB_RR)
+			H.set_rythme(RYTHME_AFIB)
+
+

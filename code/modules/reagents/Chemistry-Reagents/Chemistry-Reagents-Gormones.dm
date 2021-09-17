@@ -1,24 +1,28 @@
-/datum/reagent/gormone/adrenaline
-	name = "Adrenaline"
-	description = "Adrenaline is a hormone used as a drug to quickly increase blood pressure."
-	taste_description = "rush"
-	reagent_state = LIQUID
-	color = "#c8a5dc"
-	scannable = 1
-	overdose = 20
-	metabolism = 0.1
+// isgormone(T, adrenaline) ...
+#define isgormone(G, T) istype(G, /datum/reagent/gormone/##T)
 
-/datum/reagent/gormone/adrenaline/affect_blood(var/mob/living/carbon/human/M, var/alien, var/removed)
-    M.add_chemical_effect(CE_PAINKILLER, min(2 * volume, 40))
-    M.add_chemical_effect(CE_PULSE, volume * 6)
-    M.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + volume * 0.05)
-
-// MARKERS
-/datum/reagent/gormone/marker
+/datum/reagent/gormone
 	color = "#ddcdcd"
 	metabolism = 0.1
 	reagent_state = LIQUID
 	taste_description = "rush"
+
+/datum/reagent/gormone/adrenaline
+	name = "Adrenaline"
+	description = "Adrenaline is a hormone used as emergency drug to quickly increase BP by increase HR and CO."
+
+/datum/reagent/gormone/adrenaline/affect_blood(var/mob/living/carbon/human/M, var/alien, var/removed)
+    owner.add_chemical_effect(CE_PAINKILLER, min(2 * volume, 40))
+
+/datum/reagent/gormone/noradrenaline
+	name = "Noradrenaline"
+	description = "Noradrenaline is a hormone used as emergency drug in shock states to increase BP by vasoconstricting and increasing HR."
+
+/datum/reagent/gormone/dopamine
+	name = "Dopamine"
+	description = "Dopamine is a hormone used to treat hypotension by vasoconstricting. Can cause arrythmia."
+
+// MARKERS
 
 /datum/reagent/gormone/marker/troponin_t
 	name = "Troponin-T"

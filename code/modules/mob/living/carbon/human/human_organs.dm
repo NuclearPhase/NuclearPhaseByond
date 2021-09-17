@@ -193,16 +193,31 @@
 	for(var/obj/item/organ/O in all_bits)
 		O.set_dna(dna)
 
+/mob/living/proc/get_rythme()
+	return RYTHME_NORM
+/mob/living/carbon/human/get_rythme()
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	return heart?.rythme
+
+/mob/living/proc/set_rythme(rythme)
+	return
+
+/mob/living/carbon/human/set_rythme(rythme)
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	heart?.rythme = rythme
+
 /mob/living/proc/is_asystole()
 	return FALSE
 
 /mob/living/carbon/human/is_asystole()
-	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	return heart?.rythme == RYTHME_ASYSTOLE
+	return get_rythme() == RYTHME_ASYSTOLE
 
 /mob/living/proc/is_vfib()
 	return FALSE
 
 /mob/living/carbon/human/is_vfib()
+	return get_rythme() == RYTHME_VFIB
+
+/mob/living/carbon/human/proc/make_heart_rate(amount, source = "misc")
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	return heart?.rythme == RYTHME_VFIB
+	heart?.pulse_modificators[source] = amount

@@ -277,3 +277,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 /mob/living/carbon/human/proc/get_blood_perfusion()
 	var/bp = get_blood_pressure()
 	. = (bp / BLOOD_PRESSURE_NORMAL) * get_blood_saturation()
+

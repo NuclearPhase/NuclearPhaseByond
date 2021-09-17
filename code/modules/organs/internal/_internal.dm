@@ -8,25 +8,54 @@
 	var/list/will_assist_languages = list()
 	var/list/datum/language/assists_languages = list()
 	var/min_bruised_damage = 10       // Damage before considered bruised
-	var/list/datum/organ_disease/diseases = list()
-	var/list/gormones = list() // list of reagent containers, what holds created gormones.
-	var/list/influenced_gormones = list() // list of gormones, what process in proc/influence_gormones
+	var/list/datum/organ_disease/diseases
+	var/list/gormones // list of amount of gormones by type.
+	var/list/influenced_gormones // list of gormones, what process in proc/influence_gormone
 
-/obj/item/organ/internal/proc/influence_gormones(T, amount)
+/obj/item/organ/internal/proc/influence_gormone(T, amount)
 	return
 
-/obj/item/organ/internal/proc/generate_gormone(T, amount)
+/obj/item/organ/internal/proc/make_gormone(T, amount)
 	if(!owner)
 		return
-	owner.add_reagent(T, amount)
+	owner.bloodstr.add_reagent(T, amount)
 
-/obj/item/organ/internal/proc/generate_up_to_gormone(T, amount)
+/obj/item/organ/internal/proc/make_up_to_gormone(T, amount)
 	if(!owner)
 		return
 	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
 	if(amount <= cur_amount)
 		return
-	generate_gormone(T, amount - cur_amount)
+	make_gormone(T, amount - cur_amount)
+
+/obj/item/organ/internal/proc/free_gormone(T, amount)
+	if(!owner || !(LAZYISIN(gormones, T)))
+		return
+	var/to_use = min(amount, gormones[T])
+	make_gormone(T, to_use)
+	gormones[T] -= to_use
+
+/obj/item/organ/internal/proc/free_up_to_gormone(T, amount)
+	if(!owner)
+		return
+	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	if(amount <= cur_amount)
+		return
+	free_gormone(T, amount - cur_amount)
+
+/obj/item/organ/internal/proc/generate_gormone(T, amount, max = INFINITY)
+	if(!owner)
+		return
+	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	amount = min(cur_amount + amount, max) - cur_amount
+	if(amount <= 0)
+		return
+
+	LAZYINITLIST(gormones)
+	if(T in gormones)
+		gormones[T] += amount
+	else
+		gormones[T] = amount
 	
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
@@ -153,12 +182,12 @@
 				owner.custom_pain("Something inside your [parent.name] hurts[degree].", amount, affecting = parent)
 
 /obj/item/organ/internal/Process()
-	for(var/datum/organ_disease/OD in diseases)
+	for(var/datum/organ_disease/OD in SANITIZE_LIST(diseases))
 		if(OD.can_gone())
 			diseases -= OD
 			qdel(OD)
 			break
 		OD.update()
-	for(var/T in influence_gormones)
+	for(var/T in SANITIZE_LIST(influenced_gormones))
 		if(owner.bloodstr.has_reagent(T))
 			influence_gormone(T, owner.bloodstr.get_reagent_amount(T))

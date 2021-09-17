@@ -12,7 +12,7 @@
 	item_state = "syringe_0"
 	icon_state = "0"
 	matter = list("glass" = 150)
-	amount_per_transfer_from_this = 5
+	amount_per_transfer_from_this = 1
 	possible_transfer_amounts = null
 	volume = 15
 	w_class = ITEM_SIZE_TINY
