@@ -8,6 +8,7 @@
 	var/list/will_assist_languages = list()
 	var/list/datum/language/assists_languages = list()
 	var/min_bruised_damage = 10       // Damage before considered bruised
+	var/list/datum/organ_disease/diseases = list()
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
@@ -131,3 +132,11 @@
 				if(damage < 5)
 					degree = " a bit"
 				owner.custom_pain("Something inside your [parent.name] hurts[degree].", amount, affecting = parent)
+
+/obj/item/organ/internal/Process()
+	for(var/datum/organ_disease/OD in diseases)
+		if(OD.can_gone())
+			diseases -= OD
+			qdel(OD)
+			break
+		OD.update()

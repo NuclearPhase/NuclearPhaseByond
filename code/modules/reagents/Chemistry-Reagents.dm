@@ -112,13 +112,5 @@
 	holder = null
 	. = ..()
 
-/* DEPRECATED - TODO: REMOVE EVERYWHERE */
-
-/datum/reagent/proc/reaction_turf(var/turf/target)
-	touch_turf(target)
-
-/datum/reagent/proc/reaction_obj(var/obj/target)
-	touch_obj(target)
-
-/datum/reagent/proc/reaction_mob(var/mob/target)
-	touch_mob(target)
+/datum/reagent/gormone/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
+	return

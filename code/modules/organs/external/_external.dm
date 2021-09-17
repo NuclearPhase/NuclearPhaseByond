@@ -1354,9 +1354,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 		badness += "clammy and cool to the touch"
 	if(owner.getToxLoss() >= 25)
 		badness += "jaundiced"
-	if(owner.get_blood_oxygenation() <= 50)
+	if(owner.get_blood_perfusion() <= 0.5)
 		badness += "turning blue"
-	if(owner.get_blood_circulation() <= 60)
+	if(owner.get_blood_perfusion() <= 0.6)
 		badness += "very pale"
 	if(status & ORGAN_DEAD)
 		badness += "rotting"
@@ -1389,7 +1389,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(gutsound)
 			sounds += gutsound
 	if(!sounds.len)
-		if(owner.pulse())
+		if(owner.get_pulse())
 			sounds += "faint pulse"
 	return sounds
 

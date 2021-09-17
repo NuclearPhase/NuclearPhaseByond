@@ -61,7 +61,7 @@
 
 	// Blood loss or liver damage make you lose nutriments
 	var/blood_volume = owner.get_blood_volume()
-	if(blood_volume < BLOOD_VOLUME_SAFE || is_bruised())
+	if(blood_volume < BLOOD_PERFUSION_SAFE || is_bruised())
 		if(owner.nutrition >= 300)
 			owner.nutrition -= 10
 		else if(owner.nutrition >= 200)

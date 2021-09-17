@@ -32,63 +32,6 @@ var/global/datum/repository/crew/crew_repository = new()
 	..()
 
 /datum/repository/crew/proc/health_data(var/z_level)
-	var/list/crewmembers = list()
-	if(!z_level)
-		return crewmembers
-
-	var/datum/cache_entry/cache_entry = cache_data[num2text(z_level)]
-	if(!cache_entry)
-		cache_entry = new/datum/cache_entry
-		cache_data[num2text(z_level)] = cache_entry
-
-	if(world.time < cache_entry.timestamp)
-		return cache_entry.data
-
-	var/tracked = scan()
-	for(var/obj/item/clothing/under/C in tracked)
-		var/turf/pos = get_turf(C)
-		if(C.has_sensor && pos && pos.z == z_level && C.sensor_mode != SUIT_SENSOR_OFF)
-			if(istype(C.loc, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = C.loc
-				if(H.w_uniform != C)
-					continue
-				var/pressure = H.get_blood_pressure()
-				var/blood_result = H.get_blood_oxygenation()
-				if(blood_result > 110)
-					blood_result = "increased"
-				else if(blood_result < 90)
-					blood_result = "low"
-				else if(blood_result < 60)
-					blood_result = "extremely low"
-				else
-					blood_result = "normal"
-				pressure += " ([blood_result] oxygenation)"
-
-				var/true_pulse = H.pulse()
-				var/pulse_span = "good"
-				switch(true_pulse)
-					if(PULSE_NONE)
-						pulse_span = "bad"
-					if(PULSE_SLOW)
-						pulse_span = "highlight"
-					if(PULSE_NORM)
-						pulse_span = "good"
-					if(PULSE_FAST)
-						pulse_span = "average"
-					if(PULSE_2FAST)
-						pulse_span = "bad"
-					if(PULSE_THREADY)
-						pulse_span = "bad"
-
-				var/list/crewmemberData = list("sensor_type" = C.sensor_mode, "stat"= H.stat, "span" = pulse_span, "pulse"= H.get_pulse(1), "pressure"= pressure, "bodytemp" = H.bodytemperature - T0C, "area"="", "x"=-1, "y"=-1, "z"=-1, "ref" = "\ref[H]")
-				if(!(run_queues(H, C, pos, crewmemberData) & MOD_SUIT_SENSORS_REJECTED))
-					crewmembers[++crewmembers.len] = crewmemberData
-
-	crewmembers = sortByKey(crewmembers, "name")
-	cache_entry.timestamp = world.time + 5 SECONDS
-	cache_entry.data = crewmembers
-
-	return crewmembers
 
 /datum/repository/crew/proc/scan()
 	var/list/tracked = list()
