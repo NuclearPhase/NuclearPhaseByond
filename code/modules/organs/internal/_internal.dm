@@ -9,6 +9,25 @@
 	var/list/datum/language/assists_languages = list()
 	var/min_bruised_damage = 10       // Damage before considered bruised
 	var/list/datum/organ_disease/diseases = list()
+	var/list/gormones = list() // list of reagent containers, what holds created gormones.
+	var/list/influenced_gormones = list() // list of gormones, what process in proc/influence_gormones
+
+/obj/item/organ/internal/proc/influence_gormones(T, amount)
+	return
+
+/obj/item/organ/internal/proc/generate_gormone(T, amount)
+	if(!owner)
+		return
+	owner.add_reagent(T, amount)
+
+/obj/item/organ/internal/proc/generate_up_to_gormone(T, amount)
+	if(!owner)
+		return
+	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	if(amount <= cur_amount)
+		return
+	generate_gormone(T, amount - cur_amount)
+	
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
@@ -140,3 +159,6 @@
 			qdel(OD)
 			break
 		OD.update()
+	for(var/T in influence_gormones)
+		if(owner.bloodstr.has_reagent(T))
+			influence_gormone(T, owner.bloodstr.get_reagent_amount(T))

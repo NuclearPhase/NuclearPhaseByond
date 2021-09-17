@@ -12,3 +12,15 @@
     M.add_chemical_effect(CE_PAINKILLER, min(2 * volume, 40))
     M.add_chemical_effect(CE_PULSE, volume * 6)
     M.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + volume * 0.05)
+
+// MARKERS
+/datum/reagent/gormone/marker
+	color = "#ddcdcd"
+	metabolism = 0.1
+	reagent_state = LIQUID
+	taste_description = "rush"
+
+/datum/reagent/gormone/marker/troponin_t
+	name = "Troponin-T"
+	description = "Troponin-T generated in cardiomiocites necrose cases."
+	
