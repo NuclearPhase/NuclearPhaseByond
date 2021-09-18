@@ -18,12 +18,20 @@
 	if(ishormone(T, glucose))
 		var/diff = amount - absolutely_normal_glucose_level
 		var/produce_hormone_level = min(abs(diff) / 0.1, 2)
+		if(abs(diff) < 1)
+			return
+
 		if(diff > 0) // >normal
-			free_hormone(/datum/reagent/hormone/insulin, produce_hormone_level)
+			free_up_to_hormone(/datum/reagent/hormone/insulin, produce_hormone_level)
+			absorb_hormone(/datum/reagent/hormone/glucagon, INFINITY, hold = TRUE)
 		else if(diff < 0) // <normal
-			free_hormone(/datum/reagent/hormone/glucagon, produce_hormone_level)
+			free_up_to_hormone(/datum/reagent/hormone/glucagon, produce_hormone_level)
+			absorb_hormone(/datum/reagent/hormone/insulin, INFINITY, hold = TRUE)
 
 /obj/item/organ/internal/stomach/Process()
 	..()
+	generate_hormone(/datum/reagent/hormone/insulin, 0.1, 15)
+	generate_hormone(/datum/reagent/hormone/glucagon, 0.1, 15)
+
 
 	

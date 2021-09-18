@@ -51,7 +51,7 @@
 		dna.s_base = s_base
 		sync_organ_dna()
 	make_blood()
-	bloodstr.add_reagent(/datum/reagent/hormone/glucose, GLUCOSE_LEVEL_NORMAL)
+	bloodstr.add_reagent(/datum/reagent/hormone/glucose, GLUCOSE_LEVEL_NORMAL + 0.2)
 
 /mob/living/carbon/human/Destroy()
 	GLOB.human_mob_list -= src

@@ -208,14 +208,15 @@
 
 /datum/reagent/adenosine/affect_blood(mob/living/carbon/human/H, alien, removed)
 	// initial rush.
-	if(volume > 1 && H.chem_doses[type] < 1 && H.get_rythme() >= RYTHME_AFIB)
-		H.make_heart_rate(-90, "adenosine_av_blockage")
-	else if(volume > 1 && H.chem_doses[type] < 1 && H.get_rythme() == RYTHME_NORM)
+	if(volume > 2 && H.chem_doses[type] < 2 && H.get_rythme() >= RYTHME_AFIB)
+		H.make_heart_rate(-140, "adenosine_av_blockage")
+	else if(volume > 2 && H.chem_doses[type] < 2 && H.get_rythme() == RYTHME_NORM)
 		if(prob(1) && H.get_rythme() < RYTHME_ASYSTOLE)
 			H.set_rythme(RYTHME_VFIB)
 	else
 		H.make_heart_rate(-30, "adenosine_av_blockage")
 		if(H.get_rythme() == RYTHME_AFIB_RR)
 			H.set_rythme(RYTHME_AFIB)
+			volume = 0
 
 

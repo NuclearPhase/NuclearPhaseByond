@@ -15,7 +15,7 @@ below 100 is not dizzy
 	if(!istype(src, /mob/living/carbon/human)) // for the moment, only humans get dizzy
 		return
 
-	dizziness = min(1000, dizziness + amount)	// store what will be new value
+	dizziness = min(1000, max(dizziness, amount))	// store what will be new value
 													// clamped to max 1000
 	if(dizziness > 100 && !is_dizzy)
 		spawn(0)
@@ -54,7 +54,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		return
 	if(!jittery_damage())
 		return //Robotic hearts don't get jittery.
-	jitteriness = min(1000, jitteriness + amount)	// store what will be new value
+	jitteriness = min(1000, max(jitteriness, amount))	// store what will be new value
 													// clamped to max 1000
 	if(jitteriness > 100 && !is_jittery)
 		spawn(0)

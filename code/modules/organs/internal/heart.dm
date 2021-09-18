@@ -257,3 +257,18 @@
 			speed = "thready"
 
 	. = "[strength][rythme_d][speed] pulse."
+
+/obj/item/organ/internal/proc/get_rythme_fluffy()
+	switch(rythme)
+		if(RYTHME_NORM)
+			return "Normal"
+		if(RYTHME_AFIB)
+			return "Atrial fibrillation"
+		if(RYTHME_AFIB_RR)
+			return "Atrial fibrillation with rapid heart rate"
+		if(RYTHME_VFIB)
+			return "Ventricular fibrillation"
+		if(RYTHME_ASYSTOLE)
+			return "Asystole"
+		else
+			return "UNKNOWN BIOLOGY"

@@ -22,15 +22,17 @@
 // METABOLISM
 /datum/reagent/hormone/glucose
 	name = "Glucose"
+	metabolism = DEFAULT_HUNGER_FACTOR
 
 // 1u insulin produce 0.1u glucose decrease.
 /datum/reagent/hormone/insulin
 	name = "Insulin"
-	metabolism = 0.001
+	metabolism = 0.1
 
 /datum/reagent/hormone/insulin/affect_blood(mob/living/carbon/human/M, alien, removed)
-	M.bloodstr.remove_reagent(/datum/reagent/hormone/glucose, 0.1)
-	remove_self(1)
+	var/amount = min(M.bloodstr.get_reagent_amount(/datum/reagent/hormone/glucose), 0.1)
+	M.bloodstr.remove_reagent(/datum/reagent/hormone/glucose, amount)
+	volume = max(0, amount * 10)
 
 // 1u glucagon produce 0.1u glucose increase.
 /datum/reagent/hormone/glucagon

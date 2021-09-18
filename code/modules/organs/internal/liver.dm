@@ -15,11 +15,8 @@
 
 /obj/item/organ/internal/liver/influence_hormone(T, amount)
 	if(ishormone(T, glucagon))
-		free_hormone(/datum/reagent/hormone/glucose, 0.1)
-		absorb_hormone(T, 1)
-	if(ishormone(T, insulin))
-		free_hormone(/datum/reagent/hormone/glucose, 0.1)
-		absorb_hormone(T, 1)
+		free_hormone(/datum/reagent/hormone/glucose, min(amount, 0.1))
+		absorb_hormone(T, min(amount, 0.1) * 10)
 
 /obj/item/organ/internal/liver/Process()
 	..()

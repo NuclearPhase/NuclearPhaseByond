@@ -71,6 +71,40 @@
 	reagents.add_reagent(/datum/reagent/inaprovaline, 60)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/glucose
+	name = "glucose bottle"
+	desc = "A tiny bottle. Contains glucose. 2u."
+	icon_state = "bottle-4"
+	volume = 2
+
+/obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/glucose, 2)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/dextrose
+	name = "dextrose bottle"
+	desc = "A small bottle. Contains dextrose. 4u."
+	icon_state = "bottle-4"
+	volume = 60
+
+/obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/glucose, 4)
+	reagents.add_reagent(/datum/reagent/water, 56)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/glucagon
+	name = "glucagon bottle"
+	desc = "A small bottle. Contains glucagone."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle-4"
+
+/obj/item/weapon/reagent_containers/glass/bottle/glucagon/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/glucagon, 60)
+	update_icon()
+
 /obj/item/weapon/reagent_containers/glass/bottle/adenosine
 	name = "adenosine bottle"
 	desc = "A small bottle. Contains adenosine."

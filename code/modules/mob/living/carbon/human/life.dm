@@ -434,7 +434,7 @@
 				H?.rythme++
 			make_dizzy(rand(80, 160))
 			make_jittery(rand(30, 100))
-			if(prob(30))
+			if(prob(10))
 				Paralyse(2)
 		if(GLUCOSE_LEVEL_LCRITICAL to GLUCOSE_LEVEL_L2BAD)
 			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.7)
@@ -442,7 +442,7 @@
 				H?.rythme++
 			make_dizzy(rand(50, 80))
 			make_jittery(rand(30, 60))
-			if(prob(30))
+			if(prob(5))
 				Paralyse(1)
 		if(GLUCOSE_LEVEL_LBAD to GLUCOSE_LEVEL_NORMAL)
 			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.85)
@@ -464,10 +464,11 @@
 			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.60)
 			if(prob(2) && get_rythme() < RYTHME_VFIB)
 				H?.rythme++
-			if(prob(30))
+			if(prob(10))
 				Paralyse(1)
 		if(GLUCOSE_LEVEL_HCRITICAL to GLUCOSE_LEVEL_H2CRITICAL)
-			Paralyse(5)
+			if(prob(20))
+				Paralyse(1)
 			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.40)
 			if(prob(2) && get_rythme() < RYTHME_ASYSTOLE)
 				H?.rythme++
@@ -831,12 +832,12 @@
 				healths.overlays += health_images
 
 		if(nutrition_icon)
-			switch(nutrition)
-				if(450 to INFINITY)				nutrition_icon.icon_state = "nutrition0"
-				if(350 to 450)					nutrition_icon.icon_state = "nutrition1"
-				if(250 to 350)					nutrition_icon.icon_state = "nutrition2"
-				if(150 to 250)					nutrition_icon.icon_state = "nutrition3"
-				else							nutrition_icon.icon_state = "nutrition4"
+			switch(bloodstr?.get_reagent_amount(/datum/reagent/hormone/glucose))
+				if(GLUCOSE_LEVEL_HBAD - 2   to INFINITY)				    nutrition_icon.icon_state = "nutrition0"
+				if(GLUCOSE_LEVEL_NORMAL + 1 to GLUCOSE_LEVEL_HBAD - 2)		nutrition_icon.icon_state = "nutrition1"
+				if(GLUCOSE_LEVEL_NORMAL     to GLUCOSE_LEVEL_NORMAL + 1)	nutrition_icon.icon_state = "nutrition2"
+				if(GLUCOSE_LEVEL_LBAD - 1   to GLUCOSE_LEVEL_NORMAL)		nutrition_icon.icon_state = "nutrition3"
+				else														nutrition_icon.icon_state = "nutrition4"
 
 		if(stamina_icon)
 			switch((staminaloss))

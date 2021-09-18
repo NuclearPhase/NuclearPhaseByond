@@ -58,11 +58,19 @@
 	else
 		hormones[T] = amount
 	
-/obj/item/organ/internal/proc/absorb_hormone(T, amount)
+/obj/item/organ/internal/proc/absorb_hormone(T, amount, hold = FALSE)
 	if(!owner)
 		return
 
-	owner.bloodstr.remove_reagent(T, amount)
+	var/to_absorb = min(owner.bloodstr.get_reagent_amount(T), amount)
+	owner.bloodstr.remove_reagent(T, to_absorb)
+	if(hold)
+		LAZYINITLIST(hormones)
+		if(T in hormones)
+			hormones[T] += to_absorb
+		else
+			hormones[T] = to_absorb
+
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
