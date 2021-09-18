@@ -278,10 +278,10 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	var/bp = get_blood_pressure()
 	var/bp_eff = bp / BLOOD_PRESSURE_NORMAL
 	switch(bp)
-		if(170 to 200)
-			bp_eff *= 0.65
+		if(160 to 200)
+			bp_eff *= 0.5
 		if(200 to 230)
-			bp_eff *= 0.45
+			bp_eff *= 0.4
 		if(230 to INFINITY)
-			bp_eff *= 0.35
+			bp_eff *= 0.3
 	. = bp_eff * get_blood_saturation()

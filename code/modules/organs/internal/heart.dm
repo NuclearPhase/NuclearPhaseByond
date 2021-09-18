@@ -64,7 +64,7 @@
 	post_handle_rythme()
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
-	pulse = Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)))
+	pulse = Clamp(Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))), 0, 260)
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
@@ -165,7 +165,7 @@
 		infarct_strength = I.strength
 
 	ischemia = min(ischemia, 100 + infarct_strength)
-	
+
 	if(ischemia > 30)
 		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
@@ -258,7 +258,7 @@
 
 	. = "[strength][rythme_d][speed] pulse."
 
-/obj/item/organ/internal/proc/get_rythme_fluffy()
+/obj/item/organ/internal/heart/proc/get_rythme_fluffy()
 	switch(rythme)
 		if(RYTHME_NORM)
 			return "Normal"

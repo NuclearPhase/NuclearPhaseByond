@@ -12,13 +12,13 @@
 	var/absolutely_normal_glucose_level
 
 /obj/item/organ/internal/stomach/Initialize()
-	absolutely_normal_glucose_level = rand(GLUCOSE_LEVEL_LBAD + 0.1, GLUCOSE_LEVEL_HBAD - 0.1)
+	absolutely_normal_glucose_level = rand(GLUCOSE_LEVEL_NORMAL + 0.1, GLUCOSE_LEVEL_HBAD - 0.2)
 
 /obj/item/organ/internal/stomach/influence_hormone(T, amount)
 	if(ishormone(T, glucose))
 		var/diff = amount - absolutely_normal_glucose_level
-		var/produce_hormone_level = min(abs(diff) / 0.1, 2)
-		if(abs(diff) < 1)
+		var/produce_hormone_level = min(abs(diff) / 0.1, 1)
+		if(diff > -0.1 && diff < 1)
 			return
 
 		if(diff > 0) // >normal

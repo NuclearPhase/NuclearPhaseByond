@@ -31,7 +31,7 @@
 "aE" = (/obj/machinery/door/firedoor/multi_tile{icon_state = "door_open"; dir = 2},/obj/machinery/door/airlock/hydroponics,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aF" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aG" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 8},/turf/simulated/floor/plating,/area/sector_b/hydro)
-"aH" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b)
+"aH" = (/obj/structure/table/standard,/obj/item/weapon/reagent_containers/glass/bottle/adenosine,/turf/simulated/floor/tiled/white,/area/sector_b)
 "aI" = (/turf/simulated/floor/tiled/freezer,/area/sector_b)
 "aJ" = (/obj/structure/railing,/turf/simulated/open/air,/area/catacombs)
 "aK" = (/obj/structure/sign/hydro,/turf/simulated/wall/r_wall,/area/sector_b/hydro)
@@ -84,7 +84,7 @@
 "bF" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
 "bG" = (/obj/effect/floor_decal/industrial/warning/dust,/turf/simulated/floor/plating,/area/masslift)
 "bH" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/plating,/area/masslift)
-"bI" = (/obj/effect/landmark/start{name = "JoinLate"},/turf/simulated/floor/plating,/area/masslift)
+"bI" = (/obj/structure/bed/roller,/turf/simulated/floor/tiled/white,/area/sector_b)
 "bJ" = (/obj/effect/landmark/start,/turf/simulated/floor/wood,/area/sector_b)
 "bK" = (/obj/structure/sign/warning/secure_area,/turf/simulated/wall/r_wall,/area/sector_b)
 "bL" = (/obj/structure/sign/warning/fall,/turf/simulated/wall/r_wall,/area/sector_b)
@@ -181,6 +181,7 @@
 "dy" = (/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "dz" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 4},/turf/simulated/floor/plating,/area/sector_b/hydro)
 "dA" = (/obj/structure/catwalk,/obj/structure/cable{icon_state = "1-2"},/obj/structure/cable{icon_state = "2-4"},/turf/simulated/floor/plating,/area/sector_b)
+"dB" = (/obj/structure/table/standard,/obj/structure/monitor,/turf/simulated/floor/tiled/white,/area/sector_b)
 "dC" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor,/area/sector_b/hydro)
 "dD" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 1},/turf/simulated/outwards/stone,/area/catacombs)
 "dE" = (/obj/structure/cable{icon_state = "4-8"},/obj/machinery/door/airlock/hydroponics,/turf/simulated/floor/plating,/area/sector_b/hydro)
@@ -193,6 +194,12 @@
 "dL" = (/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/freezer,/area/sector_b/hydro_storage)
 "dM" = (/obj/structure/cable,/obj/machinery/power/apc/hyper{dir = 8; icon_state = "apc0"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor/tiled/freezer,/area/sector_b/hydro_storage)
 "dN" = (/obj/structure/railing{icon_state = "railing0"; dir = 4},/obj/machinery/power/food_compressor,/obj/structure/cable{icon_state = "0-8"},/turf/simulated/floor/plating,/area/sector_b/hydro)
+"dO" = (/obj/effect/landmark/start{name = "JoinLate"},/turf/simulated/floor/tiled/white,/area/sector_b)
+"dP" = (/obj/structure/table/standard,/obj/item/weapon/reagent_containers/glass/bottle/dextrose,/obj/item/weapon/reagent_containers/glass/bottle/glucose,/turf/simulated/floor/tiled/white,/area/sector_b)
+"dQ" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/obj/structure/table/standard,/obj/item/weapon/reagent_containers/glass/bottle/dopamine,/turf/simulated/floor/tiled/white,/area/sector_b)
+"dR" = (/obj/structure/iv_drip,/turf/simulated/floor/tiled/white,/area/sector_b)
+"dS" = (/obj/structure/table/standard,/obj/item/weapon/scalpel,/turf/simulated/floor/tiled/white,/area/sector_b)
+"dT" = (/obj/structure/table/standard,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/storage/box/syringes,/turf/simulated/floor/tiled/white,/area/sector_b)
 
 (1,1,1) = {"
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
@@ -270,9 +277,9 @@ bpbpbpbvbvbvdGbvbvbvbvbvbvbvbvafafafafafafaoacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaa
 bpbpbpbvdHdIdJdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadararasarararararararbMararasararadauaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadararararbNararbJararararararararadaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacavajajayayayayayayayayayayayayayayayayafafafafafadadadadadadadadadadadadadadadadadadawaxadawaxadararbTararararararbUararararbVaradaeaedvaeaeadaJaJaJaJaJaJaJaJaJaJaJaJaJaJblbpbpbpbp
-bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaAaBaBaBaAaBaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxaCaxaxaxaxaxaxaxaxaxaxaxadaxaxaxaxaxadararararadadadadadadadadararararadaeaedoaeaeadaSaSaSaSaSaSaSaSaSaSaSaSaSaSbubpbpbpbp
-bpbpbpbvdMdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaDaDaDaDaDaDaDaFayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxaxaxaxaxaHadaxaxaxaxaxadadadadadadaIaIaIaIaIaIadadadadadadaeaecJcTcTcUcVcVcVcVcVcVcVcVcVcVcVcVcXaSbubpbpbpbp
-bpbpbpbvbvbvbvbvbvbvbvbvbvbvbvafafafafafafaoacduacaZakakaKaLaMaNayaGaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaxaxaxaOadaxaxaxaxaxaxaxaxaxaxaxadaxaxaxaxaOadaIaIaIaIaPaIaIaIaIaIaIaPaIaIaIaIadaeaedpaeaeadaSaSaSaSaSaSaSaSaSaSaSaSddaSbubpbpbpbp
+bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaAaBaBaBaAaBaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxaCaxaxaxaxaxaxbIdBaxaHdPadaxaxaxaxaxadararararadadadadadadadadararararadaeaedoaeaeadaSaSaSaSaSaSaSaSaSaSaSaSaSaSbubpbpbpbp
+bpbpbpbvdMdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaDaDaDaDaDaDaDaFayaaaaaaaaaaadaxaxaxaxadaxdOaxaxaxdRaxaxaxaxdQadaxaxaxaxaxadadadadadadaIaIaIaIaIaIadadadadadadaeaecJcTcTcUcVcVcVcVcVcVcVcVcVcVcVcVcXaSbubpbpbpbp
+bpbpbpbvbvbvbvbvbvbvbvbvbvbvbvafafafafafafaoacduacaZakakaKaLaMaNayaGaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaxaxaxaOadaxaxaxaxaxaxaxaxaxdTdSadaxaxaxaxaOadaIaIaIaIaPaIaIaIaIaIaIaPaIaIaIaIadaeaedpaeaeadaSaSaSaSaSaSaSaSaSaSaSaSddaSbubpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpaaaaafaaaaaaaaaaaaatacduacapaaaaaybnbodNaDaDaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadadadadadadaxaxaxbXaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadauaedqaeaeadbfbfbfbfbfbfbfbfbfbfbgaSddaSbubpbpbpbp
 bpbpbpbpbpbpbpbpbpbpaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcHaDaDaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadbZaxaxcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbrbrbrbrbrbrbrbrbrbrbhaSddaSbubpbpbpbp
 bpbpbpbpbpbpbpbpaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadaxaxaxcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbpbpbpbpbpbpbpbpbpbrbhaSddaSbubpbpbpbp
@@ -291,7 +298,7 @@ bpbpbpbpbpbpbpbpbpbpbpaaaaaaafaaaaaaaaaaaaatacduacacacacacacacacacacacacacacacac
 bpbpbpbpbpbpbpbpbpbpbpbpbpaaafaaaaaaaaaaaaatacdxcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIdrdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdyaeaebdcgcdcucxcwcwcwcxcvcdcqadcWdncPcPcPcPcOcMcMcMcMdDbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpaaafaaaaaaaaaaaaatcNacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaebdcgcdcscxcwcwcwcxctcdcqadcPcYcPcPcYcPcObpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaacQakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakbpakakakadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaebdcgcdcscxcxcxcxcxctcdcqadcOcOcZcZcOcOcObpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgbIcdbAbCcycrbDcdcdcqaddadbdadadbdacObpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgcdcdbAbCcycrbDcdcdcqaddadbdadadbdacObpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpbpaaaaaaaaaabpbpbpaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadczcAcdbFbGbGbGbHcdcBcCaddadadadadadacObpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaabpbpbpbpbpaabpbpaaaaaaaaaaaabpbpaabpbpbpbpbpbpbpaaaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadcwcDbGbGbGbGbGbGbGcEcwaddadcdadadcdacObpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadadadadadadadadadadadadadcOcOcOcOcOcOcObpbpbpbpbpbpbpbpbp
