@@ -78,6 +78,8 @@
 
 		handle_medical_side_effects()
 
+		handle_glucose_level()
+
 		if(!client && !mind)
 			species.handle_npc(src)
 
@@ -421,6 +423,60 @@
 
 	return
 
+/mob/living/carbon/human/proc/handle_glucose_level()
+	var/level = bloodstr.get_reagent_amount(/datum/reagent/hormone/glucose)
+	var/obj/item/organ/internal/heart/H = internal_organs_by_name[BP_HEART]
+
+	switch(level)
+		if(-INFINITY to GLUCOSE_LEVEL_LCRITICAL)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.4)
+			if(prob(2) && get_rythme() < RYTHME_ASYSTOLE)
+				H?.rythme++
+			make_dizzy(rand(80, 160))
+			make_jittery(rand(30, 100))
+			if(prob(30))
+				Paralyse(2)
+		if(GLUCOSE_LEVEL_LCRITICAL to GLUCOSE_LEVEL_L2BAD)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.7)
+			if(prob(2) && get_rythme() < RYTHME_VFIB)
+				H?.rythme++
+			make_dizzy(rand(50, 80))
+			make_jittery(rand(30, 60))
+			if(prob(30))
+				Paralyse(1)
+		if(GLUCOSE_LEVEL_LBAD to GLUCOSE_LEVEL_NORMAL)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.85)
+			make_dizzy(rand(5, 50))
+			make_jittery(rand(5, 30))
+
+		if(GLUCOSE_LEVEL_NORMAL to GLUCOSE_LEVEL_HBAD)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.95)
+			make_dizzy(rand(5, 15))
+		if(GLUCOSE_LEVEL_HBAD to GLUCOSE_LEVEL_H2BAD)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.80)
+			make_dizzy(rand(15, 30))
+			make_jittery(rand(5, 15))
+		if(GLUCOSE_LEVEL_HBAD to GLUCOSE_LEVEL_H2BAD)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.70)
+			make_dizzy(rand(30, 50))
+			make_jittery(rand(15, 25))
+		if(GLUCOSE_LEVEL_H2BAD to GLUCOSE_LEVEL_HCRITICAL)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.60)
+			if(prob(2) && get_rythme() < RYTHME_VFIB)
+				H?.rythme++
+			if(prob(30))
+				Paralyse(1)
+		if(GLUCOSE_LEVEL_HCRITICAL to GLUCOSE_LEVEL_H2CRITICAL)
+			Paralyse(5)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.40)
+			if(prob(2) && get_rythme() < RYTHME_ASYSTOLE)
+				H?.rythme++
+			make_dizzy(rand(80, 160))
+			make_jittery(rand(30, 100))
+
+		
+			
+
 /mob/living/carbon/human/proc/stabilize_body_temperature()
 	// We produce heat naturally.
 	if (species.passive_temp_gain)
@@ -526,7 +582,10 @@
 
 	if(reagents)
 		if(touching) touching.metabolize()
-		if(ingested) ingested.metabolize()
+
+		var/obj/item/organ/internal/stomach/stomach = internal_organs_by_name[BP_STOMACH]
+		if(stomach && ingested) ingested.metabolize()
+
 		if(bloodstr) bloodstr.metabolize()
 
 	// Trace chemicals

@@ -198,6 +198,8 @@ var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O
 				organ_name = BP_LIVER
 			if(BP_KIDNEYS)
 				organ_name = BP_KIDNEYS
+			if(BP_STOMACH)
+				organ_name = BP_STOMACH
 			if(BP_CHEST)
 				organ_name = "upper body"
 			if(BP_GROIN)

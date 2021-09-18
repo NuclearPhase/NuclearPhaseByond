@@ -21,22 +21,23 @@
 	max_damage = 100
 	var/open
 	var/nc
-	influenced_gormones = list(
-		/datum/reagent/gormone/adrenaline,
-		/datum/reagent/gormone/noradrenaline,
-		/datum/reagent/gormone/dopamine
+	influenced_hormones = list(
+		/datum/reagent/hormone/adrenaline,
+		/datum/reagent/hormone/noradrenaline,
+		/datum/reagent/hormone/dopamine
 	)
 
-/obj/item/organ/internal/heart/influence_gormone(T, amount)
-	if(isgormone(T, adrenaline))
-		owner.add_chemical_effect(CE_PULSE, amount * 2.5)
-		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.06)
-	if(isgormone(T, noradrenaline))
-		owner.add_chemical_effect(CE_PRESSURE, amount * 3)
+/obj/item/organ/internal/heart/influence_hormone(T, amount)
+	if(ishormone(T, adrenaline))
+		owner.add_chemical_effect(CE_PULSE, amount * 7.5)
+		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.05)
+	if(ishormone(T, noradrenaline))
+		owner.add_chemical_effect(CE_PRESSURE, amount * 10)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * -0.01)
-		owner.add_chemical_effect(CE_PULSE, amount)
-	if(isgormone(T, dopamine))
+		owner.add_chemical_effect(CE_PULSE, amount * 2)
+	if(ishormone(T, dopamine))
 		owner.add_chemical_effect(CE_PRESSURE, amount * 5)
+		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
 		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
 		if(amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
 			++rythme
@@ -48,18 +49,19 @@
 	..()
 
 /obj/item/organ/internal/heart/Process()
-	if(owner)
-		handle_rythme()
-		make_modificators()
-		handle_ischemia()
-
-		handle_pulse()
-		handle_cardiac_output()
-		handle_blood_pressure()
-
-		handle_blood()
-		post_handle_rythme()
 	..()
+	if(!owner)
+		return
+	handle_rythme()
+	make_modificators()
+	handle_ischemia()
+
+	handle_pulse()
+	handle_cardiac_output()
+	handle_blood_pressure()
+
+	handle_blood()
+	post_handle_rythme()
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
 	pulse = Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)))
@@ -68,9 +70,12 @@
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
 
 /obj/item/organ/internal/heart/proc/make_nc()
+	if(!pulse || !(pressure / pulse))
+		nc = 0
+		return
 	nc = BLOOD_PRESSURE_NORMAL + sumListAssoc(blood_pressure_modificators) - pressure
 	nc /= (pressure / pulse)
-	nc = Clamp(nc, -40, 20)
+	nc = Clamp(nc, -40, 40)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
 	make_nc()
@@ -110,15 +115,15 @@
 	var/changed = FALSE
 	switch(rythme)
 		if(RYTHME_AFIB)
-			if(world.time - last_rythm_change > 3 MINUTES)
+			if((world.time - last_rythm_change) > 3 MINUTES)
 				rythme = RYTHME_NORM
 				changed = TRUE
 		if(RYTHME_AFIB_RR)
-			if(world.time - last_rythm_change > 5 MINUTES)
+			if((world.time - last_rythm_change) > 5 MINUTES)
 				rythme = RYTHME_AFIB
 				changed = TRUE
 		if(RYTHME_VFIB)
-			if(world.time - last_rythm_change > 1.5 MINUTES)
+			if((world.time - last_rythm_change) > 1.5 MINUTES)
 				rythme = RYTHME_ASYSTOLE
 				changed = TRUE
 		if(RYTHME_ASYSTOLE)
@@ -127,7 +132,7 @@
 				rythme = RYTHME_VFIB
 				changed = TRUE
 
-	if(!changed && rythme < RYTHME_ASYSTOLE && world.time - last_rythm_change > 1.5 MINUTES && prob(25))
+	if(!changed && rythme < RYTHME_ASYSTOLE && (world.time - last_rythm_change) > 1.5 MINUTES && prob(25))
 		if(pulse >= 210)
 			++rythme
 		else if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
@@ -165,7 +170,7 @@
 		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
-		make_up_to_gormone(/datum/reagent/gormone/marker/troponin_t, damage / max_damage * 2)
+		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)
 
 
 /obj/item/organ/internal/heart/proc/handle_blood()

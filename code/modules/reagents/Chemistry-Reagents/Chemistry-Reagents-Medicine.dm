@@ -129,13 +129,6 @@
 		return
 	if(prob(volume*20))
 		M.add_chemical_effect(CE_PULSE, 1)
-	if(volume <= 0.02 && M.chem_doses[type] >= 0.05 && world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY * 0.3)
-		data = world.time
-		to_chat(M, "<span class='warning'>You feel antsy, your concentration wavers...</span>")
-	else
-		if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY * 0.3)
-			data = world.time
-			to_chat(M, "<span class='notice'>You feel invigorated and calm.</span>")
 
 /datum/reagent/nicotine/overdose(var/mob/living/carbon/M, var/alien)
 	..()
@@ -184,9 +177,6 @@
 /datum/reagent/menthol/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	if(alien == IS_DIONA)
 		return
-	if(world.time > data + ANTIDEPRESSANT_MESSAGE_DELAY * 0.35)
-		data = world.time
-		to_chat(M, "<span class='notice'>You feel faintly sore in the throat.</span>")
 
 /datum/reagent/nitroglycerin
 	name = "Nitroglycerin"

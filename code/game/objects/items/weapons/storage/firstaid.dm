@@ -46,7 +46,6 @@
 		/obj/item/stack/medical/ointment = 1,
 		/obj/item/device/healthanalyzer,
 		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/weapon/storage/pill_bottle/antidexafen,
 		/obj/item/weapon/storage/pill_bottle/paracetamol
 		)
 
@@ -241,12 +240,6 @@
 	desc = "High-strength antidepressant. Only for use in severe depression. 10u dose per pill. <span class='warning'>WARNING: side-effects may include hallucinations.</span>"
 
 	startswith = list(/obj/item/weapon/reagent_containers/pill/paroxetine = 14)
-
-/obj/item/weapon/storage/pill_bottle/antidexafen
-	name = "bottle of cold medicine pills"
-	desc = "All-in-one cold medicine. 15u dose per pill. Safe for babies like you!"
-
-	startswith = list(/obj/item/weapon/reagent_containers/pill/antidexafen = 21)
 
 /obj/item/weapon/storage/pill_bottle/paracetamol
 	name = "bottle of paracetamol"

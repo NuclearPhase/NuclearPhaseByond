@@ -162,7 +162,6 @@
 /obj/random/medical/lite/spawn_choices()
 	return list(/obj/item/stack/medical/bruise_pack = 4,
 				/obj/item/stack/medical/ointment = 4,
-				/obj/item/weapon/storage/pill_bottle/antidexafen = 2,
 				/obj/item/weapon/storage/pill_bottle/paracetamol = 2,
 				/obj/item/stack/medical/advanced/bruise_pack = 2,
 				/obj/item/stack/medical/advanced/ointment = 2,

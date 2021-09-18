@@ -71,6 +71,28 @@
 	reagents.add_reagent(/datum/reagent/inaprovaline, 60)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/adenosine
+	name = "adenosine bottle"
+	desc = "A small bottle. Contains adenosine."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle-4"
+
+/obj/item/weapon/reagent_containers/glass/bottle/adenosine/New()
+	..()
+	reagents.add_reagent(/datum/reagent/adenosine, 60)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/dopamine
+	name = "dopamine bottle"
+	desc = "A small bottle. Contains dopamine."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle-4"
+
+/obj/item/weapon/reagent_containers/glass/bottle/dopamine/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/dopamine, 60)
+	update_icon()
+
 
 /obj/item/weapon/reagent_containers/glass/bottle/toxin
 	name = "toxin bottle"

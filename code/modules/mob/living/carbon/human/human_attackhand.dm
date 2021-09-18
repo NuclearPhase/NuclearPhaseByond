@@ -70,7 +70,7 @@
 				cpr_time = 0
 				spawn(50)
 					cpr_time = 1
-				
+
 				if(!H.check_has_mouth())
 					to_chat(H, "<span class='warning'>You don't have a mouth, you cannot do mouth-to-mouth resustication!</span>")
 					return
@@ -86,34 +86,54 @@
 				if (!H.internal_organs_by_name[H.species.breathing_organ])
 					to_chat(H, "<span class='danger'>You need lungs for mouth-to-mouth resustication!</span>")
 					return
-				
 
-				var/is_precordial_blow = is_vfib()
+
+				var/is_precordial_blow = is_vfib() // TODO: Make ability to perform precordial blow skill-based.
 
 				var/punches = is_precordial_blow ? rand(3, 5) : rand(6, 8)
 
 				H.visible_message(SPAN_NOTICE("\The [H] is performing CPR on \the [src]."))
+				var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
 
 				for(var/i in 1 to punches)
-					if(!do_after(H, 5, src))
+					if(!do_after(H, rand(4, 8), src))
 						return
-					if(stat == DEAD)
-						continue
+
+					if("CPR" in heart.pulse_modificators)
+						heart.pulse_modificators["CPR"] += rand(20, 40) // TODO: Make this skill-based.
+						heart.blood_pressure_modificators["CPR"] += rand(20, 40)
+					else
+						heart.pulse_modificators["CPR"] = rand(20, 40)
+						heart.blood_pressure_modificators["CPR"] = rand(20, 40)
 
 					if(prob(1))
 						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
 						chest?.fracture()
-						
-					
-						
-						if(!need_breathe())
-							return
-						var/obj/item/organ/internal/lungs/L = internal_organs_by_name[species.breathing_organ]
-						if(L)
-							var/datum/gas_mixture/breath = H.get_breath_from_environment()
-							var/fail = L.handle_breath(breath, 1)
-							if(!fail)
-								to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
+
+					var/obj/item/organ/internal/lungs/L = internal_organs_by_name[species.breathing_organ]
+					if(!L)
+						continue
+					var/datum/gas_mixture/breath = H.get_breath_from_environment()
+					var/fail = L.handle_breath(breath, 1)
+					if(!fail)
+						to_chat(src, SPAN_NOTICE("You feel a breath of fresh air enter your lungs. It feels good."))
+
+				if(is_precordial_blow && is_vfib())
+					H.visible_message(SPAN_NOTICE("\The [H] is performing precordial blow on \the [src]."))
+					if(!do_after(H, 20, src))
+						return
+					if(!is_vfib())
+						return
+					H.visible_message(SPAN_NOTICE("\The [H] is performed precordial blow on \the [src]!"))
+
+					if(prob(5))
+						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
+						chest?.fracture()
+
+					if(prob(30)) // TODO: Make this skill-based
+						heart.rythme = prob(70) ? RYTHME_AFIB_RR : RYTHME_AFIB
+
+
 
 			else if(!(M == src && apply_pressure(M, M.zone_sel.selecting)))
 				help_shake_act(M)

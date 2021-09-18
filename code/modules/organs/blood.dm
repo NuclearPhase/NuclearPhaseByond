@@ -276,5 +276,12 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 // 0-1
 /mob/living/carbon/human/proc/get_blood_perfusion()
 	var/bp = get_blood_pressure()
-	. = (bp / BLOOD_PRESSURE_NORMAL) * get_blood_saturation()
-
+	var/bp_eff = bp / BLOOD_PRESSURE_NORMAL
+	switch(bp)
+		if(170 to 200)
+			bp_eff *= 0.65
+		if(200 to 230)
+			bp_eff *= 0.45
+		if(230 to INFINITY)
+			bp_eff *= 0.35
+	. = bp_eff * get_blood_saturation()

@@ -227,7 +227,7 @@
 /obj/item/weapon/reagent_containers/pill/happy/New()
 	..()
 	reagents.add_reagent(/datum/reagent/space_drugs, 15)
-	reagents.add_reagent(/datum/reagent/sugar, 15)
+	reagents.add_reagent(/datum/reagent/nutriment/sugar, 15)
 	color = reagents.get_color()
 
 
@@ -260,28 +260,6 @@
 /obj/item/weapon/reagent_containers/pill/diet/New()
 	..()
 	reagents.add_reagent(/datum/reagent/lipozine, 2)
-	color = reagents.get_color()
-
-
-/obj/item/weapon/reagent_containers/pill/noexcutite
-	name = "Noexcutite (15u)"
-	desc = "Feeling jittery? This should calm you down."
-	icon_state = "pill4"
-obj/item/weapon/reagent_containers/pill/noexcutite/New()
-	..()
-	reagents.add_reagent(/datum/reagent/noexcutite, 15)
-	color = reagents.get_color()
-
-
-/obj/item/weapon/reagent_containers/pill/antidexafen
-	name = "Antidexafen (15u)"
-	desc = "Common cold mediciation. Safe for babies!"
-	icon_state = "pill4"
-/obj/item/weapon/reagent_containers/pill/antidexafen/New()
-	..()
-	reagents.add_reagent(/datum/reagent/antidexafen, 10)
-	reagents.add_reagent(/datum/reagent/drink/juice/lemon, 5)
-	reagents.add_reagent(/datum/reagent/menthol, REM*0.2)
 	color = reagents.get_color()
 
 //Psychiatry pills.

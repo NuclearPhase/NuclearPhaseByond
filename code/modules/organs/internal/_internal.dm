@@ -9,54 +9,60 @@
 	var/list/datum/language/assists_languages = list()
 	var/min_bruised_damage = 10       // Damage before considered bruised
 	var/list/datum/organ_disease/diseases
-	var/list/gormones // list of amount of gormones by type.
-	var/list/influenced_gormones // list of gormones, what process in proc/influence_gormone
+	var/list/hormones // list of amount of hormones by type.
+	var/list/influenced_hormones // list of hormones, what process in proc/influence_hormone
+	var/list/watched_hormones // list of hormones, what always process in influence_hormone
 
-/obj/item/organ/internal/proc/influence_gormone(T, amount)
+/obj/item/organ/internal/proc/influence_hormone(T, amount)
 	return
 
-/obj/item/organ/internal/proc/make_gormone(T, amount)
+/obj/item/organ/internal/proc/make_hormone(T, amount)
 	if(!owner)
 		return
 	owner.bloodstr.add_reagent(T, amount)
 
-/obj/item/organ/internal/proc/make_up_to_gormone(T, amount)
+/obj/item/organ/internal/proc/make_up_to_hormone(T, amount)
 	if(!owner)
 		return
 	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
 	if(amount <= cur_amount)
 		return
-	make_gormone(T, amount - cur_amount)
+	make_hormone(T, amount - cur_amount)
 
-/obj/item/organ/internal/proc/free_gormone(T, amount)
-	if(!owner || !(LAZYISIN(gormones, T)))
+/obj/item/organ/internal/proc/free_hormone(T, amount)
+	if(!owner || !(LAZYISIN(hormones, T)))
 		return
-	var/to_use = min(amount, gormones[T])
-	make_gormone(T, to_use)
-	gormones[T] -= to_use
+	var/to_use = min(amount, hormones[T])
+	make_hormone(T, to_use)
+	hormones[T] -= to_use
 
-/obj/item/organ/internal/proc/free_up_to_gormone(T, amount)
+/obj/item/organ/internal/proc/free_up_to_hormone(T, amount)
 	if(!owner)
 		return
 	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
 	if(amount <= cur_amount)
 		return
-	free_gormone(T, amount - cur_amount)
+	free_hormone(T, amount - cur_amount)
 
-/obj/item/organ/internal/proc/generate_gormone(T, amount, max = INFINITY)
+/obj/item/organ/internal/proc/generate_hormone(T, amount, max = INFINITY)
 	if(!owner)
 		return
-	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	var/cur_amount = LAZYACCESS(hormones, T)
 	amount = min(cur_amount + amount, max) - cur_amount
 	if(amount <= 0)
 		return
 
-	LAZYINITLIST(gormones)
-	if(T in gormones)
-		gormones[T] += amount
+	LAZYINITLIST(hormones)
+	if(T in hormones)
+		hormones[T] += amount
 	else
-		gormones[T] = amount
+		hormones[T] = amount
 	
+/obj/item/organ/internal/proc/absorb_hormone(T, amount)
+	if(!owner)
+		return
+
+	owner.bloodstr.remove_reagent(T, amount)
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
@@ -181,6 +187,7 @@
 					degree = " a bit"
 				owner.custom_pain("Something inside your [parent.name] hurts[degree].", amount, affecting = parent)
 
+// note that ..() in begin of Process()
 /obj/item/organ/internal/Process()
 	for(var/datum/organ_disease/OD in SANITIZE_LIST(diseases))
 		if(OD.can_gone())
@@ -188,6 +195,8 @@
 			qdel(OD)
 			break
 		OD.update()
-	for(var/T in SANITIZE_LIST(influenced_gormones))
+	for(var/T in SANITIZE_LIST(influenced_hormones))
 		if(owner.bloodstr.has_reagent(T))
-			influence_gormone(T, owner.bloodstr.get_reagent_amount(T))
+			influence_hormone(T, owner.bloodstr.get_reagent_amount(T))
+	for(var/T in SANITIZE_LIST(watched_hormones))
+		influence_hormone(T, owner.bloodstr.get_reagent_amount(T))

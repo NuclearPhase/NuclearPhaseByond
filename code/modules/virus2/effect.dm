@@ -237,9 +237,9 @@
 		if(c_data)
 			data = c_data
 		else
-			data = pick(/datum/reagent/bicaridine, /datum/reagent/kelotane, /datum/reagent/dylovene, /datum/reagent/inaprovaline, /datum/reagent/space_drugs, /datum/reagent/sugar,
+			data = pick(/datum/reagent/bicaridine, /datum/reagent/kelotane, /datum/reagent/dylovene, /datum/reagent/inaprovaline, /datum/reagent/space_drugs, /datum/reagent/nutriment/sugar,
 						/datum/reagent/tramadol, /datum/reagent/dexalin, /datum/reagent/cryptobiolin, /datum/reagent/impedrezene, /datum/reagent/hyperzine, /datum/reagent/ethylredoxrazine,
-						/datum/reagent/mindbreaker, /datum/reagent/nutriment/glucose)
+						/datum/reagent/mindbreaker)
 		var/datum/reagent/R = data
 		name = "[initial(name)] ([initial(R.name)])"
 

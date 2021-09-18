@@ -104,10 +104,7 @@ proc/medical_scan_results(var/mob/living/carbon/human/H, var/verbose)
 
 	. += "<span class='notice'>Pulse rate: [pulse_result]bpm.</span>"
 
-	// Blood pressure. Based on the idea of a normal blood pressure being 120 over 80.
-	if(H.get_blood_volume() <= 70)
-		. += "<span class='danger'>Severe blood loss detected.</span>"
-	. += "<b>Blood pressure:</b> [H.get_blood_pressure_fluffy()] ([H.get_blood_perfusion()]% blood oxygenation)"
+	. += "<b>Blood pressure:</b> [H.get_blood_pressure_fluffy()] ([round(H.get_blood_perfusion() * 100)]% of normal perfusion)"
 
 	// Body temperature.
 	. += "<span class='notice'>Body temperature: [H.bodytemperature-T0C]&deg;C ([H.bodytemperature*1.8-459.67]&deg;F)</span>"

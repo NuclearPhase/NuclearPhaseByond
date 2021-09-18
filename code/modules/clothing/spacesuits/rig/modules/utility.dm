@@ -142,7 +142,7 @@
 		list("dexalin plus",  "dexalin plus",  /datum/reagent/dexalinp,          80),
 		list("antibiotics",   "antibiotics",   /datum/reagent/spaceacillin,      80),
 		list("antitoxins",    "antitoxins",    /datum/reagent/dylovene,          80),
-		list("glucose",       "glucose",       /datum/reagent/nutriment/glucose, 80),
+		list("glucose",       "glucose",       /datum/reagent/hormone/glucose, 80),
 		list("hyronalin",     "hyronalin",     /datum/reagent/hyronalin,         80),
 		list("radium",        "radium",        /datum/reagent/radium,            80)
 		)
@@ -159,7 +159,7 @@
 		list("dexalin plus",  "dexalin plus",  /datum/reagent/dexalinp,          20),
 		list("antibiotics",   "antibiotics",   /datum/reagent/spaceacillin,      20),
 		list("antitoxins",    "antitoxins",    /datum/reagent/dylovene,          20),
-		list("glucose",       "glucose",       /datum/reagent/nutriment/glucose, 80),
+		list("glucose",       "glucose",       /datum/reagent/hormone/glucose, 80),
 		list("hyronalin",     "hyronalin",     /datum/reagent/hyronalin,         20),
 		list("radium",        "radium",        /datum/reagent/radium,            20)
 		)
@@ -248,7 +248,7 @@
 		list("synaptizine", "synaptizine", /datum/reagent/synaptizine,       30),
 		list("hyperzine",   "hyperzine",   /datum/reagent/hyperzine,         30),
 		list("oxycodone",   "oxycodone",   /datum/reagent/tramadol/oxycodone,         30),
-		list("glucose",     "glucose",     /datum/reagent/nutriment/glucose, 80),
+		list("glucose",     "glucose",     /datum/reagent/hormone/glucose, 80),
 		)
 
 	interface_name = "combat chem dispenser"

@@ -9,13 +9,19 @@
 	min_broken_damage = 45
 	max_damage = 70
 	relative_size = 60
+	influenced_hormones = list(
+		/datum/reagent/hormone/glucagon
+	)
 
-/obj/item/organ/internal/liver/robotize()
-	. = ..()
-	icon_state = "liver-prosthetic"
+/obj/item/organ/internal/liver/influence_hormone(T, amount)
+	if(ishormone(T, glucagon))
+		free_hormone(/datum/reagent/hormone/glucose, 0.1)
+		absorb_hormone(T, 1)
+	if(ishormone(T, insulin))
+		free_hormone(/datum/reagent/hormone/glucose, 0.1)
+		absorb_hormone(T, 1)
 
 /obj/item/organ/internal/liver/Process()
-
 	..()
 	if(!owner)
 		return

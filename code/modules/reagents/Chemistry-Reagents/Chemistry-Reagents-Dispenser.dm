@@ -384,35 +384,6 @@
 	reagent_state = SOLID
 	color = "#808080"
 
-/datum/reagent/sugar
-	name = "Sugar"
-	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
-	taste_description = "sugar"
-	taste_mult = 1.8
-	reagent_state = SOLID
-	color = "#ffffff"
-
-	glass_name = "sugar"
-	glass_desc = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
-	glass_icon = DRINK_ICON_NOISY
-
-/datum/reagent/sugar/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	M.nutrition += removed * 3
-
-	if(alien == IS_UNATHI)
-		if(M.chem_doses[type] < 2)
-			if(M.chem_doses[type] == metabolism * 2 || prob(5))
-				M.emote("yawn")
-		else if(M.chem_doses[type] < 5)
-			M.eye_blurry = max(M.eye_blurry, 10)
-		else if(M.chem_doses[type] < 20)
-			if(prob(50))
-				M.Weaken(2)
-			M.drowsyness = max(M.drowsyness, 20)
-		else
-			M.sleeping = max(M.sleeping, 20)
-			M.drowsyness = max(M.drowsyness, 60)
-
 /datum/reagent/sulfur
 	name = "Sulfur"
 	description = "A chemical element with a pungent smell."

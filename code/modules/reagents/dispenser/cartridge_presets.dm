@@ -7,7 +7,7 @@
 
 	// Multiple
 	water		spawn_reagent = /datum/reagent/water
-	sugar		spawn_reagent = /datum/reagent/sugar
+	sugar		spawn_reagent = /datum/reagent/nutriment/sugar
 
 	// Chemistry
 	hydrazine	spawn_reagent = /datum/reagent/hydrazine

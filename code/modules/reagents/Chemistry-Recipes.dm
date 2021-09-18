@@ -93,7 +93,7 @@
 /datum/chemical_reaction/inaprovaline
 	name = "Inaprovaline"
 	result = /datum/reagent/inaprovaline
-	required_reagents = list(/datum/reagent/acetone = 1, /datum/reagent/carbon = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/acetone = 1, /datum/reagent/carbon = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/dylovene
@@ -111,7 +111,7 @@
 /datum/chemical_reaction/paracetamol
 	name = "Paracetamol"
 	result = /datum/reagent/paracetamol
-	required_reagents = list(/datum/reagent/tramadol = 1, /datum/reagent/sugar = 1, /datum/reagent/water = 1)
+	required_reagents = list(/datum/reagent/tramadol = 1, /datum/reagent/nutriment/sugar = 1, /datum/reagent/water = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/oxycodone
@@ -148,7 +148,7 @@
 /datum/chemical_reaction/space_drugs
 	name = "Space Drugs"
 	result = /datum/reagent/space_drugs
-	required_reagents = list(/datum/reagent/mercury = 1, /datum/reagent/sugar = 1, /datum/reagent/lithium = 1)
+	required_reagents = list(/datum/reagent/mercury = 1, /datum/reagent/nutriment/sugar = 1, /datum/reagent/lithium = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/lube
@@ -166,7 +166,7 @@
 /datum/chemical_reaction/synaptizine
 	name = "Synaptizine"
 	result = /datum/reagent/synaptizine
-	required_reagents = list(/datum/reagent/sugar = 1, /datum/reagent/lithium = 1, /datum/reagent/water = 1)
+	required_reagents = list(/datum/reagent/nutriment/sugar = 1, /datum/reagent/lithium = 1, /datum/reagent/water = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/hyronalin
@@ -184,7 +184,7 @@
 /datum/chemical_reaction/impedrezene
 	name = "Impedrezene"
 	result = /datum/reagent/impedrezene
-	required_reagents = list(/datum/reagent/mercury = 1, /datum/reagent/acetone = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/mercury = 1, /datum/reagent/acetone = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/kelotane
@@ -217,7 +217,7 @@
 /datum/chemical_reaction/cryptobiolin
 	name = "Cryptobiolin"
 	result = /datum/reagent/cryptobiolin
-	required_reagents = list(/datum/reagent/potassium = 1, /datum/reagent/acetone = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/potassium = 1, /datum/reagent/acetone = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/tricordrazine
@@ -255,13 +255,13 @@
 	name = "Bicaridine"
 	result = /datum/reagent/bicaridine
 	required_reagents = list(/datum/reagent/inaprovaline = 1, /datum/reagent/carbon = 1)
-	inhibitors = list(/datum/reagent/sugar = 1) // Messes up with inaprovaline
+	inhibitors = list(/datum/reagent/nutriment/sugar = 1) // Messes up with inaprovaline
 	result_amount = 2
 
 /datum/chemical_reaction/hyperzine
 	name = "Hyperzine"
 	result = /datum/reagent/hyperzine
-	required_reagents = list(/datum/reagent/sugar = 1, /datum/reagent/phosphorus = 1, /datum/reagent/sulfur = 1)
+	required_reagents = list(/datum/reagent/nutriment/sugar = 1, /datum/reagent/phosphorus = 1, /datum/reagent/sulfur = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/ryetalyn
@@ -303,7 +303,7 @@
 /datum/chemical_reaction/soporific
 	name = "Soporific"
 	result = /datum/reagent/soporific
-	required_reagents = list(/datum/reagent/chloralhydrate = 1, /datum/reagent/sugar = 4)
+	required_reagents = list(/datum/reagent/chloralhydrate = 1, /datum/reagent/nutriment/sugar = 4)
 	inhibitors = list(/datum/reagent/phosphorus) // Messes with the smoke
 	result_amount = 5
 
@@ -436,12 +436,6 @@
 	required_reagents = list(/datum/reagent/radium = 1, /datum/reagent/potassium = 1, /datum/reagent/acid/hydrochloric = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/noexcutite
-	name = "Noexcutite"
-	result = /datum/reagent/noexcutite
-	required_reagents = list(/datum/reagent/tramadol/oxycodone = 1, /datum/reagent/dylovene = 1)
-	result_amount = 2
-
 /* Solidification */
 
 /datum/chemical_reaction/phoronsolidification
@@ -559,7 +553,7 @@
 /datum/chemical_reaction/chemsmoke
 	name = "Chemsmoke"
 	result = null
-	required_reagents = list(/datum/reagent/potassium = 1, /datum/reagent/sugar = 1, /datum/reagent/phosphorus = 1)
+	required_reagents = list(/datum/reagent/potassium = 1, /datum/reagent/nutriment/sugar = 1, /datum/reagent/phosphorus = 1)
 	result_amount = 0.4
 
 /datum/chemical_reaction/chemsmoke/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1057,7 +1051,7 @@
 /datum/chemical_reaction/slime/jam
 	name = "Slime Jam"
 	result = /datum/reagent/slimejelly
-	required_reagents = list(/datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/nutriment/sugar = 1)
 	result_amount = 10
 	required = /obj/item/slime_extract/purple
 
@@ -1256,7 +1250,7 @@
 /datum/chemical_reaction/chocolate_bar
 	name = "Chocolate Bar"
 	result = null
-	required_reagents = list(/datum/reagent/drink/milk/soymilk = 2, /datum/reagent/nutriment/coco = 2, /datum/reagent/sugar = 2)
+	required_reagents = list(/datum/reagent/drink/milk/soymilk = 2, /datum/reagent/nutriment/coco = 2, /datum/reagent/nutriment/sugar = 2)
 	result_amount = 1
 
 /datum/chemical_reaction/chocolate_bar/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1267,7 +1261,7 @@
 /datum/chemical_reaction/chocolate_bar2
 	name = "Chocolate Bar"
 	result = null
-	required_reagents = list(/datum/reagent/drink/milk = 2, /datum/reagent/nutriment/coco = 2, /datum/reagent/sugar = 2)
+	required_reagents = list(/datum/reagent/drink/milk = 2, /datum/reagent/nutriment/coco = 2, /datum/reagent/nutriment/sugar = 2)
 	result_amount = 1
 
 /datum/chemical_reaction/chocolate_bar2/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1290,7 +1284,7 @@
 /datum/chemical_reaction/ketchup
 	name = "Ketchup"
 	result = /datum/reagent/nutriment/ketchup
-	required_reagents = list(/datum/reagent/drink/juice/tomato = 2, /datum/reagent/water = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/drink/juice/tomato = 2, /datum/reagent/water = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 4
 
 /datum/chemical_reaction/barbecue
@@ -1466,7 +1460,7 @@
 /datum/chemical_reaction/kahlua
 	name = "Kahlua"
 	result = /datum/reagent/ethanol/coffee/kahlua
-	required_reagents = list(/datum/reagent/drink/coffee = 5, /datum/reagent/sugar = 5)
+	required_reagents = list(/datum/reagent/drink/coffee = 5, /datum/reagent/nutriment/sugar = 5)
 	catalysts = list(/datum/reagent/enzyme = 5)
 	result_amount = 5
 
@@ -1523,7 +1517,7 @@
 	name = "Magellan"
 	result = /datum/reagent/ethanol/magellan
 	required_reagents = list(/datum/reagent/ethanol/wine = 1, /datum/reagent/ethanol/specialwhiskey = 1)
-	catalysts = list(/datum/reagent/sugar)
+	catalysts = list(/datum/reagent/nutriment/sugar)
 	result_amount = 2
 
 /datum/chemical_reaction/zhenghe
@@ -1595,7 +1589,7 @@
 /datum/chemical_reaction/hooch
 	name = "Hooch"
 	result = /datum/reagent/ethanol/hooch
-	required_reagents = list (/datum/reagent/sugar = 1, /datum/reagent/ethanol = 2, /datum/reagent/fuel = 1)
+	required_reagents = list (/datum/reagent/nutriment/sugar = 1, /datum/reagent/ethanol = 2, /datum/reagent/fuel = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/irish_coffee
@@ -1842,13 +1836,13 @@
 /datum/chemical_reaction/bananahonk
 	name = "Banana Honk"
 	result = /datum/reagent/ethanol/bananahonk
-	required_reagents = list(/datum/reagent/drink/juice/banana = 1, /datum/reagent/drink/milk/cream = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/drink/juice/banana = 1, /datum/reagent/drink/milk/cream = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/silencer
 	name = "Silencer"
 	result = /datum/reagent/ethanol/silencer
-	required_reagents = list(/datum/reagent/drink/nothing = 1, /datum/reagent/drink/milk/cream = 1, /datum/reagent/sugar = 1)
+	required_reagents = list(/datum/reagent/drink/nothing = 1, /datum/reagent/drink/milk/cream = 1, /datum/reagent/nutriment/sugar = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/driestmartini
@@ -1860,7 +1854,7 @@
 /datum/chemical_reaction/lemonade
 	name = "Lemonade"
 	result = /datum/reagent/drink/lemonade
-	required_reagents = list(/datum/reagent/drink/juice/lemon = 1, /datum/reagent/sugar = 1, /datum/reagent/water = 1)
+	required_reagents = list(/datum/reagent/drink/juice/lemon = 1, /datum/reagent/nutriment/sugar = 1, /datum/reagent/water = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/kiraspecial
@@ -1896,7 +1890,7 @@
 /datum/chemical_reaction/rum
 	name = "Rum"
 	result = /datum/reagent/ethanol/rum
-	required_reagents = list(/datum/reagent/sugar = 1, /datum/reagent/water = 1)
+	required_reagents = list(/datum/reagent/nutriment/sugar = 1, /datum/reagent/water = 1)
 	catalysts = list(/datum/reagent/enzyme = 5)
 	result_amount = 2
 
@@ -1929,15 +1923,3 @@
 	var/turf/T = get_turf(holder.my_atom)
 	if(istype(T)) new /obj/item/stack/material/deuterium(T, created_volume)
 	return
-
-/datum/chemical_reaction/antidexafen
-	name = "Antidexafen"
-	result = /datum/reagent/antidexafen
-	required_reagents = list(/datum/reagent/paracetamol = 1, /datum/reagent/carbon = 1)
-	result_amount = 2
-
-/datum/chemical_reaction/nanoblood
-	name = "Nanoblood"
-	result = /datum/reagent/nanoblood
-	required_reagents = list(/datum/reagent/dexalinp = 1, /datum/reagent/iron = 1, /datum/reagent/blood = 1)
-	result_amount = 3

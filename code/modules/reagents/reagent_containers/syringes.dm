@@ -329,6 +329,27 @@
 	mode = SYRINGE_INJECT
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/adrenaline
+	name = "Syringe (adrenaline)"
+	desc = "Contains adrenaline."
+
+/obj/item/weapon/reagent_containers/syringe/adrenaline/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/adrenaline, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/noradrenaline
+	name = "Syringe (noradrenaline)"
+	desc = "Contains noradrenaline."
+
+/obj/item/weapon/reagent_containers/syringe/noradrenaline/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/noradrenaline, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+
 /obj/item/weapon/reagent_containers/syringe/antitoxin
 	name = "Syringe (anti-toxin)"
 	desc = "Contains anti-toxins."

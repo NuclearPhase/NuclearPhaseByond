@@ -10,7 +10,7 @@ var/global/pu_denominations = list(10, 5, 4, 3, 2, 1)
 	w_class = ITEM_SIZE_TINY
 	nutriment_amt = 3
 	nutriment_desc = list("raw" = 3, "bitter" = 4)
-	bitesize = 3
+	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/protein_package/New()
 	..()
@@ -79,6 +79,10 @@ var/global/pu_denominations = list(10, 5, 4, 3, 2, 1)
 	if(istype(pp, /obj/item/protein_package))
 		pp.attackby(src, user)
 	else if(istype(pp, /obj/item/weapon/reagent_containers/food/snacks/protein_package))
+		var/obj/item/weapon/reagent_containers/food/snacks/protein_package/pp_o = pp
+		if(pp_o.reagents.total_volume != 10)
+			return
+
 		var/obj/item/protein_package/p2/pp2 = new(user.loc)
 		qdel(src)
 		qdel(pp)

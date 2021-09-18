@@ -189,7 +189,7 @@
 #define BP_THROAT 	"throat"
 #define BP_VCHORDS  "vocal chords"
 #define BP_TONGUE	"tongue"
-
+#define BP_STOMACH  "stomach"
 // Robo Organs.
 #define BP_POSIBRAIN	"posibrain"
 #define BP_VOICE		"vocal synthesiser"

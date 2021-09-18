@@ -112,5 +112,5 @@
 	holder = null
 	. = ..()
 
-/datum/reagent/gormone/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/hormone/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
 	return
