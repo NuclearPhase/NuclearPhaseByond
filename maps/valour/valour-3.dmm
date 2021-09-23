@@ -62,7 +62,7 @@
 "bl" = (/obj/structure/cable{d1 = 4; d2 = 0; icon_state = "0-4"},/obj/machinery/power/massslift/powerplant/unit{dir = 4},/turf/simulated/floor/tiled/dark,/area/sector_c/lift_core)
 "bm" = (/obj/structure/cable{d2 = 5; icon_state = "0-5"; item_state = "0-5"},/obj/structure/cable{d1 = 4; d2 = 0; icon_state = "0-4"},/obj/structure/cable{d1 = 8; d2 = 0; icon_state = "0-8"},/obj/machinery/power/massslift/powerplant/core{ncable_id = "mainlift"; will_be_anchored = 1},/turf/simulated/floor/tiled/dark,/area/sector_c/lift_core)
 "bn" = (/obj/structure/cable{d1 = 8; d2 = 0; icon_state = "0-8"},/obj/machinery/power/massslift/powerplant/unit{dir = 8},/turf/simulated/floor/tiled/dark,/area/sector_c/lift_core)
-"bo" = (/turf/simulated/outwards/stone,/area/sector_c)
+"bo" = (/turf/unsimulated/outwards/stone,/area/sector_c)
 
 (1,1,1) = {"
 bobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobobo

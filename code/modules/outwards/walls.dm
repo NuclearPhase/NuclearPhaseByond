@@ -1,4 +1,4 @@
-/turf/simulated/outwards/stone
+/turf/unsimulated/outwards/stone
 	name = "stone"
 	icon = 'icons/turf/outwards.dmi'
 	icon_state = "stone"
@@ -6,7 +6,7 @@
 	density = 1
 	blocks_air = 1
 
-/turf/simulated/outwards/ice
+/turf/unsimulated/outwards/ice
 	name = "ice"
 	icon = 'icons/turf/outwards.dmi'
 	icon_state = "ice"
