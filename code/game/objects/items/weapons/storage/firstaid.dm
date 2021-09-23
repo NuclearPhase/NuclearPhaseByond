@@ -27,7 +27,6 @@
 	item_state = "firstaid-ointment"
 
 	startswith = list(
-		/obj/item/device/healthanalyzer,
 		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
 		/obj/item/stack/medical/ointment,
 		/obj/item/weapon/storage/pill_bottle/kelotane,
@@ -44,9 +43,6 @@
 	startswith = list(
 		/obj/item/stack/medical/bruise_pack = 2,
 		/obj/item/stack/medical/ointment = 1,
-		/obj/item/device/healthanalyzer,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/weapon/storage/pill_bottle/antidexafen,
 		/obj/item/weapon/storage/pill_bottle/paracetamol
 		)
 
@@ -57,9 +53,6 @@
 	item_state = "firstaid-toxin"
 
 	startswith = list(
-		/obj/item/weapon/reagent_containers/syringe/antitoxin = 3,
-		/obj/item/weapon/storage/pill_bottle/antitox,
-		/obj/item/device/healthanalyzer,
 		)
 
 /obj/item/weapon/storage/firstaid/toxin/New()
@@ -73,10 +66,6 @@
 	item_state = "firstaid-o2"
 
 	startswith = list(
-		/obj/item/weapon/storage/pill_bottle/dexalin,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
-		/obj/item/device/healthanalyzer,
 		)
 
 /obj/item/weapon/storage/firstaid/adv
@@ -241,12 +230,6 @@
 	desc = "High-strength antidepressant. Only for use in severe depression. 10u dose per pill. <span class='warning'>WARNING: side-effects may include hallucinations.</span>"
 
 	startswith = list(/obj/item/weapon/reagent_containers/pill/paroxetine = 14)
-
-/obj/item/weapon/storage/pill_bottle/antidexafen
-	name = "bottle of cold medicine pills"
-	desc = "All-in-one cold medicine. 15u dose per pill. Safe for babies like you!"
-
-	startswith = list(/obj/item/weapon/reagent_containers/pill/antidexafen = 21)
 
 /obj/item/weapon/storage/pill_bottle/paracetamol
 	name = "bottle of paracetamol"

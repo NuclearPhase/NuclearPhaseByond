@@ -129,3 +129,9 @@
 
 /proc/RoundUpToPowerOfTwo(var/val)
 	return 2 ** -round(-log(2,val))
+
+/proc/frac(x)
+	return x % 1
+
+/proc/remove_frac(x)
+	return x - frac(x)

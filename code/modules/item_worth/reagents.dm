@@ -60,7 +60,7 @@
 /datum/reagent/sodium
 	value = 0.1
 
-/datum/reagent/sugar
+/datum/reagent/nutriment/sugar
 	value = 0.1
 
 /datum/reagent/sulfur
@@ -405,7 +405,7 @@
 /datum/reagent/tramadol
 	value = 3.1
 
-/datum/reagent/tramadol/oxycodone
+/datum/reagent/tramadol/opium/oxycodone
 	value = 3.3
 
 /datum/reagent/synaptizine

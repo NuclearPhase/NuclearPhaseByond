@@ -9,16 +9,31 @@
 	min_broken_damage = 45
 	max_damage = 70
 	relative_size = 60
+	influenced_hormones = list(
+		/datum/reagent/hormone/glucagon
+	)
+	hormones = list(
+		/datum/reagent/hormone/glucose = 2
+	)
 
-/obj/item/organ/internal/liver/robotize()
-	. = ..()
-	icon_state = "liver-prosthetic"
+	var/bilirubine_norm = -1
+
+/obj/item/organ/internal/liver/influence_hormone(T, amount)
+	if(ishormone(T, glucagon))
+		free_hormone(/datum/reagent/hormone/glucose, min(amount, 0.1))
+		absorb_hormone(T, min(amount, 0.1) * 10)
 
 /obj/item/organ/internal/liver/Process()
-
 	..()
 	if(!owner)
 		return
+
+	if(bilirubine_norm < 0)
+		bilirubine_norm = rand(5, 21)
+
+	make_up_to_hormone(/datum/reagent/hormone/marker/bilirubine, bilirubine_norm)
+	make_up_to_hormone(/datum/reagent/hormone/marker/ast, 30 + ((damage / max_damage) * 0.1))
+	make_up_to_hormone(/datum/reagent/hormone/marker/alt, 25 + ((damage / max_damage) * 2))
 
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(1))
@@ -61,7 +76,7 @@
 
 	// Blood loss or liver damage make you lose nutriments
 	var/blood_volume = owner.get_blood_volume()
-	if(blood_volume < BLOOD_VOLUME_SAFE || is_bruised())
+	if(blood_volume < BLOOD_PERFUSION_SAFE || is_bruised())
 		if(owner.nutrition >= 300)
 			owner.nutrition -= 10
 		else if(owner.nutrition >= 200)

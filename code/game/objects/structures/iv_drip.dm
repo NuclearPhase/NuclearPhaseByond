@@ -114,7 +114,7 @@
 			return
 
 		// If the human is losing too much blood, beep.
-		if(attached.get_blood_volume() < BLOOD_VOLUME_SAFE * 1.05)
+		if(attached.get_blood_volume() < BLOOD_PERFUSION_SAFE * 1.05)
 			visible_message("\The [src] beeps loudly.")
 
 		if(attached.take_blood(beaker,amount))

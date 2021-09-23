@@ -279,7 +279,7 @@
 			message = "<B>[src]</B> shits \his pants."
 			reagents.add_reagent("poo", 10)
 			adjust_hygiene(-25)
-			add_event("shitself", /datum/happiness_event/hygiene/shit)
+			add_event("shitself", new /datum/happiness_event/hygiene/shit)
 
 		//Poo on the face.
 		else if(M != src && M.lying)//Can only shit on them if they're lying down.
@@ -334,7 +334,7 @@
 	else if(w_uniform)//In your pants.
 		message = "<B>[src]</B> pisses \his pants."
 		adjust_hygiene(-25)
-		add_event("pissedself", /datum/happiness_event/hygiene/pee)
+		add_event("pissedself", new /datum/happiness_event/hygiene/pee)
 
 	else//On the floor.
 		var/turf/TT = src.loc

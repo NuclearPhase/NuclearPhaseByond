@@ -2,7 +2,7 @@
 	var/msg = "<span class='info'>*---------*\n<EM>Current mood</EM>\n"
 	for(var/i in events)
 		var/datum/happiness_event/event = events[i]
-		msg += event.description
+		msg += "[event.description]\n"
 
 	if(!events.len)
 		msg += "<span class='info'>I feel indifferent.</span>\n"
@@ -22,7 +22,7 @@
 		happiness += event.happiness
 
 	switch(happiness)
-		if(-5000000 to MOOD_LEVEL_SAD4)
+		if(-INFINITY to MOOD_LEVEL_SAD4)
 			if(happiness_icon)
 				happiness_icon.icon_state = "mood7"
 
@@ -64,54 +64,38 @@
 		else
 			to_chat(src, "<span class='info'>My mood gets better.</span>")
 
-/mob/proc/flash_sadness()
-	if(prob(2))
+/mob/living/carbon/proc/flash_sadness()
+	if(prob(abs(happiness)))
 		flick("sadness",pain)
 		var/spoopysound = pick('sound/effects/badmood1.ogg','sound/effects/badmood2.ogg','sound/effects/badmood3.ogg','sound/effects/badmood4.ogg')
 		sound_to(src, spoopysound)
 
 /mob/living/carbon/proc/handle_happiness()
 	switch(happiness)
-		if(-5000000 to MOOD_LEVEL_SAD4)
+		if(-INFINITY to MOOD_LEVEL_SAD4)
 			flash_sadness()
-			crit_mood_modifier = -10
+			return 1
 		if(MOOD_LEVEL_SAD4 to MOOD_LEVEL_SAD3)
 			flash_sadness()
-			crit_mood_modifier = -5
+			return 1
 		if(MOOD_LEVEL_SAD1 to MOOD_LEVEL_HAPPY2)
-			crit_mood_modifier = CRIT_SUCCESS_NORM
+			return 1
 		if(MOOD_LEVEL_HAPPY3 to MOOD_LEVEL_HAPPY4)
-			crit_mood_modifier = 5
+			return 1
 		if(MOOD_LEVEL_HAPPY4 to INFINITY)
-			crit_mood_modifier = 10
+			return 1
 
 
-/mob/living/carbon/proc/add_event(category, type) //Category will override any events in the same category, should be unique unless the event is based on the same thing like hunger.
-	var/datum/happiness_event/the_event
-	if(events[category])
-		the_event = events[category]
-		if(the_event.type != type)
-			clear_event(category)
-			return .()
-		else
-			return 0 //Don't have to update the event.
-	else
-		the_event = new type()
-
-	events[category] = the_event
+/mob/living/carbon/proc/add_event(category, var/datum/happiness_event/event) //Category will override any events in the same category, should be unique unless the event is based on the same thing like hunger.
+	events[category] = event
 	update_happiness()
 
-	if(the_event.timeout)
-		spawn(the_event.timeout)
+	if(event.timeout)
+		spawn(event.timeout)
 			clear_event(category)
 
 /mob/living/carbon/proc/clear_event(category)
-	var/datum/happiness_event/event = events[category]
-	if(!event)
-		return 0
-
 	events -= category
-	qdel(event)
 	update_happiness()
 
 /mob/living/carbon/proc/handle_hygiene()
@@ -119,7 +103,7 @@
 	var/image/smell = image('icons/effects/effects.dmi', "smell")//This is a hack, there has got to be a safer way to do this but I don't know it at the moment.
 	switch(hygiene)
 		if(HYGIENE_LEVEL_NORMAL to INFINITY)
-			add_event("hygiene", /datum/happiness_event/hygiene/clean)
+			add_event("hygiene", new /datum/happiness_event/hygiene/clean)
 			overlays -= smell
 		if(HYGIENE_LEVEL_DIRTY to HYGIENE_LEVEL_NORMAL)
 			clear_event("hygiene")
@@ -127,7 +111,7 @@
 		if(0 to HYGIENE_LEVEL_DIRTY)
 			overlays -= smell
 			overlays += smell
-			add_event("hygiene", /datum/happiness_event/hygiene/smelly)
+			add_event("hygiene", new /datum/happiness_event/hygiene/smelly)
 
 /mob/living/carbon/proc/adjust_hygiene(var/amount)
 	var/old_hygiene = hygiene

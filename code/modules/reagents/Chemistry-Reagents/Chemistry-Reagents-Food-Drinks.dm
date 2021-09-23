@@ -6,12 +6,11 @@
 	taste_mult = 4
 	reagent_state = SOLID
 	metabolism = REM * 4
-	var/nutriment_factor = 10 // Per unit
+	var/nutriment_factor = 10
 	var/injectable = 0
 	color = "#664330"
 
 /datum/reagent/nutriment/mix_data(var/list/newdata, var/newamount)
-
 	if(!islist(newdata) || !newdata.len)
 		return
 
@@ -42,42 +41,18 @@
 	M.heal_organ_damage(0.5 * removed, 0) //what
 
 	adjust_nutrition(M, alien, removed)
-	M.add_chemical_effect(CE_BLOODRESTORE, 4 * removed)
 
 /datum/reagent/nutriment/proc/adjust_nutrition(var/mob/living/carbon/M, var/alien, var/removed)
-	switch(alien)
-		if(IS_UNATHI) removed *= 0.1 // Unathi get most of their nutrition from meat.
-	M.nutrition += nutriment_factor * removed // For hunger and fatness
-	M.bowels += nutriment_factor * removed	//For pooping
-
-/datum/reagent/nutriment/glucose
-	name = "Glucose"
-	color = "#ffffff"
-
-	injectable = 1
+	M.bowels += 10 * removed	//For pooping
+	var/obj/item/organ/internal/liver/L = M.internal_organs_by_name[BP_LIVER]
+	L.generate_hormone(/datum/reagent/hormone/glucose, (nutriment_factor / 20) * removed)
 
 /datum/reagent/nutriment/protein
 	name = "animal protein"
 	taste_description = "some sort of protein"
 	color = "#440000"
-
-/datum/reagent/nutriment/protein/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
-	switch(alien)
-		if(IS_SKRELL)
-			M.adjustToxLoss(0.5 * removed)
-			return
-	..()
-
-/datum/reagent/nutriment/protein/adjust_nutrition(var/mob/living/carbon/M, var/alien, var/removed)
-	switch(alien)
-		if(IS_UNATHI) removed *= 2.25
-	M.nutrition += nutriment_factor * removed // For hunger and fatness
-
-/datum/reagent/nutriment/protein/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	if(alien && alien == IS_SKRELL)
-		M.adjustToxLoss(2 * removed)
-		return
-	..()
+	metabolism = REM
+	nutriment_factor = 15
 
 /datum/reagent/nutriment/protein/egg // Also bad for skrell.
 	name = "egg yolk"
@@ -88,25 +63,8 @@
 	name = "Honey"
 	description = "A golden yellow syrup, loaded with sugary sweetness."
 	taste_description = "sweetness"
-	nutriment_factor = 10
+	nutriment_factor = 6
 	color = "#ffff00"
-
-/datum/reagent/honey/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
-	..()
-
-	if(alien == IS_UNATHI)
-		if(M.chem_doses[type] < 2)
-			if(M.chem_doses[type] == metabolism * 2 || prob(5))
-				M.emote("yawn")
-		else if(M.chem_doses[type] < 5)
-			M.eye_blurry = max(M.eye_blurry, 10)
-		else if(M.chem_doses[type] < 20)
-			if(prob(50))
-				M.Weaken(2)
-			M.drowsyness = max(M.drowsyness, 20)
-		else
-			M.sleeping = max(M.sleeping, 20)
-			M.drowsyness = max(M.drowsyness, 60)
 
 /datum/reagent/nutriment/flour
 	name = "flour"
@@ -123,6 +81,20 @@
 			T.wet = min(T.wet, 1)
 		else
 			T.wet = 0
+
+/datum/reagent/nutriment/sugar
+	name = "Sugar"
+	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
+	taste_description = "sugar"
+	taste_mult = 1.8
+	reagent_state = SOLID
+	color = "#ffffff"
+
+	glass_name = "sugar"
+	glass_desc = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
+	glass_icon = DRINK_ICON_NOISY
+	nutriment_factor = 25
+	metabolism = REM * 8
 
 /datum/reagent/nutriment/coco
 	name = "Coco Powder"

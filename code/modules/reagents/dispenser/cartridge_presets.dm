@@ -7,7 +7,7 @@
 
 	// Multiple
 	water		spawn_reagent = /datum/reagent/water
-	sugar		spawn_reagent = /datum/reagent/sugar
+	sugar		spawn_reagent = /datum/reagent/nutriment/sugar
 
 	// Chemistry
 	hydrazine	spawn_reagent = /datum/reagent/hydrazine
@@ -72,7 +72,7 @@
 	ryetalyn	spawn_reagent = /datum/reagent/ryetalyn
 	paracetamol	spawn_reagent = /datum/reagent/paracetamol
 	tramadol	spawn_reagent = /datum/reagent/tramadol
-	oxycodone	spawn_reagent = /datum/reagent/tramadol/oxycodone
+	oxycodone	spawn_reagent = /datum/reagent/tramadol/opium/oxycodone
 	sterilizine	spawn_reagent = /datum/reagent/sterilizine
 	leporazine	spawn_reagent = /datum/reagent/leporazine
 	kelotane	spawn_reagent = /datum/reagent/kelotane

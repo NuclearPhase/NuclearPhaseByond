@@ -181,10 +181,7 @@
 	var/slab_name = occupant.name
 	var/slab_count = 3
 	var/slab_type = /obj/item/weapon/reagent_containers/food/snacks/meat
-	var/slab_nutrition = 20
-	if(iscarbon(occupant))
-		var/mob/living/carbon/C = occupant
-		slab_nutrition = C.nutrition / 15
+	var/slab_nutrition = 25
 
 	// Some mobs have specific meat item types.
 	if(istype(src.occupant,/mob/living/simple_animal))

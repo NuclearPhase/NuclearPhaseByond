@@ -52,31 +52,9 @@ datum/preferences
 		save_character()
 
 /datum/preferences/proc/ZeroSkills(var/forced = 0)
-	for(var/V in SKILLS) for(var/datum/skill/S in SKILLS[V])
-		if(!skills.Find(S.ID) || forced)
-			skills[S.ID] = SKILL_NONE
-
-/datum/preferences/proc/CalculateSkillPoints()
-	used_skillpoints = 0
-	for(var/V in SKILLS) for(var/datum/skill/S in SKILLS[V])
-		var/multiplier = S.cost_multiplier
-		switch(skills[S.ID])
-			if(SKILL_NONE)
-				used_skillpoints += 0 * multiplier
-			if(SKILL_BASIC)
-				used_skillpoints += 1 * multiplier
-			if(SKILL_ADEPT)
-				// secondary skills cost less
-				if(S.secondary)
-					used_skillpoints += 1 * multiplier
-				else
-					used_skillpoints += 3 * multiplier
-			if(SKILL_EXPERT)
-				// secondary skills cost less
-				if(S.secondary)
-					used_skillpoints += 3 * multiplier
-				else
-					used_skillpoints += 6 * multiplier
+	for(var/T in subtypesof(/datum/skill))
+		var/datum/skill/S = new T
+		skills[S.ID] = SKILL_UNSKILLED
 
 /datum/preferences/proc/GetSkillClass(points)
 	return CalculateSkillClass(points, age)
@@ -259,7 +237,7 @@ datum/preferences
 	//For species that don't care about your silly prefs
 	character.species.handle_limbs_setup(character)
 	if(!is_preview_copy)
-		for(var/name in list(BP_HEART,BP_EYES,BP_BRAIN,BP_LUNGS,BP_LIVER,BP_KIDNEYS))
+		for(var/name in list(BP_HEART,BP_EYES,BP_BRAIN,BP_LUNGS,BP_LIVER,BP_KIDNEYS,BP_STOMACH))
 			var/status = organ_data[name]
 			if(!status)
 				continue
@@ -334,7 +312,6 @@ datum/preferences
 	character.religion = religion
 
 	character.skills = skills
-	character.used_skillpoints = used_skillpoints
 
 	if(!character.isSynthetic())
 		character.nutrition = rand(140,360)

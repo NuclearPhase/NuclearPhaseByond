@@ -388,7 +388,10 @@
 
 /mob/living/carbon/proc/add_chemical_effect(var/effect, var/magnitude = 1)
 	if(effect in chem_effects)
-		chem_effects[effect] += magnitude
+		if(effect == CE_CARDIAC_OUTPUT)
+			chem_effects[effect] *= magnitude
+		else
+			chem_effects[effect] += magnitude
 	else
 		chem_effects[effect] = magnitude
 

@@ -105,3 +105,47 @@
 	icon = 'icons/turf/areas.dmi'
 	name = "\improper Hydroponics storage"
 	icon_state = "hydrostorage"
+
+/area/sector_b/medical
+	name = "\improper Infirmary"
+	icon_state = "red"
+/area/sector_b/medical/chemistry
+	name = "\improper Chemistry"
+	icon_state = "chem"
+
+/area/sector_b/medical/morgue
+	name = "\improper Morgue"
+	icon_state = "morgue"
+	ambience = list('sound/ambience/ambimo1.ogg','sound/ambience/ambimo2.ogg','sound/music/main.ogg')
+
+/area/sector_b/medical/reanimation
+	name = "\improper Reanimation"
+	icon_state = "exam_room"
+
+/area/sector_b/medical/surgery
+	name = "\improper Operating Theatre"
+	icon_state = "surgery"
+
+/area/sector_b/medical/surgery2
+	name = "\improper Second Operating Theatre"
+	icon_state = "surgery"
+
+/area/sector_b/medical/storage
+	name = "\improper Storage"
+	icon_state = "medstorage"
+
+/area/sector_b/medical/reception
+	name = "\improper Reception"
+	icon_state = "reception"
+
+/area/sector_b/medical/pathology
+	name = "\improper Pathology"
+	icon_state = "pathology"
+
+/area/sector_b/medical/toilet
+	name = "\improper Toilet"
+	icon_state = "toilet"
+
+/area/sector_b/medical/ward
+	name = "\improper Common Ward"
+	icon_state = "ward"

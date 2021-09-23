@@ -8,6 +8,82 @@
 	var/list/will_assist_languages = list()
 	var/list/datum/language/assists_languages = list()
 	var/min_bruised_damage = 10       // Damage before considered bruised
+	var/list/datum/organ_disease/diseases
+	var/list/hormones // list of amount of hormones by type.
+	var/list/influenced_hormones // list of hormones, what process in proc/influence_hormone
+	var/list/watched_hormones // list of hormones, what always process in influence_hormone
+
+	var/list/waste_hormones = list(
+		/datum/reagent/hormone/potassium = 0.02
+	)
+
+/obj/item/organ/internal/get_view_variables_options()
+	return ..() + {"
+		<option value='?_src_=vars;add_organ_disease=\ref[src]'>Add disease</option>
+		"}
+
+/obj/item/organ/internal/proc/influence_hormone(T, amount)
+	return
+
+/obj/item/organ/internal/proc/make_hormone(T, amount)
+	if(!owner)
+		return
+	owner.bloodstr.add_reagent(T, amount)
+
+/obj/item/organ/internal/proc/make_up_to_hormone(T, amount)
+	if(!owner)
+		return
+	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	if(amount <= cur_amount)
+		return
+	make_hormone(T, amount - cur_amount)
+
+/obj/item/organ/internal/proc/free_hormone(T, amount)
+	if(!owner || !(LAZYISIN(hormones, T)))
+		return
+	var/to_use = min(amount, hormones[T])
+	make_hormone(T, to_use)
+	hormones[T] -= to_use
+
+/obj/item/organ/internal/proc/free_up_to_hormone(T, amount)
+	if(!owner)
+		return
+	var/cur_amount = owner.bloodstr.get_reagent_amount(T)
+	if(amount <= cur_amount)
+		return
+	free_hormone(T, amount - cur_amount)
+
+/obj/item/organ/internal/proc/generate_hormone(T, amount, max = INFINITY)
+	if(!owner)
+		return
+	var/cur_amount = LAZYACCESS(hormones, T)
+	amount = min(cur_amount + amount, max) - cur_amount
+	if(amount <= 0)
+		return
+
+	LAZYINITLIST(hormones)
+	if(T in hormones)
+		hormones[T] += amount
+	else
+		hormones[T] = amount
+
+	for(var/T1 in SANITIZE_LIST(waste_hormones))
+		make_hormone(T1, waste_hormones[T1] * amount * 0.01)
+	
+/obj/item/organ/internal/proc/absorb_hormone(T, amount, desired = 0, hold = FALSE)
+	if(!owner)
+		return
+	if(!desired)
+		desired = owner.bloodstr.get_reagent_amount(T) // TODO: remove this hack.
+	var/to_absorb = min(desired, owner.bloodstr.get_reagent_amount(T), amount)
+	owner.bloodstr.remove_reagent(T, to_absorb)
+	if(hold)
+		LAZYINITLIST(hormones)
+		if(T in hormones)
+			hormones[T] += to_absorb
+		else
+			hormones[T] = to_absorb
+
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
@@ -131,3 +207,19 @@
 				if(damage < 5)
 					degree = " a bit"
 				owner.custom_pain("Something inside your [parent.name] hurts[degree].", amount, affecting = parent)
+
+// note that ..() in begin of Process()
+/obj/item/organ/internal/Process()
+	for(var/datum/organ_disease/OD in SANITIZE_LIST(diseases))
+		if(OD.can_gone())
+			diseases -= OD
+			qdel(OD)
+			break
+		OD.update()
+	for(var/T in SANITIZE_LIST(influenced_hormones))
+		if(owner.bloodstr.has_reagent(T))
+			influence_hormone(T, min(owner.bloodstr.get_reagent_amount(T), owner.bloodstr.get_overdose(T)))
+	for(var/T in SANITIZE_LIST(watched_hormones))
+		influence_hormone(T, min(owner.bloodstr.get_reagent_amount(T), owner.bloodstr.get_overdose(T)))
+	for(var/T in SANITIZE_LIST(waste_hormones))
+		make_hormone(T, waste_hormones[T])

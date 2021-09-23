@@ -119,7 +119,7 @@
 				desc = "A delicious oil used in cooking. Made from corn."
 				icon_state = "oliveoil"
 				center_of_mass = "x=16;y=6"
-			if(/datum/reagent/sugar)
+			if(/datum/reagent/nutriment/sugar)
 				name = "Sugar"
 				desc = "Tastey space sugar!"
 				center_of_mass = "x=16;y=6"
@@ -161,7 +161,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/sugar/New()
 	. = ..()
-	reagents.add_reagent(/datum/reagent/sugar, 50)
+	reagents.add_reagent(/datum/reagent/nutriment/sugar, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/small
 	possible_transfer_amounts = "1;20"
@@ -199,7 +199,7 @@
 	
 /obj/item/weapon/reagent_containers/food/condiment/small/sugar/New()
 	. = ..()
-	reagents.add_reagent(/datum/reagent/sugar, 20)
+	reagents.add_reagent(/datum/reagent/nutriment/sugar, 20)
 
 /obj/item/weapon/reagent_containers/food/condiment/flour
 	name = "flour sack"

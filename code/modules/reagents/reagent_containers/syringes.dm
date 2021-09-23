@@ -12,8 +12,8 @@
 	item_state = "syringe_0"
 	icon_state = "0"
 	matter = list("glass" = 150)
-	amount_per_transfer_from_this = 5
-	possible_transfer_amounts = null
+	amount_per_transfer_from_this = 1
+	possible_transfer_amounts = "1;1.5;2;5;10;15"
 	volume = 15
 	w_class = ITEM_SIZE_TINY
 	slot_flags = SLOT_EARS
@@ -70,6 +70,10 @@
 
 	if(istype(target, /obj/structure/closet/body_bag))
 		handleBodyBag(target, user)
+		return
+
+	if(istype(target, /obj/structure/iv_drip))
+		handleIv_drip(target, user)
 		return
 
 	if(!target.reagents)
@@ -210,6 +214,11 @@
 	var/mob/living/L = locate() in bag
 	injectMob(L, user, bag)
 
+/obj/item/weapon/reagent_containers/syringe/proc/handleIv_drip(var/obj/structure/iv_drip/ivdrip, user)
+	if(!ivdrip.beaker || !ivdrip.attached)
+		return
+	injectReagents(ivdrip.beaker || ivdrip.attached, user)
+
 /obj/item/weapon/reagent_containers/syringe/proc/injectMob(var/mob/living/carbon/target, var/mob/living/carbon/user, var/atom/trackTarget)
 	if(!trackTarget)
 		trackTarget = target
@@ -329,6 +338,27 @@
 	mode = SYRINGE_INJECT
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/adrenaline
+	name = "Syringe (adrenaline)"
+	desc = "Contains adrenaline."
+
+/obj/item/weapon/reagent_containers/syringe/adrenaline/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/adrenaline, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/noradrenaline
+	name = "Syringe (noradrenaline)"
+	desc = "Contains noradrenaline."
+
+/obj/item/weapon/reagent_containers/syringe/noradrenaline/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/noradrenaline, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+
 /obj/item/weapon/reagent_containers/syringe/antitoxin
 	name = "Syringe (anti-toxin)"
 	desc = "Contains anti-toxins."
@@ -352,13 +382,18 @@
 /obj/item/weapon/reagent_containers/syringe/drugs
 	name = "Syringe (drugs)"
 	desc = "Contains aggressive drugs meant for torture."
+	var/possible_contents = list(
+		list(/datum/reagent/tramadol/opium/heroin/krokodil = 10, /datum/reagent/tramadol/opium/heroin = 5),
+		list(/datum/reagent/tramadol/opium/heroin/krokodil = 5, /datum/reagent/tramadol/opium/kodein = 5, /datum/reagent/tramadol/opium/heroin = 5),
+		list(/datum/reagent/space_drugs = 6, /datum/reagent/tramadol/opium/heroin/krokodil = 4, /datum/reagent/tramadol/opium/heroin = 5),
+		list(/datum/reagent/water = 7.5, /datum/reagent/tramadol/opium/heroin/krokodil = 4, /datum/reagent/lithium = 2.5, /datum/reagent/tramadol/opium/heroin = 1)
+	)
 
 /obj/item/weapon/reagent_containers/syringe/drugs/New()
 	..()
-	reagents.add_reagent(/datum/reagent/space_drugs, 5)
-	reagents.add_reagent(/datum/reagent/mindbreaker, 5)
-	reagents.add_reagent(/datum/reagent/cryptobiolin, 5)
-	mode = SYRINGE_INJECT
+	var/contents = pick(possible_contents)
+	for(var/R in contents)
+		reagents.add_reagent(R, contents[R])
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/ld50_syringe/choral
@@ -372,7 +407,7 @@
 /obj/item/weapon/reagent_containers/syringe/steroid
 	name = "Syringe (anabolic steroids)"
 	desc = "Contains drugs for muscle growth."
-	
+
 /obj/item/weapon/reagent_containers/syringe/steroid/New()
 	..()
 	reagents.add_reagent(/datum/reagent/adrenaline, 5)

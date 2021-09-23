@@ -59,7 +59,7 @@
 		/datum/reagent/drink/milk =            0.1,
 		/datum/reagent/ethanol/beer =            0.25,
 		/datum/reagent/phosphorus =      0.1,
-		/datum/reagent/sugar =           0.1,
+		/datum/reagent/nutriment/sugar =           0.1,
 		/datum/reagent/drink/sodawater =       0.1,
 		/datum/reagent/ammonia =         1,
 		/datum/reagent/diethylamine =    2,
@@ -72,7 +72,7 @@
 	var/global/list/weedkiller_reagents = list(
 		/datum/reagent/hydrazine =      -4,
 		/datum/reagent/phosphorus =     -2,
-		/datum/reagent/sugar =           2,
+		/datum/reagent/nutriment/sugar =           2,
 		/datum/reagent/acid =          -2,
 		/datum/reagent/acid/hydrochloric =        -2,
 		/datum/reagent/acid/polyacid =          -4,
@@ -80,7 +80,7 @@
 		/datum/reagent/adminordrazine = -5
 		)
 	var/global/list/pestkiller_reagents = list(
-		/datum/reagent/sugar =           2,
+		/datum/reagent/nutriment/sugar	 =           2,
 		/datum/reagent/diethylamine =   -2,
 		/datum/reagent/adminordrazine = -5
 		)
@@ -149,7 +149,7 @@
 			return
 
 		if(weedlevel > 0)
-			nymph.reagents.add_reagent(/datum/reagent/nutriment/glucose, weedlevel)
+			nymph.reagents.add_reagent(/datum/reagent/nutriment/sugar, weedlevel)
 			weedlevel = 0
 			nymph.visible_message("<font color='blue'><b>[nymph]</b> begins rooting through [src], ripping out weeds and eating them noisily.</font>","<font color='blue'>You begin rooting through [src], ripping out weeds and eating them noisily.</font>")
 		else if(nymph.nutrition > 100 && nutrilevel < 10)

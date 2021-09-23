@@ -47,13 +47,6 @@
 #define RIGHT 0x2
 #define UNDER 0x4
 
-// Pulse levels, very simplified.
-#define PULSE_NONE    0 // So !M.pulse checks would be possible.
-#define PULSE_SLOW    1 // <60     bpm
-#define PULSE_NORM    2 //  60-90  bpm
-#define PULSE_FAST    3 //  90-120 bpm
-#define PULSE_2FAST   4 // >120    bpm
-#define PULSE_THREADY 5 // Occurs during hypovolemic shock
 #define GETPULSE_HAND 0 // Less accurate. (hand)
 #define GETPULSE_TOOL 1 // More accurate. (med scanner, sleeper, etc.)
 
@@ -196,7 +189,7 @@
 #define BP_THROAT 	"throat"
 #define BP_VCHORDS  "vocal chords"
 #define BP_TONGUE	"tongue"
-
+#define BP_STOMACH  "stomach"
 // Robo Organs.
 #define BP_POSIBRAIN	"posibrain"
 #define BP_VOICE		"vocal synthesiser"
@@ -288,13 +281,6 @@
 #define MOOD_LEVEL_SAD3 -15
 #define MOOD_LEVEL_SAD4 -20
 
-#define NUTRITION_LEVEL_FAT 550
-#define NUTRITION_LEVEL_FULL 500
-#define NUTRITION_LEVEL_WELL_FED 450
-#define NUTRITION_LEVEL_FED 350
-#define NUTRITION_LEVEL_HUNGRY 250
-#define NUTRITION_LEVEL_STARVING 150
-
 //Thirst levels for humans
 #define THIRST_LEVEL_MAX 600
 #define THIRST_LEVEL_FILLED 500
@@ -317,20 +303,6 @@
 #define DISGUST_LEVEL_VERYGROSS 50
 #define DISGUST_LEVEL_GROSS 25
 
-//Hardcore mode stuff
-
-#define STARVATION_MIN 60 //If you have less nutrition than this value, the hunger indicator starts flashing
-#define STARVATION_NOTICE 45 //If you have more nutrition than this value, you get an occasional message reminding you that you're going to starve soon
-#define STARVATION_WEAKNESS 20 //Otherwise, if you have more nutrition than this value, you occasionally become weak and receive minor damage
-#define STARVATION_NEARDEATH 5 //Otherwise, if you have more nutrition than this value, you have seizures and occasionally receive damage
-
-//If you have less nutrition than STARVATION_NEARDEATH, you start getting damage
-#define STARVATION_OXY_DAMAGE 2.5
-#define STARVATION_TOX_DAMAGE 2.5
-#define STARVATION_BRAIN_DAMAGE 2.5
-
-#define STARVATION_OXY_HEAL_RATE 1 //While starving, THIS much oxygen damage is restored per life tick (instead of the default 5)
-
 //Temperature stuff
 //BODYTEMP_COLD_DAMAGE_LIMIT 			 -13�C Below which freezing damage occurs.						(defined in items_clothing.dm)
 #define TEMPERATURE_REFRESHING 	278.15	//5�C  Below which drinks and foods are considered refreshing.
@@ -345,3 +317,8 @@
 #define AURA_TYPE_WEAPON "Weapon"
 #define AURA_TYPE_THROWN "Thrown"
 #define AURA_TYPE_LIFE   "Life"
+
+#define SKILL_UNSKILLED 0
+#define SKILL_AMATEUR 1
+#define SKILL_TRAINED 2
+#define SKILL_PROFESSIONAL 3

@@ -161,6 +161,33 @@
 			return
 		cmd_admin_delete(O)
 
+	else if(href_list["add_organ_disease"])
+		if(!check_rights(R_DEBUG|R_SERVER))	return
+
+		var/obj/item/organ/internal/I = locate(href_list["add_organ_disease"])
+		if(!istype(I))
+			to_chat(usr, "This can only be used on instances of type /obj/item/organ/internal")
+			return
+		
+		var/list/allowed = list()
+		var/list/allowed_s = list()
+		for(var/T in subtypesof(/datum/organ_disease))
+			allowed += new T
+		for(var/datum/organ_disease/D in allowed)
+			if(!(D.can_be_apply(I)))
+				allowed -= D
+			else
+				allowed_s += D.name
+		
+		var/selected = input(usr, "Select disease", "Disease") as null|anything in allowed_s
+		if(!selected)
+			return
+		for(var/datum/organ_disease/D in allowed_s)
+			if(!(D.name == selected))
+				continue
+			I.diseases += D
+			return
+
 	else if(href_list["delall"])
 		if(!check_rights(R_DEBUG|R_SERVER))	return
 

@@ -140,27 +140,27 @@
 		return
 
 	// No heart? You are going to have a very bad time. Not 100% lethal because heart transplants should be a thing.
-	var/blood_volume = owner.get_blood_circulation()
+	var/blood_volume = owner.get_blood_perfusion()
 	if(!owner.internal_organs_by_name[BP_HEART])
-		if(blood_volume > BLOOD_VOLUME_SURVIVE)
-			blood_volume = BLOOD_VOLUME_SURVIVE
+		if(blood_volume > BLOOD_PERFUSION_SURVIVE)
+			blood_volume = BLOOD_PERFUSION_SURVIVE
 		owner.Paralyse(3)
 
 	//Effects of bloodloss
 	switch(blood_volume)
-		if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
+		if(BLOOD_PERFUSION_OKAY to BLOOD_PERFUSION_SAFE)
 			lowblood_tally = 1 * lowblood_mult
 			if(prob(1))
 				to_chat(owner, "<span class='warning'>You're finding it difficult to move.</span>")
-		if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
+		if(BLOOD_PERFUSION_BAD to BLOOD_PERFUSION_OKAY)
 			lowblood_tally = 3 * lowblood_mult
 			if(prob(1))
 				to_chat(owner, "<span class='warning'>Moving has become very difficult.</span>")
-		if(BLOOD_VOLUME_SURVIVE to BLOOD_VOLUME_BAD)
+		if(BLOOD_PERFUSION_SURVIVE to BLOOD_PERFUSION_BAD)
 			lowblood_tally = 5 * lowblood_mult
 			if(prob(15))
 				to_chat(owner, "<span class='warning'>You're almost unable to move!</span>")
-		if(-(INFINITY) to BLOOD_VOLUME_SURVIVE)
+		if(-(INFINITY) to BLOOD_PERFUSION_SURVIVE)
 			lowblood_tally = 6 * lowblood_mult
 			if(prob(10))
 				to_chat(owner, "<span class='warning'>Your body is barely functioning and is starting to shut down.</span>")

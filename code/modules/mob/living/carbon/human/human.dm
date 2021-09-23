@@ -51,6 +51,7 @@
 		dna.s_base = s_base
 		sync_organ_dna()
 	make_blood()
+	bloodstr.add_reagent(/datum/reagent/hormone/glucose, GLUCOSE_LEVEL_NORMAL + 0.2)
 
 /mob/living/carbon/human/Destroy()
 	GLOB.human_mob_list -= src
@@ -62,10 +63,6 @@
 /mob/living/carbon/human/Stat()
 	. = ..()
 	if(statpanel("Status"))
-		stat("ST:", "[str]")//Stats!
-		stat("DX:", "[dex]")
-		stat("IT:", "[int]")
-
 		if(evacuation_controller)
 			var/eta_status = evacuation_controller.get_status_panel_eta()
 			if(eta_status)
@@ -696,7 +693,7 @@
 					playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 					adjust_hygiene(-25)
-					add_event("hygiene", /datum/happiness_event/hygiene/vomitted)
+					add_event("hygiene", new /datum/happiness_event/hygiene/vomitted)
 
 					var/turf/location = loc
 					if (istype(location, /turf/simulated))
@@ -1003,7 +1000,7 @@
 		usr.visible_message("<span class='notice'>[usr] begins counting their pulse.</span>",\
 		"You begin counting your pulse.")
 
-	if(pulse())
+	if(get_pulse())
 		to_chat(usr, "<span class='notice'>[self ? "You have a" : "[src] has a"] pulse! Counting...</span>")
 	else
 		to_chat(usr, "<span class='danger'>[src] has no pulse!</span>")//it is REALLY UNLIKELY that a dead person would check his own pulse
@@ -1011,7 +1008,7 @@
 
 	to_chat(usr, "You must[self ? "" : " both"] remain still until counting is finished.")
 	if(do_mob(usr, src, 60))
-		var/message = "<span class='notice'>[self ? "Your" : "[src]'s"] pulse is [src.get_pulse(GETPULSE_HAND)].</span>"
+		var/message = "<span class='notice'>[self ? "Your" : "[src]'s"] pulse is [src.get_pulse_fluffy(GETPULSE_HAND)].</span>"
 		to_chat(usr, message)
 	else
 		to_chat(usr, "<span class='warning'>You failed to check the pulse. Try again.</span>")
@@ -1381,34 +1378,19 @@
 	return
 
 //generates realistic-ish pulse output based on preset levels
-/mob/living/carbon/human/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
+/mob/living/carbon/human/proc/get_pulse_fluffy(var/method)	//method 0 is for hands, 1 is for machines, more accurate
 	var/obj/item/organ/internal/heart/H = internal_organs_by_name[BP_HEART]
 	if(!H)
 		return
 	if(H.open && !method)
 		return "muddled and unclear; you can't seem to find a vein"
-
-	var/temp = 0
-	switch(pulse())
-		if(PULSE_NONE)
-			return "0"
-		if(PULSE_SLOW)
-			temp = rand(40, 60)
-		if(PULSE_NORM)
-			temp = rand(60, 90)
-		if(PULSE_FAST)
-			temp = rand(90, 120)
-		if(PULSE_2FAST)
-			temp = rand(120, 160)
-		if(PULSE_THREADY)
-			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
-	return "[method ? temp : temp + rand(-10, 10)]"
+	return "[method ? get_pulse() : get_pulse() + rand(-10, 10)]"
 //			output for machines^	^^^^^^^output for people^^^^^^^^^
 
-/mob/living/carbon/human/proc/pulse()
+/mob/living/carbon/human/proc/get_pulse()
 	var/obj/item/organ/internal/heart/H = internal_organs_by_name[BP_HEART]
 	if(!H)
-		return PULSE_NONE
+		return 0
 	else
 		return H.pulse
 
@@ -1589,23 +1571,22 @@
 			visible_message("\The [src] jerks and gasps for breath!")
 		else
 			visible_message("\The [src] twitches a bit as \his heart restarts!")
-		shock_stage = min(shock_stage, 100) // 120 is the point at which the heart stops.
 		if(getOxyLoss() >= 75)
 			setOxyLoss(75)
-		heart.pulse = PULSE_NORM
-		heart.handle_pulse()
+		heart.pulse = 70
+
+/mob/living/carbon/human/proc/make_reagent(amount)
 
 /mob/living/carbon/human/proc/make_adrenaline(amount)
 	if(stat == CONSCIOUS)
 		var/limit = max(0, reagents.get_overdose(/datum/reagent/adrenaline) - reagents.get_reagent_amount(/datum/reagent/adrenaline))
 		reagents.add_reagent(/datum/reagent/adrenaline, min(amount, limit))
 
-//Get fluffy numbers
-/mob/living/carbon/human/proc/get_blood_pressure()
-	if(status_flags & FAKEDEATH)
-		return "[Floor(120+rand(-5,5))*0.25]/[Floor(80+rand(-5,5)*0.25)]"
-	var/blood_result = get_blood_circulation()
-	return "[Floor((120+rand(-5,5))*(blood_result/100))]/[Floor((80+rand(-5,5))*(blood_result/100))]"
+// Get fluffy numbers
+/mob/living/carbon/human/proc/get_blood_pressure_fluffy()
+	if(get_blood_pressure() < 30)
+		return "0/0"
+	return "[Floor(get_blood_pressure())]/[Floor(max(10, get_blood_pressure() - 40) + rand(-5, 5))]"
 
 //Point at which you dun breathe no more. Separate from asystole crit, which is heart-related.
 /mob/living/carbon/human/proc/nervous_system_failure()

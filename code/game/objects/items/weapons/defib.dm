@@ -206,7 +206,7 @@
 	var/cooldowntime = (6 SECONDS) // How long in deciseconds until the defib is ready again after use.
 	var/chargetime = (2 SECONDS)
 	var/chargecost = 100 //units of charge
-	var/burn_damage_amt = 5
+	var/burn_damage_amt = 15
 
 //	var/wielded = 0
 	var/cooldown = 0
@@ -263,10 +263,6 @@
 	if(!check_contact(H))
 		return "buzzes, \"Patient's chest is obstructed. Operation aborted.\""
 
-/obj/item/weapon/shockpaddles/proc/can_revive(mob/living/carbon/human/H) //This is checked right before attempting to revive
-	if(H.stat == DEAD)
-		return "buzzes, \"Resuscitation failed - Severe neurological decay makes recovery of patient impossible. Further attempts futile.\""
-
 /obj/item/weapon/shockpaddles/proc/check_contact(mob/living/carbon/human/H)
 	if(!combat)
 		for(var/obj/item/clothing/cloth in list(H.wear_suit, H.w_uniform))
@@ -278,7 +274,7 @@
 	if(!H.should_have_organ(BP_HEART))
 		return FALSE
 	var/obj/item/organ/internal/heart/heart = H.internal_organs_by_name[BP_HEART]
-	if(!heart || H.get_blood_volume() < BLOOD_VOLUME_SURVIVE)
+	if(!heart || H.get_blood_volume() < BLOOD_PERFUSION_SURVIVE)
 		return TRUE
 	return FALSE
 
@@ -324,10 +320,16 @@
 	if(H.ssd_check())
 		to_chat(find_dead_player(H.ckey, 1), "<span class='notice'>Someone is attempting to resuscitate you. Re-enter your body if you want to be revived!</span>")
 
+	var/quality = user.get_skill(SKILL_ACLS)
+	if(quality < SKILL_AMATEUR)
+		to_chat(user, SPAN_WARNING("You have no idea how to use this."))
+		return
+
 	//beginning to place the paddles on patient's chest to allow some time for people to move away to stop the process
 	user.visible_message("<span class='warning'>\The [user] begins to place [src] on [H]'s chest.</span>", "<span class='warning'>You begin to place [src] on [H]'s chest...</span>")
-	if(!do_after(user, 30, H))
+	if(!do_after(user, 60 - quality * 10, H))
 		return
+
 	user.visible_message("<span class='notice'>\The [user] places [src] on [H]'s chest.</span>", "<span class='warning'>You place [src] on [H]'s chest.</span>")
 	playsound(get_turf(src), 'sound/machines/defib_charge.ogg', 50, 0)
 
@@ -336,9 +338,6 @@
 		make_announcement(error, "warning")
 		playsound(get_turf(src), 'sound/machines/defib_failed.ogg', 50, 0)
 		return
-
-	if(check_blood_level(H))
-		make_announcement("buzzes, \"Warning - Patient is in hypovolemic shock and may require a blood transfusion.\"", "warning") //also includes heart damage
 
 	//placed on chest and short delay to shock for dramatic effect, revive time is 5sec total
 	if(!do_after(user, chargetime, H))
@@ -355,22 +354,15 @@
 	playsound(get_turf(src), 'sound/machines/defib_zap.ogg', 50, 1, -1)
 	set_cooldown(cooldowntime)
 
-	error = can_revive(H)
-	if(error)
-		make_announcement(error, "warning")
-		playsound(get_turf(src), 'sound/machines/defib_failed.ogg', 50, 0)
-		return
-
 	H.apply_damage(burn_damage_amt, BURN, BP_CHEST)
 
-	//set oxyloss so that the patient is just barely in crit, if possible
-	make_announcement("pings, \"Resuscitation successful.\"", "notice")
 	playsound(get_turf(src), 'sound/machines/defib_success.ogg', 50, 0)
-	H.resuscitate()
-	var/obj/item/organ/internal/cell/potato = H.internal_organs_by_name[BP_CELL]
-	if(istype(potato) && potato.cell)
-		var/obj/item/weapon/cell/C = potato.cell
-		C.give(chargecost)
+	var/obj/item/organ/internal/heart/heart = H.internal_organs_by_name[BP_HEART]
+	if(H.is_vfib())
+		heart.rythme = prob(50 + quality * 10) ? RYTHME_NORM : RYTHME_AFIB_RR
+	else if(!H.is_asystole() && quality <= SKILL_TRAINED)
+		heart.pulse_modificators["defibrillation"] = rand(80, 120)
+		heart.rythme++
 	log_and_message_admins("used \a [src] to revive [key_name(H)].")
 
 
@@ -382,11 +374,6 @@
 
 	//no need to spend time carefully placing the paddles, we're just trying to shock them
 	user.visible_message("<span class='danger'>\The [user] slaps [src] onto [H]'s [affecting.name].</span>", "<span class='danger'>You overcharge [src] and slap them onto [H]'s [affecting.name].</span>")
-
-	//Just stop at awkwardly slapping electrodes on people if the safety is enabled
-	if(safety)
-		to_chat(user, "<span class='warning'>You can't do that while the safety is enabled.</span>")
-		return
 
 	playsound(get_turf(src), 'sound/machines/defib_charge.ogg', 50, 0)
 	audible_message("<span class='warning'>\The [src] lets out a steadily rising hum...</span>")
@@ -406,8 +393,8 @@
 	set_cooldown(cooldowntime)
 
 	H.stun_effect_act(2, 120, target_zone)
-	var/burn_damage = H.electrocute_act(burn_damage_amt*2, src, def_zone = target_zone)
-	if(burn_damage > 15 && H.can_feel_pain())
+	var/burn_damage = H.electrocute_act(burn_damage_amt * 2, src, def_zone = target_zone)
+	if(burn_damage > 10 && H.can_feel_pain())
 		H.emote("scream")
 
 	admin_attack_log(user, H, "Electrocuted using \a [src]", "Was electrocuted with \a [src]", "used \a [src] to electrocute")
@@ -467,26 +454,6 @@
 			playsound(get_turf(src), 'sound/machines/defib_safetyoff.ogg', 50, 0)
 		update_icon()
 	..()
-
-/obj/item/weapon/shockpaddles/robot
-	name = "defibrillator paddles"
-	desc = "A pair of advanced shockpaddles powered by a robot's internal power cell, able to penetrate thick clothing."
-	chargecost = 50
-	combat = 1
-	icon_state = "defibpaddles0"
-	item_state = "defibpaddles0"
-	cooldowntime = (3 SECONDS)
-
-/obj/item/weapon/shockpaddles/robot/check_charge(var/charge_amt)
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		return (R.cell && R.cell.check_charge(charge_amt))
-
-/obj/item/weapon/shockpaddles/robot/checked_use(var/charge_amt)
-	if(isrobot(src.loc))
-		var/mob/living/silicon/robot/R = src.loc
-		return (R.cell && R.cell.checked_use(charge_amt))
-
 /*
 	Shockpaddles that are linked to a base unit
 */
@@ -519,59 +486,6 @@
 
 /obj/item/weapon/shockpaddles/linked/make_announcement(var/message, var/msg_class)
 	base_unit.audible_message("<b>\The [base_unit]</b> [message]", "\The [base_unit] vibrates slightly.")
-
-/*
-	Standalone Shockpaddles
-*/
-
-/obj/item/weapon/shockpaddles/standalone
-	desc = "A pair of shockpaddles powered by an experimental miniaturized reactor" //Inspired by the advanced e-gun
-	var/fail_counter = 0
-
-/obj/item/weapon/shockpaddles/standalone/Destroy()
-	. = ..()
-	if(fail_counter)
-		STOP_PROCESSING(SSobj, src)
-
-/obj/item/weapon/shockpaddles/standalone/check_charge(var/charge_amt)
-	return 1
-
-/obj/item/weapon/shockpaddles/standalone/checked_use(var/charge_amt)
-	radiation_repository.radiate(src, charge_amt/12) //just a little bit of radiation. It's the price you pay for being powered by magic I guess
-	return 1
-
-/obj/item/weapon/shockpaddles/standalone/Process()
-	if(fail_counter > 0)
-		radiation_repository.radiate(src, fail_counter--)
-	else
-		STOP_PROCESSING(SSobj, src)
-
-/obj/item/weapon/shockpaddles/standalone/emp_act(severity)
-	..()
-	var/new_fail = 0
-	switch(severity)
-		if(1)
-			new_fail = max(fail_counter, 20)
-			visible_message("\The [src]'s reactor overloads!")
-		if(2)
-			new_fail = max(fail_counter, 8)
-			if(ismob(loc))
-				to_chat(loc, "<span class='warning'>\The [src] feel pleasantly warm.</span>")
-
-	if(new_fail && !fail_counter)
-		START_PROCESSING(SSobj, src)
-	fail_counter = new_fail
-
-/obj/item/weapon/shockpaddles/standalone/traitor
-	name = "defibrillator paddles"
-	desc = "A pair of unusual looking paddles powered by an experimental miniaturized reactor. It possesses both the ability to penetrate armor and to deliver powerful shocks."
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "defibpaddles0"
-	item_state = "defibpaddles0"
-	combat = 1
-	safety = 0
-	chargetime = (1 SECONDS)
-	burn_damage_amt = 15
 
 #undef DEFIB_TIME_LIMIT
 #undef DEFIB_TIME_LOSS

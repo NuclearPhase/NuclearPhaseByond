@@ -321,17 +321,6 @@
 	reagent_state = LIQUID
 	color = "#808080"
 
-/datum/reagent/nitroglycerin
-	name = "Nitroglycerin"
-	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
-	taste_description = "oil"
-	reagent_state = LIQUID
-	color = "#808080"
-
-/datum/reagent/nitroglycerin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	..()
-	M.add_chemical_effect(CE_PULSE, 2)
-
 /datum/reagent/coolant
 	name = "Coolant"
 	description = "Industrial cooling substance."

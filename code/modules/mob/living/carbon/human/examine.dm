@@ -136,13 +136,13 @@
 	//buckled
 	if(buckled)
 		msg += "<span class='warning'>[T.He] [T.is] \icon[buckled] buckled to [buckled]!</span>\n"
-	if(str > user.str && str < (user.str + 5))
+	if(strength > user.strength && strength < (user.strength + 5))
 		msg += "[T.He] looks stronger than you.\n"
 
-	if(str > (user.str + 5))
+	if(strength > (user.strength + 5))
 		msg += "<b>[T.He] looks a lot stronger than you.</b>\n"
 
-	if(str < user.str)
+	if(strength < user.strength)
 		msg += "[T.He] looks weaker than you.\n"
 
 	//Jitters
@@ -185,7 +185,7 @@
 			spawn(0)
 				user.visible_message("<b>\The [user]</b> checks \the [src]'s pulse.", "You check \the [src]'s pulse.")
 				if(do_after(user, 15, src))
-					if(pulse() == PULSE_NONE)
+					if(get_pulse() == 0)
 						to_chat(user, "<span class='deadsay'>[T.He] [T.has] no pulse.</span>")
 					else
 						to_chat(user, "<span class='deadsay'>[T.He] [T.has] a pulse!</span>")

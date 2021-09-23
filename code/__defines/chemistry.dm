@@ -1,4 +1,4 @@
-#define DEFAULT_HUNGER_FACTOR 0.03 // Factor of how fast mob nutrition decreases
+#define DEFAULT_HUNGER_FACTOR 0.0025 // Factor of how fast mob nutrition decreases
 
 #define REM 0.2 // Means 'Reagent Effect Multiplier'. This is how many units of reagent are consumed per tick
 
@@ -35,6 +35,8 @@
 #define CE_SPEEDBOOST    "gofast"       // Hyperzine
 #define CE_SLOWDOWN      "goslow"       // Slowdown
 #define CE_PULSE         "xcardic"      // increases or decreases heart rate
+#define CE_PRESSURE      "bpressure"    // increases or decreases blood pressure
+#define CE_CARDIAC_OUTPUT "cardoutput"  // multiplies cardiac output
 #define CE_NOPULSE       "heartstop"    // stops heartbeat
 #define CE_ANTITOX       "antitox"      // Dylovene
 #define CE_OXYGENATED    "oxygen"       // Dexalin.
@@ -44,6 +46,7 @@
 #define CE_BREATHLOSS    "breathloss"   // Breathing depression, makes you need more air
 #define CE_MIND    		 "mindbending"  // Stabilizes or wrecks mind. Used for hallucinations
 #define CE_CRYO 	     "cryogenic"    // Prevents damage from being frozen
+#define CE_ANTIARRYTHMIC "stablerythme" // Prevents arrythmias.
 
 //reagent flags
 #define IGNORE_MOB_SIZE 0x1
