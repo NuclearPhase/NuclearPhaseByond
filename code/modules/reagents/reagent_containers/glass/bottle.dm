@@ -75,6 +75,18 @@
 	reagents.add_reagent(/datum/reagent/inaprovaline, 30)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/amicil
+	name = "glucose amicil"
+	desc = "A tiny ampoule. Contains amicil. 4u."
+	icon_state = "ampoule"
+	volume = 4
+
+/obj/item/weapon/reagent_containers/glass/bottle/amicil/New()
+	..()
+	reagents.add_reagent(/datum/reagent/amicil, 4)
+	update_icon()
+
+
 /obj/item/weapon/reagent_containers/glass/bottle/glucose
 	name = "glucose ampoule"
 	desc = "A tiny ampoule. Contains glucose. 2u."

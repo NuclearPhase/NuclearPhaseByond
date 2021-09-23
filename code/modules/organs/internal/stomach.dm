@@ -33,7 +33,7 @@
 	// wer simulate glucose-nutrition system by this..
 	// TODO: detach this from stomach, remove this copy-paste from insulin code.
 	absorb_hormone(/datum/reagent/hormone/glucose, DEFAULT_HUNGER_FACTOR)
-	absorb_hormone(/datum/reagent/hormone/potassium, max(DEFAULT_HUNGER_FACTOR * 10, 0.1))
+	absorb_hormone(/datum/reagent/hormone/potassium, max(DEFAULT_HUNGER_FACTOR * 5, 0.1))
 
 	generate_hormone(/datum/reagent/hormone/insulin, 0.1, 15)
 	generate_hormone(/datum/reagent/hormone/glucagon, 0.1, 15)

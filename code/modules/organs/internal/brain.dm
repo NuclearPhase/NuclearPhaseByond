@@ -221,4 +221,6 @@
 					damprob = owner.chem_effects[CE_STABLE] ? 80 : 100
 					if(prob(damprob))
 						take_damage(1)
+			if(damage >= max_damage)
+				owner.stat = DEAD
 	..()

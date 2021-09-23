@@ -370,3 +370,13 @@
 	if(prob(50))
 		H.add_chemical_effect(CE_BREATHLOSS)
 
+/datum/reagent/amicil
+	name = "Amicile"
+	description = "Lidocaine is a antibiotic."
+	reagent_state = LIQUID
+	color = "#aa7"
+	metabolism = REM
+	overdose = 5
+
+/datum/reagent/amicil/affect_blood(mob/living/carbon/human/H, alien, removed)
+	H.add_chemical_effect(CE_ANTIBIOTIC, volume)

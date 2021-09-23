@@ -1,3 +1,5 @@
+// TODO: add infection analysis.
+
 /datum/analysis
 	var/name = "UNKNOWN ANALYSIS"
 	var/required_reagent = /datum/reagent/blood

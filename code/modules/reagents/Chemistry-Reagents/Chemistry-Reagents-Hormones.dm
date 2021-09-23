@@ -43,6 +43,7 @@
 	M.bloodstr.remove_reagent(/datum/reagent/hormone/glucose, amount)
 	M.bloodstr.remove_reagent(/datum/reagent/hormone/potassium, max(amount * 10, 0.1))
 	volume = max(0, amount * 10)
+	M.adjustToxLoss(-1)
 
 // 1u glucagon produce 0.1u glucose increase.
 /datum/reagent/hormone/glucagon
