@@ -29,8 +29,10 @@
 
 /obj/structure/monitor/Process()
 	if(!attached)
+		icon_state = "monitor"
 		return PROCESS_KILL
 	if(!Adjacent(attached))
+		icon_state = "monitor"
 		attached = null
 		update_icon()
 		return PROCESS_KILL
@@ -41,6 +43,11 @@
 	var/obj/item/organ/internal/heart/H = attached?.internal_organs_by_name[BP_HEART]
 	if(!attached || !H)
 		return
+
+	if(H.pulse)
+		icon_state = "monitor-active"
+	else
+		icon_state = "monitor"
 
 	var/list/data = list()
 	data["name"] = "[attached]"
@@ -64,8 +71,16 @@
 			data["perfusion_s"] = "average"
 	data["ischemia"] = H.ischemia
 	data["saturation"] = round(attached.get_blood_saturation() * 100)
-	data["perfusion"] = min(100, round(attached.get_blood_perfusion() * 100))
+	data["perfusion"] = round(attached.get_blood_perfusion() * 100)
 	data["status"] = (attached.stat == CONSCIOUS) ? "CONSCIOUS" : "UNCONSCIOUS"
+
+	data["ecg"] = list()
+	if(attached.bloodstr.get_reagent_amount(/datum/reagent/hormone/potassium) > POTASSIUM_LEVEL_HBAD)
+		data["ecg"] += list("Hypercaliemia.")
+	if(H.ischemia)
+		data["ecg"] += list("Ischemia.")
+	if(attached.stat == DEAD)
+		data["ecg"] += list("HR variability not present. Suggest neurological failure.")
 
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -73,10 +88,6 @@
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(TRUE)
-
-/obj/structure/monitor/Topic(href, href_list)
-	if(..())
-		return 1
 
 /obj/structure/monitor/attack_hand(mob/user)
 	ui_interact(user)

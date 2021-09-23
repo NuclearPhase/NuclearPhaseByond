@@ -235,20 +235,18 @@
 	affected.take_damage(12, 0, (DAM_SHARP|DAM_EDGE), used_weapon = tool)
 
 //////////////////////////////////////////////////////////////////
-//	 skin cauterization surgery step
+//	 skin suture
 //////////////////////////////////////////////////////////////////
-/datum/surgery_step/generic/cauterize
+/datum/surgery_step/generic/suture
 	allowed_tools = list(
-	/obj/item/weapon/cautery = 100,			\
-	/obj/item/clothing/mask/smokable/cigarette = 75,	\
-	/obj/item/weapon/flame/lighter = 50,			\
-	/obj/item/weapon/weldingtool = 25
+	/obj/item/weapon/FixOVein/suture = 100,
+	/obj/item/stack/cable_coil = 60
 	)
 
 	min_duration = 70
 	max_duration = 100
 
-/datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/generic/suture/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	if(target_zone == BP_MOUTH || target_zone == BP_EYES)
 		return FALSE
@@ -260,7 +258,7 @@
 	if(affected.robotic >= ORGAN_ROBOT)
 		return FALSE
 	if(!affected.get_incision(1))
-		to_chat(user, "<span class='warning'>There are no incisions on [target]'s [affected.name] that can be closed cleanly with \the [tool]!</span>")
+		to_chat(user, "<span class='warning'>There are no incisions on [target]'s [affected.name] that can be sutured cleanly with \the [tool]!</span>")
 		return SURGERY_FAILURE
 	if(affected.is_stump()) // Copypasting some stuff here to avoid having to modify ..() for a single surgery
 		return affected.status & ORGAN_ARTERY_CUT
@@ -268,29 +266,29 @@
 		return affected.open()
 
 
-/datum/surgery_step/generic/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/generic/suture/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
 	var/datum/wound/cut/W = affected.get_incision()
-	user.visible_message("[user] is beginning to cauterize[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool]." , \
-	"You are beginning to cauterize[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].")
-	target.custom_pain("Your [affected.name] is being burned!",40,affecting = affected)
+	user.visible_message("[user] is beginning to suture[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool]." , \
+	"You are beginning to suture[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].")
+	target.custom_pain("Your [affected.name] is being punctured!",40,affecting = affected)
 	..()
 
-/datum/surgery_step/generic/cauterize/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/generic/suture/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
 	var/datum/wound/cut/W = affected.get_incision()
-	user.visible_message("<span class='notice'>[user] cauterizes[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].</span>", \
-	"<span class='notice'>You cauterize[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].</span>")
+	user.visible_message("<span class='notice'>[user] sutures[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].</span>", \
+	"<span class='notice'>You suture[W ? " \a [W.desc] on" : ""] \the [target]'s [affected.name] with \the [tool].</span>")
 	if(W)
 		W.close()
 	if(affected.is_stump())
 		affected.status &= ~ORGAN_ARTERY_CUT
 
-/datum/surgery_step/generic/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/generic/suture/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("<span class='warning'>[user]'s hand slips, leaving a small burn on [target]'s [affected.name] with \the [tool]!</span>", \
-	"<span class='warning'>Your hand slips, leaving a small burn on [target]'s [affected.name] with \the [tool]!</span>")
-	affected.take_damage(0, 3, used_weapon = tool)
+	user.visible_message("<span class='warning'>[user]'s hand slips, leaving a small puncture on [target]'s [affected.name] with \the [tool]!</span>", \
+	"<span class='warning'>Your hand slips, leaving a small puncture on [target]'s [affected.name] with \the [tool]!</span>")
+	affected.take_damage(6, 0, used_weapon = tool)
 
 //////////////////////////////////////////////////////////////////
 //	 limb amputation surgery step

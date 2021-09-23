@@ -13,6 +13,15 @@
 	var/list/influenced_hormones // list of hormones, what process in proc/influence_hormone
 	var/list/watched_hormones // list of hormones, what always process in influence_hormone
 
+	var/list/waste_hormones = list(
+		/datum/reagent/hormone/potassium = 0.02
+	)
+
+/obj/item/organ/internal/get_view_variables_options()
+	return ..() + {"
+		<option value='?_src_=vars;add_organ_disease=\ref[src]'>Add disease</option>
+		"}
+
 /obj/item/organ/internal/proc/influence_hormone(T, amount)
 	return
 
@@ -57,12 +66,16 @@
 		hormones[T] += amount
 	else
 		hormones[T] = amount
+
+	for(var/T1 in SANITIZE_LIST(waste_hormones))
+		make_hormone(T1, waste_hormones[T1] * amount * 0.01)
 	
-/obj/item/organ/internal/proc/absorb_hormone(T, amount, hold = FALSE)
+/obj/item/organ/internal/proc/absorb_hormone(T, amount, desired = 0, hold = FALSE)
 	if(!owner)
 		return
-
-	var/to_absorb = min(owner.bloodstr.get_reagent_amount(T), amount)
+	if(!desired)
+		desired = owner.bloodstr.get_reagent_amount(T) // TODO: remove this hack.
+	var/to_absorb = min(desired, owner.bloodstr.get_reagent_amount(T), amount)
 	owner.bloodstr.remove_reagent(T, to_absorb)
 	if(hold)
 		LAZYINITLIST(hormones)
@@ -205,6 +218,8 @@
 		OD.update()
 	for(var/T in SANITIZE_LIST(influenced_hormones))
 		if(owner.bloodstr.has_reagent(T))
-			influence_hormone(T, owner.bloodstr.get_reagent_amount(T))
+			influence_hormone(T, min(owner.bloodstr.get_reagent_amount(T), owner.bloodstr.get_overdose(T)))
 	for(var/T in SANITIZE_LIST(watched_hormones))
-		influence_hormone(T, owner.bloodstr.get_reagent_amount(T))
+		influence_hormone(T, min(owner.bloodstr.get_reagent_amount(T), owner.bloodstr.get_overdose(T)))
+	for(var/T in SANITIZE_LIST(waste_hormones))
+		make_hormone(T, waste_hormones[T])

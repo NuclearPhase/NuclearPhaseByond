@@ -12,6 +12,11 @@
 	influenced_hormones = list(
 		/datum/reagent/hormone/glucagon
 	)
+	hormones = list(
+		/datum/reagent/hormone/glucose = 2
+	)
+
+	var/bilirubine_norm = -1
 
 /obj/item/organ/internal/liver/influence_hormone(T, amount)
 	if(ishormone(T, glucagon))
@@ -22,6 +27,13 @@
 	..()
 	if(!owner)
 		return
+
+	if(bilirubine_norm < 0)
+		bilirubine_norm = rand(5, 21)
+
+	make_up_to_hormone(/datum/reagent/hormone/marker/bilirubine, bilirubine_norm)
+	make_up_to_hormone(/datum/reagent/hormone/marker/ast, 30 + ((damage / max_damage) * 0.1))
+	make_up_to_hormone(/datum/reagent/hormone/marker/alt, 25 + ((damage / max_damage) * 2))
 
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(1))

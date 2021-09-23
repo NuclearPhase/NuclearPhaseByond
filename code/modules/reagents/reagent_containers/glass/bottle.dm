@@ -10,11 +10,11 @@
 	randpixel = 7
 	center_of_mass = "x=15;y=10"
 	amount_per_transfer_from_this = 10
-	possible_transfer_amounts = "5;10;15;25;30;60"
+	possible_transfer_amounts = "5;10;15;25;30"
 	w_class = ITEM_SIZE_SMALL
 	item_flags = 0
 	obj_flags = 0
-	volume = 60
+	volume = 30
 
 	on_reagent_change()
 		update_icon()
@@ -54,6 +54,10 @@
 
 			filling.color = reagents.get_color()
 			overlays += filling
+		if(reagents.total_volume && (icon_state == "ampoule"))
+			var/image/filling = image('icons/obj/reagentfillings.dmi', src, "ampoule")
+			filling.color = reagents.get_color()
+			overlays += filling
 
 		if (!is_open_container())
 			var/image/lid = image(icon, src, "lid_bottle")
@@ -68,13 +72,13 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline/New()
 	..()
-	reagents.add_reagent(/datum/reagent/inaprovaline, 60)
+	reagents.add_reagent(/datum/reagent/inaprovaline, 30)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucose
-	name = "glucose bottle"
-	desc = "A tiny bottle. Contains glucose. 2u."
-	icon_state = "bottle-4"
+	name = "glucose ampoule"
+	desc = "A tiny ampoule. Contains glucose. 2u."
+	icon_state = "ampoule"
 	volume = 2
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
@@ -82,16 +86,27 @@
 	reagents.add_reagent(/datum/reagent/hormone/glucose, 2)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/insulin
+	name = "insulin ampoule"
+	desc = "A tiny ampoule. Contains insulin. 2u."
+	icon_state = "ampoule"
+	volume = 2
+
+/obj/item/weapon/reagent_containers/glass/bottle/insulin/New()
+	..()
+	reagents.add_reagent(/datum/reagent/hormone/insulin, 2)
+	update_icon()
+
 /obj/item/weapon/reagent_containers/glass/bottle/dextrose
 	name = "dextrose bottle"
 	desc = "A small bottle. Contains dextrose. 4u."
 	icon_state = "bottle-4"
-	volume = 60
+	volume = 30
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
 	..()
 	reagents.add_reagent(/datum/reagent/hormone/glucose, 4)
-	reagents.add_reagent(/datum/reagent/water, 56)
+	reagents.add_reagent(/datum/reagent/water, 26)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucagon
@@ -102,7 +117,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucagon/New()
 	..()
-	reagents.add_reagent(/datum/reagent/hormone/glucagon, 60)
+	reagents.add_reagent(/datum/reagent/hormone/glucagon, 30)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/adenosine
@@ -113,7 +128,30 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/adenosine/New()
 	..()
-	reagents.add_reagent(/datum/reagent/adenosine, 60)
+	reagents.add_reagent(/datum/reagent/adenosine, 30)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/amiodarone
+	name = "amiodarone bottle"
+	desc = "A small bottle. Contains amiodarone."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle-4"
+
+/obj/item/weapon/reagent_containers/glass/bottle/amiodarone/New()
+	..()
+	reagents.add_reagent(/datum/reagent/amiodarone, 30)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/lidocaine
+	name = "lidocaine bottle"
+	desc = "A small bottle. Contains lidocaine."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle-3"
+	volume = 15
+
+/obj/item/weapon/reagent_containers/glass/bottle/lidocaine/New()
+	..()
+	reagents.add_reagent(/datum/reagent/lidocaine, 15)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/dopamine
@@ -124,7 +162,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/dopamine/New()
 	..()
-	reagents.add_reagent(/datum/reagent/hormone/dopamine, 60)
+	reagents.add_reagent(/datum/reagent/hormone/dopamine, 30)
 	update_icon()
 
 
@@ -136,7 +174,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/toxin/New()
 	..()
-	reagents.add_reagent(/datum/reagent/toxin, 60)
+	reagents.add_reagent(/datum/reagent/toxin, 30)
 	update_icon()
 
 
@@ -160,7 +198,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/stoxin/New()
 	..()
-	reagents.add_reagent(/datum/reagent/soporific, 60)
+	reagents.add_reagent(/datum/reagent/soporific, 30)
 	update_icon()
 
 
@@ -184,7 +222,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/antitoxin/New()
 	..()
-	reagents.add_reagent(/datum/reagent/dylovene, 60)
+	reagents.add_reagent(/datum/reagent/dylovene, 30)
 	update_icon()
 
 
@@ -196,7 +234,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/mutagen/New()
 	..()
-	reagents.add_reagent(/datum/reagent/mutagen, 60)
+	reagents.add_reagent(/datum/reagent/mutagen, 30)
 	update_icon()
 
 
@@ -208,7 +246,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/ammonia/New()
 	..()
-	reagents.add_reagent(/datum/reagent/ammonia, 60)
+	reagents.add_reagent(/datum/reagent/ammonia, 30)
 	update_icon()
 
 
@@ -220,7 +258,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/eznutrient/New()
 	..()
-	reagents.add_reagent(/datum/reagent/toxin/fertilizer/eznutrient, 60)
+	reagents.add_reagent(/datum/reagent/toxin/fertilizer/eznutrient, 30)
 	update_icon()
 
 
@@ -232,7 +270,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/left4zed/New()
 	..()
-	reagents.add_reagent(/datum/reagent/toxin/fertilizer/left4zed, 60)
+	reagents.add_reagent(/datum/reagent/toxin/fertilizer/left4zed, 30)
 	update_icon()
 
 
@@ -244,7 +282,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/robustharvest/New()
 	..()
-	reagents.add_reagent(/datum/reagent/toxin/fertilizer/robustharvest, 60)
+	reagents.add_reagent(/datum/reagent/toxin/fertilizer/robustharvest, 30)
 	update_icon()
 
 
@@ -256,7 +294,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/diethylamine/New()
 	..()
-	reagents.add_reagent(/datum/reagent/diethylamine, 60)
+	reagents.add_reagent(/datum/reagent/diethylamine, 30)
 	update_icon()
 
 
@@ -268,7 +306,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/pacid/New()
 	..()
-	reagents.add_reagent(/datum/reagent/acid/polyacid, 60)
+	reagents.add_reagent(/datum/reagent/acid/polyacid, 30)
 	update_icon()
 
 
@@ -281,7 +319,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/adminordrazine/New()
 	..()
-	reagents.add_reagent(/datum/reagent/adminordrazine, 60)
+	reagents.add_reagent(/datum/reagent/adminordrazine, 30)
 	update_icon()
 
 
@@ -293,7 +331,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/capsaicin/New()
 	..()
-	reagents.add_reagent(/datum/reagent/capsaicin, 60)
+	reagents.add_reagent(/datum/reagent/capsaicin, 30)
 	update_icon()
 
 
@@ -305,5 +343,5 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/frostoil/New()
 	..()
-	reagents.add_reagent(/datum/reagent/frostoil, 60)
+	reagents.add_reagent(/datum/reagent/frostoil, 30)
 	update_icon()

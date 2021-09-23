@@ -113,9 +113,9 @@ var/list/organ_cache = list()
 			take_damage(rand(1,3))
 		germ_level += rand(2,6)
 		if(germ_level >= INFECTION_LEVEL_TWO)
-			germ_level += rand(2,6)
+			germ_level += rand(4,8)
 		if(germ_level >= INFECTION_LEVEL_THREE)
-			die()
+			germ_level += rand(1,2)
 
 	else if(owner && owner.bodytemperature >= 170)	//cryo stops germs from moving and doing their bad stuffs
 		//** Handle antibiotics and curing infections
@@ -146,26 +146,26 @@ var/list/organ_cache = list()
 	//** Handle the effects of infections
 	var/antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/spaceacillin)
 
-	if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(owner.virus_immunity()*0.3))
+	if(germ_level > 0 && germ_level < INFECTION_LEVEL_ONE / 2 && prob(owner.virus_immunity() * 0.3))
 		germ_level--
 
-	if (germ_level >= INFECTION_LEVEL_ONE/2)
-		//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes
-		if(antibiotics < 5 && prob(round(germ_level/6 * owner.immunity_weakness() * 0.01)))
-			germ_level++
+	if(germ_level >= INFECTION_LEVEL_ONE / 2 && antibiotics < 5)
+		var/dgerm_level = round(M_E ** (germ_level / GERMS_BREEDING_COEF))
+		dgerm_level *= owner.immunity_weakness()
+		dgerm_level *= owner.immunity_weakness() > 1.9 ? 10 : 1
 
 	if(germ_level >= INFECTION_LEVEL_ONE)
-		var/fever_temperature = (owner.species.heat_level_1 - owner.species.body_temperature - 5)* min(germ_level/INFECTION_LEVEL_TWO, 1) + owner.species.body_temperature
-		owner.bodytemperature += between(0, (fever_temperature - T20C)/BODYTEMP_COLD_DIVISOR + 1, fever_temperature - owner.bodytemperature)
+		if(owner.bodytemperature - T0C < 45.5)
+			owner.bodytemperature += germ_level / 170
 
-	if (germ_level >= INFECTION_LEVEL_TWO)
+	if(germ_level >= INFECTION_LEVEL_TWO)
 		var/obj/item/organ/external/parent = owner.get_organ(parent_organ)
-		//spread germs
-		if (antibiotics < 5 && parent.germ_level < germ_level && ( parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(owner.immunity_weakness() * 0.3) ))
+		// Spread germs
+		if(antibiotics < 5 && parent.germ_level < germ_level && (parent.germ_level < INFECTION_LEVEL_ONE * 2 || prob(owner.immunity_weakness() * 0.3)))
 			parent.germ_level++
 
 		if (prob(3))	//about once every 30 seconds
-			take_damage(1,silent=prob(30))
+			take_damage(germ_level / INFECTION_LEVEL_TWO, silent = prob(30))
 
 /obj/item/organ/proc/handle_rejection()
 	// Process unsuitable transplants. TODO: consider some kind of
@@ -217,12 +217,9 @@ var/list/organ_cache = list()
 	if (!germ_level || antibiotics < 5)
 		return
 
-	if (germ_level < INFECTION_LEVEL_ONE)
-		germ_level = 0	//cure instantly
-	else if (germ_level < INFECTION_LEVEL_TWO)
-		germ_level -= 6	//at germ_level == 500, this should cure the infection in a minute
-	else
-		germ_level -= 2 //at germ_level == 1000, this will cure the infection in 5 minutes
+	germ_level -= antibiotics / 5
+	if(germ_level < INFECTION_LEVEL_ONE)
+		germ_level = 0 // cure instantly
 
 //Note: external organs have their own version of this proc
 /obj/item/organ/proc/take_damage(amount, var/silent=0)
@@ -335,20 +332,26 @@ var/list/organ_cache = list()
 		else
 			. += "Necrotic"
 	switch (germ_level)
-		if (INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 200)
-			. +=  "Mild Infection"
-		if (INFECTION_LEVEL_ONE + 200 to INFECTION_LEVEL_ONE + 300)
-			. +=  "Mild Infection+"
-		if (INFECTION_LEVEL_ONE + 300 to INFECTION_LEVEL_ONE + 400)
-			. +=  "Mild Infection++"
-		if (INFECTION_LEVEL_TWO to INFECTION_LEVEL_TWO + 200)
-			. +=  "Acute Infection"
-		if (INFECTION_LEVEL_TWO + 200 to INFECTION_LEVEL_TWO + 300)
-			. +=  "Acute Infection+"
-		if (INFECTION_LEVEL_TWO + 300 to INFECTION_LEVEL_TWO + 400)
-			. +=  "Acute Infection++"
-		if (INFECTION_LEVEL_THREE to INFINITY)
-			. +=  "Septic"
+		if(INFECTION_LEVEL_ONE to INFECTION_LEVEL_ONE + 50)
+			. += "Mild Infection I"
+		if(INFECTION_LEVEL_ONE + 50 to INFECTION_LEVEL_ONE + 100)
+			. += "Mild Infection II"
+		if(INFECTION_LEVEL_ONE + 100 to INFECTION_LEVEL_TWO)
+			. += "Mild Infection III"
+		if(INFECTION_LEVEL_TWO to INFECTION_LEVEL_TWO + 100)
+			. += "Acute Infection I"
+		if(INFECTION_LEVEL_TWO + 100 to INFECTION_LEVEL_TWO + 200)
+			. += "Acute Infection II"
+		if(INFECTION_LEVEL_TWO + 200 to INFECTION_LEVEL_THREE)
+			. += "Acute Infection III"
+		if(INFECTION_LEVEL_THREE to INFECTION_LEVEL_THREE + 100)
+			. += "Septic I"
+		if(INFECTION_LEVEL_THREE + 100 to INFECTION_LEVEL_THREE + 200)
+			. += "Septic II"
+		if(INFECTION_LEVEL_THREE + 200 to INFECTION_LEVEL_FOUR)
+			. += "Septic III"
+		if(INFECTION_LEVEL_FOUR to INFINITY)
+			. += "Gangrene"
 	if(rejecting)
 		. += "Genetic Rejection"
 

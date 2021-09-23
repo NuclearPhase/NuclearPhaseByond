@@ -116,9 +116,32 @@
 
 /datum/chemical_reaction/oxycodone
 	name = "Oxycodone"
-	result = /datum/reagent/tramadol/oxycodone
-	required_reagents = list(/datum/reagent/ethanol = 1, /datum/reagent/tramadol = 1)
-	catalysts = list(/datum/reagent/toxin/phoron = 5)
+	result = /datum/reagent/tramadol/opium/oxycodone
+	required_reagents = list(/datum/reagent/tramadol/opium = 2, /datum/reagent/paracetamol = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/morphine
+	name = "Morphine"
+	result = /datum/reagent/tramadol/opium/morphine
+	required_reagents = list(/datum/reagent/tramadol/opium = 2, /datum/reagent/mercury = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/heroin
+	name = "Heroin"
+	result = /datum/reagent/tramadol/opium/heroin
+	required_reagents = list(/datum/reagent/tramadol/opium/kodein = 1, /datum/reagent/tramadol/opium/morphine = 1, /datum/reagent/lithium = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/kodein
+	name = "Kodein"
+	result = /datum/reagent/tramadol/opium/kodein
+	required_reagents = list(/datum/reagent/tramadol/opium = 3, /datum/reagent/hyperzine = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/krokodil
+	name = "Krokodil"
+	result = /datum/reagent/tramadol/opium/heroin/krokodil
+	required_reagents = list(/datum/reagent/tramadol/opium/kodein = 1, /datum/reagent/nutriment = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/sterilizine

@@ -247,7 +247,7 @@
 	charges = list(
 		list("synaptizine", "synaptizine", /datum/reagent/synaptizine,       30),
 		list("hyperzine",   "hyperzine",   /datum/reagent/hyperzine,         30),
-		list("oxycodone",   "oxycodone",   /datum/reagent/tramadol/oxycodone,         30),
+		list("oxycodone",   "oxycodone",   /datum/reagent/tramadol/opium/oxycodone,         30),
 		list("glucose",     "glucose",     /datum/reagent/hormone/glucose, 80),
 		)
 

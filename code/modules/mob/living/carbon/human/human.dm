@@ -63,10 +63,6 @@
 /mob/living/carbon/human/Stat()
 	. = ..()
 	if(statpanel("Status"))
-		stat("ST:", "[str]")//Stats!
-		stat("DX:", "[dex]")
-		stat("IT:", "[int]")
-
 		if(evacuation_controller)
 			var/eta_status = evacuation_controller.get_status_panel_eta()
 			if(eta_status)
@@ -697,7 +693,7 @@
 					playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 					adjust_hygiene(-25)
-					add_event("hygiene", /datum/happiness_event/hygiene/vomitted)
+					add_event("hygiene", new /datum/happiness_event/hygiene/vomitted)
 
 					var/turf/location = loc
 					if (istype(location, /turf/simulated))
@@ -1588,9 +1584,9 @@
 
 // Get fluffy numbers
 /mob/living/carbon/human/proc/get_blood_pressure_fluffy()
-	if(get_blood_pressure() < 35)
+	if(get_blood_pressure() < 30)
 		return "0/0"
-	return "[Floor(get_blood_pressure())]/[Floor(get_blood_pressure() - 40 + rand(-5, 5))]"
+	return "[Floor(get_blood_pressure())]/[Floor(max(10, get_blood_pressure() - 40) + rand(-5, 5))]"
 
 //Point at which you dun breathe no more. Separate from asystole crit, which is heart-related.
 /mob/living/carbon/human/proc/nervous_system_failure()

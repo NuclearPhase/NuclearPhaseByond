@@ -108,6 +108,12 @@
 		silent = max(silent-1, 0)
 	return silent
 
+/mob/living/proc/make_drugged(vol, weigth = 0.5, force = FALSE)
+	if(force)
+		druggy = vol
+	else if(druggy < vol)
+		druggy = Interpolate(druggy, vol, weigth)
+
 /mob/living/proc/handle_drugged()
 	if(druggy)
 		druggy = max(druggy-1, 0)

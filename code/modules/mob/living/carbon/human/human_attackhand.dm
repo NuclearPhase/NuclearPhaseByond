@@ -87,24 +87,22 @@
 					to_chat(H, "<span class='danger'>You need lungs for mouth-to-mouth resustication!</span>")
 					return
 
+				var/acls_quality = M.get_skill(SKILL_ACLS)
+				var/is_precordial_blow = acls_quality >= SKILL_AMATEUR && is_vfib()
 
-				var/is_precordial_blow = is_vfib() // TODO: Make ability to perform precordial blow skill-based.
-
-				var/punches = is_precordial_blow ? rand(3, 5) : rand(6, 8)
+				var/punches = is_precordial_blow ? rand(2, 5 + acls_quality) : rand(5, 9 + acls_quality)
 
 				H.visible_message(SPAN_NOTICE("\The [H] is performing CPR on \the [src]."))
 				var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
 
 				for(var/i in 1 to punches)
-					if(!do_after(H, rand(4, 8), src))
+					if(!do_after(H, rand(max(0, 4 - acls_quality), 8), src))
 						return
 
 					if("CPR" in heart.pulse_modificators)
-						heart.pulse_modificators["CPR"] += rand(20, 40) // TODO: Make this skill-based.
-						heart.blood_pressure_modificators["CPR"] += rand(20, 40)
+						heart.pulse_modificators["CPR"] += rand(15, 30) * (1 + acls_quality)
 					else
-						heart.pulse_modificators["CPR"] = rand(20, 40)
-						heart.blood_pressure_modificators["CPR"] = rand(20, 40)
+						heart.pulse_modificators["CPR"] = rand(15, 30) * (1 + acls_quality)
 
 					if(prob(1))
 						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
@@ -113,10 +111,11 @@
 					var/obj/item/organ/internal/lungs/L = internal_organs_by_name[species.breathing_organ]
 					if(!L)
 						continue
-					var/datum/gas_mixture/breath = H.get_breath_from_environment()
-					var/fail = L.handle_breath(breath, 1)
-					if(!fail)
-						to_chat(src, SPAN_NOTICE("You feel a breath of fresh air enter your lungs. It feels good."))
+					for(var/i2 in 1 to acls_quality)
+						var/datum/gas_mixture/breath = H.get_breath_from_environment()
+						var/fail = L.handle_breath(breath, 1)
+						if(!fail && prob(20))
+							to_chat(src, SPAN_NOTICE("You feel a breath of fresh air enter your lungs. It feels so good."))
 
 				if(is_precordial_blow && is_vfib())
 					H.visible_message(SPAN_NOTICE("\The [H] is performing precordial blow on \the [src]."))
@@ -130,8 +129,9 @@
 						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
 						chest?.fracture()
 
-					if(prob(30)) // TODO: Make this skill-based
-						heart.rythme = prob(70) ? RYTHME_AFIB_RR : RYTHME_AFIB
+
+					if(prob(acls_quality * 10))
+						heart.rythme = prob(100 - acls_quality * 20) ? RYTHME_AFIB_RR : RYTHME_AFIB
 
 
 
@@ -248,7 +248,7 @@
 			if(HULK in H.mutations)
 				real_damage *= 2 // Hulks do twice the damage
 				rand_damage *= 2
-			real_damage = (max(1, real_damage) * strToDamageModifier(H.str))
+			real_damage = (max(1, real_damage) * strToDamageModifier(H.strength))
 
 			var/armour = run_armor_check(hit_zone, "melee")
 			// Apply additional unarmed effects.

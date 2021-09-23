@@ -356,7 +356,8 @@
 		//Kinda balanced by fact you need like 2 seconds to aim
 		//As opposed to no-delay pew pew
 		P.accuracy += 2
-	if(!user.skillcheck(user.ranged_skill, 55, 0) || !user.combat_mode)//Being unskilled at guns decreased accuracy.
+	P.accuracy += user.get_skill(SKILL_WEAPONS) || -2
+	if(!user.combat_mode)
 		P.accuracy -= 2
 
 //does the actual launching of the projectile

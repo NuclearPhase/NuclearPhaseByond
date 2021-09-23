@@ -405,7 +405,7 @@
 /datum/reagent/tramadol
 	value = 3.1
 
-/datum/reagent/tramadol/oxycodone
+/datum/reagent/tramadol/opium/oxycodone
 	value = 3.3
 
 /datum/reagent/synaptizine

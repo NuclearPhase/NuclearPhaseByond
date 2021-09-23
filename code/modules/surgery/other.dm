@@ -9,7 +9,7 @@
 /datum/surgery_step/fix_tendon
 	priority = 2
 	allowed_tools = list(
-	/obj/item/weapon/FixOVein = 100, \
+	/obj/item/weapon/FixOVein/suture = 100, \
 	/obj/item/stack/cable_coil = 75,	\
 	/obj/item/weapon/tape_roll = 50
 	)
@@ -53,7 +53,7 @@
 /datum/surgery_step/fix_vein
 	priority = 3
 	allowed_tools = list(
-	/obj/item/weapon/FixOVein = 100, \
+	/obj/item/weapon/FixOVein/suture = 100, \
 	/obj/item/stack/cable_coil = 75,	\
 	/obj/item/weapon/tape_roll = 50
 	)

@@ -1,3 +1,4 @@
+#define DRUGS_MESSAGE_DELAY (30 SECONDS + rand(-1 SECOND, 1 SECOND))
 /* Painkillers */
 
 /datum/reagent/paracetamol
@@ -19,7 +20,6 @@
 	..()
 	M.druggy = max(M.druggy, 2)
 	M.add_chemical_effect(CE_PAINKILLER, 10)
-
 /datum/reagent/tramadol
 	name = "Tramadol"
 	description = "A simple, yet effective painkiller. Don't mix with alcohol."
@@ -31,62 +31,190 @@
 	metabolism = 0.05
 	ingest_met = 0.02
 	flags = IGNORE_MOB_SIZE
-	var/pain_power = 80 //magnitide of painkilling effect
+	var/pain_power = 100 //magnitide of painkilling effect
 	var/effective_dose = 0.5 //how many units it need to process to reach max power
+	var/soft_overdose = 15 //determines when it starts causing negative effects w/out actually causing OD
+	var/additiction_coef = 0.8
 
-/datum/reagent/tramadol/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/tramadol/affect_blood(mob/living/carbon/M, alien, removed)
 	var/effectiveness = 1
 	if(M.chem_doses[type] < effective_dose) //some ease-in ease-out for the effect
 		effectiveness = M.chem_doses[type]/effective_dose
 	else if(volume < effective_dose)
 		effectiveness = volume/effective_dose
 	M.add_chemical_effect(CE_PAINKILLER, pain_power * effectiveness)
-	if(M.chem_doses[type] > 0.5 * overdose)
-		M.add_chemical_effect(CE_SLOWDOWN, 1)
-		if(prob(1))
-			M.slurring = max(M.slurring, 10)
-	if(M.chem_doses[type] > 0.75 * overdose)
-		M.add_chemical_effect(CE_SLOWDOWN, 1)
-		if(prob(5))
-			M.slurring = max(M.slurring, 20)
-	if(M.chem_doses[type] > overdose)
-		M.add_chemical_effect(CE_SLOWDOWN, 1)
-		M.slurring = max(M.slurring, 30)
-		if(prob(1))
-			M.Weaken(2)
-			M.drowsyness = max(M.drowsyness, 5)
+	handle_painkiller_overdose(M)
 	var/boozed = isboozed(M)
 	if(boozed)
 		M.add_chemical_effect(CE_ALCOHOL_TOXIC, 1)
 		M.add_chemical_effect(CE_BREATHLOSS, 0.1 * boozed) //drinking and opiating makes breathing kinda hard
 
-/datum/reagent/tramadol/overdose(var/mob/living/carbon/M, var/alien)
+/datum/reagent/tramadol/overdose(mob/living/carbon/M, alien)
 	..()
 	M.hallucination(120, 30)
-	M.druggy = max(M.druggy, 10)
+	M.make_drugged(10)
 	M.add_chemical_effect(CE_PAINKILLER, pain_power*0.5) //extra painkilling for extra trouble
 	M.add_chemical_effect(CE_BREATHLOSS, 0.6) //Have trouble breathing, need more air
 	if(isboozed(M))
 		M.add_chemical_effect(CE_BREATHLOSS, 0.2) //Don't drink and OD on opiates folks
 
-/datum/reagent/tramadol/proc/isboozed(var/mob/living/carbon/M)
-	. = 0
-	var/list/pool = M.reagents.reagent_list | M.ingested.reagent_list
-	for(var/datum/reagent/ethanol/booze in pool)
-		if(M.chem_doses[booze.type] < 2) //let them experience false security at first
-			continue
-		. = 1
-		if(booze.strength < 40) //liquor stuff hits harder
-			return 2
+/datum/reagent/tramadol/proc/handle_painkiller_overdose(mob/living/carbon/M)
+	if(M.chem_doses[type] > soft_overdose)
+		M.add_chemical_effect(CE_SLOWDOWN, 1)
+		if(prob(1))
+			M.slurring = max(M.slurring, 10)
+	if(M.chem_doses[type] > (overdose+soft_overdose)/2)
+		if(prob(5))
+			M.slurring = max(M.slurring, 20)
+	if(M.chem_doses[type] > overdose)
+		M.slurring = max(M.slurring, 30)
+		if(prob(1))
+			M.Weaken(2)
+			M.drowsyness = max(M.drowsyness, 5)
 
-/datum/reagent/tramadol/oxycodone
+/datum/reagent/tramadol/proc/isboozed(mob/living/carbon/M)
+	. = 0
+	var/datum/reagents/ingested = M.ingested
+	if(ingested)
+		var/list/pool = M.reagents.reagent_list | ingested.reagent_list
+		for(var/datum/reagent/ethanol/booze in pool)
+			if(M.chem_doses[booze.type] < 2) //let them experience false security at first
+				continue
+			. = 1
+			if(booze.strength < 40) //liquor stuff hits harder
+				return 2
+
+/datum/reagent/tramadol/opium // yes, opium is a subtype of tramadol, for reasons ~Toby
+	name = "Opium"
+	description = "Latex obtained from the opium poppy. An effective, but addictive painkiller."
+	taste_description = "bitterness"
+	color = "#63311b"
+	overdose = 20
+	soft_overdose = 10
+	scannable = 0
+	reagent_state = SOLID
+	data = 0
+	pain_power = 120
+	var/drugdata = 0
+	additiction_coef = 2.1
+
+/datum/reagent/tramadol/opium/affect_blood(mob/living/carbon/M, alien, removed)
+	var/effectiveness = 1
+	if(volume < effective_dose) //reverse order compared to tramadol for quicker effect uppon injecting
+		effectiveness = volume/effective_dose
+	else if(M.chem_doses[type] < effective_dose)
+		effectiveness = M.chem_doses[type]/effective_dose
+	M.add_chemical_effect(CE_PAINKILLER, pain_power * effectiveness)
+	handle_painkiller_overdose(M)
+	var/boozed = isboozed(M)
+	if(boozed)
+		M.add_chemical_effect(CE_ALCOHOL_TOXIC, 1)
+		M.add_chemical_effect(CE_BREATHLOSS, 0.1 * boozed) //drinking and opiating makes breathing kinda hard
+	if(world.time > drugdata + DRUGS_MESSAGE_DELAY)
+		drugdata = world.time
+		var/msg = ""
+		if(pain_power > 200)
+			msg = pick("unbeliveably happy", "like living your best life", "blissful", "blessed", "unearthly tranquility")
+		else
+			msg = pick("happy", "joyful", "relaxed", "tranquility")
+		to_chat(M, SPAN("notice", "You feel [msg]."))
+
+/datum/reagent/tramadol/opium/handle_painkiller_overdose(mob/living/carbon/M)
+	var/whole_volume = (volume + M.chem_doses[type]) // side effects are more robust (dose-wise) than in the case of *legal* painkillers usage
+	if(whole_volume > soft_overdose)
+		M.add_chemical_effect(CE_SLOWDOWN, 1)
+		M.make_drugged(10)
+		if(prob(1))
+			M.slurring = max(M.slurring, 10)
+	if(whole_volume > (overdose+soft_overdose)/2)
+		M.eye_blurry = max(M.eye_blurry, 10)
+		if(prob(5))
+			M.slurring = max(M.slurring, 20)
+	if(whole_volume > overdose)
+		M.add_chemical_effect(CE_SLOWDOWN, 2)
+		M.slurring = max(M.slurring, 30)
+		if(prob(1))
+			M.Weaken(2)
+			M.drowsyness = max(M.drowsyness, 5)
+	M.make_jittery(whole_volume * 0.5)
+
+/datum/reagent/tramadol/opium/heroin
+	name = "Heroin"
+	description = "An opioid most commonly used as a recreational drug for its euphoric effects. An extremely effective painkiller, yet is terribly addictive and notorious for its life-threatening side-effects."
+	color = "#b79a8d"
+	overdose = 15
+	soft_overdose = 7.5
+	pain_power = 220
+	scannable = 0
+	reagent_state = SOLID
+	additiction_coef = 3
+
+/datum/reagent/tramadol/opium/heroin/affect_blood(mob/living/carbon/M, alien, removed)
+	..()
+	M.add_chemical_effect(CE_SLOWDOWN, 1)
+
+/datum/reagent/tramadol/opium/heroin/handle_painkiller_overdose(mob/living/carbon/M)
+	var/whole_volume = (volume + M.chem_doses[type]) // side effects are more robust (dose-wise) than in the case of *legal* painkillers usage
+	if(whole_volume > soft_overdose)
+		M.hallucination(30, 30)
+		M.eye_blurry = max(M.eye_blurry, 10)
+		M.drowsyness = max(M.drowsyness, 5)
+		M.make_drugged(10)
+		M.add_chemical_effect(CE_SLOWDOWN, 2)
+		if(prob(5))
+			M.slurring = max(M.slurring, 20)
+	if(whole_volume > overdose)
+		M.add_chemical_effect(CE_SLOWDOWN, 3)
+		M.slurring = max(M.slurring, 30)
+		M.Weaken(5)
+		if(prob(25))
+			M.sleeping = max(M.sleeping, 3)
+		M.add_chemical_effect(CE_BREATHLOSS, 0.2)
+	M.make_jittery(whole_volume * 0.5)
+
+/datum/reagent/tramadol/opium/kodein
+	name = "Heroin"
+	description = "An mild opium alkaloid most commonly used as basis of other opiates."
+	color = "#b79abd"
+	overdose = 15
+	soft_overdose = 7.5
+	pain_power = 80
+	scannable = 1
+	reagent_state = SOLID
+	additiction_coef = 3
+
+/datum/reagent/tramadol/opium/heroin/krokodil
+	name = "Krokodil"
+	description = "A drug most commonly used as a cheap replacement of heroin."
+	color = "#b7ba8d"
+	overdose = 15
+	soft_overdose = 7.5
+	pain_power = 150
+	scannable = 1
+	reagent_state = SOLID
+	additiction_coef = 2.6
+
+/datum/reagent/tramadol/opium/morphine
+	name = "Morphine"
+	description = "An opioid painkiller drug."
+	color = "#aaaabb"
+	overdose = 25
+	soft_overdose = 15
+	scannable = 1
+	reagent_state = SOLID
+	data = 0
+	pain_power = 200
+	additiction_coef = 2
+
+/datum/reagent/tramadol/opium/oxycodone
 	name = "Oxycodone"
-	description = "An effective and very addictive painkiller. Don't mix with alcohol."
+	description = "An effective opiat painkiller. Don't mix with alcohol."
 	taste_description = "bitterness"
 	color = "#800080"
 	overdose = 20
-	pain_power = 200
+	pain_power = 180
 	effective_dose = 2
+	additiction_coef = 2
 
 /datum/reagent/sterilizine
 	name = "Sterilizine"
@@ -210,13 +338,35 @@
 	// initial rush.
 	if(volume > 2 && H.chem_doses[type] < 2 && H.get_rythme() >= RYTHME_AFIB)
 		H.make_heart_rate(-140, "adenosine_av_blockage")
-	else if(volume > 2 && H.chem_doses[type] < 2 && H.get_rythme() == RYTHME_NORM)
-		if(prob(1) && H.get_rythme() < RYTHME_ASYSTOLE)
-			H.set_rythme(RYTHME_VFIB)
 	else
 		H.make_heart_rate(-30, "adenosine_av_blockage")
 		if(H.get_rythme() == RYTHME_AFIB_RR)
 			H.set_rythme(RYTHME_AFIB)
 			volume = 0
 
+/datum/reagent/amiodarone
+	name = "Amiodarone"
+	description = "Amiodarone is a antiarrythmic drug."
+	reagent_state = LIQUID
+	color = "#76a"
+	metabolism = REM
+
+/datum/reagent/amiodarone/affect_blood(mob/living/carbon/human/H, alien, removed)
+	H.add_chemical_effect(CE_ANTIARRYTHMIC, 1)
+
+/datum/reagent/lidocaine
+	name = "Lidocaine"
+	description = "Lidocaine is a antiarrythmic and painkiller drug."
+	reagent_state = LIQUID
+	color = "#7aa"
+	metabolism = REM
+	overdose = 10
+
+/datum/reagent/lidocaine/affect_blood(mob/living/carbon/human/H, alien, removed)
+	H.add_chemical_effect(CE_ANTIARRYTHMIC, 2)
+	H.add_chemical_effect(CE_PAINKILLER, 40)
+
+/datum/reagent/lidocaine/overdose(mob/living/carbon/human/H, alien)
+	if(prob(50))
+		H.add_chemical_effect(CE_BREATHLOSS)
 

@@ -16,6 +16,8 @@
 	var/created = 0
 	var/amount = 1             // number of wounds of this type
 	var/germ_level = 0         // amount of germs in the wound
+	var/germ_speed = 1         // speed of germs creating
+	var/obj/item/organ/external/parent_organ	// the organ the wound is on, if on an organ
 
 	/*  These are defined by the wound type and should not be changed */
 	var/list/stages            // stages such as "cut", "deep cut", etc.
@@ -28,7 +30,7 @@
 	var/tmp/list/desc_list = list()
 	var/tmp/list/damage_list = list()
 
-/datum/wound/New(var/damage)
+/datum/wound/New(damage)
 
 	created = world.time
 
@@ -46,7 +48,7 @@
 	bleed_timer += damage
 
 // returns 1 if there's a next stage, 0 otherwise
-/datum/wound/proc/init_stage(var/initial_damage)
+/datum/wound/proc/init_stage(initial_damage)
 	current_stage = stages.len
 
 	while(src.current_stage > 1 && src.damage_list[current_stage-1] <= initial_damage / src.amount)
@@ -74,7 +76,7 @@
 				return salved
 
 	// Checks whether other other can be merged into src.
-/datum/wound/proc/can_merge(var/datum/wound/other)
+/datum/wound/proc/can_merge(datum/wound/other)
 	if (other.type != src.type) return 0
 	if (other.current_stage != src.current_stage) return 0
 	if (other.damage_type != src.damage_type) return 0
@@ -86,7 +88,7 @@
 	if (!(other.disinfected) != !(src.disinfected)) return 0
 	return 1
 
-/datum/wound/proc/merge_wound(var/datum/wound/other)
+/datum/wound/proc/merge_wound(datum/wound/other)
 	src.embedded_objects |= other.embedded_objects
 	src.damage += other.damage
 	src.amount += other.amount
@@ -100,9 +102,6 @@
 	if (damage < 10)	//small cuts, tiny bruises, and moderate burns shouldn't be infectable.
 		return 0
 	if (is_treated() && damage < 25)	//anything less than a flesh wound (or equivalent) isn't infectable if treated properly
-		return 0
-	if (disinfected)
-		germ_level = 0	//reset this, just in case
 		return 0
 
 	if (damage_type == BRUISE && !bleeding()) //bruises only infectable if bleeding
@@ -126,13 +125,21 @@
 	salved = 1
 
 /datum/wound/proc/disinfect()
-	disinfected = 1
+	if(!disinfected)
+		germ_level *= 0.5
+		disinfected = 1
 
 // heal the given amount of damage, and if the given amount of damage was more
 // than what needed to be healed, return how much heal was left
 /datum/wound/proc/heal_damage(amount)
-	if(embedded_objects.len)
+	if(LAZYLEN(embedded_objects))
 		return amount // heal nothing
+	if(parent_organ)
+		if(damage_type == BURN && !(parent_organ.burn_ratio < 1))
+			return amount	//We don't want to heal wounds on irreparable organs.
+		else if(!(parent_organ.brute_ratio < 1))
+			return amount
+
 	var/healed_damage = min(src.damage, amount)
 	amount -= healed_damage
 	src.damage -= healed_damage
@@ -183,3 +190,8 @@
 
 /datum/wound/proc/is_surgical()
 	return 0
+
+/datum/wound/proc/germ_speed()
+	.  = germ_speed
+	. *= is_treated() ? 0.8 : 1
+	. *= disinfected  ? 0.6 : 1

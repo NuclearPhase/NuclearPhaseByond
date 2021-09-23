@@ -271,7 +271,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	. = heart?.pressure
 
 /mob/living/carbon/human/proc/get_blood_saturation()
-	. = CLAMP01(1 - getOxyLoss() / 100 + rand(-0.3, 0.3))
+	. = Clamp(1 - getOxyLoss() / 100 + rand(-0.3, 0.3), 0, 0.99)
 
 // 0-1
 /mob/living/carbon/human/proc/get_blood_perfusion()
@@ -282,6 +282,8 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 			bp_eff *= 0.5
 		if(200 to 230)
 			bp_eff *= 0.4
-		if(230 to INFINITY)
+		if(230 to 270)
 			bp_eff *= 0.3
-	. = bp_eff * get_blood_saturation()
+		if(270 to INFINITY)
+			return 0
+	. = CLAMP01(bp_eff * get_blood_saturation())

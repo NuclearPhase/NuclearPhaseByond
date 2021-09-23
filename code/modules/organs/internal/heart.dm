@@ -11,7 +11,7 @@
 	var/pressure = BLOOD_PRESSURE_NORMAL
 	var/list/pulse_modificators = list()
 	var/list/cardiac_output_modificators = list() // *
-	var/list/blood_pressure_modificators = list()
+	var/list/blood_pressure_modificators = list() // *
 	var/rythme = RYTHME_NORM
 	var/ischemia = 0
 	var/heartbeat = 0
@@ -32,11 +32,11 @@
 		owner.add_chemical_effect(CE_PULSE, amount * 7.5)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.05)
 	if(ishormone(T, noradrenaline))
-		owner.add_chemical_effect(CE_PRESSURE, amount * 10)
+		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.05)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * -0.01)
 		owner.add_chemical_effect(CE_PULSE, amount * 2)
 	if(ishormone(T, dopamine))
-		owner.add_chemical_effect(CE_PRESSURE, amount * 5)
+		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.025)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
 		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
 		if(amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
@@ -52,6 +52,13 @@
 	..()
 	if(!owner)
 		return
+	if(owner.stat == DEAD)
+		rythme = RYTHME_ASYSTOLE
+		pulse = 0
+		pressure = 0
+		ischemia = 100
+		return
+
 	handle_rythme()
 	make_modificators()
 	handle_ischemia()
@@ -63,8 +70,19 @@
 	handle_blood()
 	post_handle_rythme()
 
+	make_up_to_hormone(/datum/reagent/hormone/marker/ast, 30 + ((damage / max_damage) * 2))
+	make_up_to_hormone(/datum/reagent/hormone/marker/alt, 25 + ((damage / max_damage) * 0.1))
+
+
 /obj/item/organ/internal/heart/proc/handle_pulse()
-	pulse = Clamp(Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))), 0, 260)
+	switch(rythme)
+		if(RYTHME_ASYSTOLE)
+			pulse = sumListAndCutAssoc(pulse_modificators)
+		if(RYTHME_VFIB)
+			pulse = rand(200, 250)
+		else
+			pulse = Clamp(Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))), 0, 260)
+		
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
@@ -73,45 +91,48 @@
 	if(!pulse || !(pressure / pulse))
 		nc = 0
 		return
-	nc = BLOOD_PRESSURE_NORMAL + sumListAssoc(blood_pressure_modificators) - pressure
+	var/last = nc
+	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - pressure
 	nc /= (pressure / pulse)
-	nc = Clamp(nc, -40, 40)
+	nc = Clamp(Interpolate(last, nc, 0.5), -40, 40)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
 	make_nc()
-	pulse_modificators["hypoperfusion"] = (1 - owner.get_blood_perfusion()) / 0.75
-	pulse_modificators["shock"] = owner.shock_stage / 0.75
-	cardiac_output_modificators["damage"] = 1 - (damage / max_damage)
-	if(CE_PULSE in owner.chem_effects)
-		pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
+	if(rythme != RYTHME_ASYSTOLE)
+		pulse_modificators["hypoperfusion"] = (1 - owner.get_blood_perfusion()) * 100
+		pulse_modificators["shock"] = owner.shock_stage / 0.75
+		if(CE_PULSE in owner.chem_effects)
+			pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
 	if(CE_PRESSURE in owner.chem_effects)
 		blood_pressure_modificators["chem"] = owner.chem_effects[CE_PRESSURE]
 	if(CE_CARDIAC_OUTPUT in owner.chem_effects)
 		cardiac_output_modificators["chem"] = owner.chem_effects[CE_CARDIAC_OUTPUT]
+	cardiac_output_modificators["damage"] = 1 - (damage / max_damage)
 
 /obj/item/organ/internal/heart/proc/handle_rythme()
 	switch(rythme)
 		if(RYTHME_AFIB)
 			if(ischemia < 15)
 				ischemia += 0.15
-			cardiac_output_modificators["afib"] = 0.08
+			cardiac_output_modificators["afib"] = 0.85
 			pulse_modificators["afib"] = rand(-20, 20)
 		if(RYTHME_AFIB_RR)
 			if(ischemia < 20)
 				ischemia += 0.20
-			cardiac_output_modificators["afib_rr"] = 0.85
+			cardiac_output_modificators["afib_rr"] = 0.3
 			pulse_modificators["afib_rr"] = rand(25, 70)
 		if(RYTHME_VFIB)
 			ischemia += 0.40
-			cardiac_output_modificators["vfib"] = 0.15
-			pulse_modificators["afib_rr"] = rand(100, 130)
+			cardiac_output_modificators["vfib"] = 0.05
+			pulse_modificators["vfib"] = rand(100, 130)
 		if(RYTHME_ASYSTOLE)
 			ischemia += 0.70
-			var/critical_point = 130 + (ischemia / 50) * 120
-			pulse_modificators["asystole"] = -critical_point
+	if(rythme <= RYTHME_AFIB)
+		ischemia = max(0, ischemia - 0.2)
 
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
 	var/static/last_rythm_change = world.time
+	var/antiarrythmic = LAZYACCESS(owner.chem_effects, CE_ANTIARRYTHMIC) || 0
 	var/changed = FALSE
 	switch(rythme)
 		if(RYTHME_AFIB)
@@ -127,25 +148,36 @@
 				rythme = RYTHME_ASYSTOLE
 				changed = TRUE
 		if(RYTHME_ASYSTOLE)
-			var/critical_point = 130 + (ischemia / 50) * 120
-			if(pulse > critical_point + 30)
+			var/critical_point = 130 + (ischemia / 50) * 40
+			if(pulse > critical_point)
 				rythme = RYTHME_VFIB
 				changed = TRUE
 
 	if(!changed && rythme < RYTHME_ASYSTOLE && (world.time - last_rythm_change) > 1.5 MINUTES && prob(25))
-		if(pulse >= 210)
+		if(pulse >= 210 && rythme < RYTHME_VFIB)
+			if(rythme == RYTHME_AFIB_RR && antiarrythmic <= 1)
+				return
 			++rythme
 		else if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
 			++rythme
 		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
 			++rythme
+		else if(pressure < BLOOD_PRESSURE_LCRITICAL)
+			++rythme 
+		else if(pressure > BLOOD_PRESSURE_HBAD && antiarrythmic)
+			++rythme
+
+	if(antiarrythmic && rythme == RYTHME_AFIB && prob(antiarrythmic * 25))
+		rythme = RYTHME_NORM
+	if(antiarrythmic > 1 && rythme == RYTHME_AFIB_RR && prob(10))
+		rythme = RYTHME_AFIB
 
 	if(changed)
 		last_rythm_change = world.time
 
 /obj/item/organ/internal/heart/proc/handle_blood_pressure()
-	pressure = sumListAndCutAssoc(blood_pressure_modificators)
-	pressure += 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))
+	pressure = 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))
+	pressure *= mulListAndCutAssoc(blood_pressure_modificators)
 	pressure *= owner.get_blood_volume()
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()

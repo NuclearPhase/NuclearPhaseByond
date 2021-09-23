@@ -3,7 +3,7 @@
 //the damage amount for the stage with the same name as the wound.
 //e.g. /datum/wound/cut/deep should only be applied for 15 damage and up,
 //because in it's stages list, "deep cut" = 15.
-/proc/get_wound_type(var/type, var/damage)
+/proc/get_wound_type(type, damage)
 	switch(type)
 		if(CUT)
 			switch(damage)
@@ -67,6 +67,7 @@
 	damage = min(min_damage, damage)
 
 /datum/wound/cut/small
+	germ_speed = 0.25
 	// link wound descriptions to amounts of damage
 	// Minor cuts have max_bleeding_stage set to the stage that bears the wound type's name.
 	// The major cut types have the max_bleeding_stage set to the clot stage (which is accordingly given the "blood soaked" descriptor).
@@ -80,6 +81,7 @@
 		)
 
 /datum/wound/cut/deep
+	germ_speed = 1.25
 	max_bleeding_stage = 3
 	stages = list(
 		"ugly deep ripped cut" = 25,
@@ -91,6 +93,7 @@
 		)
 
 /datum/wound/cut/flesh
+	germ_speed = 1.5
 	max_bleeding_stage = 4
 	stages = list(
 		"ugly ripped flesh wound" = 35,
@@ -102,6 +105,7 @@
 		)
 
 /datum/wound/cut/gaping
+	germ_speed = 2
 	max_bleeding_stage = 3
 	stages = list(
 		"gaping wound" = 50,
@@ -112,6 +116,7 @@
 		)
 
 /datum/wound/cut/gaping_big
+	germ_speed = 2.25
 	max_bleeding_stage = 3
 	stages = list(
 		"big gaping wound" = 60,
@@ -121,7 +126,8 @@
 		"large straight scar" = 0
 		)
 
-datum/wound/cut/massive
+/datum/wound/cut/massive
+	germ_speed = 2.5
 	max_bleeding_stage = 3
 	stages = list(
 		"massive wound" = 70,
@@ -141,6 +147,7 @@ datum/wound/cut/massive
 
 /datum/wound/puncture/small
 	max_bleeding_stage = 2
+	germ_speed = 0.5
 	stages = list(
 		"puncture" = 5,
 		"healing puncture" = 2,
@@ -149,6 +156,7 @@ datum/wound/cut/massive
 
 /datum/wound/puncture/flesh
 	max_bleeding_stage = 2
+	germ_speed = 1
 	stages = list(
 		"puncture wound" = 15,
 		"blood soaked clot" = 5,
@@ -158,6 +166,7 @@ datum/wound/cut/massive
 
 /datum/wound/puncture/gaping
 	max_bleeding_stage = 3
+	germ_speed = 2
 	stages = list(
 		"gaping hole" = 30,
 		"large blood soaked clot" = 15,
@@ -168,6 +177,7 @@ datum/wound/cut/massive
 
 /datum/wound/puncture/gaping_big
 	max_bleeding_stage = 3
+	germ_speed = 2.5
 	stages = list(
 		"big gaping hole" = 50,
 		"healing gaping hole" = 20,
@@ -176,7 +186,8 @@ datum/wound/cut/massive
 		"large round scar" = 0
 		)
 
-datum/wound/puncture/massive
+/datum/wound/puncture/massive
+	germ_speed = 3
 	max_bleeding_stage = 3
 	stages = list(
 		"massive wound" = 60,
@@ -188,6 +199,7 @@ datum/wound/puncture/massive
 
 /** BRUISES **/
 /datum/wound/bruise
+	germ_speed = 0.75
 	stages = list(
 		"monumental bruise" = 80,
 		"huge bruise" = 50,
@@ -204,6 +216,7 @@ datum/wound/puncture/massive
 
 /** BURNS **/
 /datum/wound/burn
+	germ_speed = 1
 	damage_type = BURN
 	max_bleeding_stage = 0
 
@@ -211,6 +224,7 @@ datum/wound/puncture/massive
 	return 0
 
 /datum/wound/burn/moderate
+	germ_speed = 1
 	stages = list(
 		"ripped burn" = 10,
 		"moderate burn" = 5,
@@ -219,6 +233,7 @@ datum/wound/puncture/massive
 		)
 
 /datum/wound/burn/large
+	germ_speed = 1.25
 	stages = list(
 		"ripped large burn" = 20,
 		"large burn" = 15,
@@ -227,6 +242,7 @@ datum/wound/puncture/massive
 		)
 
 /datum/wound/burn/severe
+	germ_speed = 1.5
 	stages = list(
 		"ripped severe burn" = 35,
 		"severe burn" = 30,
@@ -235,6 +251,7 @@ datum/wound/puncture/massive
 		)
 
 /datum/wound/burn/deep
+	germ_speed = 1.75
 	stages = list(
 		"ripped deep burn" = 45,
 		"deep burn" = 40,
@@ -243,6 +260,7 @@ datum/wound/puncture/massive
 		)
 
 /datum/wound/burn/carbonised
+	germ_speed = 2
 	stages = list(
 		"carbonised area" = 50,
 		"healing carbonised area" = 20,
@@ -251,8 +269,9 @@ datum/wound/puncture/massive
 
 /** EXTERNAL ORGAN LOSS **/
 /datum/wound/lost_limb
+	germ_level = 4
 
-/datum/wound/lost_limb/New(var/obj/item/organ/external/lost_limb, var/losstype, var/clean)
+/datum/wound/lost_limb/New(obj/item/organ/external/lost_limb, losstype, clean)
 	var/damage_amt = lost_limb.max_damage
 	if(clean) damage_amt /= 2
 
@@ -265,7 +284,7 @@ datum/wound/puncture/massive
 				"bloody stump" = damage_amt,
 				"clotted stump" = damage_amt*0.5,
 				"scarred stump" = 0
-				)
+			)
 		if(DROPLIMB_BURN)
 			damage_type = BURN
 			stages = list(
@@ -277,5 +296,5 @@ datum/wound/puncture/massive
 
 	..(damage_amt)
 
-/datum/wound/lost_limb/can_merge(var/datum/wound/other)
+/datum/wound/lost_limb/can_merge(datum/wound/other)
 	return 0 //cannot be merged

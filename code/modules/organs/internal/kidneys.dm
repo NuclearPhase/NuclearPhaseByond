@@ -4,9 +4,9 @@
 	gender = PLURAL
 	organ_tag = BP_KIDNEYS
 	parent_organ = BP_GROIN
-	min_bruised_damage = 25
-	min_broken_damage = 45
-	max_damage = 70
+	min_bruised_damage = 45
+	min_broken_damage = 75
+	max_damage = 100
 
 /obj/item/organ/internal/kidneys/Process()
 	..()
@@ -14,8 +14,10 @@
 	if(!owner)
 		return
 
-	generate_hormone(/datum/reagent/hormone/noradrenaline, 0.1, 10)
-	generate_hormone(/datum/reagent/hormone/adrenaline, 0.1, 5)
+	absorb_hormone(/datum/reagent/hormone/potassium, 0.5)
+
+	generate_hormone(/datum/reagent/hormone/noradrenaline, 0.1, 2.5)
+	generate_hormone(/datum/reagent/hormone/adrenaline, 0.1, 2.5)
 
 	if(owner.get_blood_pressure() <= BLOOD_PRESSURE_LBAD || owner.get_blood_perfusion() <= BLOOD_PERFUSION_OKAY)
 		var/pressure_diff = BLOOD_PRESSURE_NORMAL - owner.get_blood_pressure()

@@ -565,66 +565,76 @@ Note that amputating the affected organ does in fact remove the infection from t
 		handle_germ_effects()
 
 /obj/item/organ/external/proc/handle_germ_sync()
-	var/antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/spaceacillin)
+	var/antibiotics = owner.chem_effects[CE_ANTIBIOTIC]
 	for(var/datum/wound/W in wounds)
 		//Open wounds can become infected
-		if (owner.germ_level > W.germ_level && W.infection_check())
-			W.germ_level++
+		if(W.infection_check())
+			W.germ_level += W.germ_speed()
+		else
+			W.germ_level -= antibiotics / 5
 
-	if (antibiotics < 5)
-		for(var/datum/wound/W in wounds)
-			//Infected wounds raise the organ's germ level
-			if (W.germ_level > germ_level)
-				germ_level++
-				break	//limit increase to a maximum of one per second
+	if(antibiotics >= 15)
+		return
+	for(var/datum/wound/W in wounds)
+		// Infected wounds raise the organ's germ level
+		if(W.germ_level > germ_level && prob(100 - (antibiotics / 15) * 100))
+			germ_level++
+			break	// Limit increase to a maximum of one per second
 
 /obj/item/organ/external/handle_germ_effects()
 
 	if(germ_level < INFECTION_LEVEL_TWO)
 		return ..()
 
-	var/antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/spaceacillin)
+	var/antibiotics = owner.chem_effects[CE_ANTIBIOTIC]
 
-	if(germ_level >= INFECTION_LEVEL_TWO)
-		//spread the infection to internal organs
-		var/obj/item/organ/target_organ = null	//make internal organs become infected one at a time instead of all at once
-		for (var/obj/item/organ/I in internal_organs)
-			if (I.germ_level > 0 && I.germ_level < min(germ_level, INFECTION_LEVEL_TWO))	//once the organ reaches whatever we can give it, or level two, switch to a different one
-				if (!target_organ || I.germ_level > target_organ.germ_level)	//choose the organ with the highest germ_level
-					target_organ = I
+	germ_level += 1.5
 
-		if (!target_organ)
-			//figure out which organs we can spread germs to and pick one at random
-			var/list/candidate_organs = list()
-			for (var/obj/item/organ/I in internal_organs)
-				if (I.germ_level < germ_level)
-					candidate_organs |= I
-			if (candidate_organs.len)
-				target_organ = pick(candidate_organs)
+	// Spread the infection to internal organs
+	var/obj/item/organ/target_organ = null	// Make internal organs become infected one at a time instead of all at once
+	for(var/obj/item/organ/I in internal_organs)
+		if(I.germ_level < germ_level)	// Once the organ reaches whatever we can give it, or level two, switch to a different one
+			if(!target_organ || I.germ_level < target_organ.germ_level)	// Choose the organ with the lowest germ_level
+				target_organ = I
 
-		if (target_organ)
-			target_organ.germ_level++
+	if(!target_organ)
+		// Figure out which organs we can spread germs to and pick one at random
+		var/list/candidate_organs = list()
+		for(var/obj/item/organ/I in internal_organs)
+			if(I.germ_level < germ_level)
+				candidate_organs |= I
+		if(candidate_organs.len)
+			target_organ = pick(candidate_organs)
 
-		//spread the infection to child and parent organs
-		if (children)
-			for (var/obj/item/organ/external/child in children)
-				if (child.germ_level < germ_level && (child.robotic < ORGAN_ROBOT))
-					if (child.germ_level < INFECTION_LEVEL_ONE*2 || prob(30))
-						child.germ_level++
+	if(target_organ)
+		if(target_organ.germ_level < germ_level - 250)
+			if(prob(Interpolate(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
+				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
 
-		if (parent)
-			if (parent.germ_level < germ_level && (parent.robotic < ORGAN_ROBOT))
-				if (parent.germ_level < INFECTION_LEVEL_ONE*2 || prob(30))
-					parent.germ_level++
+	if(target_organ)
+		target_organ.germ_level++
 
-	if(germ_level >= INFECTION_LEVEL_THREE && antibiotics < 30)	//overdosing is necessary to stop severe infections
-		if (!(status & ORGAN_DEAD))
+	// Spread the infection to child and parent organs
+	for(var/obj/item/organ/external/child in SANITIZE_LIST(children))
+		if(child.germ_level < germ_level)
+			if(child.germ_level < INFECTION_LEVEL_ONE * 2 || prob(30 - antibiotics))
+				child.germ_level++
+
+	if(parent)
+		if(parent.germ_level < germ_level)
+			if(parent.germ_level < INFECTION_LEVEL_ONE * 2 || prob(30 - antibiotics))
+				parent.germ_level++
+
+	if(germ_level >= INFECTION_LEVEL_FOUR && antibiotics < 15) // Overdosing is necessary to stop severe infections
+		if(!(status & ORGAN_DEAD))
 			status |= ORGAN_DEAD
 			to_chat(owner, "<span class='notice'>You can't feel your [name] anymore...</span>")
 			owner.update_body(1)
 
 		germ_level++
-		owner.adjustToxLoss(1)
+		owner.adjustToxLoss(0.5)
+	if(germ_level >= INFECTION_LEVEL_THREE)
+		owner.adjustToxLoss(germ_level / (INFECTION_LEVEL_FOUR + antibiotics * 65))
 
 //Updating wounds. Handles wound natural I had some free spachealing, internal bleedings and infections
 /obj/item/organ/external/proc/update_wounds()
@@ -931,8 +941,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/rval = 0
 	for(var/datum/wound/W in wounds)
 		rval |= !W.disinfected
-		W.disinfected = 1
-		W.germ_level = 0
+		W.disinfect()
 	return rval
 
 /obj/item/organ/external/proc/clamp_()

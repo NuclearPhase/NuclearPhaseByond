@@ -26,15 +26,15 @@
 <div class="item">
     <div class="itemLabel">
         ECG:
-    </div>
+    </div><br>
+    {{:data.rythme}} rythme.<br>
+    {{for data.ecg}}
     <div class="itemContent">
-        {{if data.ischemia > 0}}
-            <div class="warning">
-                Ischemia detected
-            </div>
-        {{/if}}
-        {{:data.rythme}} rythme.<br>
+        <div class="warning">
+            {{:value}}
+        </div>
     </div>
+    {{/for}}
 </div>
 
 {{/if}}

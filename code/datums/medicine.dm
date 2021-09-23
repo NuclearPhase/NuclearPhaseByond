@@ -11,6 +11,9 @@
 /datum/organ_disease/proc/can_gone()
     return strength <= gone_level
 
+/datum/organ_disease/proc/can_be_apply(var/obj/item/organ/internal/I)
+    return TRUE
+
 /datum/organ_disease/infarct
     dstrength = 0.05
 

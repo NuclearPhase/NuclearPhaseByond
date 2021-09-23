@@ -27,7 +27,6 @@
 	item_state = "firstaid-ointment"
 
 	startswith = list(
-		/obj/item/device/healthanalyzer,
 		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
 		/obj/item/stack/medical/ointment,
 		/obj/item/weapon/storage/pill_bottle/kelotane,
@@ -44,8 +43,6 @@
 	startswith = list(
 		/obj/item/stack/medical/bruise_pack = 2,
 		/obj/item/stack/medical/ointment = 1,
-		/obj/item/device/healthanalyzer,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
 		/obj/item/weapon/storage/pill_bottle/paracetamol
 		)
 
@@ -56,9 +53,6 @@
 	item_state = "firstaid-toxin"
 
 	startswith = list(
-		/obj/item/weapon/reagent_containers/syringe/antitoxin = 3,
-		/obj/item/weapon/storage/pill_bottle/antitox,
-		/obj/item/device/healthanalyzer,
 		)
 
 /obj/item/weapon/storage/firstaid/toxin/New()
@@ -72,10 +66,6 @@
 	item_state = "firstaid-o2"
 
 	startswith = list(
-		/obj/item/weapon/storage/pill_bottle/dexalin,
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
-		/obj/item/device/healthanalyzer,
 		)
 
 /obj/item/weapon/storage/firstaid/adv

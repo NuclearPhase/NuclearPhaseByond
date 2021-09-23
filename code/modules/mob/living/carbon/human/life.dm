@@ -65,8 +65,7 @@
 
 	//No need to update all of these procs if the guy is dead.
 	if(stat != DEAD && !InStasis())
-		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		handle_additictions()
 
 		//Organs and blood
 		handle_organs()
@@ -833,10 +832,10 @@
 
 		if(nutrition_icon)
 			switch(bloodstr?.get_reagent_amount(/datum/reagent/hormone/glucose))
-				if(GLUCOSE_LEVEL_HBAD - 2   to INFINITY)				    nutrition_icon.icon_state = "nutrition0"
-				if(GLUCOSE_LEVEL_NORMAL + 1 to GLUCOSE_LEVEL_HBAD - 2)		nutrition_icon.icon_state = "nutrition1"
-				if(GLUCOSE_LEVEL_NORMAL     to GLUCOSE_LEVEL_NORMAL + 1)	nutrition_icon.icon_state = "nutrition2"
-				if(GLUCOSE_LEVEL_LBAD - 1   to GLUCOSE_LEVEL_NORMAL)		nutrition_icon.icon_state = "nutrition3"
+				//if(GLUCOSE_LEVEL_HBAD - 2   to INFINITY)				    nutrition_icon.icon_state = "nutrition0"
+				if(GLUCOSE_LEVEL_NORMAL - 0.1 to INFINITY)		nutrition_icon.icon_state = "nutrition1"
+				if(GLUCOSE_LEVEL_LBAD   to GLUCOSE_LEVEL_NORMAL - 0.1)	nutrition_icon.icon_state = "nutrition2"
+				if(GLUCOSE_LEVEL_LBAD - 0.5  to GLUCOSE_LEVEL_LBAD)		nutrition_icon.icon_state = "nutrition3"
 				else														nutrition_icon.icon_state = "nutrition4"
 
 		if(stamina_icon)
@@ -1301,7 +1300,7 @@
 			if(H.stat == DEAD)//This shouldn't even need to be a fucking check.
 				return
 			to_chat(H, "<spawn class='warning'>You smell something foul...")
-			H.add_event("disgust", /datum/happiness_event/disgust/verygross)
+			H.add_event("disgust", new /datum/happiness_event/disgust/verygross)
 			if(prob(75))
 				H.vomit()
 
@@ -1313,7 +1312,7 @@
 	if(/obj/effect/decal/cleanable/poo in range(5, src))
 		if(prob(2))
 			to_chat(src, "<spawn class='warning'>Something smells like shit...")
-			add_event("disgust", /datum/happiness_event/disgust/verygross)
+			add_event("disgust", new /datum/happiness_event/disgust/verygross)
 			if(prob(50))
 				vomit()
 
@@ -1323,7 +1322,7 @@
 
 		if(prob(2))
 			to_chat(src, "<spawn class='warning'>Something smells like shit...")
-			add_event("disgust", /datum/happiness_event/disgust/verygross)
+			add_event("disgust", new /datum/happiness_event/disgust/verygross)
 			if(prob(50))
 				vomit()
 
