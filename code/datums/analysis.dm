@@ -3,7 +3,7 @@
 /datum/analysis
 	var/name = "UNKNOWN ANALYSIS"
 	var/required_reagent = /datum/reagent/blood
-	var/required_amount = 15
+	var/required_amount = 10
 	var/time = 0
 	var/removed_amount = 5
 
@@ -95,6 +95,18 @@
 	var/potassium_level = get_reagent_amount(RL, /datum/reagent/hormone/potassium)
 	. += format_reagent_level("Potassium", amount = potassium_level,
 		normal_h = POTASSIUM_LEVEL_HBAD)
+
+/datum/analysis/cbc
+	name = "Complete blood count"
+	removed_amount = 15
+
+/datum/analysis/cbc/analyze(var/datum/reagent/blood/B)
+	. = format_header(B)
+
+	var/list/RL = form_reagent_list(B)
+	var/crp_level = get_reagent_amount(RL, /datum/reagent/hormone/marker/crp)
+	. += format_reagent_level("CRP", amount = crp_level,
+		normal_h = 0)
 
 /datum/analysis/blood_type
 	name = "Blood type screen"

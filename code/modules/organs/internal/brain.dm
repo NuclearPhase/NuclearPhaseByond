@@ -136,8 +136,12 @@
 	return (get_current_damage_threshold() > threshold)
 
 /obj/item/organ/internal/brain/Process()
-
 	if(owner)
+		if(prob(5))
+			var/result = 0
+			for(var/obj/item/organ/O in owner.organs | owner.internal_organs)
+				result += max(0, O.germ_level - INFECTION_LEVEL_ONE)
+			make_up_to_hormone(/datum/reagent/hormone/marker/crp, result / 100)
 		if(damage > max_damage / 2 && healed_threshold)
 			spawn()
 				alert(owner, "You have taken massive brain damage! You will not be able to remember the events leading up to your injury.", "Brain Damaged")

@@ -389,3 +389,4 @@
 
 /datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 3)
+	H.adjustToxLoss(0.1)

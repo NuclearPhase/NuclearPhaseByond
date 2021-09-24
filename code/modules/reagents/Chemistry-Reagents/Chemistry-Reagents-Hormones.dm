@@ -59,6 +59,8 @@
 	name = "AST"
 /datum/reagent/hormone/marker/alt
 	name = "ALT"
+/datum/reagent/hormone/marker/crp
+	name = "CRP"
 
 
 // Ions.
