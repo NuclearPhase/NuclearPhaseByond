@@ -430,15 +430,15 @@
 
 	switch(level)
 		if(-INFINITY to GLUCOSE_LEVEL_LCRITICAL)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.4)
-			if(prob(2) && get_rythme() < RYTHME_ASYSTOLE)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.1)
+			if(prob(8) && get_rythme() < RYTHME_ASYSTOLE)
 				H?.rythme++
 			make_dizzy(rand(80, 160))
 			make_jittery(rand(30, 100))
 			if(prob(10))
 				Paralyse(2)
 		if(GLUCOSE_LEVEL_LCRITICAL to GLUCOSE_LEVEL_L2BAD)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.7)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.45)
 			if(prob(2) && get_rythme() < RYTHME_VFIB)
 				H?.rythme++
 			make_dizzy(rand(50, 80))
@@ -446,7 +446,7 @@
 			if(prob(5))
 				Paralyse(1)
 		if(GLUCOSE_LEVEL_LBAD to GLUCOSE_LEVEL_NORMAL)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.85)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.7)
 			make_dizzy(rand(5, 50))
 			make_jittery(rand(5, 30))
 
@@ -458,11 +458,11 @@
 			make_dizzy(rand(15, 30))
 			make_jittery(rand(5, 15))
 		if(GLUCOSE_LEVEL_HBAD to GLUCOSE_LEVEL_H2BAD)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.70)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.55)
 			make_dizzy(rand(30, 50))
 			make_jittery(rand(15, 25))
 		if(GLUCOSE_LEVEL_H2BAD to GLUCOSE_LEVEL_HCRITICAL)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.60)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.40)
 			if(prob(2) && get_rythme() < RYTHME_VFIB)
 				H?.rythme++
 			if(prob(10))
@@ -470,8 +470,8 @@
 		if(GLUCOSE_LEVEL_HCRITICAL to GLUCOSE_LEVEL_H2CRITICAL)
 			if(prob(20))
 				Paralyse(1)
-			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.40)
-			if(prob(2) && get_rythme() < RYTHME_ASYSTOLE)
+			add_chemical_effect(CE_CARDIAC_OUTPUT, 0.10)
+			if(prob(8) && get_rythme() < RYTHME_ASYSTOLE)
 				H?.rythme++
 			make_dizzy(rand(80, 160))
 			make_jittery(rand(30, 100))

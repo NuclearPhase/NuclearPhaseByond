@@ -62,12 +62,12 @@
 		else if(abs(power) < (max_power * 0.8))
 			power -= 0.1
 
-	if(power_diff > 0.1 && max_power > 30)
+	if(power_diff > 0.1)
 		var/msg
-		if(power < -10)
-			msg = SPAN_NOTICE("You feel <big>[pick("unbeliveably happy", "like living your best life", "blissful", "blessed", "unearthly tranquility")]</big>")
+		if(power < -10 && max_power > 30)
+			msg = SPAN_NOTICE("I feel <big>[pick("unbeliveably happy", "like living your best life", "blissful", "blessed", "unearthly tranquility")]</big>")
 		else
-			msg = SPAN_NOTICE("You feel [pick("happy", "joyful", "relaxed", "tranquility")]")
+			msg = SPAN_NOTICE("I feel [pick("happy", "joyful", "relaxed", "tranquility")]")
 
 		var/datum/happiness_event/HE = new
 		HE.description = msg

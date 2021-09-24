@@ -27,10 +27,6 @@
 	item_state = "firstaid-ointment"
 
 	startswith = list(
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/stack/medical/ointment,
-		/obj/item/weapon/storage/pill_bottle/kelotane,
-		/obj/item/weapon/storage/pill_bottle/paracetamol
 		)
 
 /obj/item/weapon/storage/firstaid/fire/New()
@@ -41,9 +37,6 @@
 	icon_state = "firstaid"
 
 	startswith = list(
-		/obj/item/stack/medical/bruise_pack = 2,
-		/obj/item/stack/medical/ointment = 1,
-		/obj/item/weapon/storage/pill_bottle/paracetamol
 		)
 
 /obj/item/weapon/storage/firstaid/toxin
@@ -75,10 +68,6 @@
 	item_state = "firstaid-advanced"
 
 	startswith = list(
-		/obj/item/weapon/reagent_containers/hypospray/autoinjector,
-		/obj/item/stack/medical/advanced/bruise_pack = 3,
-		/obj/item/stack/medical/advanced/ointment = 2,
-		/obj/item/stack/medical/splint
 		)
 
 /obj/item/weapon/storage/firstaid/combat
@@ -88,13 +77,6 @@
 	item_state = "firstaid-advanced"
 
 	startswith = list(
-		/obj/item/weapon/storage/pill_bottle/bicaridine,
-		/obj/item/weapon/storage/pill_bottle/dermaline,
-		/obj/item/weapon/storage/pill_bottle/dexalin_plus,
-		/obj/item/weapon/storage/pill_bottle/dylovene,
-		/obj/item/weapon/storage/pill_bottle/tramadol,
-		/obj/item/weapon/storage/pill_bottle/spaceacillin,
-		/obj/item/stack/medical/splint,
 		)
 
 /obj/item/weapon/storage/firstaid/surgery

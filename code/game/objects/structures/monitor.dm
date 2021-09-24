@@ -27,27 +27,46 @@
 	attached = null
 	. = ..()
 
-/obj/structure/monitor/Process()
+/obj/structure/monitor/update_icon()
+	overlays.Cut()
 	if(!attached)
 		icon_state = "monitor"
+		return
+
+	var/obj/item/organ/internal/heart/H = attached.internal_organs_by_name[BP_HEART]
+
+	if(!H)
+		icon_state = "monitor-asystole"
+		return
+
+	if(H.rythme < RYTHME_VFIB)
+		icon_state = "monitor-normal"
+	else if(H.rythme == RYTHME_VFIB)
+		icon_state = "monitor-vfib"
+	else if(H.rythme == RYTHME_ASYSTOLE)
+		icon_state = "monitor-asystole"
+
+	if(H.pressure < BLOOD_PRESSURE_L2BAD || H.pressure > BLOOD_PRESSURE_H2BAD)
+		overlays += image(icon, "monitor-r")
+	if(attached.get_blood_saturation() < 0.80)
+		overlays += image(icon, "monitor-c")
+	if(attached.get_blood_perfusion() < 0.7)
+		overlays += image(icon, "monitor-y")
+
+/obj/structure/monitor/Process()
+	if(!attached)
 		return PROCESS_KILL
 	if(!Adjacent(attached))
-		icon_state = "monitor"
 		attached = null
 		update_icon()
 		return PROCESS_KILL
-	
+
 	update_icon()
 
 /obj/structure/monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/obj/item/organ/internal/heart/H = attached?.internal_organs_by_name[BP_HEART]
 	if(!attached || !H)
 		return
-
-	if(H.pulse)
-		icon_state = "monitor-active"
-	else
-		icon_state = "monitor"
 
 	var/list/data = list()
 	data["name"] = "[attached]"
@@ -75,16 +94,21 @@
 	data["status"] = (attached.stat == CONSCIOUS) ? "CONSCIOUS" : "UNCONSCIOUS"
 
 	data["ecg"] = list()
+	
+	var/obj/item/organ/internal/brain/brain = attached.internal_organs_by_name[BP_BRAIN]
+	if(attached.stat == DEAD || !brain)
+		data["ecg"] += list("HR variability not present. Suggest neurological failure.")
+	else
+		data["ecg"] += list("Neurological system activity: [100 - Floor(100 * CLAMP01(brain.damage / brain.max_damage))]% of normal.")
+
 	if(attached.bloodstr.get_reagent_amount(/datum/reagent/hormone/potassium) > POTASSIUM_LEVEL_HBAD)
 		data["ecg"] += list("Hypercaliemia.")
 	if(H.ischemia)
 		data["ecg"] += list("Ischemia.")
-	if(attached.stat == DEAD)
-		data["ecg"] += list("HR variability not present. Suggest neurological failure.")
-
+	
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "monitor.tmpl", "Monitor", 300, 270)
+		ui = new(user, src, ui_key, "monitor.tmpl", "Monitor", 450, 270)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(TRUE)

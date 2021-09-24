@@ -117,3 +117,5 @@
 	var/usefov = 1
 	var/decaylevel = 0 //For rotting bodies
 	var/adhered_gas = 0
+
+	atom_flags = ATOM_FLAG_NO_REACT

@@ -59,6 +59,8 @@ var/list/flooring_cache = list()
 	if(update_neighbors)
 		for(var/turf/simulated/floor/F in orange(src, 1))
 			F.update_icon()
+	if(variants)
+		icon_state = pick(variants) // FIXME: probably, original update_icon have this feature.
 
 /turf/simulated/floor/proc/get_flooring_overlay(var/cache_key, var/icon_base, var/icon_dir = 0)
 	if(!flooring_cache[cache_key])

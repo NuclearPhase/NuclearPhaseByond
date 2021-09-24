@@ -121,10 +121,9 @@
 	if(downgrade_on_action)
 		G.downgrade()
 
-	if(G.check_action_cooldown() && !G.attacking)
+	if((G.check_action_cooldown() || G.assailant.a_intent) && !G.attacking)
 		var/intent = G.assailant.a_intent
 		switch(intent)
-
 			if(I_HELP)
 				if(on_hit_help(G))
 					G.action_used()

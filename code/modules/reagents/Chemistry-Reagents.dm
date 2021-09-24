@@ -62,9 +62,9 @@
 	//adjust effective amounts - removed, dose, and max_dose - for mob size
 	var/effective = removed
 	if(!(flags & IGNORE_MOB_SIZE) && location != CHEM_TOUCH)
-		effective *= (MOB_MEDIUM/M.mob_size)
-
-	M.chem_doses[type] = M.chem_doses[type] + effective
+		effective *= (MOB_MEDIUM / M.mob_size)
+	if(!istype(src, /datum/reagent/hormone))
+		M.chem_doses[type] = M.chem_doses[type] + effective
 	if(effective >= (metabolism * 0.1) || effective >= 0.1) // If there's too little chemical, don't affect the mob, just remove it
 		switch(location)
 			if(CHEM_BLOOD)

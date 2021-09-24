@@ -45,9 +45,9 @@
 	volume = max(0, amount * 10)
 	M.adjustToxLoss(-1)
 
-// 1u glucagon produce 0.1u glucose increase.
-/datum/reagent/hormone/glucagon
-	name = "Glucagon"
+// 1u glucagone produce 0.1u glucose increase.
+/datum/reagent/hormone/glucagone
+	name = "glucagone"
 
 // MARKERS
 

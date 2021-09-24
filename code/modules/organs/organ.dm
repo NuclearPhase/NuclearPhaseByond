@@ -114,6 +114,7 @@ var/list/organ_cache = list()
 		germ_level += rand(2,6)
 		if(germ_level >= INFECTION_LEVEL_TWO)
 			germ_level += rand(4,8)
+			
 		if(germ_level >= INFECTION_LEVEL_THREE)
 			germ_level += rand(1,2)
 
@@ -166,6 +167,8 @@ var/list/organ_cache = list()
 
 		if (prob(3))	//about once every 30 seconds
 			take_damage(germ_level / INFECTION_LEVEL_TWO, silent = prob(30))
+	if(germ_level >= INFECTION_LEVEL_THREE)
+		owner.adjust_hygiene(-4)
 
 /obj/item/organ/proc/handle_rejection()
 	// Process unsuitable transplants. TODO: consider some kind of
@@ -185,11 +188,11 @@ var/list/organ_cache = list()
 					if(1 to 50)
 						germ_level++
 					if(51 to 200)
-						germ_level += rand(1,2)
+						germ_level += rand(2, 4)
 					if(201 to 500)
-						germ_level += rand(2,3)
+						germ_level += rand(4, 6)
 					if(501 to INFINITY)
-						germ_level += rand(3,5)
+						germ_level += rand(6, 7)
 						owner.reagents.add_reagent(/datum/reagent/toxin, rand(1,2))
 
 /obj/item/organ/proc/receive_chem(chemical as obj)

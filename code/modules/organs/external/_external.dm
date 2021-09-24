@@ -1369,6 +1369,16 @@ Note that amputating the affected organ does in fact remove the infection from t
 		badness += "very pale"
 	if(status & ORGAN_DEAD)
 		badness += "rotting"
+	if(germ_level > INFECTION_LEVEL_ONE)
+		switch(germ_level)
+			if(INFECTION_LEVEL_ONE to INFECTION_LEVEL_TWO)
+				badness += "slightly purulent"
+			if(INFECTION_LEVEL_TWO to INFECTION_LEVEL_THREE)
+				badness += "strong inflammation"
+			if(INFECTION_LEVEL_THREE to INFECTION_LEVEL_FOUR)
+				badness += "blackening"
+			if(INFECTION_LEVEL_FOUR to INFINITY)
+				badness += "peeling with disgusting blisters"
 	if(!badness.len)
 		to_chat(user, "<span class='notice'>[owner]'s skin is normal.</span>")
 	else

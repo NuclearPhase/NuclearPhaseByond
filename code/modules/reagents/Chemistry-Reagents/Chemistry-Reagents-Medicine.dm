@@ -110,14 +110,6 @@
 	if(boozed)
 		M.add_chemical_effect(CE_ALCOHOL_TOXIC, 1)
 		M.add_chemical_effect(CE_BREATHLOSS, 0.1 * boozed) //drinking and opiating makes breathing kinda hard
-	if(world.time > drugdata + DRUGS_MESSAGE_DELAY)
-		drugdata = world.time
-		var/msg = ""
-		if(pain_power > 200)
-			msg = pick("unbeliveably happy", "like living your best life", "blissful", "blessed", "unearthly tranquility")
-		else
-			msg = pick("happy", "joyful", "relaxed", "tranquility")
-		to_chat(M, SPAN("notice", "You feel [msg]."))
 
 /datum/reagent/tramadol/opium/handle_painkiller_overdose(mob/living/carbon/M)
 	var/whole_volume = (volume + M.chem_doses[type]) // side effects are more robust (dose-wise) than in the case of *legal* painkillers usage

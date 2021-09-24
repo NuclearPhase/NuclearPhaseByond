@@ -48,7 +48,7 @@
 
 /obj/item/organ/internal/brain/New(var/mob/living/carbon/holder)
 	..()
-	max_damage = 200
+	max_damage = 100
 	if(species)
 		max_damage = species.total_health
 	min_bruised_damage = max_damage*0.25
@@ -221,6 +221,4 @@
 					damprob = owner.chem_effects[CE_STABLE] ? 80 : 100
 					if(prob(damprob))
 						take_damage(1)
-			if(damage >= max_damage)
-				owner.stat = DEAD
 	..()

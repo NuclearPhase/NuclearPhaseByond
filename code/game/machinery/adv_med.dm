@@ -12,7 +12,7 @@
 
 	use_power = 1
 	idle_power_usage = 60
-	active_power_usage = 10000	//10 kW. It's a big all-body scanner.
+	active_power_usage = 30 KWATT
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
 	if (user.stat)

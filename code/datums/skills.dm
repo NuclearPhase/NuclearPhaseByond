@@ -100,7 +100,7 @@
 	field = "Medical"
 	desc_unskilled = "You know the signs of cases, what requires advanced medical help. You can make bad-quality CPR."
 	desc_amateur = "You know the difference between shockable and not-shockable rythme. You can perform bad-quality precordial blow, medium-quality CPR and bad-quality defibrillation."
-	desc_trained = "You are experienced in reanimation. You can perform medium-quality precordial blow, high-quality CPR and defibrillation."
+	desc_trained = "You are experienced in reanimation. You can perform medium-quality precordial blow, high-quality CPR, defibrillation, and use ALV."
 	desc_professional = "You are an professional in reanimation. You can be sure, patient you are giving CPR will never die from hypoxia. Precordial blows that you perform are not really worse than amateur defibrillation."
 
 #define SKILL_ANATOMY "anatomy"

@@ -76,7 +76,7 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/amicil
-	name = "glucose amicil"
+	name = "amicil ampoule."
 	desc = "A tiny ampoule. Contains amicil. 4u."
 	icon_state = "ampoule"
 	volume = 4
@@ -109,27 +109,15 @@
 	reagents.add_reagent(/datum/reagent/hormone/insulin, 2)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/bottle/dextrose
-	name = "dextrose bottle"
-	desc = "A small bottle. Contains dextrose. 4u."
-	icon_state = "bottle-4"
-	volume = 30
-
-/obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
-	..()
-	reagents.add_reagent(/datum/reagent/hormone/glucose, 4)
-	reagents.add_reagent(/datum/reagent/water, 26)
-	update_icon()
-
-/obj/item/weapon/reagent_containers/glass/bottle/glucagon
-	name = "glucagon bottle"
+/obj/item/weapon/reagent_containers/glass/bottle/glucagone
+	name = "glucagone bottle"
 	desc = "A small bottle. Contains glucagone."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle-4"
 
-/obj/item/weapon/reagent_containers/glass/bottle/glucagon/New()
+/obj/item/weapon/reagent_containers/glass/bottle/glucagone/New()
 	..()
-	reagents.add_reagent(/datum/reagent/hormone/glucagon, 30)
+	reagents.add_reagent(/datum/reagent/hormone/glucagone, 30)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/adenosine
@@ -155,15 +143,15 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/lidocaine
-	name = "lidocaine bottle"
-	desc = "A small bottle. Contains lidocaine."
+	name = "lidocaine ampoule"
+	desc = "A small ampoule. Contains lidocaine. 5u"
 	icon = 'icons/obj/chemical.dmi'
-	icon_state = "bottle-3"
-	volume = 15
+	icon_state = "ampoule"
+	volume = 5
 
 /obj/item/weapon/reagent_containers/glass/bottle/lidocaine/New()
 	..()
-	reagents.add_reagent(/datum/reagent/lidocaine, 15)
+	reagents.add_reagent(/datum/reagent/lidocaine, 5)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/dopamine

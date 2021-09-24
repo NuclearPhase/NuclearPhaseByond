@@ -178,7 +178,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/poo/New()
 	..()
 	icon_state = pick("poop1", "poop2", "poop3", "poop4", "poop5", "poop6", "poop7")
-	reagents.add_reagent("poo", 10)
+	reagents.add_reagent(/datum/reagent/poo, 10)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/poo/throw_impact(atom/hit_atom)
@@ -202,7 +202,7 @@
 
 	New()
 		..()
-		reagents.add_reagent("urine", 30)
+		reagents.add_reagent(/datum/reagent/urine, 30)
 
 
 //#####LIFE PROCS#####
@@ -277,14 +277,14 @@
 
 		else if(w_uniform)
 			message = "<B>[src]</B> shits \his pants."
-			reagents.add_reagent("poo", 10)
+			reagents.add_reagent(/datum/reagent/poo, 10)
 			adjust_hygiene(-25)
 			add_event("shitself", new /datum/happiness_event/hygiene/shit)
 
 		//Poo on the face.
 		else if(M != src && M.lying)//Can only shit on them if they're lying down.
 			message = "<span class='danger'><b>[src]</b> shits right on <b>[M]</b>'s face!</span>"
-			M.reagents.add_reagent("poo", 10)
+			M.reagents.add_reagent(/datum/reagent/poo, 10)
 
 		//Poo on the floor.
 		else
@@ -327,7 +327,7 @@
 			//Inside a beaker, glass, drink, etc.
 			message = "<B>[src]</B> urinates into [RC]."
 			var/amount = rand(1,8)
-			RC.reagents.add_reagent("urine", amount)
+			RC.reagents.add_reagent(/datum/reagent/urine, amount)
 			if(reagents)
 				reagents.trans_to(RC, amount)
 

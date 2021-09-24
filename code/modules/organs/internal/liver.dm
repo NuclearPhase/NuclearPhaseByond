@@ -10,7 +10,7 @@
 	max_damage = 70
 	relative_size = 60
 	influenced_hormones = list(
-		/datum/reagent/hormone/glucagon
+		/datum/reagent/hormone/glucagone
 	)
 	hormones = list(
 		/datum/reagent/hormone/glucose = 2
@@ -19,7 +19,7 @@
 	var/bilirubine_norm = -1
 
 /obj/item/organ/internal/liver/influence_hormone(T, amount)
-	if(ishormone(T, glucagon))
+	if(ishormone(T, glucagone))
 		free_hormone(/datum/reagent/hormone/glucose, min(amount, 0.1))
 		absorb_hormone(T, min(amount, 0.1) * 10)
 

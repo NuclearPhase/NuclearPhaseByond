@@ -268,13 +268,19 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 
 /mob/living/carbon/human/proc/get_blood_pressure()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	. = heart?.pressure
+	. = Floor(heart?.pressure)
 
 /mob/living/carbon/human/proc/get_blood_saturation()
+	if(stat == DEAD)
+		return 0
+
 	. = Clamp(1 - getOxyLoss() / 100 + rand(-0.3, 0.3), 0, 0.99)
 
 // 0-1
 /mob/living/carbon/human/proc/get_blood_perfusion()
+	if(stat == DEAD)
+		return 0
+
 	var/bp = get_blood_pressure()
 	var/bp_eff = bp / BLOOD_PRESSURE_NORMAL
 	switch(bp)
