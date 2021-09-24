@@ -77,13 +77,24 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/amicil
 	name = "amicil ampoule."
-	desc = "A tiny ampoule. Contains amicil. 4u."
+	desc = "A tiny ampoule. Contains amicil. 6u."
 	icon_state = "ampoule"
-	volume = 4
+	volume = 6
 
 /obj/item/weapon/reagent_containers/glass/bottle/amicil/New()
 	..()
-	reagents.add_reagent(/datum/reagent/amicil, 4)
+	reagents.add_reagent(/datum/reagent/amicil, 6)
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone
+	name = "ceftriaxone ampoule."
+	desc = "A tiny ampoule. Contains ceftriaxone. 6u."
+	icon_state = "ampoule"
+	volume = 6
+
+/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone/New()
+	..()
+	reagents.add_reagent(/datum/reagent/ceftriaxone, 6)
 	update_icon()
 
 

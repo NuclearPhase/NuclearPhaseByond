@@ -309,11 +309,17 @@
 	..()
 	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - volume * 0.05, 0.6, 1))
 
+	var/obj/item/organ/internal/heart/H = M.internal_organs_by_name[BP_HEART]
+	if(!H)
+		return
+	
+	H.ischemia = max(0, H.ischemia - volume / 10)
+
 /datum/reagent/atropine
 	name = "Atropine"
 	description = "Atropine is a drug what increases HR. Used in severe bradycardia cases"
 	reagent_state = LIQUID
-	color = "#a76"
+	color = "#ff7766"
 
 /datum/reagent/atropine/affect_blood(mob/living/carbon/human/H, alien, removed)
 	..()
@@ -323,7 +329,7 @@
 	name = "Adenosine"
 	description = "Adenosine is a drug used to produce controlled AV blockade."
 	reagent_state = LIQUID
-	color = "#a76"
+	color = "#aa7766"
 	metabolism = 0.5
 
 /datum/reagent/adenosine/affect_blood(mob/living/carbon/human/H, alien, removed)
@@ -340,7 +346,7 @@
 	name = "Amiodarone"
 	description = "Amiodarone is a antiarrythmic drug."
 	reagent_state = LIQUID
-	color = "#76a"
+	color = "#7766aa"
 	metabolism = REM
 
 /datum/reagent/amiodarone/affect_blood(mob/living/carbon/human/H, alien, removed)
@@ -350,7 +356,7 @@
 	name = "Lidocaine"
 	description = "Lidocaine is a antiarrythmic and painkiller drug."
 	reagent_state = LIQUID
-	color = "#7aa"
+	color = "#77aaaa"
 	metabolism = REM
 	overdose = 10
 
@@ -363,12 +369,23 @@
 		H.add_chemical_effect(CE_BREATHLOSS)
 
 /datum/reagent/amicil
-	name = "Amicile"
-	description = "Lidocaine is a antibiotic."
+	name = "Amicil"
+	description = "Amicil is a antibiotic."
 	reagent_state = LIQUID
-	color = "#aa7"
+	color = "#aaaa77"
 	metabolism = REM
-	overdose = 5
+	overdose = 15
 
 /datum/reagent/amicil/affect_blood(mob/living/carbon/human/H, alien, removed)
-	H.add_chemical_effect(CE_ANTIBIOTIC, volume)
+	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 1.5)
+
+/datum/reagent/ceftriaxone
+	name = "Ceftriaxone"
+	description = "Ceftriaxone is a antibiotic."
+	reagent_state = LIQUID
+	color = "#aadd66"
+	metabolism = REM * 2
+	overdose = 5
+
+/datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
+	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 3)

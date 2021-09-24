@@ -12,7 +12,7 @@
 	item_state = "syringe_0"
 	icon_state = "0"
 	matter = list("glass" = 150)
-	amount_per_transfer_from_this = 1
+	amount_per_transfer_from_this = 5
 	possible_transfer_amounts = "1;1.5;2;5;10;15"
 	volume = 15
 	w_class = ITEM_SIZE_TINY
@@ -355,6 +355,16 @@
 /obj/item/weapon/reagent_containers/syringe/noradrenaline/New()
 	..()
 	reagents.add_reagent(/datum/reagent/hormone/noradrenaline, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/atropine
+	name = "Syringe (atropine)"
+	desc = "Contains atropine."
+
+/obj/item/weapon/reagent_containers/syringe/atropine/New()
+	..()
+	reagents.add_reagent(/datum/reagent/atropine, 15)
 	mode = SYRINGE_INJECT
 	update_icon()
 

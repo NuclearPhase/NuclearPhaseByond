@@ -27,6 +27,62 @@
 		return 0
 	return 1
 
+
+//////////////////////////////////////////////////////////////////
+//	 desinfection cauterize step
+//////////////////////////////////////////////////////////////////
+/datum/surgery_step/generic/cauterize
+	allowed_tools = list(
+	/obj/item/weapon/cautery = 100,			\
+	/obj/item/clothing/mask/smokable/cigarette = 75,	\
+	/obj/item/weapon/flame/lighter = 50,			\
+	/obj/item/weapon/weldingtool = 25
+	)
+
+	min_duration = 40
+	max_duration = 60
+
+/datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if(target_zone == BP_MOUTH || target_zone == BP_EYES)
+		return FALSE
+	if(!hasorgans(target))
+		return FALSE
+
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	if(!affected)
+		return FALSE
+	if(affected.germ_level < INFECTION_LEVEL_TWO)
+		return FALSE
+
+	return TRUE
+
+
+/datum/surgery_step/generic/cauterize/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("[user] is beginning to burn out infected flesh on \the [target]'s [affected.name] with \the [tool]." , \
+	"You are beginning to cauterize infected flesh on \the [target]'s [affected.name] with \the [tool].")
+	target.custom_pain("Your [affected.name] is being burned!", 55, affecting = affected)
+	..()
+
+/datum/surgery_step/generic/cauterize/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+
+	user.visible_message(SPAN_NOTICE("[user] burns out infected flesh on \the [target]'s [affected.name] with \the [tool]."), \
+	SPAN_NOTICE("You cauterize infected flesh on \the [target]'s [affected.name] with \the [tool]."))
+	var/removed = Clamp(affected.germ_level - INFECTION_LEVEL_TWO, 0, rand(125, 160))
+	if(!removed)
+		return
+
+	affected.germ_level -= removed
+	affected.take_damage(0, removed / 10, used_weapon = tool)
+
+/datum/surgery_step/generic/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message(SPAN_WARNING("[user]'s hand slips, leaving a small burn on [target]'s [affected.name] with \the [tool]!"), \
+	SPAN_WARNING("Your hand slips, leaving a small burn on [target]'s [affected.name] with \the [tool]!"))
+	affected.take_damage(0, 6, used_weapon = tool)
+
+
 //////////////////////////////////////////////////////////////////
 //	laser scalpel surgery step
 //	acts as both cutting and bleeder clamping surgery steps
