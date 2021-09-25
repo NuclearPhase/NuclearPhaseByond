@@ -106,7 +106,7 @@
 	var/list/RL = form_reagent_list(B)
 	var/crp_level = get_reagent_amount(RL, /datum/reagent/hormone/marker/crp)
 	. += format_reagent_level("CRP", amount = crp_level,
-		normal_h = 0)
+		normal_h = "0")
 
 /datum/analysis/blood_type
 	name = "Blood type screen"

@@ -185,7 +185,7 @@
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts pouring [tool]'s contents on \the [target]'s [affected.name]." , \
 	"You start pouring [tool]'s contents on \the [target]'s [affected.name].")
-	target.custom_pain("Your [affected.name] is on fire!",50,affecting = affected)
+	target.custom_pain("Your [affected.name] is on fire!", 50, affecting = affected)
 	..()
 
 /datum/surgery_step/sterilize/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -200,6 +200,10 @@
 	var/temp_holder = new/obj()
 	var/datum/reagents/temp_reagents = new(amount, temp_holder)
 	container.reagents.trans_to_holder(temp_reagents, amount)
+
+	affected.disinfect()
+	for(var/obj/item/organ/internal/I in affected.get_contents_recursive())
+		I.germ_level = max(INFECTION_LEVEL_TWO, I.germ_level * 0.9)
 
 	var/trans = temp_reagents.trans_to_mob(target, temp_reagents.total_volume, CHEM_BLOOD) //technically it's contact, but the reagents are being applied to internal tissue
 	if (trans > 0)

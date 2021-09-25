@@ -35,7 +35,7 @@
 	allowed_tools = list(
 	/obj/item/weapon/cautery = 100,			\
 	/obj/item/clothing/mask/smokable/cigarette = 75,	\
-	/obj/item/weapon/flame/lighter = 50,			\
+	/obj/item/weapon/flame = 50, \
 	/obj/item/weapon/weldingtool = 25
 	)
 
@@ -53,6 +53,13 @@
 		return FALSE
 	if(affected.germ_level < INFECTION_LEVEL_TWO)
 		return FALSE
+	if(istype(tool, /obj/item/weapon/flame))
+		var/obj/item/weapon/flame/F = tool
+		if(!F.lit)
+			return FALSE
+	if(affected.burn_dam > 30)
+		to_chat(user, SPAN_WARNING("[target]'s [affected.name] is too burned!"))
+
 
 	return TRUE
 

@@ -182,7 +182,7 @@
 		var/selected = input(usr, "Select disease", "Disease") as null|anything in allowed_s
 		if(!selected)
 			return
-		for(var/datum/organ_disease/D in allowed_s)
+		for(var/datum/organ_disease/D in allowed)
 			if(!(D.name == selected))
 				continue
 			I.diseases += D

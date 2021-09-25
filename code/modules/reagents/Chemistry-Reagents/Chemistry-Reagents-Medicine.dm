@@ -377,7 +377,7 @@
 	overdose = 15
 
 /datum/reagent/amicil/affect_blood(mob/living/carbon/human/H, alien, removed)
-	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 1.5)
+	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 2)
 
 /datum/reagent/ceftriaxone
 	name = "Ceftriaxone"
@@ -388,5 +388,5 @@
 	overdose = 5
 
 /datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
-	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 3)
-	H.adjustToxLoss(0.1)
+	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 4)
+	H.adjustToxLoss(0.0166 * volume)

@@ -27,7 +27,7 @@
 #define IS_NABBER  9
 
 #define CE_STABLE        "stable"       // Inaprovaline
-#define CE_ANTIBIOTIC    "antibiotic"   // Spaceacilin
+#define CE_ANTIBIOTIC    "antibiotic"   // Antibiotics
 #define CE_BLOODRESTORE  "bloodrestore" // Iron/nutriment
 #define CE_PAINKILLER    "painkiller"
 #define CE_ALCOHOL       "alcohol"      // Liver filtering

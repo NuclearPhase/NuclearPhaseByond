@@ -17,6 +17,8 @@
 		/datum/reagent/hormone/potassium = 0.02
 	)
 
+	var/max_damage_regen = 0.1
+
 /obj/item/organ/internal/get_view_variables_options()
 	return ..() + {"
 		<option value='?_src_=vars;add_organ_disease=\ref[src]'>Add disease</option>
@@ -210,6 +212,10 @@
 
 // note that ..() in begin of Process()
 /obj/item/organ/internal/Process()
+	. = ..()
+	if(!owner)
+		return
+	
 	for(var/datum/organ_disease/OD in SANITIZE_LIST(diseases))
 		if(OD.can_gone())
 			diseases -= OD
@@ -223,3 +229,15 @@
 		influence_hormone(T, min(owner.bloodstr.get_reagent_amount(T), owner.bloodstr.get_overdose(T)))
 	for(var/T in SANITIZE_LIST(waste_hormones))
 		make_hormone(T, waste_hormones[T])
+
+	if(!vital && damage && owner.bloodstr.get_reagent_amount(/datum/reagent/hormone/glucose) >= GLUCOSE_LEVEL_NORMAL)
+		var/regen = min(max_damage_regen, damage)
+		absorb_hormone(/datum/reagent/hormone/glucose, regen)
+		damage = max(0, damage)
+
+/obj/item/organ/internal/rejuvenate(var/ignore_prosthetic_prefs)
+	germ_level = 0
+	diseases.Cut()
+	hormones = initial(hormones)
+
+	..()

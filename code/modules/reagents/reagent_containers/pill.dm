@@ -72,6 +72,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //Pills
+
+/obj/item/weapon/reagent_containers/pill/nitroglycerin
+	name = "Nitroglycerin (10u)"
+	desc = "Nitroglycerin used to treat ischemia."
+	icon_state = "pill3"
+/obj/item/weapon/reagent_containers/pill/nitroglycerin/New()
+	..()
+	reagents.add_reagent(/datum/reagent/nitroglycerin, 10)
+	color = reagents.get_color()
+
+/obj/item/weapon/reagent_containers/pill/amicil
+	name = "Amicil (6u)"
+	desc = "Light antibiotic."
+	icon_state = "pill3"
+
+/obj/item/weapon/reagent_containers/pill/amicil/New()
+	..()
+	reagents.add_reagent(/datum/reagent/amicil, 6)
+	color = reagents.get_color()
+
+
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Dylovene (25u)"
 	desc = "Neutralizes many common toxins."

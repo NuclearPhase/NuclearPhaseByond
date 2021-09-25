@@ -13,7 +13,7 @@
 		/datum/reagent/hormone/glucagone
 	)
 	hormones = list(
-		/datum/reagent/hormone/glucose = 2
+		/datum/reagent/hormone/glucose = 4
 	)
 
 	var/bilirubine_norm = -1

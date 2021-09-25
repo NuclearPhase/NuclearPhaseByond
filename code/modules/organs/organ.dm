@@ -100,7 +100,7 @@ var/list/organ_cache = list()
 	if(is_preserved())
 		return
 	//Process infections
-	if ((robotic >= ORGAN_ROBOT) || (owner && owner.species && (owner.species.species_flags & SPECIES_FLAG_IS_PLANT)))
+	if (owner && owner.species && (owner.species.species_flags & SPECIES_FLAG_IS_PLANT))
 		germ_level = 0
 		return
 
@@ -213,14 +213,12 @@ var/list/organ_cache = list()
 
 //Germs
 /obj/item/organ/proc/handle_antibiotics()
-	var/antibiotics = 0
-	if(owner)
-		antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/spaceacillin)
-
-	if (!germ_level || antibiotics < 5)
+	if(!owner || (germ_level <= 0) || !(CE_ANTIBIOTIC in owner.chem_effects))
 		return
+	
+	var/antibiotics = owner.chem_effects[CE_ANTIBIOTIC]
 
-	germ_level -= antibiotics / 5
+	germ_level -= antibiotics / 3.5
 	if(germ_level < INFECTION_LEVEL_ONE)
 		germ_level = 0 // cure instantly
 
@@ -290,10 +288,6 @@ var/list/organ_cache = list()
 
 	if(robotic >= ORGAN_ROBOT || !istype(target) || !istype(user) || (user != target && user.a_intent == I_HELP))
 		return ..()
-
-	if(alert("Do you really want to use this organ as food? It will be useless for anything else afterwards.",,"Ew, no.","Bon appetit!") == "Ew, no.")
-		to_chat(user, "<span class='notice'>You successfully repress your cannibalistic tendencies.</span>")
-		return
 
 	user.drop_from_inventory(src)
 	var/obj/item/weapon/reagent_containers/food/snacks/organ/O = new(get_turf(src))

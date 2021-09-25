@@ -48,7 +48,7 @@
 
 /obj/item/organ/internal/brain/New(var/mob/living/carbon/holder)
 	..()
-	max_damage = 100
+	max_damage = 300
 	if(species)
 		max_damage = species.total_health
 	min_bruised_damage = max_damage*0.25
@@ -190,7 +190,7 @@
 
 			if(owner.is_asystole()) // Heart is missing or isn't beating and we're not breathing (hardcrit)
 				owner.Paralyse(3)
-			var/can_heal = damage && damage < max_damage && (damage % damage_threshold_value || owner.chem_effects[CE_BRAIN_REGEN] || (!past_damage_threshold(3) && owner.chem_effects[CE_STABLE]))
+			var/can_heal = damage && damage < max_damage && (damage % damage_threshold_value || owner.chem_effects[CE_BRAIN_REGEN])
 			var/damprob
 			//Effects of bloodloss
 			switch(blood_volume)

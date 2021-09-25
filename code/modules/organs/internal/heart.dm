@@ -12,6 +12,7 @@
 	var/list/pulse_modificators = list()
 	var/list/cardiac_output_modificators = list() // *
 	var/list/blood_pressure_modificators = list() // *
+	var/last_rythm_change = 0
 	var/rythme = RYTHME_NORM
 	var/ischemia = 0
 	var/heartbeat = 0
@@ -82,7 +83,7 @@
 			pulse = rand(200, 250)
 		else
 			pulse = Clamp(Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))), 0, 260)
-		
+
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
@@ -131,7 +132,6 @@
 		ischemia = max(0, ischemia - 0.2)
 
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
-	var/static/last_rythm_change = world.time
 	var/antiarrythmic = LAZYACCESS(owner.chem_effects, CE_ANTIARRYTHMIC) || 0
 	var/changed = FALSE
 	switch(rythme)
@@ -148,12 +148,13 @@
 				rythme = RYTHME_ASYSTOLE
 				changed = TRUE
 		if(RYTHME_ASYSTOLE)
-			var/critical_point = 130 + (ischemia / 50) * 40
-			if(pulse > critical_point)
-				rythme = RYTHME_VFIB
-				changed = TRUE
+			if((world.time - last_rythm_change) > 10 SECONDS)
+				var/critical_point = 130 + (ischemia / 50) * 40
+				if(pulse > critical_point)
+					rythme = RYTHME_VFIB
+					changed = TRUE
 
-	if(!changed && rythme < RYTHME_ASYSTOLE && (world.time - last_rythm_change) > 1.5 MINUTES && prob(25))
+	if(!changed && rythme < RYTHME_ASYSTOLE && ((world.time - last_rythm_change) > 1.5 MINUTES) && prob(25))
 		if(pulse >= 210 && rythme < RYTHME_VFIB)
 			if(rythme == RYTHME_AFIB_RR && antiarrythmic <= 1)
 				return
@@ -163,8 +164,8 @@
 		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
 			++rythme
 		else if(pressure < BLOOD_PRESSURE_LCRITICAL)
-			++rythme 
-		else if(pressure > BLOOD_PRESSURE_HBAD && antiarrythmic)
+			++rythme
+		else if(pressure > BLOOD_PRESSURE_HBAD && !antiarrythmic)
 			++rythme
 
 	if(antiarrythmic && rythme == RYTHME_AFIB && prob(antiarrythmic * 25))

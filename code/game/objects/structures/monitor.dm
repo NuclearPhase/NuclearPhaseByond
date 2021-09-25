@@ -97,7 +97,7 @@
 	
 	var/obj/item/organ/internal/brain/brain = attached.internal_organs_by_name[BP_BRAIN]
 	if(attached.stat == DEAD || !brain)
-		data["ecg"] += list("HR variability not present. Suggest neurological failure.")
+		data["ecg"] += list("Neurological activity not present")
 	else
 		data["ecg"] += list("Neurological system activity: [100 - Floor(100 * CLAMP01(brain.damage / brain.max_damage))]% of normal.")
 

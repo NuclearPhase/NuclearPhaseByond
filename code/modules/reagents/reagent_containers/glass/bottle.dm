@@ -75,17 +75,6 @@
 	reagents.add_reagent(/datum/reagent/inaprovaline, 30)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/bottle/amicil
-	name = "amicil ampoule."
-	desc = "A tiny ampoule. Contains amicil. 6u."
-	icon_state = "ampoule"
-	volume = 6
-
-/obj/item/weapon/reagent_containers/glass/bottle/amicil/New()
-	..()
-	reagents.add_reagent(/datum/reagent/amicil, 6)
-	update_icon()
-
 /obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone
 	name = "ceftriaxone ampoule."
 	desc = "A tiny ampoule. Contains ceftriaxone. 6u."
@@ -97,16 +86,27 @@
 	reagents.add_reagent(/datum/reagent/ceftriaxone, 6)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/glass/bottle/morphine
+	name = "morphine ampoule."
+	desc = "A tiny ampoule. Contains morphine. 6u."
+	icon_state = "ampoule"
+	volume = 6
+
+/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone/New()
+	..()
+	reagents.add_reagent(/datum/reagent/tramadol/opium/morphine, 6)
+	update_icon()
+
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucose
 	name = "glucose ampoule"
-	desc = "A tiny ampoule. Contains glucose. 2u."
+	desc = "A tiny ampoule. Contains glucose. 4u."
 	icon_state = "ampoule"
 	volume = 2
 
 /obj/item/weapon/reagent_containers/glass/bottle/glucose/New()
 	..()
-	reagents.add_reagent(/datum/reagent/hormone/glucose, 2)
+	reagents.add_reagent(/datum/reagent/hormone/glucose, 4)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/insulin
