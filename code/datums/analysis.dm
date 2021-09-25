@@ -37,7 +37,8 @@
 	. = "[formatted_t1] [formatted_t2] [desc]<br>"
 
 /datum/analysis/proc/get_reagent_amount(var/list/RL, T)
-	return LAZYACCESS(RL, T) || 0
+	return LAZYACCESS0(RL, T)
+
 /datum/analysis/proc/analyze(var/datum/reagent/R)
 	if(!R)
 		return "Cannot analyze this sample."

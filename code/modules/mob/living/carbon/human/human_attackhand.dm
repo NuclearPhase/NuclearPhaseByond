@@ -96,13 +96,14 @@
 				var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
 
 				for(var/i in 1 to punches)
-					if(!do_after(H, rand(max(0, 4 - acls_quality), 8), src))
+					if(!do_after(H, rand(4, 8) - acls_quality, src))
 						return
-
+					
+					var/pulse_amount = rand(30, 45) * (1 + acls_quality)
 					if("CPR" in heart.pulse_modificators)
-						heart.pulse_modificators["CPR"] += rand(15, 30) * (1 + acls_quality)
+						heart.pulse_modificators["CPR"] += pulse_amount
 					else
-						heart.pulse_modificators["CPR"] = rand(15, 30) * (1 + acls_quality)
+						heart.pulse_modificators["CPR"] = pulse_amount
 
 					if(prob(1))
 						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
@@ -130,8 +131,8 @@
 						chest?.fracture()
 
 
-					if(prob(acls_quality * 10))
-						heart.rythme = prob(100 - acls_quality * 20) ? RYTHME_AFIB_RR : RYTHME_AFIB
+					if(prob(acls_quality * 13))
+						heart.rythme = prob(100 - acls_quality * 20) ? RYTHME_AFIB_RR : RYTHME_NORM
 
 
 

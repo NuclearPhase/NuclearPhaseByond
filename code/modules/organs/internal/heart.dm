@@ -30,7 +30,7 @@
 
 /obj/item/organ/internal/heart/influence_hormone(T, amount)
 	if(ishormone(T, adrenaline))
-		owner.add_chemical_effect(CE_PULSE, amount * 7.5)
+		owner.add_chemical_effect(CE_PULSE, amount * 5)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.05)
 	if(ishormone(T, noradrenaline))
 		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.05)
@@ -40,7 +40,7 @@
 		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.025)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
 		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
-		if(amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
+		if(prob(5) && amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
 			++rythme
 
 
@@ -80,9 +80,11 @@
 		if(RYTHME_ASYSTOLE)
 			pulse = sumListAndCutAssoc(pulse_modificators)
 		if(RYTHME_VFIB)
-			pulse = rand(200, 250)
+			pulse = rand(200, 260)
 		else
-			pulse = Clamp(Floor(max(0, initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators))), 0, 260)
+			var/n_pulse = initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)
+			pulse = Interpolate(pulse, n_pulse, 0.5)
+	pulse = Floor(Clamp(pulse, 0, 260))
 
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
@@ -101,7 +103,7 @@
 	make_nc()
 	if(rythme != RYTHME_ASYSTOLE)
 		pulse_modificators["hypoperfusion"] = (1 - owner.get_blood_perfusion()) * 100
-		pulse_modificators["shock"] = owner.shock_stage / 0.75
+		pulse_modificators["shock"] = owner.shock_stage
 		if(CE_PULSE in owner.chem_effects)
 			pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
 	if(CE_PRESSURE in owner.chem_effects)
@@ -125,14 +127,13 @@
 		if(RYTHME_VFIB)
 			ischemia += 0.40
 			cardiac_output_modificators["vfib"] = 0.05
-			pulse_modificators["vfib"] = rand(100, 130)
 		if(RYTHME_ASYSTOLE)
 			ischemia += 0.70
 	if(rythme <= RYTHME_AFIB)
 		ischemia = max(0, ischemia - 0.2)
 
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
-	var/antiarrythmic = LAZYACCESS(owner.chem_effects, CE_ANTIARRYTHMIC) || 0
+	var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
 	var/changed = FALSE
 	switch(rythme)
 		if(RYTHME_AFIB)
@@ -154,16 +155,10 @@
 					rythme = RYTHME_VFIB
 					changed = TRUE
 
-	if(!changed && rythme < RYTHME_ASYSTOLE && ((world.time - last_rythm_change) > 1.5 MINUTES) && prob(25))
-		if(pulse >= 210 && rythme < RYTHME_VFIB)
-			if(rythme == RYTHME_AFIB_RR && antiarrythmic <= 1)
-				return
-			++rythme
-		else if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
+	if(!changed && rythme < RYTHME_ASYSTOLE && ((world.time - last_rythm_change) > 1.5 MINUTES) && prob(5))
+		if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
 			++rythme
 		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
-			++rythme
-		else if(pressure < BLOOD_PRESSURE_LCRITICAL)
 			++rythme
 		else if(pressure > BLOOD_PRESSURE_HBAD && !antiarrythmic)
 			++rythme
@@ -175,11 +170,15 @@
 
 	if(changed)
 		last_rythm_change = world.time
+		pulse_modificators.Cut()
+		blood_pressure_modificators.Cut()
 
 /obj/item/organ/internal/heart/proc/handle_blood_pressure()
-	pressure = 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))
-	pressure *= mulListAndCutAssoc(blood_pressure_modificators)
-	pressure *= owner.get_blood_volume()
+	var/n_pressure = 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))
+	n_pressure *= mulListAndCutAssoc(blood_pressure_modificators)
+	n_pressure *= owner.get_blood_volume()
+
+	pressure = Interpolate(pressure, n_pressure, 0.25)
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()
 	if(pulse >= 90 || owner.shock_stage >= 10 || is_below_sound_pressure(get_turf(owner)))

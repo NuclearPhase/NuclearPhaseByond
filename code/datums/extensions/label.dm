@@ -34,7 +34,7 @@
 		atom_holder.verbs -= /atom/proc/RemoveLabel
 
 	var/full_label = " ([label])"
-	var/index = findtextEx(atom_holder.name, full_label)
+	var/index = findtextEx_char(atom_holder.name, full_label)
 	if(!index) // Playing it safe, something might not have set the name properly
 		return
 

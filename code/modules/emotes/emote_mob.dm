@@ -57,11 +57,11 @@
 				m_type = AUDIBLE_MESSAGE
 			return custom_emote(m_type, message)
 
-	var/splitpoint = findtext(act, " ")
+	var/splitpoint = findtext_char(act, " ")
 	if(splitpoint > 0)
 		var/tempstr = act
-		act = copytext(tempstr,1,splitpoint)
-		message = copytext(tempstr,splitpoint+1,0)
+		act = copytext_char(tempstr,1,splitpoint)
+		message = copytext_char(tempstr,splitpoint+1,0)
 
 	var/decl/emote/use_emote = usable_emotes[act]
 	if(!use_emote)
@@ -97,16 +97,16 @@
 	// Store the player's name in a nice bold, naturalement
 	nametext = "<B>[source]</B>"
 
-	name_anchor = findtext(message, "^")
+	name_anchor = findtext_char(message, "^")
 	if(name_anchor > 0) // User supplied emote with a carat
-		pretext = copytext(message, 1, name_anchor)
-		subtext = copytext(message, name_anchor + 1, length(message) + 1)
+		pretext = copytext_char(message, 1, name_anchor)
+		subtext = copytext_char(message, name_anchor + 1, length(message) + 1)
 	else
 		// No carat. Just the emote as usual.
 		subtext = message
 
 	// Oh shit, we got this far! Let's see... did the user attempt to use more than one carat?
-	if(findtext(subtext, "^"))
+	if(findtext_char(subtext, "^"))
 		// abort abort!
 		return 0
 
@@ -114,19 +114,19 @@
 	if(pretext)
 		pretext = capitalize(pretext)
 		// Add a space at the end if we didn't already supply one.
-		end_char = copytext(pretext, length(pretext), length(pretext) + 1)
+		end_char = copytext_char(pretext, length(pretext), length(pretext) + 1)
 		if(end_char != " ")
 			pretext += " "
 
 	// Grab the last character of the emote message.
-	end_char = copytext(subtext, length(subtext), length(subtext) + 1)
+	end_char = copytext_char(subtext, length(subtext), length(subtext) + 1)
 	if(end_char != "." && end_char != "?" && end_char != "!" && end_char != "\"")
 		// No punctuation supplied. Tack a period on the end.
 		subtext += "."
 
 	// Add a space to the subtext, unless it begins with an apostrophe or comma... or a space.
 	if(subtext != ".")
-		start_char = copytext(subtext, 1, 2)
+		start_char = copytext_char(subtext, 1, 2)
 		if(start_char != "," && start_char != " " && start_char != "&") // Apostrophes are parsed as "&#039;", so uhh, yeah.
 			subtext = " " + subtext
 

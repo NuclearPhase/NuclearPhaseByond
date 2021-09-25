@@ -8,7 +8,7 @@
 	var/list/skills = list()
 
 /mob/proc/get_skill(skill_id)
-	return LAZYACCESS(skills, skill_id) || 0
+	return LAZYACCESS0(skills, skill_id)
 
 /mob/proc/skillcheck(skill_id, required, message, affected = 0)
 	if(mood_affect() && (get_skill(skill_id) >= required || prob(affected)))

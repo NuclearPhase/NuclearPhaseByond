@@ -202,7 +202,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		targetpad.audible_message(message)
 		targetpad.last_message = message
 	if(sourcepad) //If this is a pad receiving a call
-		if(name_used==caller_id||text==last_message||findtext(text, "Holopad received")) //prevent echoes
+		if(name_used==caller_id||text==last_message||findtext_char(text, "Holopad received")) //prevent echoes
 			return
 		sourcepad.audible_message("<i><span class='game say'>Holopad received, <span class='name'>[name_used]</span> [speaking.format_message(text, verb)]</span></i>")
 
@@ -225,7 +225,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	for(var/mob/living/silicon/ai/master in masters)
 		var/rendered = "<i><span class='game say'>The holographic image of <span class='message'>[msg]</span></span></i>"
 		master.show_message(rendered, type)
-	if(findtext(msg, "Holopad received,"))
+	if(findtext_char(msg, "Holopad received,"))
 		return
 	for(var/mob/living/carbon/master in masters)
 		var/rendered = "<i><span class='game say'>The holographic image of <span class='message'>[msg]</span></span></i>"

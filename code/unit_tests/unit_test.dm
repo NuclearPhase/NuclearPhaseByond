@@ -253,7 +253,7 @@ proc/load_unit_test_changes()
 	var/list/tests = list()
 	for(var/test in typesof(/datum/unit_test))
 		var/datum/unit_test/d = test
-		if(!findtext(initial(d.name), "template"))
+		if(!findtext_char(initial(d.name), "template"))
 			tests += d
 	return tests
 

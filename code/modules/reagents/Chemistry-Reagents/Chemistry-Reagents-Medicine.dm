@@ -313,7 +313,7 @@
 	if(!H)
 		return
 	
-	H.ischemia = max(0, H.ischemia - volume / 10)
+	H.ischemia = max(0, H.ischemia - volume / 2.5)
 
 /datum/reagent/atropine
 	name = "Atropine"
@@ -323,7 +323,7 @@
 
 /datum/reagent/atropine/affect_blood(mob/living/carbon/human/H, alien, removed)
 	..()
-	H.add_chemical_effect(CE_PULSE, volume * 5)
+	H.add_chemical_effect(CE_PULSE, volume * 10)
 
 /datum/reagent/adenosine
 	name = "Adenosine"
@@ -389,4 +389,4 @@
 
 /datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 4)
-	H.adjustToxLoss(0.0166 * volume)
+	H.adjustToxLoss(0.02 * volume)

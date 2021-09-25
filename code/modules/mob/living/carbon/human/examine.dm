@@ -354,7 +354,7 @@
 	msg += applying_pressure
 
 	if (pose)
-		if( findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0 )
+		if( findtext_char(pose,".",length(pose)) == 0 && findtext_char(pose,"!",length(pose)) == 0 && findtext_char(pose,"?",length(pose)) == 0 )
 			pose = addtext(pose,".") //Makes sure all emotes end with a period.
 		msg += "[T.He] [pose]"
 

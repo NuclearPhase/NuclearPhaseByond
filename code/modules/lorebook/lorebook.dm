@@ -123,12 +123,12 @@
 	var/end_word = min(first_word + allowed_words,words.len)
 	while(end_word != words.len) //skip ahead to the next punctuation mark so the sentence doesn't end mid-way.
 		var/W = words[end_word]
-		var/L = copytext(W,length(W))
+		var/L = copytext_char(W,length(W))
 
 		var/list/connectors = list("and","or","to", "also", "then", "so", "but", "either", "yet")
 		var/punctuation = ":.,;!?"
 
-		if(findtext(punctuation,L) || connectors.Find(W) ) //move forward until we hit a punctuation mark or a connector word.
+		if(findtext_char(punctuation,L) || connectors.Find(W) ) //move forward until we hit a punctuation mark or a connector word.
 			break
 		end_word++
 

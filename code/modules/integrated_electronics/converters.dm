@@ -31,17 +31,17 @@
 
 	set_pin_data(IC_OUTPUT, 1, result)
 
-/obj/item/integrated_circuit/converter/text2ascii
+/obj/item/integrated_circuit/converter/text2ascii_char
 	name = "char to ascii"
 	desc = "This circuit can convert a single string character into the corresponding ASCII number"
 	icon_state = "string-ascii"
 	extended_desc = "In the case of multi-character string input only the first character will be converted."
 
-/obj/item/integrated_circuit/converter/text2ascii/do_work()
+/obj/item/integrated_circuit/converter/text2ascii_char/do_work()
 	var/result = null
 	var/datum/integrated_io/incoming = inputs[1]
 	if(istext(incoming.data))
-		result = text2ascii(incoming.data)
+		result = text2ascii_char(incoming.data)
 
 	set_pin_data(IC_OUTPUT, 1, result)
 

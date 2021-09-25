@@ -95,7 +95,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
 	var/result
 	for (var/token in spamfilter)
-		if (findtextEx(message,token))
+		if (findtextEx_char(message,token))
 			message = "<font color=\"red\">[message]</font>"	//Rejected messages will be indicated by red color.
 			result = token										//Token caused rejection (if there are multiple, last will be chosen>.
 	pda_msgs += new/datum/data_pda_msg(recipient,sender,message)

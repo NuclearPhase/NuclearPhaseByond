@@ -18,23 +18,23 @@ var/const  //Ascii values of characters
 n_scriptOptions
 	proc
 		CanStartID(char) //returns true if the character can start a variable, function, or keyword name (by default letters or an underscore)
-			if(!isnum(char))char=text2ascii(char)
+			if(!isnum(char))char=text2ascii_char(char)
 			return (char in ascii_A to ascii_Z) || (char in ascii_a to ascii_z) || char==ascii_UNDERSCORE || char==ascii_DOLLAR
 
 		IsValidIDChar(char) //returns true if the character can be in the body of a variable, function, or keyword name (by default letters, numbers, and underscore)
-			if(!isnum(char))char=text2ascii(char)
+			if(!isnum(char))char=text2ascii_char(char)
 			return CanStartID(char) || IsDigit(char)
 
 		IsDigit(char)
-			if(!isnum(char))char=text2ascii(char)
+			if(!isnum(char))char=text2ascii_char(char)
 			return char in ascii_ZERO to ascii_NINE
 
 		IsValidID(id)    //returns true if all the characters in the string are okay to be in an identifier name
-			if(!CanStartID(id)) //don't need to grab first char in id, since text2ascii does it automatically
+			if(!CanStartID(id)) //don't need to grab first char in id, since text2ascii_char does it automatically
 				return 0
 			if(length(id)==1) return 1
 			for(var/i=2 to length(id))
-				if(!IsValidIDChar(copytext(id, i, i+1)))
+				if(!IsValidIDChar(copytext_char(id, i, i+1)))
 					return 0
 			return 1
 

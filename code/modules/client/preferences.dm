@@ -163,7 +163,7 @@ datum/preferences
 		real_name = random_name(gender,species)
 
 	if(config.humans_need_surnames)
-		var/firstspace = findtext(real_name, " ")
+		var/firstspace = findtext_char(real_name, " ")
 		var/name_length = length(real_name)
 		if(!firstspace)	//we need a surname
 			real_name += " [pick(GLOB.last_names)]"
