@@ -91,15 +91,15 @@
 		item_state = "balloon-empty"
 
 /obj/item/toy/balloon
-	name = "\improper 'criminal' balloon"
-	desc = "FUK NT!11!"
+	name = "\improper red balloon"
+	desc = "red balloon"
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
 	force = 0
 	icon = 'icons/obj/weapons.dmi'
-	icon_state = "syndballoon"
-	item_state = "syndballoon"
+	icon_state = "redballoon"
+	item_state = "redballoon"
 	w_class = ITEM_SIZE_HUGE
 
 /obj/item/toy/balloon/New()
@@ -108,9 +108,9 @@
 
 /obj/item/toy/balloon/nanotrasen
 	name = "\improper 'motivational' balloon"
-	desc = "Man, I love NanoTrasen soooo much. I use only NT products. You have NO idea."
-	icon_state = "ntballoon"
-	item_state = "ntballoon"
+	desc = "Blue balloon"
+	icon_state = "blueballoon"
+	item_state = "blueballoon"
 
 /*
  * Fake telebeacon

@@ -47,3 +47,4 @@
 
 	var/list/stasis_sources = list()
 	var/stasis_value
+	var/should_update_healths = TRUE

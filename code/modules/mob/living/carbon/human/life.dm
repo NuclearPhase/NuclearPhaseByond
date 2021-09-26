@@ -783,7 +783,7 @@
 		else
 			clear_fullscreen("brute")
 
-		if(healths)
+		if(healths && should_update_healths)
 			if (chem_effects[CE_PAINKILLER] > 100)
 				healths.overlays.Cut()
 				healths.icon_state = "health_numb"

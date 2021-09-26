@@ -459,14 +459,9 @@ This function completely restores a damaged organ to perfect condition.
 				var/datum/wound/W = pick(compatible_wounds)
 				W.open_wound(damage)
 				if(prob(25))
-					if(robotic >= ORGAN_ROBOT)
-						owner.visible_message("<span class='danger'>The damage to [owner.name]'s [name] worsens.</span>",\
-						"<span class='danger'>The damage to your [name] worsens.</span>",\
-						"<span class='danger'>You hear the screech of abused metal.</span>")
-					else
-						owner.visible_message("<span class='danger'>The wound on [owner.name]'s [name] widens with a nasty ripping noise.</span>",\
-						"<span class='danger'>The wound on your [name] widens with a nasty ripping noise.</span>",\
-						"<span class='danger'>You hear a nasty ripping noise, as if flesh is being torn apart.</span>")
+					owner.visible_message("<span class='danger'>The wound on [owner.name]'s [name] widens with a nasty ripping noise.</span>",\
+					"<span class='danger'>The wound on your [name] widens with a nasty ripping noise.</span>",\
+					"<span class='danger'>You hear a nasty ripping noise, as if flesh is being torn apart.</span>")
 				return W
 
 	//Creating wound
@@ -565,16 +560,14 @@ Note that amputating the affected organ does in fact remove the infection from t
 		handle_germ_effects()
 
 /obj/item/organ/external/proc/handle_germ_sync()
-	var/antibiotics = owner.chem_effects[CE_ANTIBIOTIC]
+	var/antibiotics = LAZYACCESS0(owner.chem_effects, CE_ANTIBIOTIC)
 	for(var/datum/wound/W in wounds)
 		//Open wounds can become infected
-		if(W.infection_check())
-			W.germ_level += W.germ_speed()
-		else
-			W.germ_level -= antibiotics / 5
+		W.germ_level += W.germ_speed()
 
 	if(antibiotics >= 15)
 		return
+	
 	for(var/datum/wound/W in wounds)
 		// Infected wounds raise the organ's germ level
 		if(W.germ_level > germ_level && prob(100 - (antibiotics / 15) * 100))

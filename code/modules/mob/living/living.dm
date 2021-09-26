@@ -559,7 +559,7 @@ default behaviour is:
 										blood_exists = 1
 									if(ishuman(M))//Ok so they're a human, so they have blood and shit.
 										var/mob/living/carbon/human/H = M
-										var/blood_volume = round(H.vessel.get_reagent_amount("blood"))//Getting their blood.
+										var/blood_volume = round(H.vessel.total_volume)//Getting their blood.
 
 										if(blood_volume > 50)//Do they have blood?
 											H.vessel.remove_reagent(/datum/reagent/blood, 1)//If so take some away.
@@ -582,21 +582,21 @@ default behaviour is:
 														X.overlays.Add(image('icons/effects/blood.dmi',trail_type,dir = newdir))
 
 								//pull damage with injured people
+									if(prob(25) && ishuman(M))
+										var/mob/living/carbon/human/H = M
+										for(var/obj/item/organ/external/E in H.organs)
+											E.createwound(BRUISE, 1)
+										visible_message(SPAN_DANGER("\The [M]'s wounds open more from being dragged!"))
+								if(ishuman(M) && M.pull_damage())
 									if(prob(25))
-										M.adjustBruteLoss(1)
-										visible_message("<span class='danger'>\The [M]'s [M.isSynthetic() ? "state worsens": "wounds open more"] from being dragged!</span>")
-								if(M.pull_damage())
-									if(prob(25))
-										M.adjustBruteLoss(2)
-										visible_message("<span class='danger'>\The [M]'s [M.isSynthetic() ? "state" : "wounds"] worsen terribly from being dragged!</span>")
+										var/mob/living/carbon/human/H = M
+										for(var/obj/item/organ/external/E in H.organs)
+											E.createwound(BRUISE, 2)
+										visible_message(SPAN_DANGER("\The [M]'s wounds worsen terribly from being dragged!"))
 										var/turf/location = M.loc
-										if (istype(location, /turf/simulated))
+										if(istype(location, /turf/simulated))
 											location.add_blood(M)
-											if(ishuman(M))
-												var/mob/living/carbon/human/H = M
-												var/blood_volume = round(H.vessel.get_reagent_amount(/datum/reagent/blood))
-												if(blood_volume > 0)
-													H.vessel.remove_reagent(/datum/reagent/blood, 1)
+											H.remove_blood(1)
 
 
 						step(pulling, get_dir(pulling.loc, T))

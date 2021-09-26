@@ -84,7 +84,7 @@
 			if(booze.strength < 40) //liquor stuff hits harder
 				return 2
 
-/datum/reagent/tramadol/opium // yes, opium is a subtype of tramadol, for reasons ~Toby
+/datum/reagent/tramadol/opium
 	name = "Opium"
 	description = "Latex obtained from the opium poppy. An effective, but addictive painkiller."
 	taste_description = "bitterness"
@@ -144,8 +144,10 @@
 /datum/reagent/tramadol/opium/heroin/affect_blood(mob/living/carbon/M, alien, removed)
 	..()
 	M.add_chemical_effect(CE_SLOWDOWN, 1)
+	M.hallucination(110, 30)
 
 /datum/reagent/tramadol/opium/heroin/handle_painkiller_overdose(mob/living/carbon/M)
+	M.hallucination(120, 30)
 	var/whole_volume = (volume + M.chem_doses[type]) // side effects are more robust (dose-wise) than in the case of *legal* painkillers usage
 	if(whole_volume > soft_overdose)
 		M.hallucination(30, 30)

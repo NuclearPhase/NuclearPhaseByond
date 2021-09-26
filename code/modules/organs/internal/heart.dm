@@ -40,8 +40,8 @@
 		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.025)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
 		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
-		if(prob(5) && amount > 10 && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
-			++rythme
+		if(amount > 10 && prob(5) && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
+			change_rythme(rythme + 1, 30 SECONDS)
 
 
 /obj/item/organ/internal/heart/die()
@@ -132,46 +132,45 @@
 	if(rythme <= RYTHME_AFIB)
 		ischemia = max(0, ischemia - 0.2)
 
+/obj/item/organ/internal/heart/proc/change_rythme(newrythme, timerequired = 0)
+	if(timerequired)
+		if((world.time - last_rythm_change) < timerequired)
+			return
+
+	rythme = newrythme
+	last_rythm_change = world.time
+	pulse_modificators.Cut()
+	blood_pressure_modificators.Cut()
+
+
+	
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
 	var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
-	var/changed = FALSE
+
+	if(rythme < RYTHME_ASYSTOLE && prob(5))
+	
+		if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
+			change_rythme(rythme + 1, 1.5 MINUTES)
+		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
+			change_rythme(rythme + 1, 1.5 MINUTES)
+		else if(pressure > BLOOD_PRESSURE_HBAD && !antiarrythmic)
+			change_rythme(rythme + 1, 1.5 MINUTES)
 	switch(rythme)
 		if(RYTHME_AFIB)
-			if((world.time - last_rythm_change) > 3 MINUTES)
-				rythme = RYTHME_NORM
-				changed = TRUE
+			change_rythme(RYTHME_NORM, 3 MINUTES)
 		if(RYTHME_AFIB_RR)
-			if((world.time - last_rythm_change) > 5 MINUTES)
-				rythme = RYTHME_AFIB
-				changed = TRUE
+			change_rythme(RYTHME_AFIB, 5 MINUTES)
 		if(RYTHME_VFIB)
-			if((world.time - last_rythm_change) > 1.5 MINUTES)
-				rythme = RYTHME_ASYSTOLE
-				changed = TRUE
+			change_rythme(RYTHME_ASYSTOLE, 2 MINUTES)
 		if(RYTHME_ASYSTOLE)
-			if((world.time - last_rythm_change) > 10 SECONDS)
-				var/critical_point = 130 + (ischemia / 50) * 40
-				if(pulse > critical_point)
-					rythme = RYTHME_VFIB
-					changed = TRUE
-
-	if(!changed && rythme < RYTHME_ASYSTOLE && ((world.time - last_rythm_change) > 1.5 MINUTES) && prob(5))
-		if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
-			++rythme
-		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
-			++rythme
-		else if(pressure > BLOOD_PRESSURE_HBAD && !antiarrythmic)
-			++rythme
+			var/critical_point = 145 + (ischemia / 50) * 40 - antiarrythmic * 10
+			if(pulse > critical_point)
+				change_rythme(RYTHME_VFIB, 10 SECONDS)
 
 	if(antiarrythmic && rythme == RYTHME_AFIB && prob(antiarrythmic * 25))
 		rythme = RYTHME_NORM
 	if(antiarrythmic > 1 && rythme == RYTHME_AFIB_RR && prob(10))
 		rythme = RYTHME_AFIB
-
-	if(changed)
-		last_rythm_change = world.time
-		pulse_modificators.Cut()
-		blood_pressure_modificators.Cut()
 
 /obj/item/organ/internal/heart/proc/handle_blood_pressure()
 	var/n_pressure = 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))

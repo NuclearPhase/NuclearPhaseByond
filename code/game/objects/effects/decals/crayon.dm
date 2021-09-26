@@ -25,5 +25,6 @@
 
 		overlays += mainOverlay
 		overlays += shadeOverlay
+		
 
 		add_hiddenprint(usr)
