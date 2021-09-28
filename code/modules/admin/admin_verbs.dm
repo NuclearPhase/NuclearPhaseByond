@@ -202,13 +202,15 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_analyse_health_context,
 	/client/proc/cmd_analyse_health_panel,
 	/client/proc/visualpower,
-	/client/proc/visualpower_remove
+	/client/proc/visualpower_remove,
+	/client/proc/enable_profiler
 	)
 
 var/list/admin_verbs_paranoid_debug = list(
 	/client/proc/callproc,
 	/client/proc/callproc_target,
-	/client/proc/debug_controller
+	/client/proc/debug_controller,
+	/client/proc/enable_profiler
 	)
 
 var/list/admin_verbs_possess = list(
@@ -941,3 +943,18 @@ var/list/admin_verbs_mentor = list(
 	T.add_spell(new S)
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_and_message_admins("gave [key_name(T)] the spell [S].")
+
+/client/proc/enable_profiler()
+	set category = "Debug"
+	set name = "Enable Profiler"
+	set desc = "Access BYOND's proc performance profiler"
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	log_and_message_admins("has enabled performance profiler. This may cause lag.")
+
+	// Give profiler access
+	world.SetConfig("APP/admin", ckey, "role=admin")
+	winset(src, "browserwindow", "is-visible=true")
+	send_link(src, "?debug=profile")
