@@ -601,7 +601,7 @@ meteor_act
 				src.throw_at(target, rand(1,3), src.throw_speed)
 			if(user.lying)
 				to_chat(user, too_high_message)
-					return
+				return
 
 		if(BP_MOUTH)//If we aim for the mouth then we kick their teeth out.
 			if(lying)

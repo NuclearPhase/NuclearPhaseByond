@@ -1,4 +1,6 @@
 /obj/machinery/portable_atmospherics/hydroponics/Process()
+	if(!seed)
+		return
 
 	// Handle nearby smoke if any.
 	for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
@@ -27,14 +29,14 @@
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 10) are unaffected.
 	if (weedlevel >= 10 && prob(10))
-		if(!seed || weedlevel >= seed.get_trait(TRAIT_WEED_TOLERANCE))
+		if(weedlevel >= seed.get_trait(TRAIT_WEED_TOLERANCE))
 			weed_invasion()
 			if(mechanical)
 				needs_icon_update |= 1
 
 	// If there is no seed data (and hence nothing planted),
 	// or the plant is dead, process nothing further.
-	if(!seed || dead)
+	if(dead)
 		if(mechanical) 
 			update_icon() //Harvesting would fail to set alert icons properly.
 		return

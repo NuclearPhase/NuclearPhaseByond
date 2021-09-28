@@ -1100,3 +1100,11 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 
 /proc/pass()
 	return
+
+#define SPAN(class, X) "<span class='" + ##class + "'>" + ##X + "</span>"
+
+#define SPAN_NOTICE(X)   SPAN("notice", X)
+#define SPAN_WARNING(X)  SPAN("warning", X)
+#define SPAN_DANGER(X)   SPAN("danger", X)
+#define SPAN_OCCULT(X)   SPAN("cult", X)
+#define SPAN_DEADSAY(X)  SPAN("deadsay", X)

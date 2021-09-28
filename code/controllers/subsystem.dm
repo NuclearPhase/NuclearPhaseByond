@@ -25,6 +25,11 @@
 	var/times_fired = 0		//number of times we have called fire()
 	var/queued_time = 0		//time we entered the queue, (for timing and priority reasons)
 	var/queued_priority 	//we keep a running total to make the math easier, if priority changes mid-fire that would break our running total, so we store it here
+
+	// Similar to can_fire, but intended explicitly for subsystems that are asleep. Using this var instead of can_fire
+	//	 allows admins to disable subsystems without them re-enabling themselves.
+	var/suspended = FALSE
+
 	//linked list stuff for the queue
 	var/datum/controller/subsystem/queue_next
 	var/datum/controller/subsystem/queue_prev
@@ -199,6 +204,28 @@
 /datum/controller/subsystem/proc/postpone(cycles = 1)
 	if(next_fire - world.time < wait)
 		next_fire += (wait*cycles)
+
+// Admin-disables this subsystem. Will show as OFFLINE in MC panel.
+/datum/controller/subsystem/proc/disable()
+	can_fire = FALSE
+
+// Admin-enables this subsystem.
+/datum/controller/subsystem/proc/enable()
+	if (!can_fire)
+		next_fire = world.time + wait
+		can_fire = TRUE
+
+// Suspends this subsystem. Functionally identical to disable(), but shows SUSPEND in MC panel.
+// 	Preferred over disable() for self-disabling subsystems.
+/datum/controller/subsystem/proc/suspend()
+	suspended = TRUE
+
+// Wakes a suspended subsystem.
+/datum/controller/subsystem/proc/wake()
+	if (suspended)
+		suspended = FALSE
+		if (can_fire)
+			next_fire = world.time + wait
 
 //usually called via datum/controller/subsystem/New() when replacing a subsystem (i.e. due to a recurring crash)
 //should attempt to salvage what it can from the old instance of subsystem

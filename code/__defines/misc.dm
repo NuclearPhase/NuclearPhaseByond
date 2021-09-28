@@ -13,6 +13,7 @@
 #define INVISIBILITY_OBSERVER    60
 #define INVISIBILITY_EYE         61
 #define INVISIBILITY_SYSTEM      99
+#define INVISIBILITY_ABSTRACT   101	// special: this can never be seen, regardless of see_invisible
 
 #define SEE_INVISIBLE_LIVING     25
 #define SEE_INVISIBLE_NOLIGHTING 15
@@ -218,3 +219,5 @@
 
 #define SUPPLY_SECURITY_ELEVATED 1
 #define SUPPLY_SECURITY_HIGH 2
+
+#define CLIENT_FROM_VAR(I) (ismob(I) ? I:client : (isclient(I) ? I : (istype(I, /datum/mind) ? I:current?:client : null)))

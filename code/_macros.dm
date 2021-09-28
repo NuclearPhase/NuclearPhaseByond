@@ -1,6 +1,6 @@
 #define PUBLIC_GAME_MODE (ticker ? (ticker.hide_mode == 0 ? master_mode : "Secret") : "Unknown")
 
-#define Clamp(value, low, high) 	(value <= low ? low : (value >= high ? high : value))
+#define Clamp(value, low, high) clamp(value, low, high)
 #define CLAMP01(x) 		(Clamp(x, 0, 1))
 
 #define get_turf(A) get_step(A,0)
@@ -93,8 +93,11 @@
 
 #define random_id(key,min_id,max_id) uniqueness_repository.Generate(/datum/uniqueness_generator/id_random, key, min_id, max_id)
 
-#define to_chat(target, message)                            target << message
-#define to_world(message)                                   world << message
+#define to_target(target, payload)            target << (payload)
+#define from_target(target, receiver)         target >> (receiver)
+
+#define legacy_chat(target, message)          to_target(target, message)
+#define to_world(message)                     to_chat(world, message)
 #define to_world_log(message)                               world.log << message
 #define sound_to(target, sound)                             target << sound
 #define to_file(file_entry, source_var)                     file_entry << source_var
@@ -103,6 +106,8 @@
 #define close_browser(target, browser_name)                 target << browse(null, browser_name)
 #define show_image(target, image)                           target << image
 #define send_rsc(target, rsc_content, rsc_name)             target << browse_rsc(rsc_content, rsc_name)
+#define sound_to(target, sound)               to_target(target, sound)
+#define image_to(target, image)               to_target(target, image)
 
 #define MAP_IMAGE_PATH "nano/images/[GLOB.using_map.path]/"
 
@@ -165,3 +170,4 @@
 #define cast_new(type, num, args...) if((num) == 1) { new type(args) } else { for(var/i=0;i<(num),i++) { new type(args) } }
 
 #define FLAGS_EQUALS(flag, flags) ((flag & (flags)) == (flags))
+

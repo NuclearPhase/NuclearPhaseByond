@@ -43,7 +43,7 @@
 	animate_movement = FORWARD_STEPS
 	anchored = 1.0
 	density = 1
-	var/moving = 0
+	var/moving_ = 0
 	var/datum/gas_mixture/air_contents = new()
 
 
@@ -57,7 +57,7 @@
 
 
 // When destroyed by explosions, properly handle contents.
-obj/structure/ex_act(severity)
+obj/structure/transit_tube_pod/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/AM in contents)
@@ -128,7 +128,7 @@ obj/structure/ex_act(severity)
 /obj/structure/transit_tube/station/attack_hand(mob/user as mob)
 	if(!pod_moving)
 		for(var/obj/structure/transit_tube_pod/pod in loc)
-			if(!pod.moving && pod.dir in directions())
+			if(!pod.moving_ && pod.dir in directions())
 				if(icon_state == "closed")
 					open_animation()
 
@@ -157,7 +157,7 @@ obj/structure/ex_act(severity)
 
 /obj/structure/transit_tube/station/proc/launch_pod()
 	for(var/obj/structure/transit_tube_pod/pod in loc)
-		if(!pod.moving && pod.dir in directions())
+		if(!pod.moving_ && pod.dir in directions())
 			spawn(5)
 				pod_moving = 1
 				close_animation()
@@ -284,10 +284,10 @@ obj/structure/ex_act(severity)
 
 
 /obj/structure/transit_tube_pod/proc/follow_tube()
-	if(moving)
+	if(moving_)
 		return
 
-	moving = 1
+	moving_ = 1
 
 	spawn()
 		var/obj/structure/transit_tube/current_tube = null
@@ -352,7 +352,7 @@ obj/structure/ex_act(severity)
 
 			while(isturf(loc) && Move(get_step(loc, dir)))
 
-		moving = 0
+		moving_ = 0
 
 /obj/structure/transit_tube_pod/return_air()
 	return air_contents
@@ -388,7 +388,7 @@ obj/structure/ex_act(severity)
 				// Todo: If you get out of a moving pod in space, you should move as well.
 				//  Same direction as pod? Direcion you moved? Halfway between?
 
-		if(!moving)
+		if(!moving_)
 			for(var/obj/structure/transit_tube/station/station in loc)
 				if(dir in station.directions())
 					if(!station.pod_moving)

@@ -215,7 +215,7 @@
 	var/speed = 1 // lowest = 1, highest = 10
 	var/list/rpath = list() // real path of the magnet, used in iterator
 
-	var/moving = 0 // 1 if scheduled to loop
+	var/moving_ = 0 // 1 if scheduled to loop
 	var/looping = 0 // 1 if looping
 
 	var/datum/radio_frequency/radio_connection
@@ -271,7 +271,7 @@
 
 		dat += "<br>Speed: <a href='?src=\ref[src];operation=minusspeed'>-</a> [speed] <a href='?src=\ref[src];operation=plusspeed'>+</a><br>"
 		dat += "Path: {<a href='?src=\ref[src];operation=setpath'>[path]</a>}<br>"
-		dat += "Moving: <a href='?src=\ref[src];operation=togglemoving'>[moving ? "Enabled":"Disabled"]</a>"
+		dat += "Moving: <a href='?src=\ref[src];operation=togglemoving'>[moving_ ? "Enabled":"Disabled"]</a>"
 
 
 		user << browse(dat, "window=magnet;size=400x500")
@@ -329,14 +329,14 @@
 				if("setpath")
 					var/newpath = sanitize(input(usr, "Please define a new path!",,path) as text|null)
 					if(newpath && newpath != "")
-						moving = 0 // stop moving
+						moving_ = 0 // stop moving
 						path = newpath
 						pathpos = 1 // reset position
 						filter_path() // renders rpath
 
 				if("togglemoving")
-					moving = !moving
-					if(moving)
+					moving_ = !moving_
+					if(moving_)
 						spawn() MagnetMove()
 
 
@@ -345,7 +345,7 @@
 	proc/MagnetMove()
 		if(looping) return
 
-		while(moving && rpath.len >= 1)
+		while(moving_ && rpath.len >= 1)
 
 			if(stat & (BROKEN|NOPOWER))
 				break

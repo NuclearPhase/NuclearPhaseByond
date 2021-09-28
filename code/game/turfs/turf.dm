@@ -17,7 +17,6 @@
 	var/heat_capacity = 1
 
 	//Properties for both
-	var/temperature = T20C      // Initial turf temperature.
 	var/blocks_air = 0          // Does this turf contain air/let air through?
 
 	// General properties.
@@ -28,6 +27,11 @@
 	var/list/decals
 
 	var/movement_delay
+	var/fluid_can_pass
+	var/obj/effect/flood/flood_object
+	var/fluid_blocked_dirs = 0
+	var/flooded // Whether or not this turf is absolutely flooded ie. a water source.
+	var/height = 0 // Determines if fluids can overflow onto next turf
 
 /turf/New()
 	..()
@@ -176,6 +180,15 @@ var/const/enterloopsanity = 100
 
 /turf/proc/is_plating()
 	return 0
+
+/turf/proc/is_wall()
+	return FALSE
+
+/turf/proc/is_open()
+	return FALSE
+
+/turf/proc/is_floor()
+	return FALSE
 
 /turf/proc/protects_atom(var/atom/A)
 	return FALSE

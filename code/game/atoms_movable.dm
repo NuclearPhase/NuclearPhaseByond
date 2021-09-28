@@ -11,7 +11,7 @@
 	// var/elevation = 2    - not used anywhere
 	var/move_speed = 10
 	var/l_move_time = 1
-	var/m_flag = 1
+	var/moving = 1
 	var/throwing = 0
 	var/thrower
 	var/turf/throw_source = null

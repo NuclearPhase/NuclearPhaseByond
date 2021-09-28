@@ -108,12 +108,12 @@
 	var/max_safe_output = 4		// For UI use, maximal output that won't cause overheat.
 	var/time_per_sheet = 96		//fuel efficiency - how long 1 sheet lasts at power level 1
 	var/max_sheets = 100 		//max capacity of the hopper
-	var/max_temperature = 300	//max temperature before overheating increases
-	var/temperature_gain = 50	//how much the temperature increases per power output level, in degrees per level
+	var/max_temperature = 300	//max ctemperature before overheating increases
+	var/temperature_gain = 50	//how much the ctemperature increases per power output level, in degrees per level
 
 	var/sheets = 0			//How many sheets of material are loaded in the generator
 	var/sheet_left = 0		//How much is left of the current sheet
-	var/temperature = 0		//The current temperature
+	var/ctemperature = 0		//The current ctemperature
 	var/overheating = 0		//if this gets high enough the generator explodes
 	var/max_overheat = 150
 
@@ -180,19 +180,19 @@
 	else
 		sheet_left -= needed_sheets
 
-	//calculate the "target" temperature range
-	//This should probably depend on the external temperature somehow, but whatever.
+	//calculate the "target" ctemperature range
+	//This should probably depend on the external ctemperature somehow, but whatever.
 	var/lower_limit = 56 + power_output * temperature_gain
 	var/upper_limit = 76 + power_output * temperature_gain
 	/*
-		Hot or cold environments can affect the equilibrium temperature
+		Hot or cold environments can affect the equilibrium ctemperature
 		The lower the pressure the less effect it has. I guess it cools using a radiator or something when in vacuum.
 		Gives traitors more opportunities to sabotage the generator or allows enterprising engineers to build additional
 		cooling in order to get more power out.
 	*/
 	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
-		var/outer_temp = 0.1 * temperature + T0C
+		var/outer_temp = 0.1 * ctemperature + T0C
 		if(outer_temp > environment.temperature) //sharing the heat
 			var/heat_transfer = environment.get_thermal_energy_change(outer_temp)
 			if(heat_transfer > 1)
@@ -207,11 +207,11 @@
 
 	var/average = (upper_limit + lower_limit)/2
 
-	//calculate the temperature increase
-	var/bias = Clamp(round((average - temperature)/TEMPERATURE_DIVISOR, 1),  -TEMPERATURE_CHANGE_MAX, TEMPERATURE_CHANGE_MAX)
-	temperature += bias + rand(-7, 7)
+	//calculate the ctemperature increase
+	var/bias = Clamp(round((average - ctemperature)/TEMPERATURE_DIVISOR, 1),  -TEMPERATURE_CHANGE_MAX, TEMPERATURE_CHANGE_MAX)
+	ctemperature += bias + rand(-7, 7)
 
-	if (temperature > max_temperature)
+	if (ctemperature > max_temperature)
 		overheat()
 	else if (overheating > 0)
 		overheating--
@@ -224,10 +224,10 @@
 		var/ambient = environment.temperature - T20C
 		cooling_temperature += ambient*ratio
 
-	if (temperature > cooling_temperature)
-		var/temp_loss = (temperature - cooling_temperature)/TEMPERATURE_DIVISOR
+	if (ctemperature > cooling_temperature)
+		var/temp_loss = (ctemperature - cooling_temperature)/TEMPERATURE_DIVISOR
 		temp_loss = between(2, round(temp_loss, 1), TEMPERATURE_CHANGE_MAX)
-		temperature = max(temperature - temp_loss, cooling_temperature)
+		ctemperature = max(ctemperature - temp_loss, cooling_temperature)
 		src.updateDialog()
 
 	if(overheating)
@@ -245,7 +245,7 @@
 	var/phoron = (sheets+sheet_left)*20
 	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
-		environment.adjust_gas_temp("phoron", phoron/10, temperature + T0C)
+		environment.adjust_gas_temp("phoron", phoron/10, ctemperature + T0C)
 
 	sheets = 0
 	sheet_left = 0
@@ -327,7 +327,7 @@
 	data["output_max"] = max_power_output
 	data["output_safe"] = max_safe_output
 	data["output_watts"] = power_output * power_gen
-	data["temperature_current"] = src.temperature
+	data["temperature_current"] = src.ctemperature
 	data["temperature_max"] = src.max_temperature
 	if(overheating)
 		data["temperature_overheat"] = ((overheating / max_overheat) * 100)		// Overheat percentage. Generator explodes at 100%
@@ -370,7 +370,7 @@
 	dat += text("Power output: <A href='?src=\ref[src];action=lower_power'>-</A> [power_gen * power_output] Watts<A href='?src=\ref[src];action=higher_power'>+</A><br>")
 	dat += text("Power current: [(powernet == null ? "Unconnected" : "[avail()]")]<br>")
 
-	var/tempstr = "Temperature: [temperature]&deg;C<br>"
+	var/tempstr = "ctemperature: [ctemperature]&deg;C<br>"
 	dat += (overheating)? "<span class='danger'>[tempstr]</span>" : tempstr
 	dat += "<br><A href='?src=\ref[src];action=close'>Close</A>"
 	user << browse("[dat]", "window=port_gen")
@@ -447,7 +447,7 @@
 	icon_state = "potato"
 	max_safe_output = 4
 	max_power_output = 8	//The maximum power setting without emagging.
-	temperature_gain = 80	//how much the temperature increases per power output level, in degrees per level
+	temperature_gain = 80	//how much the ctemperature increases per power output level, in degrees per level
 	max_temperature = 450
 	time_per_sheet = 400
 	rad_power = 6

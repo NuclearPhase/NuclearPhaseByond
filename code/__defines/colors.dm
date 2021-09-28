@@ -60,3 +60,7 @@
 #define	PIPE_COLOR_ORANGE      "#b95a00"
 
 #define COLOR_BLOOD_HUMAN "#a10808"
+
+#define RANDOM_RGB rgb(rand(0,255), rand(0,255), rand(0,255))
+// Used by fluid system.
+#define COLOR_OCEAN "#99f5ff"

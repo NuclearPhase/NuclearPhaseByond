@@ -11,7 +11,6 @@
 		/obj/item/clothing/mask/smokable,
 		/obj/item/weapon/lipstick,
 		/obj/item/weapon/haircomb,
-		/obj/item/weapon/mirror,
 		/obj/item/clothing/accessory/locket,
 		/obj/item/clothing/head/hairflower,
 		/obj/item/device/flashlight/pen,

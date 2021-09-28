@@ -272,7 +272,7 @@
 	activate_pin(2)
 
 	for(var/mob/O in hearers(1, get_turf(src)))
-		O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
+		O.show_message("[bicon(src)] *beep* *beep*", 3, "*beep* *beep*", 2)
 
 	return 1
 
@@ -669,7 +669,7 @@
 		text_output += "\an [name]"
 	else
 		text_output += "\an ["\improper[initial_name]"] labeled '[name]'"
-	text_output += " which is currently [get_pin_data(IC_INPUT, 1) ? "lit <font color=[led_color]>¤</font>" : "unlit."]"
+	text_output += " which is currently [get_pin_data(IC_INPUT, 1) ? "lit <font color=[led_color]>ï¿½</font>" : "unlit."]"
 	to_chat(user,jointext(text_output,null))
 /obj/item/integrated_circuit/output/led/get_topic_data()
 	return list("\An [initial(name)] that is currently [get_pin_data(IC_INPUT, 1) ? "lit" : "unlit."]")
