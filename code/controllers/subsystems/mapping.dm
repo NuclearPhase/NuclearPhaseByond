@@ -60,5 +60,3 @@ SUBSYSTEM_DEF(mapping)
 			exoplanet_ruins_templates[R.name] = R
 		else if(istype(R, /datum/map_template/ruin/space))
 			space_ruins_templates[R.name] = R
-		else if(istype(R, /datum/map_template/ruin/away_site))
-			away_sites_templates[R.name] = R

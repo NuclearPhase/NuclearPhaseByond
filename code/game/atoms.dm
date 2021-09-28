@@ -549,10 +549,6 @@ its easier to just keep the beam vertical.
 	else
 		return ..()
 
-/atom/MouseEntered(location, control, params)
-	. = ..()
-	update_tooltip(usr, name)
-
 //Kicking
 /atom/proc/kick_act(mob/living/carbon/human/user)
 	//They're not adjcent to us so we can't kick them. Can't kick in straightjacket or while being incapacitated (except lying), can't kick while legcuffed or while being locked in closet
