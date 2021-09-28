@@ -16,11 +16,18 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 #define ATOM_FLAG_NO_BLOOD               0x0004 // Used for items if they don't want to get a blood overlay.
 #define ATOM_FLAG_NO_REACT               0x0008 // Reagents don't react inside this container.
 #define ATOM_FLAG_OPEN_CONTAINER         0x0010 // Is an open container for chemistry purposes.
+#define ATOM_FLAG_NO_TEMP_CHANGE         0x0020  // Reagents do not cool or heat to ambient temperature in this container.
 
 #define MOVABLE_FLAG_PROXMOVE            0x0001 // Does this object require proximity checking in Enter()?
 
 #define OBJ_FLAG_ANCHORABLE              0x0001 // This object can be stuck in place with a tool
 #define OBJ_FLAG_CONDUCTIBLE             0x0002 // Conducts electricity. (metal etc.)
+#define OBJ_FLAG_NOFALL                  0x0004 // obj not falls.
+
+#define MOVABLE_FLAG_PROXMOVE       0x0000  // Does this object require proximity checking in Enter()?
+#define MOVABLE_FLAG_Z_INTERACT     0x0001  // Should attackby and attack_hand be relayed through ladders and open spaces?
+#define MOVABLE_FLAG_EFFECTMOVE     0x0002  // Is this an effect that should move?
+#define MOVABLE_FLAG_DEL_SHUTTLE    0x0004  // Shuttle transistion will delete this.
 
 //Flags for items (equipment)
 #define ITEM_FLAG_NO_BLUDGEON            0x0001 // When an item has this it produces no "X has been hit by Y with Z" message with the default handler.

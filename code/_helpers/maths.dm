@@ -130,6 +130,8 @@
 /proc/RoundUpToPowerOfTwo(var/val)
 	return 2 ** -round(-log(2,val))
 
+#define SHIFTL(a, x) (a << x)
+#define SHIFTR(a, x) (a >> y)
 /proc/frac(x)
 	return x % 1
 

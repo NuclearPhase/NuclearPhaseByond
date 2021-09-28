@@ -55,6 +55,8 @@ var/list/all_virtual_listeners = list()
 /atom/movable
 	var/mob/observer/virtual/virtual_mob
 
+	var/waterproof = TRUE
+
 /atom/movable/Initialize()
 	. = ..()
 	if(shall_have_virtual_mob())

@@ -1,7 +1,7 @@
-"a" = (/turf/simulated/open/air,/area/sector_d)
+"a" = (/turf/simulated/open,/area/sector_d)
 "b" = (/turf/simulated/wall/r_wall,/area/sector_d)
 "c" = (/obj/machinery/door/airlock/masslift,/turf/simulated/floor/tiled,/area/sector_d)
-"d" = (/turf/simulated/open/air,/area/masslift/d)
+"d" = (/turf/simulated/open,/area/masslift/d)
 "e" = (/turf/unsimulated/outwards/stone,/area/space)
 "f" = (/turf/unsimulated/outwards/stone,/area/sector_d)
 

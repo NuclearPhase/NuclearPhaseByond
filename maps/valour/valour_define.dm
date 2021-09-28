@@ -4,7 +4,7 @@
 	full_name = "The Valour"
 	path = "valour"
 
-	lobby_icon = 'maps/example/example_lobby.dmi'
+	lobby_icon = 'maps/valour/utopia_lobby.dmi'
 
 	station_levels = list(1, 2, 3, 4, 5)
 	contact_levels = list(1, 2, 3, 4, 5)

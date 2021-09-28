@@ -110,10 +110,12 @@ What is the naming convention for planes or layers?
 	#define BLOOD_LAYER                 9
 	#define MOUSETRAP_LAYER             10
 	#define PLANT_LAYER                 11
+	#define AO_LAYER                    12
 
 #define HIDING_MOB_PLANE              -16 // for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
 	#define HIDING_MOB_LAYER 0
+	#define SHALLOW_FLUID_LAYER 1
 
 #define OBJ_PLANE                     -15 // For objects which appear below humans.
 	#define BELOW_DOOR_LAYER        0.25
@@ -162,11 +164,13 @@ What is the naming convention for planes or layers?
 #define EFFECTS_BELOW_LIGHTING_PLANE   -4 // For special effects.
 
 	#define BELOW_PROJECTILE_LAYER  2
+	#define DEEP_FLUID_LAYER 2
 	#define FIRE_LAYER              3
 	#define PROJECTILE_LAYER        4
 	#define ABOVE_PROJECTILE_LAYER  5
 	#define SINGULARITY_LAYER       6
 	#define POINTER_LAYER           7
+	#define MIMICED_LIGHTING_LAYER  8	// Z-Mimic-managed lighting
 
 #define OBSERVER_PLANE                 -3 // For observers and ghosts
 
@@ -225,6 +229,8 @@ What is the naming convention for planes or layers?
 /atom/proc/reset_plane_and_layer()
 	plane = initial(plane)
 	layer = initial(layer)
+
+#define DEFAULT_APPEARANCE_FLAGS (PIXEL_SCALE)
 
 /*
   PLANE MASTERS

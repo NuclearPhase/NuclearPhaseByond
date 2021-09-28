@@ -1,7 +1,6 @@
 /datum/gear/cosmetic/
 	display_name = "handheld mirror"
 	sort_category = "Cosmetics"
-	path = /obj/item/weapon/mirror
 
 /datum/gear/cosmetic/lipstick
 	display_name = "lipstick selection"

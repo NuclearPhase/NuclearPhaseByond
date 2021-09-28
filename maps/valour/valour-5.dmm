@@ -52,7 +52,7 @@
 "aZ" = (/obj/effect/floor_decal/industrial/warning/dust,/turf/simulated/floor/tiled/dark,/area/sector_a)
 "ba" = (/obj/effect/floor_decal/industrial/warning{icon_state = "warning"; dir = 6},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/tiled/dark,/area/sector_a)
 "bb" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/turf/simulated/floor/tiled/dark,/area/sector_a/lift_maintenance)
-"bc" = (/turf/simulated/open/air,/area/masslift/a)
+"bc" = (/turf/simulated/open,/area/masslift/a)
 "bk" = (/obj/structure/sign/warning/secure_area,/turf/simulated/wall/r_wall,/area/sector_a)
 "bl" = (/obj/machinery/light/small/red{icon_state = "bulb1"; dir = 8},/turf/simulated/floor/tiled/dark,/area/sector_a/lift_maintenance)
 "bm" = (/obj/masslift/extender,/turf/simulated/floor/tiled/dark,/area/sector_a/lift_maintenance)
