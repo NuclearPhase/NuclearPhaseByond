@@ -132,3 +132,8 @@
 
 #define SHIFTL(a, x) (a << x)
 #define SHIFTR(a, x) (a >> y)
+/proc/frac(x)
+	return x % 1
+
+/proc/remove_frac(x)
+	return x - frac(x)

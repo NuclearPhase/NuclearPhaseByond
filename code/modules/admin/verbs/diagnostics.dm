@@ -137,5 +137,5 @@
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
 	for(var/t in jobban_keylist)
-		if(findtext(t, filter))
+		if(findtext_char(t, filter))
 			to_chat(usr, "[t]")

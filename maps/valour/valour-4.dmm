@@ -20,39 +20,39 @@
 "at" = (/obj/structure/railing{icon_state = "railing0"; dir = 4},/turf/simulated/open,/area/sector_b)
 "au" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "av" = (/obj/structure/railing{icon_state = "railing1"; dir = 8},/obj/structure/railing{icon_state = "corneroverlay"; dir = 8},/obj/structure/railing{icon_state = "railing1"},/obj/structure/railing{icon_state = "frontoverlay_l"},/obj/structure/railing{icon_state = "frontoverlay_r"; dir = 8},/turf/simulated/open,/area/sector_b)
-"aw" = (/obj/machinery/door/firedoor/multi_tile,/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/floor/tiled/white,/area/sector_b)
-"ax" = (/turf/simulated/floor/tiled/white,/area/sector_b)
+"aw" = (/obj/machinery/door/firedoor/multi_tile,/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"ax" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{d1 = 4; d2 = 0; icon_state = "0-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
 "ay" = (/turf/simulated/wall/r_wall,/area/sector_b/hydro)
 "az" = (/turf/simulated/floor/plating,/area/sector_b)
 "aA" = (/obj/machinery/door/airlock/hydroponics,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aB" = (/turf/simulated/floor/plating,/area/sector_b/hydro)
-"aC" = (/obj/machinery/door/firedoor,/obj/machinery/door/airlock/glass_medical,/turf/simulated/floor/tiled/white,/area/sector_b)
+"aC" = (/obj/structure/sink{dir = 1; icon_state = "sink"; pixel_y = 24},/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
 "aD" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aE" = (/obj/machinery/door/firedoor/multi_tile{icon_state = "door_open"; dir = 2},/obj/machinery/door/airlock/hydroponics,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aF" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/plating,/area/sector_b/hydro)
 "aG" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 8},/turf/simulated/floor/plating,/area/sector_b/hydro)
-"aH" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b)
-"aI" = (/turf/simulated/floor/tiled/freezer,/area/sector_b)
+"aH" = (/obj/structure/table/standard,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"aI" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical)
 "aJ" = (/obj/structure/railing,/turf/simulated/open,/area/catacombs)
 "aK" = (/obj/structure/sign/hydro,/turf/simulated/wall/r_wall,/area/sector_b/hydro)
 "aL" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/turf/simulated/floor,/area/sector_b/hydro)
 "aM" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/turf/simulated/floor,/area/sector_b/hydro)
 "aN" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/turf/simulated/floor,/area/sector_b/hydro)
-"aO" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b)
-"aP" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 1},/turf/simulated/floor/tiled/freezer,/area/sector_b)
-"aQ" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b)
-"aR" = (/obj/structure/table/marble,/turf/simulated/floor/tiled/white,/area/sector_b)
+"aO" = (/obj/machinery/light/small{icon_state = "bulb1"; dir = 1},/obj/structure/curtain/black,/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"aP" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"aQ" = (/obj/structure/toilet{icon_state = "toilet00"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"aR" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
 "aS" = (/obj/structure/catwalk,/turf/simulated/open,/area/catacombs)
-"aT" = (/obj/machinery/optable,/turf/simulated/floor/tiled/white,/area/sector_b)
-"aU" = (/obj/machinery/door/firedoor,/obj/machinery/door/airlock/medical,/turf/simulated/floor/tiled/white,/area/sector_b)
-"aV" = (/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b)
-"aW" = (/obj/machinery/door/firedoor/multi_tile{icon_state = "door_open"; dir = 1},/obj/machinery/door/airlock/multi_tile/glass{icon_state = "door_closed"; dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b)
-"aX" = (/obj/machinery/light/spot,/turf/simulated/floor/tiled/freezer,/area/sector_b)
-"aY" = (/obj/machinery/door/firedoor/multi_tile,/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/floor/tiled/freezer,/area/sector_b)
+"aT" = (/turf/simulated/wall/r_wall,/area/sector_b/medical/toilet)
+"aU" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"aV" = (/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"aW" = (/obj/structure/cable{icon_state = "2-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"aX" = (/turf/simulated/wall/r_wall,/area/sector_b/medical)
+"aY" = (/obj/structure/iv_drip,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
 "aZ" = (/obj/structure/railing{icon_state = "railing1"; dir = 1},/obj/structure/railing{icon_state = "railing1"; dir = 8},/obj/structure/railing{icon_state = "frontoverlay_r"; dir = 1},/obj/structure/railing{icon_state = "frontoverlay_l"; dir = 8},/obj/structure/railing{icon_state = "corneroverlay"; dir = 1},/turf/simulated/open,/area/sector_b)
 "ba" = (/obj/structure/catwalk,/obj/structure/cable{icon_state = "2-4"},/turf/simulated/floor/plating,/area/sector_b)
-"bb" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/freezer,/area/sector_b)
-"bc" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/turf/simulated/floor/tiled/freezer,/area/sector_b)
+"bb" = (/obj/structure/table/standard,/obj/machinery/microscope,/obj/machinery/light/spot{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"bc" = (/obj/structure/bed/chair/office/dark{icon_state = "officechair_dark_preview"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
 "bd" = (/obj/machinery/door/airlock/masslift,/turf/simulated/floor/tiled/dark,/area/sector_c/lift_zone)
 "be" = (/obj/machinery/controller/lift_button{linked_id = "control@lift_controller@1"; pixel_y = 24},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "bf" = (/obj/structure/railing{tag = "icon-railing0 (NORTH)"; icon_state = "railing0"; dir = 1},/turf/simulated/open,/area/catacombs)
@@ -66,7 +66,7 @@
 "bn" = (/obj/structure/cable{icon_state = "2-4"},/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{icon_state = "0-2"},/turf/simulated/floor/plating,/area/sector_b/hydro)
 "bo" = (/obj/structure/cable{icon_state = "4-8"},/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor/plating,/area/sector_b/hydro)
 "bp" = (/turf/unsimulated/outwards/stone,/area/catacombs)
-"bq" = (/obj/structure/table/marble,/turf/simulated/wall/r_wall,/area/sector_b)
+"bq" = (/turf/simulated/wall/r_wall,/area/sector_b/medical/pathology)
 "br" = (/turf/simulated/wall/r_wall,/area/catacombs)
 "bs" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/wall/r_wall,/area/sector_b)
 "bt" = (/obj/structure/sign/warning/caution,/turf/simulated/wall/r_wall,/area/sector_b)
@@ -84,7 +84,7 @@
 "bF" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 10},/turf/simulated/floor/plating,/area/masslift)
 "bG" = (/obj/effect/floor_decal/industrial/warning/dust,/turf/simulated/floor/plating,/area/masslift)
 "bH" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 6},/turf/simulated/floor/plating,/area/masslift)
-"bI" = (/obj/effect/landmark/start{name = "JoinLate"},/turf/simulated/floor/plating,/area/masslift)
+"bI" = (/obj/structure/bed/padded,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
 "bJ" = (/obj/effect/landmark/start,/turf/simulated/floor/wood,/area/sector_b)
 "bK" = (/obj/structure/sign/warning/secure_area,/turf/simulated/wall/r_wall,/area/sector_b)
 "bL" = (/obj/structure/sign/warning/fall,/turf/simulated/wall/r_wall,/area/sector_b)
@@ -99,10 +99,10 @@
 "bU" = (/turf/simulated/floor/wood{icon_state = "wood_broken3"},/area/sector_b)
 "bV" = (/turf/simulated/floor/wood{icon_state = "wood_broken0"},/area/sector_b)
 "bW" = (/obj/structure/railing{icon_state = "railing0"; dir = 8},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 9},/turf/simulated/floor/plating,/area/masslift)
-"bX" = (/obj/effect/landmark/start,/turf/simulated/floor/tiled/white,/area/sector_b)
+"bX" = (/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
 "bY" = (/obj/structure/railing{icon_state = "railing0"; dir = 4},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 5},/turf/simulated/floor/plating,/area/masslift)
-"bZ" = (/obj/structure/filingcabinet/filingcabinet,/turf/simulated/floor/tiled/white,/area/sector_b)
-"ca" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b)
+"bZ" = (/obj/structure/filingcabinet/filingcabinet,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"ca" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
 "cb" = (/obj/structure/railing{icon_state = "railing0"; dir = 1},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 9},/turf/simulated/floor/plating,/area/masslift)
 "cc" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 1},/obj/effect/floor_decal/industrial/warning/dust/corner{icon_state = "warningcorner_dust"; dir = 1},/turf/simulated/floor/plating,/area/masslift)
 "cd" = (/turf/simulated/floor/plating,/area/masslift)
@@ -110,12 +110,12 @@
 "cf" = (/obj/structure/railing{icon_state = "railing0"; dir = 1},/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 5},/turf/simulated/floor/plating,/area/masslift)
 "cg" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 8},/turf/simulated/floor/plating,/area/masslift)
 "ch" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 1},/turf/simulated/floor/plating,/area/masslift)
-"ci" = (/obj/machinery/door/airlock/glass_medical,/turf/simulated/floor/tiled/white,/area/sector_b)
-"cj" = (/obj/structure/bed/chair/office/light{icon_state = "officechair_white_preview"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b)
-"ck" = (/obj/structure/table/marble,/obj/machinery/door/window{icon_state = "left"; dir = 2},/turf/simulated/floor/tiled/white,/area/sector_b)
-"cl" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced/polarized,/turf/simulated/floor/tiled/white,/area/sector_b)
+"ci" = (/obj/structure/closet/crate/bin,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"cj" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"ck" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"cl" = (/obj/structure/table/marble,/obj/structure/monitor,/obj/machinery/light{dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
 "cm" = (/obj/effect/landmark/start,/turf/simulated/floor/tiled/dark,/area/sector_b)
-"cn" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor/tiled/white,/area/sector_b)
+"cn" = (/obj/machinery/light{icon_state = "tube1"; dir = 4},/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
 "co" = (/obj/structure/bed/chair/elevator{icon_state = "shuttle_chair_preview"; dir = 1},/obj/machinery/light,/turf/simulated/floor/plating,/area/masslift)
 "cp" = (/obj/structure/railing{icon_state = "corneroverlay"; dir = 1},/obj/structure/railing{icon_state = "railing1"; dir = 1},/obj/structure/railing{icon_state = "frontoverlay_l"; dir = 8},/obj/structure/railing{icon_state = "frontoverlay_r"; dir = 1},/obj/structure/railing{icon_state = "railing1"; dir = 8},/turf/simulated/open,/area/sector_b)
 "cq" = (/obj/effect/floor_decal/industrial/warning/dust{icon_state = "warning_dust"; dir = 4},/turf/simulated/floor/plating,/area/masslift)
@@ -181,6 +181,7 @@
 "dy" = (/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/dark,/area/sector_b)
 "dz" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 4},/turf/simulated/floor/plating,/area/sector_b/hydro)
 "dA" = (/obj/structure/catwalk,/obj/structure/cable{icon_state = "1-2"},/obj/structure/cable{icon_state = "2-4"},/turf/simulated/floor/plating,/area/sector_b)
+"dB" = (/obj/structure/table/marble,/obj/machinery/door/window,/obj/item/weapon/paper_bin,/obj/item/weapon/folder/white,/obj/item/weapon/folder/white,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
 "dC" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 1},/obj/structure/window/reinforced{icon_state = "rwindow"; dir = 8},/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor,/area/sector_b/hydro)
 "dD" = (/obj/structure/railing{icon_state = "mcorneroverlay"; dir = 1},/turf/unsimulated/outwards/stone,/area/catacombs)
 "dE" = (/obj/structure/cable{icon_state = "4-8"},/obj/machinery/door/airlock/hydroponics,/turf/simulated/floor/plating,/area/sector_b/hydro)
@@ -193,6 +194,127 @@
 "dL" = (/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/freezer,/area/sector_b/hydro_storage)
 "dM" = (/obj/structure/cable,/obj/machinery/power/apc/hyper{dir = 8; icon_state = "apc0"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor/tiled/freezer,/area/sector_b/hydro_storage)
 "dN" = (/obj/structure/railing{icon_state = "railing0"; dir = 4},/obj/machinery/power/food_compressor,/obj/structure/cable{icon_state = "0-8"},/turf/simulated/floor/plating,/area/sector_b/hydro)
+"dO" = (/obj/machinery/power/apc/hyper{dir = 8; icon_state = "apc0"; pixel_x = -32; pixel_y = 0},/obj/structure/cable{d1 = 4; d2 = 0; icon_state = "0-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"dP" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"dQ" = (/obj/effect/landmark/start{name = "JoinLate"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"dR" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"dS" = (/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"dT" = (/obj/structure/cable{icon_state = "2-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"dU" = (/obj/structure/bed/chair/office/light{icon_state = "officechair_white_preview"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"dV" = (/obj/structure/bed/chair/office/light{icon_state = "officechair_white_preview"; dir = 4},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"dW" = (/obj/structure/table/marble,/obj/machinery/door/window,/obj/item/weapon/pen,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"dX" = (/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"dY" = (/obj/structure/bed/chair{icon_state = "chair_preview"; dir = 8},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"dZ" = (/obj/structure/closet/crate/bin,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"ea" = (/obj/structure/table/marble,/obj/machinery/door/window{icon_state = "left"; dir = 2},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eb" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/obj/structure/window/reinforced/polarized,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"ec" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"ed" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"ee" = (/obj/structure/table/marble,/obj/item/weapon/FixOVein/suture,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/obj/item/weapon/reagent_containers/spray/sterilizine,/obj/item/weapon/reagent_containers/spray/sterilizine,/obj/item/weapon/reagent_containers/spray/sterilizine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"ef" = (/obj/structure/table/marble,/obj/item/weapon/retractor,/obj/item/weapon/scalpel,/obj/item/clothing/gloves/latex/nitrile,/obj/item/clothing/gloves/latex/nitrile,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"eg" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"eh" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{icon_state = "0-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"ei" = (/obj/structure/closet/crate/bin,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"ej" = (/obj/structure/table/marble,/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{d1 = 2; d2 = 0; icon_state = "0-2"},/obj/item/weapon/reagent_containers/ivbag/blood/AMinus,/obj/item/weapon/reagent_containers/ivbag/blood/APlus,/obj/item/weapon/reagent_containers/ivbag/blood/BMinus,/obj/item/weapon/reagent_containers/ivbag/blood/BPlus,/obj/item/weapon/reagent_containers/ivbag/blood/APlus,/obj/item/weapon/reagent_containers/ivbag/blood/BMinus,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"ek" = (/obj/structure/table/marble,/obj/item/weapon/circular_saw,/obj/item/weapon/cautery,/obj/item/weapon/bonesetter,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"el" = (/obj/structure/table/marble,/obj/item/weapon/FixOVein/suture,/obj/item/weapon/hemostat,/obj/item/weapon/bonegel,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"em" = (/obj/structure/table/marble,/obj/item/weapon/FixOVein/suture,/obj/item/weapon/hemostat,/obj/item/weapon/bonegel,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"en" = (/obj/effect/decal/cleanable/spiderling_remains,/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/sector_b/medical)
+"eo" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/reagent_containers/syringe/atropine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"ep" = (/obj/structure/table/marble,/obj/structure/monitor,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"eq" = (/obj/machinery/optable,/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"er" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/syringe/drugs,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"es" = (/obj/structure/table/marble,/obj/item/clothing/head/surgery,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"et" = (/obj/structure/table/marble,/obj/item/clothing/head/surgery,/obj/item/clothing/head/surgery,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"eu" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/syringe/drugs,/obj/item/weapon/reagent_containers/syringe/atropine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"ev" = (/obj/machinery/optable,/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"ew" = (/obj/structure/table/standard,/obj/structure/monitor,/obj/machinery/light{dir = 1},/obj/item/weapon/storage/pill_bottle/paracetamol,/obj/item/weapon/storage/box/freezer,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"ex" = (/obj/structure/table/marble,/obj/item/weapon/circular_saw,/obj/item/weapon/cautery,/obj/item/weapon/bonesetter,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"ey" = (/obj/item/weapon/archaeological_find/remains,/obj/effect/decal/cleanable/urine,/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/sector_b/medical)
+"ez" = (/obj/machinery/light/spot{icon_state = "tube1"; dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"eA" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"eB" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"eC" = (/obj/structure/table/marble,/obj/structure/window/reinforced/polarized{icon_state = "rwindow"; dir = 4},/obj/item/weapon/reagent_containers/pill/nitroglycerin,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eD" = (/obj/structure/table/standard,/obj/item/weapon/storage/fancy/vials,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"eE" = (/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"eF" = (/obj/structure/table/marble,/obj/machinery/light{icon_state = "tube1"; dir = 4},/obj/item/weapon/reagent_containers/glass/bottle/insulin,/obj/item/weapon/reagent_containers/syringe/adrenaline,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/obj/item/weapon/storage/pill_bottle/nitroglycerin,/obj/item/weapon/storage/pill_bottle/nitroglycerin,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"eG" = (/obj/structure/table/marble,/obj/item/weapon/scalpel,/obj/item/weapon/retractor,/obj/item/clothing/gloves/latex/nitrile,/obj/item/clothing/gloves/latex/nitrile,/obj/item/weapon/reagent_containers/syringe/atropine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"eH" = (/obj/structure/table/marble,/obj/machinery/light{dir = 1},/obj/structure/monitor,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"eI" = (/obj/machinery/light,/obj/structure/filingcabinet/filingcabinet,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"eJ" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/syringe/drugs,/obj/item/weapon/reagent_containers/syringe/drugs,/obj/item/weapon/storage/box/syringes,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"eK" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/glass/bottle/adenosine,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"eL" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/glass/bottle/dopamine,/obj/item/weapon/reagent_containers/glass/bottle/amiodarone,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/obj/item/weapon/reagent_containers/syringe/atropine,/obj/item/weapon/reagent_containers/syringe/atropine,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"eM" = (/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eN" = (/obj/structure/table/marble,/obj/structure/monitor,/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"eO" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"eP" = (/obj/structure/cable{icon_state = "2-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"eQ" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"eR" = (/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"eS" = (/obj/structure/cable{icon_state = "2-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"eT" = (/obj/structure/cable{icon_state = "2-4"},/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"eU" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eV" = (/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eW" = (/obj/structure/bed/chair/office/dark{icon_state = "officechair_dark_preview"; dir = 4},/obj/effect/landmark/start{name = "Chief Medical Officer"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"eX" = (/obj/machinery/power/apc/hyper{pixel_y = -32},/obj/structure/cable,/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"eY" = (/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"eZ" = (/obj/structure/cable{icon_state = "4-8"},/obj/structure/cable{icon_state = "2-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fa" = (/obj/structure/cable{icon_state = "4-8"},/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fb" = (/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fc" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/obj/item/weapon/storage/box/bloodpacks,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fd" = (/obj/structure/cable{d1 = 2; d2 = 0; icon_state = "0-2"},/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fe" = (/obj/structure/cable{icon_state = "1-2"},/obj/structure/cable{icon_state = "1-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"ff" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "4-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fg" = (/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fh" = (/obj/structure/cable{icon_state = "1-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fi" = (/obj/structure/cable{icon_state = "4-8"},/obj/structure/cable{icon_state = "1-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fj" = (/obj/structure/cable{icon_state = "1-2"},/obj/structure/cable{icon_state = "2-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fk" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fl" = (/obj/machinery/door/airlock/glass_medical,/obj/structure/cable{icon_state = "1-2"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fm" = (/obj/machinery/door/firedoor/multi_tile{icon_state = "door_open"; dir = 1},/obj/machinery/door/airlock/multi_tile/glass{icon_state = "door_closed"; dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fn" = (/obj/structure/cable{icon_state = "1-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fo" = (/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical/reanimation)
+"fp" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{icon_state = "0-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fq" = (/obj/machinery/power/apc/hyper{dir = 1; icon_state = "apc0"; pixel_y = 32},/obj/structure/cable{d1 = 4; d2 = 0; icon_state = "0-4"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fr" = (/obj/machinery/light{dir = 1},/obj/structure/cable{icon_state = "4-8"},/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fs" = (/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"ft" = (/obj/structure/cable{icon_state = "4-8"},/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/dark,/area/sector_b)
+"fu" = (/obj/structure/table/standard,/obj/item/weapon/paper_bin,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"fv" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"fw" = (/obj/machinery/door/airlock/glass_medical,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fx" = (/obj/structure/bedsheetbin,/obj/machinery/light{dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fy" = (/obj/structure/table/standard,/obj/item/weapon/scalpel,/obj/item/weapon/scalpel,/obj/item/protein_package/p10,/obj/item/weapon/storage/box/gloves,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fz" = (/obj/structure/curtain/medical,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fA" = (/obj/structure/iv_drip,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fB" = (/obj/structure/bed/chair/wheelchair,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fC" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/glass/bottle/insulin,/obj/item/weapon/reagent_containers/glass/bottle/insulin,/obj/item/weapon/reagent_containers/glass/bottle/insulin,/obj/item/weapon/reagent_containers/glass/bottle/glucose,/obj/item/weapon/reagent_containers/glass/bottle/glucose,/obj/item/weapon/reagent_containers/glass/bottle/glucose,/obj/item/weapon/reagent_containers/glass/bottle/glucose,/obj/item/weapon/storage/pill_bottle/amicil,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fD" = (/obj/structure/bed/padded,/obj/item/weapon/bedsheet,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fE" = (/obj/item/roller,/obj/item/roller,/obj/structure/table/rack,/obj/machinery/light,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fF" = (/obj/structure/table/marble,/obj/item/stack/medical/bruise_pack,/obj/item/stack/medical/bruise_pack,/obj/item/stack/medical/splint,/obj/item/stack/medical/ointment,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fG" = (/obj/structure/table/marble,/obj/structure/monitor,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fH" = (/obj/structure/table/standard,/obj/item/weapon/storage/box/syringes,/obj/machinery/light,/obj/item/protein_package/p10,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fI" = (/obj/structure/iv_drip,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fJ" = (/obj/structure/iv_drip,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fK" = (/obj/structure/alv,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"fL" = (/obj/structure/lattice,/turf/simulated/wall/r_wall,/area/sector_b)
+"fM" = (/obj/machinery/door/airlock/multi_tile/glass,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fN" = (/obj/effect/landmark/start{name = "Medical Doctor"},/obj/structure/cable{icon_state = "1-8"},/turf/simulated/floor/tiled/white,/area/sector_b/medical/reception)
+"fO" = (/obj/machinery/door/window,/obj/structure/table/marble,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fP" = (/obj/structure/table/standard,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fQ" = (/obj/structure/window/basic,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fR" = (/obj/machinery/door/window{icon_state = "left"; dir = 2},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fS" = (/obj/effect/wingrille_spawn,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fT" = (/obj/structure/sink{dir = 8; icon_state = "sink"; pixel_x = -12; pixel_y = 0},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery)
+"fU" = (/obj/structure/sink{dir = 4; icon_state = "sink"; pixel_x = 12; pixel_y = 0},/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fV" = (/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fW" = (/obj/machinery/light{dir = 1},/obj/structure/cable{icon_state = "4-8"},/obj/machinery/space_heater,/turf/simulated/floor/tiled/white,/area/sector_b/medical/surgery2)
+"fX" = (/obj/machinery/light{icon_state = "tube1"; dir = 1},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"fY" = (/obj/random/trash,/turf/simulated/floor/tiled/white,/area/sector_b/medical/pathology)
+"fZ" = (/obj/random/trash,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"ga" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/random/trash,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"gb" = (/obj/structure/closet/secure_closet/CMO,/turf/simulated/floor/tiled/white,/area/sector_b/medical)
+"gc" = (/obj/structure/table/marble,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/obj/item/weapon/reagent_containers/glass/bottle/lidocaine,/obj/item/weapon/reagent_containers/glass/bottle/amiodarone,/obj/item/weapon/reagent_containers/syringe/noradrenaline,/obj/item/weapon/reagent_containers/glass/bottle/ceftriaxone,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/floor/tiled/white,/area/sector_b/medical/storage)
+"gd" = (/obj/structure/janitorialcart,/turf/simulated/floor/tiled/white,/area/sector_b/medical/toilet)
+"ge" = (/obj/structure/closet/walllocker/emerglocker{pixel_y = 32},/turf/simulated/floor/tiled/white,/area/sector_b/medical)
 
 (1,1,1) = {"
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
@@ -366,32 +488,32 @@ bpbpbpbpaaacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacac
 bpbpbpbpbpacbacIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIbkcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIdrdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdtaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpacduacacacacacacacacacacacacacacacacduacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaiaeaeaeaeaeaeaiaeaeaeaeaeaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpacduacaaakakakakakakakakakakakakalacduacamakakanakakakakakakakakakakakakakakanakakakakakakakakakakakakakakakakakakakakakadagaeaeaeaeaeaeaeaeaeadadadadadadadadadadaeaeaeaeaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvbvbvdGbvbvbvbvbvbvbvbvafafafafafafaoacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaeaeaeaeaeadaqaeadadarasararararasaradadaqaeadaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvdHdIdJdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadararasarararararararbMararasararadauaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeadararararbNararbJararararararararadaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacavajajayayayayayayayayayayayayayayayayafafafafafadadadadadadadadadadadadadadadadadadawaxadawaxadararbTararararararbUararararbVaradaeaedvaeaeadaJaJaJaJaJaJaJaJaJaJaJaJaJaJblbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaAaBaBaBaAaBaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxaCaxaxaxaxaxaxaxaxaxaxaxadaxaxaxaxaxadararararadadadadadadadadararararadaeaedoaeaeadaSaSaSaSaSaSaSaSaSaSaSaSaSaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvdMdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaDaDaDaDaDaDaDaFayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxaxaxaxaxaHadaxaxaxaxaxadadadadadadaIaIaIaIaIaIadadadadadadaeaecJcTcTcUcVcVcVcVcVcVcVcVcVcVcVcVcXaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbvbvbvbvbvbvbvbvbvbvbvbvafafafafafafaoacduacaZakakaKaLaMaNayaGaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaxaxaxaOadaxaxaxaxaxaxaxaxaxaxaxadaxaxaxaxaOadaIaIaIaIaPaIaIaIaIaIaIaPaIaIaIaIadaeaedpaeaeadaSaSaSaSaSaSaSaSaSaSaSaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpaaaaafaaaaaaaaaaaaatacduacapaaaaaybnbodNaDaDaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadadadadadadaxaxaxbXaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadauaedqaeaeadbfbfbfbfbfbfbfbfbfbfbgaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcHaDaDaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadbZaxaxcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbrbrbrbrbrbrbrbrbrbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaxaxadaxaxaxaxaxaxadaxaxaxcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbpbpbpbpbpbpbpbpbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaBaBaBaBaBaBaBaBayafafafafafadadadadadadadaQaxaxaxaxciaxaxaxcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbpadadadadadadadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaRaRaRbqbqadaxaxaxaxaxadaxaxcjcaaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadbpadbBbBbBbBbOadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBdzbmbmaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaRaxaxaxaxadaxaxaxaxaxadadadckclaxbXaxaxaxaOadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaeaeaeaeaeadadadbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacbiajajaKdCaMaNayaGaBaDaDaDaDaDaDaDaDayaaaaaaaaaaadaRaxaTaxaxaUaxaxaxaxaxaxaxadaxaxaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadauaeaeaeaebKbPbQbBbBbRbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacdAcIcIcIcIdEdFaBaBaAaBaBaDaDaDaDaDaDaDaFayaaaaaaaaaaadaRaxaxaxaxadaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxaxadaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIaIadaecmcmcmaebsbBbSbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaBaBaBaBaBaBaBaBayaaaaaaaaaaadaxaxaVaxaxadaxaxaxaxaxaxaxaWaxaxaVaxaxaxaxcnadaIaIaXaIaIadadaYaIadadaIaIaXaIaIbtaeaeaeaeaebLbBbQbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduaccpakakayayayayayayayayayayayayayayayayafafafafafadadadadadadadadadadadadadadadawaxadawaxadadadadadadadaIaIadaIaIaIaIadaIaIadadadadbdbdbdbdbdadadadadadadadadadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeaeaeaeaeaeaeadaIaIadbbaIaIbcadaIaIadcwbWbCbCbCbCbCbCbCbYcwadbpbpbpbpbpbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaeaeaeaeaeaeaeaeadaIaIadaIaIaIaIadaIaIadcbcccdcdcdcdcdcdcdcecfadcOcOcOcOcOcOcOcGaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaeaeaeaeaeaeaeaeaeaeaeadadadadadaYaIadadadbLadcgcdcdchchcochchcdcdcqadcPcScPcPdecPcOaSaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpaaaaaaaaafaaaaaaaaaaaaatacduaccKajajcLajajajajajajajajajajajajajajcLajajajajajajajajajajajajajajajajajajadagaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaedwbeaebdcgcdcscxcxcxcxcxctcdcqadcPcPcPcPdfdgdhcVcVdiaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpaaaaaaafaaaaaaaaaaaaatacduacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaedvaeaebdcgcdcscxcwcwcwcxctcdcqadcPdjdkdkdldmcOaSaSaSaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpaaafaaaaaaaaaaaaatacdxcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIdrdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdyaeaebdcgcdcucxcwcwcwcxcvcdcqadcWdncPcPcPcPcOcMcMcMcMdDbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvbvbvdGbvbvbvbvbvbvbvbvafafafafafafaoacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaadadadadadadadadadadadadaaaaaaadadaeaeaeaeaeadaqaeadadarasararararasaradadaqaeadaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvdHdIdJdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaadaIaIfXaIaIaIaIfXaIaIadaaaaaaaaadaeaeaeaeaeadararasarararararararbMararasararadauaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaadaIaIaIaIaIaIaIaIaIaIadaaaaaaaaadaeaeaeaeaeadararararbNararbJararararararararadaeaedvaeaeadbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacavajajayayayayayayayayayayayayayayayayadadadadadadfLaIaIaXaXaXaXaXaXfMaIadadadadadadawaIadawaIadararbTararararararbUararararbVaradaeaedvaeaeadaJaJaJaJaJaJaJaJaJaJaJaJaJaJblbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvdLdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaAaBaBaBaAaBaBaBaBaBaBaBaBaBaBaygbfXaIaIfXaIfwaIaIaXaHaRfvaxaUaVaWaXfxfAfAewaXaIaIaIaIaIadararararadadadadadadadadararararadaeaedoaeaeadaSaSaSaSaSaSaSaSaSaSaSaSaSaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvdMdKdKdKdKdKdKdKdKdKbvaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaDaDaDaDaDaDaDaFayaIaIaIaIaIeWfOaIaPaXbbbcaRcnbqaIbXfwaIaIaIfyaXaIaIaIaIaIadadadadadadadadadadadadadadadadadadaeaecJcTcTcUcVcVcVcVcVcVcVcVcVcVcVcVcXaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbvbvbvbvbvbvbvbvbvbvbvbvafafafafafafaoacduacaZakakaKaLaMaNayaGaBaDaDaDaDaDaDaDaDayaIaIaIfPfPfPaXaIaIfSaHaRfYcibqaIbXaXfEfBfBfHaXcjaIaIaIaPaXaYbIclaYbIeHaYbIeHaXaCezaCdPaOaQadaeaedpaeaeadaSaSaSaSaSaSaSaSaSaSaSaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpaaaaafaaaaaaaaaaaaatacduacapaaaaaybnbodNaDaDaBaBaBaBaBaBaBaBaBayaXaXaXaXaXaXaXaIaIfSbbbcaRaRdBaIbXaXaXaXaXaXaXaIaIaIaIdYaXdOdSdSdSdSdSdSdTdRaXgddPdPdPaTaTadauaedqaeaeadbfbfbfbfbfbfbfbfbfbfbgaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcHaDaDaBaDaDaDaDaDaDaDaDayaIfXaIaIfXaIfwaIaPaXaHaRaRdVdWaIbXaXbZedehckaIaIaIaIaIdYaXdRdRdRdRdRfoaXeAaXaXaXaXdPdPaOaQadaeaeaeaeaeadbrbrbrbrbrbrbrbrbrbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaBaBaBaBaBaBaBaBayfQfQfQfQfQfRaXaIaIaXeDeDeIfubqaIbXaXcacaeMckaIaIaIaIaIdYaXaYbIeNaYbIeNaXbXaIeOePeQeReSaTaTadaeaeaeaeaeadbpbpbpbpbpbpbpbpbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaBaBaBaBaBaBaBaBayfZaIaIaIaIaIaXaIaIaXbqbqbqbqbqaIeTeUeVeVfNckaIaIdQaIaIaPaXaXaXaXaXaXaXaXbXaIaIbXaXdPeXaOaQadaeaeaeaeaeadbpadadadadadadadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBcRaDaDaBaDaDaDaDaDaDaDaDaygaaIaIaIaIaPaXaIaPaXfDaIeOfDaXaIbXaXcaeYdUeCaIaIaIaIaIfVaXfVaIaIaIgeaIaIbXaIaIbXaXaXaXaXaXadaeaeaeaeaeadbpadbBbBbBbBbOadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaaycFaBdzbmbmaBaBaBaBaBaBaBaBaBayaIaIaIaIaIaIaXaIaIaXcjaIaIaIaXaIbXaXaXaXeaebaIaIePaVaVaVeQaVeZaVaVaVaVaVfaaVeZfbaXejfFeefCadaeaeaeaeaeadadadbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacbiajajaKdCaMaNayaGaBaDaDaDaDaDaDaDaDayaIaIaIaIaIaIaXaIaIaXfDaIaIaIfzaIbXaIfdaXaIaIaIaIbXaIaIaIaXaIbXdXaIaIdXaIaIdXfeaVfffgeEeEeFadauaeaeaeaebKbPbQbBbBbRbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacdAcIcIcIcIdEdFaBaBaAaBaBaDaDaDaDaDaDaDaFaycjaIaIaIaIaPaXaIaPaXcjaIaIaIfzaIfhaVfiaVaVaVaVaVfjaIaIaPaXaXfkaXaXaXaXaXaXaXflaXaXeEfKfKeKadaecmcmcmaebsbBbSbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacacacacaEaBaBaBaEaBaBaBaBaBaBaBaBaBaBayaIaIaIaIaIaIaXaIaIaXfDaIdXaIaXaIdXaIaIfmaIaIdXaIbXaIaIaIaXdZfnfrfpeGaXeffqfWfseiaXfceJgceLbtaeaeaeaeaebLbBbQbBbBbBbBbBadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduaccpakakayayayayayayayayayayayayayayayayadadadadadadadadadadadadadadadadadadadadawaIadawbXadadadadfTecececexaXekegegegfUaXaXadadadadbdbdbdbdbdadadadadadadadadadbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaedvaeaeaeadecececfIelaXemfJegegegaXenadcwbWbCbCbCbCbCbCbCbYcwadbpbpbpbpbpbpbrbhaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaeaeaeaedvaeaeaeadeoepeqeresaXeteuevfGeBaXeyadcbcccdcdcdcdcdcdcdcecfadcOcOcOcOcOcOcOcGaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpaaaaaaaaaaaaafaaaaaaaaaaaaatacduacapaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadadaeaeaeaedvaeaeaeadadadadadadadadadadadadadbLadcgcdcdchchcochchcdcdcqadcPcScPcPdecPcOaSaSddaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpaaaaaaaaafaaaaaaaaaaaaatacduaccKajajcLajajajajajajajajajajajajajajcLajajajajajajajajajajajajajajajajajajadagaeaeaeaedvaeaeaeaeaeaeaeaeaeaeaeaeaeaedwbeaebdcgcdcscxcxcxcxcxctcdcqadcPcPcPcPdfdgdhcVcVdiaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpaaaaaaafaaaaaaaaaaaaatacduacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaedvaeaeaeaeaeaeaeaeaeaeaeaeaeaedvaeaebdcgcdcscxcwcwcwcxctcdcqadcPdjdkdkdldmcOaSaSaSaSbubpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpaaafaaaaaaaaaaaaatacdxcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIcIdrdsdsdsdsdsftdsdsdsdsdsdsdsdsdsdsdsdsdsdsdyaeaebdcgcdcucxcwcwcwcxcvcdcqadcWdncPcPcPcPcOcMcMcMcMdDbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpaaafaaaaaaaaaaaaatcNacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacacbjaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaeaebdcgcdcscxcwcwcwcxctcdcqadcPcYcPcPcYcPcObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaacQakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakakbpakakakadagaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaeaeaeaeaiaeaebdcgcdcscxcxcxcxcxctcdcqadcOcOcZcZcOcOcObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
-bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgbIcdbAbCcycrbDcdcdcqaddadbdadadbdacObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
+bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpaaaaaaaaaaaaaabpbpaaaaadadadadadadadadadadadadadadadadadadadadadadadbtadcgcdcdbAbCcycrbDcdcdcqaddadbdadadbdacObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabpbpbpbpaaaaaaaaaabpbpbpaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadczcAcdbFbGbGbGbHcdcBcCaddadadadadadacObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpaaaaaaaaaaaaaaaabpbpbpbpbpaabpbpaaaaaaaaaaaabpbpaabpbpbpbpbpbpbpaaaaaabpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadcwcDbGbGbGbGbGbGbGcEcwaddadcdadadcdacObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp
 bpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpadadadadadadadadadadadadadcOcOcOcOcOcOcObpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbpbp

@@ -240,7 +240,7 @@
 	..()
 	atom_flags |= ATOM_FLAG_NO_REACT
 	syringes = new
-	known_reagents = list(/datum/reagent/inaprovaline="Inaprovaline",/datum/reagent/dylovene="Dylovene")
+	known_reagents = list(/datum/reagent/inaprovaline="Inaprovaline")
 	processed_reagents = new
 	create_reagents(max_volume)
 	synth = new (list(src),0)

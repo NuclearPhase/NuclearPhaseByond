@@ -76,7 +76,7 @@
 /obj/effect/ruin_loader
 	name = "random ruin"
 	icon = 'icons/obj/weapons.dmi'
-	icon_state = "syndballoon"
+	icon_state = "redballoon"
 	invisibility = 0
 
 /obj/effect/ruin_loader/proc/Load(list/potentialRuins, datum/map_template/template)

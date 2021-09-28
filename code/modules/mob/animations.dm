@@ -15,7 +15,7 @@ below 100 is not dizzy
 	if(!istype(src, /mob/living/carbon/human)) // for the moment, only humans get dizzy
 		return
 
-	dizziness = min(1000, dizziness + amount)	// store what will be new value
+	dizziness = min(1000, max(dizziness, amount))	// store what will be new value
 													// clamped to max 1000
 	if(dizziness > 100 && !is_dizzy)
 		spawn(0)
@@ -54,7 +54,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 		return
 	if(!jittery_damage())
 		return //Robotic hearts don't get jittery.
-	jitteriness = min(1000, jitteriness + amount)	// store what will be new value
+	jitteriness = min(1000, max(jitteriness, amount))	// store what will be new value
 													// clamped to max 1000
 	if(jitteriness > 100 && !is_jittery)
 		spawn(0)
@@ -160,8 +160,6 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 /mob/do_attack_animation(atom/A)
 	..()
-	return//Remove this to make item attack animations appear again.
-	/*
 	is_floating = 0 // If we were without gravity, the bouncing animation got stopped, so we make sure we restart the bouncing after the next movement.
 
 	// What icon do we use for the attack?
@@ -199,7 +197,6 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 	// And animate the attack!
 	animate(I, alpha = 175, pixel_x = 0, pixel_y = 0, pixel_z = 0, time = 3)
-	*/
 
 /mob/proc/spin(spintime, speed)
 	spawn()

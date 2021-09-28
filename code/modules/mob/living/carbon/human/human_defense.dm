@@ -265,7 +265,7 @@ meteor_act
 
 	//Finally if we pass all that, we cut the limb off. This should reduce the number of one hit sword kills.
 	else if(I.sharp && I.edge)
-		if(prob(I.sharpness * strToDamageModifier(user.str)))
+		if(prob(I.sharpness * strToDamageModifier(user.strength)))
 			affecting.droplimb(0, DROPLIMB_EDGE)
 
 	var/obj/item/organ/external/head/O = locate(/obj/item/organ/external/head) in src.organs
@@ -289,8 +289,8 @@ meteor_act
 					apply_effect(6, WEAKEN, blocked)
 		//Apply blood
 		attack_bloody(I, user, effective_force, hit_zone)
-	//if(user.skillcheck(user.melee_skill,0,0) == CRIT_SUCCESS)
-	//	resolve_critical_hit()
+	if(user.skillcheck(SKILL_WEAPONS, SKILL_PROFESSIONAL) && prob(10))
+		resolve_critical_hit()
 
 	return 1
 
@@ -655,24 +655,17 @@ meteor_act
 			attackby(I, src)
 
 /mob/living/proc/resolve_critical_hit()
-	var/result = rand(1,3)
-
-	switch(result)
+	switch(rand(1, 3))
 		if(1)
-			visible_message("<span class='danger'><big>CRITICAL HIT! IT MUST BE PAINFUL</big></span>")
-			apply_damage(rand(5,10), BRUTE)
-			return
+			apply_damage(rand(5, 10), BRUTE)
 
 		if(2)
-			visible_message("<span class='danger'><big>CRITICAL HIT! [src] is stunned!</big></span>")
-			Weaken(1)
-			Stun(3)
-			return
+			apply_damage(rand(8, 15), BRUTE)
+			Stun(1)
 
 		if(3)
-			visible_message("<span class='danger'><big>CRITICAL HIT! [src] is knocked unconcious by the blow!</big></span>")
-			apply_effect(20, PARALYZE)
-			return
+			apply_damage(rand(13, 20), BRUTE)
+			Stun(1)
 
 /*
 //Add screaming here.

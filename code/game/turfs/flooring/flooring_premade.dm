@@ -162,6 +162,7 @@
 	name = "white floor"
 	icon_state = "white"
 	initial_flooring = /decl/flooring/tiling/white
+	variants = list("white", "white1", "white2", "white3")
 
 /turf/simulated/floor/tiled/freezer
 	name = "tiles"

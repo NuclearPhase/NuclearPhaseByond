@@ -179,10 +179,10 @@
 		if(blood_species != species.name)
 			return 1
 
-	var/donor_antigen = copytext(blood_type, 1, length(blood_type))
-	var/receiver_antigen = copytext(dna.b_type, 1, length(dna.b_type))
-	var/donor_rh = (findtext(blood_type, "+") > 0)
-	var/receiver_rh = (findtext(dna.b_type, "+") > 0)
+	var/donor_antigen = copytext_char(blood_type, 1, length(blood_type))
+	var/receiver_antigen = copytext_char(dna.b_type, 1, length(dna.b_type))
+	var/donor_rh = (findtext_char(blood_type, "+") > 0)
+	var/receiver_rh = (findtext_char(dna.b_type, "+") > 0)
 
 	if(donor_rh && !receiver_rh) return 1
 	switch(receiver_antigen)
@@ -262,51 +262,34 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	B.set_invisibility(0)
 	return B
 
-//Percentage of maximum blood volume.
+// 0-1
 /mob/living/carbon/human/proc/get_blood_volume()
-	return round((vessel.get_reagent_amount(/datum/reagent/blood)/species.blood_volume)*100)
+	. = vessel.get_reagent_amount(/datum/reagent/blood) / species.blood_volume
 
-//Percentage of maximum blood volume, affected by the condition of circulation organs
-/mob/living/carbon/human/proc/get_blood_circulation()
+/mob/living/carbon/human/proc/get_blood_pressure()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	var/blood_volume = get_blood_volume()
-	if(!heart || (heart.pulse == PULSE_NONE && !(status_flags & FAKEDEATH) && heart.robotic < ORGAN_ROBOT))
-		blood_volume *= 0.25
-	else
-		var/pulse_mod = 1
-		switch(heart.pulse)
-			if(PULSE_SLOW)
-				pulse_mod *= 0.9
-			if(PULSE_FAST)
-				pulse_mod *= 1.1
-			if(PULSE_2FAST, PULSE_THREADY)
-				pulse_mod *= 1.25
-		blood_volume *= max(0.3, (1-(heart.damage / heart.max_damage))) * pulse_mod
-	return min(blood_volume, 100)
+	. = Floor(heart?.pressure)
 
-//Whether the species needs blood to carry oxygen. Used in get_blood_oxygenation and may be expanded based on blood rather than species in the future.
-/mob/living/carbon/human/proc/blood_carries_oxygen()
-	return species.blood_oxy
+/mob/living/carbon/human/proc/get_blood_saturation()
+	if(stat == DEAD)
+		return 0
 
-//Percentage of maximum blood volume, affected by the condition of circulation organs, affected by the oxygen loss. What ultimately matters for brain
-/mob/living/carbon/human/proc/get_blood_oxygenation()
-	var/blood_volume = get_blood_circulation()
+	. = Clamp(1 - getOxyLoss() / 100 + rand(-0.3, 0.3), 0, 0.99)
 
-	if(is_asystole()) // Heart is missing or isn't beating and we're not breathing (hardcrit)
-		return min(blood_volume, BLOOD_VOLUME_SURVIVE)
+// 0-1
+/mob/living/carbon/human/proc/get_blood_perfusion()
+	if(stat == DEAD)
+		return 0
 
-	if(!need_breathe())
-		return blood_volume
-
-	if(!blood_carries_oxygen())
-		blood_volume = 100
-
-	var/blood_volume_mod = max(0, 1 - getOxyLoss()/(maxHealth/2))
-	var/oxygenated_mult = 0
-	if(chem_effects[CE_OXYGENATED] == 1) // Dexalin.
-		oxygenated_mult = 0.5
-	else if(chem_effects[CE_OXYGENATED] >= 2) // Dexplus.
-		oxygenated_mult = 0.8
-	blood_volume_mod = blood_volume_mod + oxygenated_mult - (blood_volume_mod * oxygenated_mult)
-	blood_volume = blood_volume * blood_volume_mod
-	return min(blood_volume, 100)
+	var/bp = get_blood_pressure()
+	var/bp_eff = bp / BLOOD_PRESSURE_NORMAL
+	switch(bp)
+		if(160 to 200)
+			bp_eff *= 0.5
+		if(200 to 230)
+			bp_eff *= 0.4
+		if(230 to 270)
+			bp_eff *= 0.3
+		if(270 to INFINITY)
+			return 0
+	. = CLAMP01(bp_eff * get_blood_saturation())

@@ -5,9 +5,9 @@
 	organ_tag = BP_LUNGS
 	parent_organ = BP_CHEST
 	w_class = ITEM_SIZE_NORMAL
-	min_bruised_damage = 25
-	min_broken_damage = 45
-	max_damage = 70
+	min_bruised_damage = 45
+	min_broken_damage = 75
+	max_damage = 100
 	relative_size = 60
 
 	var/active_breathing = 1
@@ -69,9 +69,22 @@
 	if(!owner)
 		return
 
-	if (germ_level > INFECTION_LEVEL_ONE && active_breathing)
+	if(germ_level > INFECTION_LEVEL_ONE && active_breathing)
 		if(prob(5))
 			owner.emote("cough")		//respitory tract infection
+	if(germ_level > INFECTION_LEVEL_TWO && active_breathing)
+		if(prob(5))
+			owner.emote("cough")
+	if(germ_level > INFECTION_LEVEL_THREE && active_breathing)
+		if(prob(5))
+			owner.emote("cough")
+		if(prob(2))
+			owner.visible_message(
+				"<B>\The [owner]</B> coughs up blood!",
+				SPAN_WARNING("You cough up blood!"),
+				"You hear someone coughing!",
+			)
+		take_damage(0.1)
 
 	if(is_bruised() && !owner.is_asystole())
 		if(prob(2))
@@ -119,7 +132,7 @@
 	if(breath_pressure < species.hazard_low_pressure || breath_pressure > species.hazard_high_pressure)
 		var/datum/gas_mixture/environment = loc.return_air_for_internal_lifeform()
 		var/env_pressure = environment.return_pressure()
-		var/lung_rupture_prob =  robotic >= ORGAN_ROBOT ? prob(2.5) : prob(5) //Robotic lungs are less likely to rupture.
+		var/lung_rupture_prob = prob(5)
 		if(env_pressure < species.hazard_low_pressure || env_pressure > species.hazard_high_pressure)
 			if(!is_bruised() && lung_rupture_prob) //only rupture if NOT already ruptured
 				rupture()
@@ -131,9 +144,6 @@
 	var/safe_pressure_min = min_breath_pressure // Minimum safe partial pressure of breathable gas in kPa
 	// Lung damage increases the minimum safe pressure.
 	safe_pressure_min *= 1 + rand(1,4) * damage/max_damage
-
-	if(!forced && owner.chem_effects[CE_BREATHLOSS] && !owner.chem_effects[CE_STABLE]) //opiates are bad mmkay
-		safe_pressure_min *= 1 + rand(1,4) * owner.chem_effects[CE_BREATHLOSS]
 
 	var/failed_inhale = 0
 	var/failed_exhale = 0
@@ -159,7 +169,7 @@
 
 	owner.oxygen_alert = failed_inhale * 2
 
-	var/inhaled_gas_used = inhaling/6
+	var/inhaled_gas_used = inhaling/4
 	breath.adjust_gas(breath_type, -inhaled_gas_used, update = 0) //update afterwards
 
 	if(exhale_type)
@@ -205,19 +215,6 @@
 		owner.phoron_alert = 1
 	else
 		owner.phoron_alert = 0
-
-	// If there's some other shit in the air lets deal with it here.
-	if(breath.gas["sleeping_agent"])
-		var/SA_pp = (breath.gas["sleeping_agent"] / breath.total_moles) * breath_pressure
-		if(SA_pp > SA_para_min)		// Enough to make us paralysed for a bit
-			owner.Paralyse(3)	// 3 gives them one second to wake up and run away a bit!
-			if(SA_pp > SA_sleep_min)	// Enough to make us sleep as well
-				owner.Sleeping(5)
-		else if(SA_pp > 0.15)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-			if(prob(20))
-				owner.emote(pick("giggle", "laugh"))
-
-		breath.adjust_gas("sleeping_agent", -breath.gas["sleeping_agent"]/6, update = 0) //update after
 
 	// Were we able to breathe?
 	var/failed_breath = failed_inhale || failed_exhale
@@ -311,9 +308,9 @@
 		owner.bodytemperature += temp_adj
 
 	else if(breath.temperature >= species.heat_discomfort_level)
-		species.get_environment_discomfort(owner,"heat")
+		species.get_environment_discomfort(owner, "heat")
 	else if(breath.temperature <= species.cold_discomfort_level)
-		species.get_environment_discomfort(owner,"cold")
+		species.get_environment_discomfort(owner, "cold")
 
 /obj/item/organ/internal/lungs/listen()
 	if(owner.failed_last_breath || !active_breathing)
@@ -336,7 +333,7 @@
 		breathtype += pick("shallow and rapid")
 	if(!breathtype.len)
 		breathtype += "healthy"
-	
+
 	. += "[english_list(breathtype)] breathing"
 
 	return english_list(.)

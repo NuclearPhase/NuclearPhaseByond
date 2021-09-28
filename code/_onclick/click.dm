@@ -336,13 +336,7 @@
 	playsound(usr.loc, 'sound/weapons/taser2.ogg', 75, 1)
 	LE.launch(A)
 /mob/living/carbon/human/LaserEyes()
-	if(nutrition>0)
-		..()
-		nutrition = max(nutrition - rand(1,5),0)
-		handle_regular_hud_updates()
-	else
-		to_chat(src, "<span class='warning'>You're out of energy!  You need food!</span>")
-
+	handle_regular_hud_updates()
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
 	if(!A || !x || !y || !A.x || !A.y) return

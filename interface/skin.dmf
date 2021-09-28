@@ -393,7 +393,10 @@ macro "hotkeymode"
 	elem 
 		name = "TAB"
 		command = ".winset \"mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true\""
-	elem 
+	elem
+		name = "C"
+		command = "Use-On-Other-Hand"
+	elem
 		name = "CENTER+REP"
 		command = ".center"
 	elem 

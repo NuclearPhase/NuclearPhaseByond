@@ -125,7 +125,7 @@
 			new_multiplier = 0.1
 		else if(istype(R,/datum/reagent/water))
 			new_multiplier = 0.4
-		else if(istype(R,/datum/reagent/sugar)  && R.volume > 1)
+		else if(istype(R,/datum/reagent/nutriment/sugar)  && R.volume > 1)
 			stat = DEAD
 			explosion(get_turf(src),-1,0,2,3,0)
 			return 0

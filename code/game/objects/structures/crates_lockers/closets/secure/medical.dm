@@ -221,7 +221,6 @@
 		/obj/item/weapon/reagent_containers/dropper = 2,
 		/obj/item/weapon/reagent_containers/glass/beaker = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline,
-		/obj/item/weapon/storage/pill_bottle/spaceacillin,
 		/obj/item/weapon/reagent_containers/syringe/antiviral,
 		/obj/item/weapon/reagent_containers/glass/bottle/antitoxin,
 		/obj/item/weapon/storage/box/masks,

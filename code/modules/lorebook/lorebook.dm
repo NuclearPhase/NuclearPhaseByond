@@ -118,23 +118,23 @@
 	first_word+=1	//move to the next word, OR the first word if we started a new chapter.
 
 	var/list/words = current_chapter.words
-	var/allowed_words = round(((word_per_minute / 600) * user.int) * read_time) //-> INT1=2words INT10=20words INT20=41 at 250word/minute
+	var/allowed_words = round(((word_per_minute / 600) * user.intelligence) * read_time) //-> INT1=2words INT10=20words INT20=41 at 250word/minute
 
 	var/end_word = min(first_word + allowed_words,words.len)
 	while(end_word != words.len) //skip ahead to the next punctuation mark so the sentence doesn't end mid-way.
 		var/W = words[end_word]
-		var/L = copytext(W,length(W))
+		var/L = copytext_char(W,length(W))
 
 		var/list/connectors = list("and","or","to", "also", "then", "so", "but", "either", "yet")
 		var/punctuation = ":.,;!?"
 
-		if(findtext(punctuation,L) || connectors.Find(W) ) //move forward until we hit a punctuation mark or a connector word.
+		if(findtext_char(punctuation,L) || connectors.Find(W) ) //move forward until we hit a punctuation mark or a connector word.
 			break
 		end_word++
 
 	var/msg = words.Join(" ",first_word, end_word+ (first_word == 1) ) //Why is list.Join() being weird?
 
-	if(user.int == 1) //illiterate :P
+	if(user.intelligence == 1) //illiterate :P
 		msg = uh(msg)
 
 	to_chat(user, "<i>\"[msg]\"</i>" )

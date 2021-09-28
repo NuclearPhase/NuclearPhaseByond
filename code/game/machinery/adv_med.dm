@@ -12,7 +12,7 @@
 
 	use_power = 1
 	idle_power_usage = 60
-	active_power_usage = 10000	//10 kW. It's a big all-body scanner.
+	active_power_usage = 30 KWATT
 
 /obj/machinery/bodyscanner/relaymove(mob/user as mob)
 	if (user.stat)
@@ -297,15 +297,12 @@
 		if(H.status_flags & FAKEDEATH)
 			pulse_result = 0
 		else
-			pulse_result = H.get_pulse(1)
+			pulse_result = H.get_pulse_fluffy(1)
 	else
 		pulse_result = "ERROR - Nonstandard biology"
 	dat += "<b>Pulse rate:</b> [pulse_result]bpm."
 
-	// Blood pressure. Based on the idea of a normal blood pressure being 120 over 80.
-	if(H.get_blood_volume() <= 70)
-		dat += "<span class='danger'>Severe blood loss detected.</span>"
-	dat += "<b>Blood pressure:</b> [H.get_blood_pressure()] ([H.get_blood_oxygenation()]% blood oxygenation)"
+	dat += "<b>Blood pressure:</b> [H.get_blood_pressure_fluffy()] ([H.get_blood_perfusion()]% blood oxygenation)"
 	dat += "<b>Blood volume:</b> [H.vessel.get_reagent_amount(/datum/reagent/blood)]/[H.species.blood_volume]u"
 
 	// Body temperature.

@@ -143,10 +143,10 @@
 	for(var/line in splittext(file2text("config/custom_items.txt"), "\n"))
 
 		line = trim(line)
-		if(line == "" || !line || findtext(line, "#", 1, 2))
+		if(line == "" || !line || findtext_char(line, "#", 1, 2))
 			continue
 
-		if(findtext(line, "{", 1, 2) || findtext(line, "}", 1, 2)) // New block!
+		if(findtext_char(line, "{", 1, 2) || findtext_char(line, "}", 1, 2)) // New block!
 			if(current_data && current_data.assoc_key)
 				if(!custom_items[current_data.assoc_key])
 					custom_items[current_data.assoc_key] = list()
@@ -154,11 +154,11 @@
 				L |= current_data
 			current_data = null
 
-		var/split = findtext(line,":")
+		var/split = findtext_char(line,":")
 		if(!split)
 			continue
-		var/field = trim(copytext(line,1,split))
-		var/field_data = trim(copytext(line,(split+1)))
+		var/field = trim(copytext_char(line,1,split))
+		var/field_data = trim(copytext_char(line,(split+1)))
 		if(!field || !field_data)
 			continue
 

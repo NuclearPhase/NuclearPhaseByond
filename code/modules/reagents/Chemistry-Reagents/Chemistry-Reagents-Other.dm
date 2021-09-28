@@ -80,15 +80,15 @@
 		hex2 += "FF"
 	if(length(hex1) != 9 || length(hex2) != 9)
 		return
-	colors[1] += hex2num(copytext(hex1, 2, 4)) * volume
-	colors[2] += hex2num(copytext(hex1, 4, 6)) * volume
-	colors[3] += hex2num(copytext(hex1, 6, 8)) * volume
-	colors[4] += hex2num(copytext(hex1, 8, 10)) * volume
+	colors[1] += hex2num(copytext_char(hex1, 2, 4)) * volume
+	colors[2] += hex2num(copytext_char(hex1, 4, 6)) * volume
+	colors[3] += hex2num(copytext_char(hex1, 6, 8)) * volume
+	colors[4] += hex2num(copytext_char(hex1, 8, 10)) * volume
 	tot_w += volume
-	colors[1] += hex2num(copytext(hex2, 2, 4)) * newamount
-	colors[2] += hex2num(copytext(hex2, 4, 6)) * newamount
-	colors[3] += hex2num(copytext(hex2, 6, 8)) * newamount
-	colors[4] += hex2num(copytext(hex2, 8, 10)) * newamount
+	colors[1] += hex2num(copytext_char(hex2, 2, 4)) * newamount
+	colors[2] += hex2num(copytext_char(hex2, 4, 6)) * newamount
+	colors[3] += hex2num(copytext_char(hex2, 6, 8)) * newamount
+	colors[4] += hex2num(copytext_char(hex2, 8, 10)) * newamount
 	tot_w += newamount
 
 	color = rgb(colors[1] / tot_w, colors[2] / tot_w, colors[3] / tot_w, colors[4] / tot_w)
@@ -320,17 +320,6 @@
 	taste_description = "sweetness"
 	reagent_state = LIQUID
 	color = "#808080"
-
-/datum/reagent/nitroglycerin
-	name = "Nitroglycerin"
-	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
-	taste_description = "oil"
-	reagent_state = LIQUID
-	color = "#808080"
-
-/datum/reagent/nitroglycerin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	..()
-	M.add_chemical_effect(CE_PULSE, 2)
 
 /datum/reagent/coolant
 	name = "Coolant"

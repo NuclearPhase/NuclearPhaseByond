@@ -58,6 +58,7 @@ Hotkey-Mode: (hotkey-mode must be on)
 \ts = down
 \td = right
 \tw = up
+\tc = use held object on object held in another hand
 \t, = move-upwards
 \t. = move-down
 \tq = drop

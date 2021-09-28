@@ -27,15 +27,15 @@
 		return
 
 	var/list/seperate = list()
-	if(findtext(msg,"(("))
+	if(findtext_char(msg,"(("))
 		return
-	else if(findtext(msg,"))"))
+	else if(findtext_char(msg,"))"))
 		return
-	else if(findtext(msg," ")==0)
+	else if(findtext_char(msg," ")==0)
 		return
 	else
 		/*var/l = length(msg)
-		if(findtext(msg," ",l,l+1)==0)
+		if(findtext_char(msg," ",l,l+1)==0)
 			msg+=" "*/
 		seperate = splittext(msg, " ")
 
@@ -82,9 +82,9 @@
 	if(length(text)==1)
 		text=uppertext(text)
 	else
-		var/cap = copytext(text,1,2)
+		var/cap = copytext_char(text,1,2)
 		cap = uppertext(cap)
-		cap += copytext(text,2,length(text)+1)
+		cap += copytext_char(text,2,length(text)+1)
 		text=cap
 	var/q = 0
 	msg+=text

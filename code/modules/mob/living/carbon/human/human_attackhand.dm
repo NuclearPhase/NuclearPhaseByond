@@ -63,51 +63,78 @@
 
 	switch(M.a_intent)
 		if(I_HELP)
-			if(istype(H) && (is_asystole() || (status_flags & FAKEDEATH)))
+			if(istype(H) && (is_asystole() || is_vfib()))
 				if (!cpr_time)
 					return 0
 
 				cpr_time = 0
-				spawn(30)
+				spawn(50)
 					cpr_time = 1
 
-				H.visible_message("<span class='notice'>\The [H] is trying to perform CPR on \the [src].</span>")
-
-				if(!do_after(H, 30, src))
+				if(!H.check_has_mouth())
+					to_chat(H, "<span class='warning'>You don't have a mouth, you cannot do mouth-to-mouth resustication!</span>")
+					return
+				if(!check_has_mouth())
+					to_chat(H, "<span class='warning'>They don't have a mouth, you cannot do mouth-to-mouth resustication!</span>")
+					return
+				if((H.head && (H.head.body_parts_covered & FACE)) || (H.wear_mask && (H.wear_mask.body_parts_covered & FACE)))
+					to_chat(H, "<span class='warning'>You need to remove your mouth covering for mouth-to-mouth resustication!</span>")
+					return 0
+				if((head && (head.body_parts_covered & FACE)) || (wear_mask && (wear_mask.body_parts_covered & FACE)))
+					to_chat(H, "<span class='warning'>You need to remove \the [src]'s mouth covering for mouth-to-mouth resustication!</span>")
+					return 0
+				if (!H.internal_organs_by_name[H.species.breathing_organ])
+					to_chat(H, "<span class='danger'>You need lungs for mouth-to-mouth resustication!</span>")
 					return
 
-				H.visible_message("<span class='notice'>\The [H] performs CPR on \the [src]!</span>")
-				if(prob(5))
-					var/obj/item/organ/external/chest = get_organ(BP_CHEST)
-					if(chest)
-						chest.fracture()
-				if(stat != DEAD)
-					if(prob(15))
-						resuscitate()
+				var/acls_quality = M.get_skill(SKILL_ACLS)
+				var/is_precordial_blow = acls_quality >= SKILL_AMATEUR && is_vfib()
 
-					if(!H.check_has_mouth())
-						to_chat(H, "<span class='warning'>You don't have a mouth, you cannot do mouth-to-mouth resustication!</span>")
+				var/punches = is_precordial_blow ? rand(2, 5 + acls_quality) : rand(5, 9 + acls_quality)
+
+				H.visible_message(SPAN_NOTICE("\The [H] is performing CPR on \the [src]."))
+				var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+
+				for(var/i in 1 to punches)
+					if(!do_after(H, rand(4, 8) - acls_quality, src))
 						return
-					if(!check_has_mouth())
-						to_chat(H, "<span class='warning'>They don't have a mouth, you cannot do mouth-to-mouth resustication!</span>")
-						return
-					if((H.head && (H.head.body_parts_covered & FACE)) || (H.wear_mask && (H.wear_mask.body_parts_covered & FACE)))
-						to_chat(H, "<span class='warning'>You need to remove your mouth covering for mouth-to-mouth resustication!</span>")
-						return 0
-					if((head && (head.body_parts_covered & FACE)) || (wear_mask && (wear_mask.body_parts_covered & FACE)))
-						to_chat(H, "<span class='warning'>You need to remove \the [src]'s mouth covering for mouth-to-mouth resustication!</span>")
-						return 0
-					if (!H.internal_organs_by_name[H.species.breathing_organ])
-						to_chat(H, "<span class='danger'>You need lungs for mouth-to-mouth resustication!</span>")
-						return
-					if(!need_breathe())
-						return
+					
+					var/pulse_amount = rand(30, 45) * (1 + acls_quality)
+					if("CPR" in heart.pulse_modificators)
+						heart.pulse_modificators["CPR"] += pulse_amount
+					else
+						heart.pulse_modificators["CPR"] = pulse_amount
+
+					if(prob(1))
+						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
+						chest?.fracture()
+
 					var/obj/item/organ/internal/lungs/L = internal_organs_by_name[species.breathing_organ]
-					if(L)
+					if(!L)
+						continue
+					for(var/i2 in 1 to acls_quality)
 						var/datum/gas_mixture/breath = H.get_breath_from_environment()
 						var/fail = L.handle_breath(breath, 1)
-						if(!fail)
-							to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
+						if(!fail && prob(20))
+							to_chat(src, SPAN_NOTICE("You feel a breath of fresh air enter your lungs. It feels so good."))
+
+				if(is_precordial_blow && is_vfib())
+					H.visible_message(SPAN_NOTICE("\The [H] is performing precordial blow on \the [src]."))
+					if(!do_after(H, 20, src))
+						return
+					if(!is_vfib())
+						return
+					H.visible_message(SPAN_NOTICE("\The [H] is performed precordial blow on \the [src]!"))
+
+					if(prob(5))
+						var/obj/item/organ/external/chest = get_organ(BP_CHEST)
+						chest?.fracture()
+
+
+					if(prob(acls_quality * 13))
+						heart.rythme = prob(100 - acls_quality * 20) ? RYTHME_AFIB_RR : RYTHME_NORM
+
+
 
 			else if(!(M == src && apply_pressure(M, M.zone_sel.selecting)))
 				help_shake_act(M)
@@ -222,7 +249,7 @@
 			if(HULK in H.mutations)
 				real_damage *= 2 // Hulks do twice the damage
 				rand_damage *= 2
-			real_damage = (max(1, real_damage) * strToDamageModifier(H.str))
+			real_damage = (max(1, real_damage) * strToDamageModifier(H.strength))
 
 			var/armour = run_armor_check(hit_zone, "melee")
 			// Apply additional unarmed effects.

@@ -158,7 +158,7 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/combatpain
 	name = "autoinjector (oxycodone)"
 	icon_state = "black"
-	starts_with = list(/datum/reagent/tramadol/oxycodone = 5)
+	starts_with = list(/datum/reagent/tramadol/opium/oxycodone = 5)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/mindbreaker
 	name = "autoinjector"

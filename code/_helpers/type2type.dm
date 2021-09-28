@@ -19,7 +19,7 @@
 	var/i     = length(hex)
 
 	while (i)
-		var/char = text2ascii(hex, i)
+		var/char = text2ascii_char(hex, i)
 		switch(char)
 			if(48)                                  // 0 -- do nothing
 			if(49 to 57) num += (char - 48) * power // 1-9

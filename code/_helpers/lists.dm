@@ -301,8 +301,42 @@ proc/listclearnulls(list/list)
 		return (result + L.Copy(Li, 0))
 	return (result + R.Copy(Ri, 0))
 
+/proc/sumList(list/L)
+	. = 0
+	for(var/i in L)
+		. += i
 
-//Mergesort: any value in a list, preserves key=value structure
+/proc/sumListAndCut(list/L)
+	. = sumList(L)
+	L.Cut()
+
+/proc/mulList(list/L)
+	. = 0
+	for(var/i in L)
+		. *= i
+
+/proc/mulListAndCut(list/L)
+	. = mulList(L)
+	L.Cut()
+
+/proc/sumListAssoc(list/L)
+	. = 0
+	for(var/I in L)
+		. += L[I]
+
+/proc/sumListAndCutAssoc(list/L)
+	. = sumListAssoc(L)
+	L.Cut()
+
+/proc/mulListAssoc(list/L)
+	. = 1
+	for(var/I in L)
+		. *= L[I]
+
+/proc/mulListAndCutAssoc(list/L)
+	. = mulListAssoc(L)
+	L.Cut()
+
 /proc/sortAssoc(var/list/L)
 	if(L.len < 2)
 		return L
@@ -585,7 +619,6 @@ proc/dd_sortedtextlist(list/incoming, case_sensitive = 0)
 		sorted_text += current_sort_text
 		sorted_text += list_bottom
 	return sorted_text
-
 
 proc/dd_sortedTextList(list/incoming)
 	var/case_sensitive = 1

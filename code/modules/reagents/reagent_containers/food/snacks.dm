@@ -265,7 +265,7 @@
 
 	New()
 		..()
-		reagents.add_reagent(/datum/reagent/sugar, 3)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 3)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/proteinbar
@@ -278,7 +278,7 @@
 	..()
 	reagents.add_reagent(/datum/reagent/nutriment, 9)
 	reagents.add_reagent(/datum/reagent/nutriment/protein, 4)
-	reagents.add_reagent(/datum/reagent/sugar, 4)
+	reagents.add_reagent(/datum/reagent/nutriment/sugar, 4)
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/candy/donor
@@ -289,7 +289,7 @@
 	New()
 		..()
 		reagents.add_reagent(/datum/reagent/nutriment, 10)
-		reagents.add_reagent(/datum/reagent/sugar, 3)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 3)
 		bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/candy_corn
@@ -303,7 +303,7 @@
 	New()
 		..()
 		reagents.add_reagent(/datum/reagent/nutriment, 4)
-		reagents.add_reagent(/datum/reagent/sugar, 2)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 2)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chips
@@ -341,7 +341,7 @@
 	nutriment_desc = list("chocolate" = 5)
 	New()
 		..()
-		reagents.add_reagent(/datum/reagent/sugar, 2)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 2)
 		reagents.add_reagent(/datum/reagent/nutriment/coco, 2)
 		bitesize = 2
 
@@ -355,7 +355,7 @@
 	nutriment_desc = list("chocolate" = 5)
 	New()
 		..()
-		reagents.add_reagent(/datum/reagent/sugar, 2)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 2)
 		reagents.add_reagent(/datum/reagent/nutriment/coco, 2)
 		bitesize = 2
 
@@ -1222,7 +1222,7 @@
 
 	New()
 		..()
-		reagents.add_reagent(/datum/reagent/sugar, 4)
+		reagents.add_reagent(/datum/reagent/nutriment/sugar, 4)
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers
@@ -3042,7 +3042,7 @@
 		if( boxes.len > 0 )
 			boxtotagto = boxes[boxes.len]
 
-		boxtotagto.boxtag = copytext("[boxtotagto.boxtag][t]", 1, 30)
+		boxtotagto.boxtag = copytext_char("[boxtotagto.boxtag][t]", 1, 30)
 
 		update_icon()
 		return

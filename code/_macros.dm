@@ -98,6 +98,11 @@
 
 #define legacy_chat(target, message)          to_target(target, message)
 #define to_world(message)                     to_chat(world, message)
+// G is type.
+#define ishormone(G, T) (G == /datum/reagent/hormone/##T)
+
+#define to_chat(target, message)                            target << message
+#define to_world(message)                                   world << message
 #define to_world_log(message)                               world.log << message
 #define sound_to(target, sound)                             target << sound
 #define to_file(file_entry, source_var)                     file_entry << source_var
@@ -150,6 +155,7 @@
 #define LAZYSET(L, A, I) if(!L) { L = list(); } L[A] = I;
 // Reads I from L safely - Works with both associative and traditional lists.
 #define LAZYACCESS(L, I) (L ? (isnum(I) ? (I > 0 && I <= L.len ? L[I] : null) : L[I]) : null)
+#define LAZYACCESS0(L, I) (LAZYACCESS(L, I) || 0)
 // Reads the length of L, returning 0 if null
 #define LAZYLEN(L) length(L)
 // Safely checks if I is in L

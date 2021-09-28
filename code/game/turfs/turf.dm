@@ -33,6 +33,8 @@
 	var/flooded // Whether or not this turf is absolutely flooded ie. a water source.
 	var/height = 0 // Determines if fluids can overflow onto next turf
 
+	var/list/variants
+
 /turf/New()
 	..()
 	for(var/atom/movable/AM as mob|obj in src)

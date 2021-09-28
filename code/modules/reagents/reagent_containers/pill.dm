@@ -72,6 +72,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 //Pills
+
+/obj/item/weapon/reagent_containers/pill/nitroglycerin
+	name = "Nitroglycerin (10u)"
+	desc = "Nitroglycerin used to treat ischemia."
+	icon_state = "pill3"
+/obj/item/weapon/reagent_containers/pill/nitroglycerin/New()
+	..()
+	reagents.add_reagent(/datum/reagent/nitroglycerin, 10)
+	color = reagents.get_color()
+
+/obj/item/weapon/reagent_containers/pill/amicil
+	name = "Amicil (6u)"
+	desc = "Light antibiotic."
+	icon_state = "pill3"
+
+/obj/item/weapon/reagent_containers/pill/amicil/New()
+	..()
+	reagents.add_reagent(/datum/reagent/amicil, 6)
+	color = reagents.get_color()
+
+
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Dylovene (25u)"
 	desc = "Neutralizes many common toxins."
@@ -227,7 +248,7 @@
 /obj/item/weapon/reagent_containers/pill/happy/New()
 	..()
 	reagents.add_reagent(/datum/reagent/space_drugs, 15)
-	reagents.add_reagent(/datum/reagent/sugar, 15)
+	reagents.add_reagent(/datum/reagent/nutriment/sugar, 15)
 	color = reagents.get_color()
 
 
@@ -260,28 +281,6 @@
 /obj/item/weapon/reagent_containers/pill/diet/New()
 	..()
 	reagents.add_reagent(/datum/reagent/lipozine, 2)
-	color = reagents.get_color()
-
-
-/obj/item/weapon/reagent_containers/pill/noexcutite
-	name = "Noexcutite (15u)"
-	desc = "Feeling jittery? This should calm you down."
-	icon_state = "pill4"
-obj/item/weapon/reagent_containers/pill/noexcutite/New()
-	..()
-	reagents.add_reagent(/datum/reagent/noexcutite, 15)
-	color = reagents.get_color()
-
-
-/obj/item/weapon/reagent_containers/pill/antidexafen
-	name = "Antidexafen (15u)"
-	desc = "Common cold mediciation. Safe for babies!"
-	icon_state = "pill4"
-/obj/item/weapon/reagent_containers/pill/antidexafen/New()
-	..()
-	reagents.add_reagent(/datum/reagent/antidexafen, 10)
-	reagents.add_reagent(/datum/reagent/drink/juice/lemon, 5)
-	reagents.add_reagent(/datum/reagent/menthol, REM*0.2)
 	color = reagents.get_color()
 
 //Psychiatry pills.

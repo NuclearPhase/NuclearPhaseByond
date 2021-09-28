@@ -12,6 +12,8 @@
 	var/damage_this_tick = getToxLoss()
 	for(var/obj/item/organ/external/O in organs)
 		damage_this_tick += O.burn_dam + O.brute_dam
+		if(O.germ_level > INFECTION_LEVEL_ONE / 2)
+			. = TRUE
 
 	if(damage_this_tick > last_dam)
 		. = TRUE
@@ -56,8 +58,7 @@
 				//Moving makes open wounds get infected much faster
 				if (E.wounds.len)
 					for(var/datum/wound/W in E.wounds)
-						if (W.infection_check())
-							W.germ_level += 1
+						W.germ_level += 5
 
 /mob/living/carbon/human/proc/handle_stance()
 	// Don't need to process any of this if they aren't standing anyways
@@ -193,17 +194,31 @@
 	for(var/obj/item/organ/O in all_bits)
 		O.set_dna(dna)
 
+/mob/living/proc/get_rythme()
+	return RYTHME_NORM
+/mob/living/carbon/human/get_rythme()
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	return heart?.rythme
+
+/mob/living/proc/set_rythme(rythme)
+	return
+
+/mob/living/carbon/human/set_rythme(rythme)
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	heart?.rythme = rythme
+
 /mob/living/proc/is_asystole()
 	return FALSE
 
 /mob/living/carbon/human/is_asystole()
-	if(isSynthetic())
-		var/obj/item/organ/internal/cell/C = internal_organs_by_name[BP_CELL]
-		if(istype(C))
-			if(!C.is_usable())
-				return TRUE
-	else if(should_have_organ(BP_HEART))
-		var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-		if(!istype(heart) || !heart.is_working())
-			return TRUE
+	return get_rythme() == RYTHME_ASYSTOLE
+
+/mob/living/proc/is_vfib()
 	return FALSE
+
+/mob/living/carbon/human/is_vfib()
+	return get_rythme() == RYTHME_VFIB
+
+/mob/living/carbon/human/proc/make_heart_rate(amount, source = "misc")
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	heart?.pulse_modificators[source] = amount

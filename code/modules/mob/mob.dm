@@ -296,7 +296,24 @@
 		if (W)
 			W.attack_self(src)
 			update_inv_r_hand()
-	return
+
+/mob/verb/mode_other()
+	set name = "Use On Other Hand"
+	set category = "Object"
+	set src = usr
+
+	if(istype(loc, /obj/mecha)) return
+
+	if(!(l_hand && r_hand))
+		return
+
+	var/obj/item/L = l_hand
+	var/obj/item/R = r_hand
+
+	ClickOn(hand ? R : L)
+
+	update_inv_l_hand()
+	update_inv_r_hand()
 
 /*
 /mob/verb/dump_source()
@@ -327,7 +344,7 @@
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
 /mob/proc/store_memory(msg as message, popup, sane = 1)
-	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
+	msg = copytext_char(msg, 1, MAX_MESSAGE_LEN)
 
 	if (sane)
 		msg = sanitize(msg)
@@ -497,17 +514,17 @@
 	return 0
 
 /mob/living/carbon/human/pull_damage()
-	if(!lying || getBruteLoss() + getFireLoss() < 100)
-		return 0
-	for(var/thing in organs)
-		var/obj/item/organ/external/e = thing
-		if(!e || e.is_stump())
-			continue
-		if((e.status & ORGAN_BROKEN) && !e.splinted)
+	if(!lying)
+		return FALSE
+	for(var/obj/item/organ/external/E in organs)
+		if((E.status & ORGAN_BROKEN) && !E.splinted)
+			return TRUE
+		if(E.status & ORGAN_BLEEDING)
 			return 1
-		if(e.status & ORGAN_BLEEDING)
-			return 1
-	return 0
+		for(var/datum/wound/W in E.wounds)
+			if(W.bleeding())
+				return TRUE
+	return FALSE
 
 /mob/MouseDrop(mob/M as mob)
 	..()

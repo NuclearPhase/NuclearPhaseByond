@@ -106,6 +106,7 @@
 
 /obj/item/weapon/reagent_containers/spray/sterilizine
 	name = "sterilizine"
+	icon_state = "sterilizer"
 	desc = "Great for hiding incriminating bloodstains and sterilizing scalpels."
 
 /obj/item/weapon/reagent_containers/spray/sterilizine/New()

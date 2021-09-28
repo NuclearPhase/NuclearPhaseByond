@@ -28,7 +28,7 @@
 	..()
 
 /datum/reagent/proc/remove_self(var/amount) // Shortcut
-	holder.remove_reagent(type, amount)
+	holder?.remove_reagent(type, amount)
 
 // This doesn't apply to skin contact - this is for, e.g. extinguishers and sprays. The difference is that reagent is not directly on the mob's skin - it might just be on their clothing.
 /datum/reagent/proc/touch_mob(var/mob/M, var/amount)
@@ -62,9 +62,9 @@
 	//adjust effective amounts - removed, dose, and max_dose - for mob size
 	var/effective = removed
 	if(!(flags & IGNORE_MOB_SIZE) && location != CHEM_TOUCH)
-		effective *= (MOB_MEDIUM/M.mob_size)
-
-	M.chem_doses[type] = M.chem_doses[type] + effective
+		effective *= (MOB_MEDIUM / M.mob_size)
+	if(!istype(src, /datum/reagent/hormone))
+		M.chem_doses[type] = M.chem_doses[type] + effective
 	if(effective >= (metabolism * 0.1) || effective >= 0.1) // If there's too little chemical, don't affect the mob, just remove it
 		switch(location)
 			if(CHEM_BLOOD)
@@ -112,13 +112,5 @@
 	holder = null
 	. = ..()
 
-/* DEPRECATED - TODO: REMOVE EVERYWHERE */
-
-/datum/reagent/proc/reaction_turf(var/turf/target)
-	touch_turf(target)
-
-/datum/reagent/proc/reaction_obj(var/obj/target)
-	touch_obj(target)
-
-/datum/reagent/proc/reaction_mob(var/mob/target)
-	touch_mob(target)
+/datum/reagent/hormone/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
+	return

@@ -1,0 +1,1 @@
+GLOBAL_LIST_INIT(hallucination_deadchat_phrases, world.file2list("code/modules/mob/living/carbon/hallucination_deadchat_phrases.txt"))

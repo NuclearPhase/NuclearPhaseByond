@@ -146,13 +146,14 @@ GLOBAL_DATUM_INIT(temp_reagents_holder, /obj, new)
 		warning("[log_info_line(my_atom)] attempted to add a reagent of type '[reagent_type]' which doesn't exist. ([usr])")
 	return 0
 
-/datum/reagents/proc/remove_reagent(var/reagent_type, var/amount, var/safety = 0)
+/datum/reagents/proc/remove_reagent(var/reagent_type, var/amount, var/safety = 0, var/update = TRUE)
 	if(!isnum(amount))
 		return 0
 	for(var/datum/reagent/current in reagent_list)
 		if(current.type == reagent_type)
 			current.volume -= amount // It can go negative, but it doesn't matter
-			update_total() // Because this proc will delete it then
+			if(update)
+				update_total() // Because this proc will delete it then
 			if(!safety)
 				process_reactions()
 			if(my_atom)

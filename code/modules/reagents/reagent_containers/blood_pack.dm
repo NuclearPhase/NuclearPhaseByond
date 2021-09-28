@@ -81,9 +81,6 @@
 	reagents.trans_to_mob(attached, amount_per_transfer_from_this, CHEM_BLOOD)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/ivbag/nanoblood/New()
-	..()
-	reagents.add_reagent(/datum/reagent/nanoblood, volume)
 
 /obj/item/weapon/reagent_containers/ivbag/blood
 	name = "blood pack"
