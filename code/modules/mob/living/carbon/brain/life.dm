@@ -36,7 +36,7 @@
 /mob/living/carbon/brain/handle_environment(datum/gas_mixture/environment)
 	if(!environment)
 		return
-	var/environment_heat_capacity = environment.heat_capacity()
+	var/environment_heat_capacity = environment.heat_capacity
 	if(istype(get_turf(src), /turf/space))
 		var/turf/heat_turf = get_turf(src)
 		environment_heat_capacity = heat_turf.heat_capacity

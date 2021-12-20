@@ -17,6 +17,8 @@
 	//Cache of gas overlay objects
 	var/list/tile_overlay_cache
 
+	var/heat_capacity = 0
+
 /datum/gas_mixture/New(_volume = CELL_VOLUME, _temperature = 0, _group_multiplier = 1)
 	volume = _volume
 	temperature = _temperature
@@ -50,7 +52,7 @@
 		return
 
 	if(moles > 0 && abs(temperature - temp) > MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
-		var/self_heat_capacity = heat_capacity()
+		var/self_heat_capacity = heat_capacity
 		var/giver_heat_capacity = gas_data.specific_heat[gasid] * moles
 		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
 		if(combined_heat_capacity != 0)
@@ -92,8 +94,8 @@
 		return
 
 	if(abs(temperature-giver.temperature)>MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
-		var/self_heat_capacity = heat_capacity()
-		var/giver_heat_capacity = giver.heat_capacity()
+		var/self_heat_capacity = heat_capacity
+		var/giver_heat_capacity = giver.heat_capacity
 		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
 		if(combined_heat_capacity != 0)
 			temperature = (giver.temperature*giver_heat_capacity + temperature*self_heat_capacity)/combined_heat_capacity
@@ -109,8 +111,8 @@
 
 // Used to equalize the mixture between two zones before sleeping an edge.
 /datum/gas_mixture/proc/equalize(datum/gas_mixture/sharer)
-	var/our_heatcap = heat_capacity()
-	var/share_heatcap = sharer.heat_capacity()
+	var/our_heatcap = heat_capacity
+	var/share_heatcap = sharer.heat_capacity
 
 	// Special exception: there isn't enough air around to be worth processing this edge next tick, zap both to zero.
 	if(total_moles + sharer.total_moles <= MINIMUM_AIR_TO_SUSPEND)
@@ -134,11 +136,11 @@
 
 
 //Returns the heat capacity of the gas mix based on the specific heat of the gases.
-/datum/gas_mixture/proc/heat_capacity()
-	. = 0
+/datum/gas_mixture/proc/update_heat_capacity()
+	heat_capacity = 0
 	for(var/g in gas)
-		. += gas_data.specific_heat[g] * gas[g]
-	. *= group_multiplier
+		heat_capacity += gas_data.specific_heat[g] * gas[g]
+	heat_capacity *= group_multiplier
 
 
 //Adds or removes thermal energy. Returns the actual thermal energy change, as in the case of removing energy we can't go below TCMB.
@@ -147,18 +149,17 @@
 	if (total_moles == 0)
 		return 0
 
-	var/heat_capacity = heat_capacity()
 	if (thermal_energy < 0)
 		if (temperature < TCMB)
 			return 0
-		var/thermal_energy_limit = -(temperature - TCMB)*heat_capacity	//ensure temperature does not go below TCMB
+		var/thermal_energy_limit = -(temperature - TCMB) * heat_capacity	//ensure temperature does not go below TCMB
 		thermal_energy = max( thermal_energy, thermal_energy_limit )	//thermal_energy and thermal_energy_limit are negative here.
 	temperature += thermal_energy/heat_capacity
 	return thermal_energy
 
 //Returns the thermal energy change required to get to a new temperature
 /datum/gas_mixture/proc/get_thermal_energy_change(var/new_temperature)
-	return heat_capacity()*(max(new_temperature, 0) - temperature)
+	return heat_capacity*(max(new_temperature, 0) - temperature)
 
 
 //Technically vacuum doesn't have a specific entropy. Just use a really big number (infinity would be ideal) here so that it's easy to add gas to vacuum and hard to take gas out.
@@ -210,6 +211,7 @@
 			gas -= g
 		else
 			total_moles += gas[g]
+	update_heat_capacity()
 
 
 //Returns the pressure of the gas mix.  Only accurate if there have been no gas modifications since update_values() has been called.
@@ -421,8 +423,8 @@
 	var/size = max(1, group_multiplier)
 	if(isnull(share_size)) share_size = max(1, other.group_multiplier)
 
-	var/full_heat_capacity = heat_capacity()
-	var/s_full_heat_capacity = other.heat_capacity()
+	var/full_heat_capacity = heat_capacity
+	var/s_full_heat_capacity = other.heat_capacity
 
 	var/list/avg_gas = list()
 
@@ -473,7 +475,7 @@
 	var/list/total_gas = list()
 	for(var/datum/gas_mixture/gasmix in gases)
 		total_volume += gasmix.volume
-		var/temp_heatcap = gasmix.heat_capacity()
+		var/temp_heatcap = gasmix.heat_capacity
 		total_thermal_energy += gasmix.temperature * temp_heatcap
 		total_heat_capacity += temp_heatcap
 		for(var/g in gasmix.gas)

@@ -358,13 +358,13 @@
 		var/device_energy = power * REACTION_POWER_MODIFIER
 
 		//Release reaction gasses
-		var/heat_capacity = removed.heat_capacity()
+		var/heat_capacity = removed.heat_capacity
 		removed.adjust_multi("phoron", max(device_energy / PHORON_RELEASE_MODIFIER, 0), \
 		                     "oxygen", max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
 
 		var/thermal_power = THERMAL_RELEASE_MODIFIER * device_energy
 		if (debug)
-			var/heat_capacity_new = removed.heat_capacity()
+			var/heat_capacity_new = removed.heat_capacity
 			visible_message("[src]: Releasing [round(thermal_power)] W.")
 			visible_message("[src]: Releasing additional [round((heat_capacity_new - heat_capacity)*removed.temperature)] W with exhaust gasses.")
 

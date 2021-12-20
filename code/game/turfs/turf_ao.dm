@@ -113,4 +113,4 @@
 	var/old_permit_ao = permit_ao
 	. = ..()
 	if(density != old_density || permit_ao != old_permit_ao)
-		regenerate_ao()
+		queue_ao()

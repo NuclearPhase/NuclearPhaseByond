@@ -590,7 +590,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(!target_organ || I.germ_level < target_organ.germ_level)	// Choose the organ with the lowest germ_level
 				target_organ = I
 
-	if(!target_organ)
+	if(target_organ)
+		if(target_organ.germ_level < germ_level - 250)
+			if(prob(Interpolate(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
+				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
+		target_organ.germ_level++
+	else
 		// Figure out which organs we can spread germs to and pick one at random
 		var/list/candidate_organs = list()
 		for(var/obj/item/organ/I in internal_organs)
@@ -598,14 +603,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				candidate_organs |= I
 		if(candidate_organs.len)
 			target_organ = pick(candidate_organs)
-
-	if(target_organ)
-		if(target_organ.germ_level < germ_level - 250)
-			if(prob(Interpolate(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
-				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
-
-	if(target_organ)
-		target_organ.germ_level++
+		
 
 	// Spread the infection to child and parent organs
 	for(var/obj/item/organ/external/child in SANITIZE_LIST(children))
@@ -618,7 +616,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(parent.germ_level < INFECTION_LEVEL_ONE * 2 || prob(30 - antibiotics))
 				parent.germ_level++
 
-	if(germ_level >= INFECTION_LEVEL_FOUR && antibiotics < 15) // Overdosing is necessary to stop severe infections
+	if(germ_level >= INFECTION_LEVEL_FOUR && antibiotics < 15 && prob(1)) // Overdosing is necessary to stop severe infections
 		if(!(status & ORGAN_DEAD))
 			status |= ORGAN_DEAD
 			to_chat(owner, "<span class='notice'>You can't feel your [name] anymore...</span>")
@@ -626,8 +624,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		germ_level++
 		owner.adjustToxLoss(0.5)
-	if(germ_level >= INFECTION_LEVEL_THREE)
-		owner.adjustToxLoss(germ_level / (INFECTION_LEVEL_FOUR + antibiotics * 65))
+	if(germ_level >= INFECTION_LEVEL_THREE - 100)
+		owner.reagents.add_reagent(/datum/reagent/toxin, germ_level / (INFECTION_LEVEL_FOUR + antibiotics * 65) * 0.8)
 
 //Updating wounds. Handles wound natural I had some free spachealing, internal bleedings and infections
 /obj/item/organ/external/proc/update_wounds()

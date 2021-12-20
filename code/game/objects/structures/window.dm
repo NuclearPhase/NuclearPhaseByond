@@ -359,7 +359,7 @@
 //This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
 /obj/structure/window/proc/update_nearby_icons()
 	update_icon()
-	for(var/obj/structure/window/W in orange(src, 1))
+	for(var/obj/structure/window/W in orange(1, src))
 		W.update_icon()
 
 //Updates the availabiliy of the rotation verbs
@@ -383,7 +383,7 @@
 		return
 	var/list/dirs = list()
 	if(anchored)
-		for(var/obj/structure/window/W in orange(src,1))
+		for(var/obj/structure/window/W in orange(1, src))
 			if(W.anchored && W.density && W.type == src.type && W.is_fulltile()) //Only counts anchored, not-destroyed fill-tile windows.
 				dirs += get_dir(src, W)
 

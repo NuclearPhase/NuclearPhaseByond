@@ -436,8 +436,8 @@
 	if(sink.total_moles > 0 && sink.temperature > 0)
 		//estimate the final temperature of the sink after transfer
 		var/estimate_moles = pressure_delta*output_volume/(sink.temperature * R_IDEAL_GAS_EQUATION)
-		var/sink_heat_capacity = sink.heat_capacity()
-		var/transfer_heat_capacity = source.heat_capacity()*estimate_moles/source_total_moles
+		var/sink_heat_capacity = sink.heat_capacity
+		var/transfer_heat_capacity = source.heat_capacity*estimate_moles/source_total_moles
 		air_temperature = (sink.temperature*sink_heat_capacity  + source.temperature*transfer_heat_capacity) / (sink_heat_capacity + transfer_heat_capacity)
 
 	//get the number of moles that would have to be transfered to bring sink to the target pressure

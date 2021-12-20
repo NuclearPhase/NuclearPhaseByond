@@ -17,6 +17,8 @@
 	)
 
 	var/bilirubine_norm = -1
+	var/absorbed = 0
+	var/absorbed_max = 30
 
 /obj/item/organ/internal/liver/influence_hormone(T, amount)
 	if(ishormone(T, glucagone))
@@ -29,11 +31,13 @@
 		return
 
 	if(bilirubine_norm < 0)
-		bilirubine_norm = rand(5, 21)
+		bilirubine_norm = rand(15, 21)
 
-	make_up_to_hormone(/datum/reagent/hormone/marker/bilirubine, bilirubine_norm)
-	make_up_to_hormone(/datum/reagent/hormone/marker/ast, 30 + ((damage / max_damage) * 0.1))
-	make_up_to_hormone(/datum/reagent/hormone/marker/alt, 25 + ((damage / max_damage) * 2))
+	var/cdamage = damage / max_damage
+	var/cwork = absorbed / absorbed_max
+	make_up_to_hormone(/datum/reagent/hormone/marker/bilirubine, bilirubine_norm + cdamage * 50)
+	make_up_to_hormone(/datum/reagent/hormone/marker/ast, 30 + (cwork * 5))
+	make_up_to_hormone(/datum/reagent/hormone/marker/alt, 25 + (cwork * 15))
 
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(1))
@@ -46,38 +50,18 @@
 	if (damage < max_damage && !owner.chem_effects[CE_TOXIN])
 		heal_damage(0.2 * owner.chem_effects[CE_ANTITOX])
 
-	// Get the effectiveness of the liver.
-	var/filter_effect = 3
-	if(is_bruised())
-		filter_effect -= 1
-	if(is_broken())
-		filter_effect -= 2
-	// Robotic organs filter better but don't get benefits from dylovene for filtering.
-	if(robotic >= ORGAN_ROBOT)
-		filter_effect += 1
-	else if(owner.chem_effects[CE_ANTITOX])
-		filter_effect += 1
-	// If you're not filtering well, you're going to take damage. Even more if you have alcohol in you.
-	if(filter_effect < 2)
-		owner.adjustToxLoss(0.5 * max(2 - filter_effect, 0) * (1 + owner.chem_effects[CE_ALCOHOL_TOXIC] + 0.5 * owner.chem_effects[CE_ALCOHOL]))
-
 	if(owner.chem_effects[CE_ALCOHOL_TOXIC])
 		take_damage(owner.chem_effects[CE_ALCOHOL_TOXIC], prob(90)) // Chance to warn them
 
-	// Heal a bit if needed and we're not busy. This allows recovery from low amounts of toxloss.
-	if(!owner.chem_effects[CE_ALCOHOL] && !owner.chem_effects[CE_TOXIN] && !owner.radiation && damage > 0)
-		if(damage < min_broken_damage)
-			heal_damage(0.2)
-		if(damage < min_bruised_damage)
-			heal_damage(0.3)
+	if(absorbed > 0)
+		absorbed = max(0, absorbed - 0.15 + LAZYACCESS0(owner.chem_effects, CE_ANTITOX))
+	if(absorbed > absorbed_max)
+		take_damage(absorbed - absorbed_max)
+		absorbed = absorbed_max
+	else if(damage > 0)
+		var/to_regen = min(damage, absorbed_max - absorbed)
+		heal_damage(to_regen)
+		absorbed += to_regen
 
 	//Blood regeneration if there is some space
 	owner.regenerate_blood(0.1 + owner.chem_effects[CE_BLOODRESTORE])
-
-	// Blood loss or liver damage make you lose nutriments
-	var/blood_volume = owner.get_blood_volume()
-	if(blood_volume < BLOOD_PERFUSION_SAFE || is_bruised())
-		if(owner.nutrition >= 300)
-			owner.nutrition -= 10
-		else if(owner.nutrition >= 200)
-			owner.nutrition -= 3

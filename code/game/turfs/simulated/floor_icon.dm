@@ -56,8 +56,10 @@ var/list/flooring_cache = list()
 		if(!isnull(burnt) && (flooring.flags & TURF_CAN_BURN))
 			overlays |= get_damage_overlay("burned[burnt]")
 
+	queue_ao()
 	if(update_neighbors)
 		for(var/turf/simulated/floor/F in orange(src, 1))
+			F.queue_ao()
 			F.update_icon()
 	if(variants)
 		icon_state = pick(variants) // FIXME: probably, original update_icon have this feature.

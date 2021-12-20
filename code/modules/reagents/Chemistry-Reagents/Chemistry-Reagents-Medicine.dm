@@ -392,3 +392,11 @@
 /datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 4)
 	H.adjustToxLoss(0.02 * volume)
+
+/datum/reagent/charcoal
+	name = "Charcoal"
+	description = "Activated charcoal."
+	reagent_state = SOLID
+	color = "#181818"
+	metabolism = REM * 0.5
+	overdose = 30

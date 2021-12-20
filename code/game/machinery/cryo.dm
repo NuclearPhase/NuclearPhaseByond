@@ -236,7 +236,7 @@
 /obj/machinery/atmospherics/unary/cryo_cell/proc/heat_gas_contents()
 	if(air_contents.total_moles < 1)
 		return
-	var/air_heat_capacity = air_contents.heat_capacity()
+	var/air_heat_capacity = air_contents.heat_capacity
 	var/combined_heat_capacity = current_heat_capacity + air_heat_capacity
 	if(combined_heat_capacity > 0)
 		var/combined_energy = T20C*current_heat_capacity + air_heat_capacity*air_contents.temperature

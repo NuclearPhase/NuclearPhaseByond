@@ -49,7 +49,7 @@
 			//Actually transfer the gas
 			removed = air1.remove(recent_moles_transferred)
 			if(removed)
-				last_heat_capacity = removed.heat_capacity()
+				last_heat_capacity = removed.heat_capacity
 				last_temperature = removed.temperature
 
 				//Update the gas networks.

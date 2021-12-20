@@ -38,5 +38,4 @@
 	generate_hormone(/datum/reagent/hormone/insulin, 0.1, 15)
 	generate_hormone(/datum/reagent/hormone/glucagone, 0.1, 15)
 
-
 	

@@ -38,7 +38,7 @@
 #define CE_PRESSURE      "bpressure"    // increases or decreases blood pressure
 #define CE_CARDIAC_OUTPUT "cardoutput"  // multiplies cardiac output
 #define CE_NOPULSE       "heartstop"    // stops heartbeat
-#define CE_ANTITOX       "antitox"      // Dylovene
+#define CE_ANTITOX       "antitox"
 #define CE_OXYGENATED    "oxygen"       // Dexalin.
 #define CE_BRAIN_REGEN   "brainfix"     // Alkysine.
 #define CE_ANTIVIRAL     "antiviral"    // Anti-virus effect.

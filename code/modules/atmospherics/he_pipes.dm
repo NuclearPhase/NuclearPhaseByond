@@ -70,7 +70,7 @@ obj/machinery/atmospherics/pipe/simple/heat_exchanging/Process()
 			parent.radiate_heat_to_space(surface, 1)
 
 		if(buckled_mob)
-			var/hc = pipe_air.heat_capacity()
+			var/hc = pipe_air.heat_capacity
 			var/avg_temp = (pipe_air.temperature * hc + buckled_mob.bodytemperature * 3500) / (hc + 3500)
 			pipe_air.temperature = avg_temp
 			buckled_mob.bodytemperature = avg_temp

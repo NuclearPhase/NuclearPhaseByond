@@ -42,8 +42,8 @@
 		update_cycle = SSair.times_fired
 		partner.update_cycle = SSair.times_fired
 
-		var/air_heat_capacity = air_contents.heat_capacity()
-		var/other_air_heat_capacity = partner.air_contents.heat_capacity()
+		var/air_heat_capacity = air_contents.heat_capacity
+		var/other_air_heat_capacity = partner.air_contents.heat_capacity
 		var/combined_heat_capacity = other_air_heat_capacity + air_heat_capacity
 
 		var/old_temperature = air_contents.temperature

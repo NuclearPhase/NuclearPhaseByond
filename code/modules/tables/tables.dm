@@ -409,7 +409,7 @@
 
 	var/list/connection_dirs = list()
 
-	for(var/obj/structure/table/T in orange(src, 1))
+	for(var/obj/structure/table/T in orange(1, src))
 		if(!T.can_connect()) continue
 		var/T_dir = get_dir(src, T)
 		if(T_dir in blocked_dirs) continue

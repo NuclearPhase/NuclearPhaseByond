@@ -81,8 +81,8 @@
 	last_circ2_gen = 0
 
 	if(air1 && air2)
-		var/air1_heat_capacity = air1.heat_capacity()
-		var/air2_heat_capacity = air2.heat_capacity()
+		var/air1_heat_capacity = air1.heat_capacity
+		var/air2_heat_capacity = air2.heat_capacity
 		var/delta_temperature = abs(air2.temperature - air1.temperature)
 
 		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
