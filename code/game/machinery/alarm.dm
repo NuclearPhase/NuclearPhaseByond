@@ -48,7 +48,7 @@
 	layer = ABOVE_WINDOW_LAYER
 
 	var/alarm_id = null
-	var/breach_detection = 1 // Whether to use automatic breach detection or not
+	var/breach_detection = 0 // Whether to use automatic breach detection or not
 	var/frequency = 1439
 	//var/skipprocess = 0 //Experimenting
 	var/alarm_frequency = 1437
@@ -125,7 +125,7 @@
 		update_icon()
 		frame.transfer_fingerprints_to(src)
 
-/obj/machinery/alarm/Initialize()
+/obj/machinery/alarm/Initialize(mapload)
 	. = ..()
 	alarm_area = get_area(src)
 	area_uid = alarm_area.uid
@@ -146,6 +146,10 @@
 	set_frequency(frequency)
 	if (!master_is_operating())
 		elect_master()
+	
+	if(mapload)
+		spawn(10)
+			apply_mode()
 
 /obj/machinery/alarm/Process()
 	if((stat & (NOPOWER|BROKEN)) || shorted || buildstage != 2)

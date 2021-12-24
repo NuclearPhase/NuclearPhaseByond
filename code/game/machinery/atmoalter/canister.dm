@@ -39,6 +39,9 @@
 /obj/machinery/portable_atmospherics/canister/nitrogen/prechilled
 	name = "\improper Canister: \[N2 (Cooling)\]"
 
+/obj/machinery/portable_atmospherics/canister/nitrogen/preheated
+	name = "\improper Canister: \[N2 (Heating)\]"
+
 /obj/machinery/portable_atmospherics/canister/oxygen
 	name = "\improper Canister: \[O2\]"
 	icon_state = "blue"
@@ -421,6 +424,12 @@ update_flag
 /obj/machinery/portable_atmospherics/canister/nitrogen/prechilled/New()
 	..()
 	src.air_contents.temperature = 80
+	src.update_icon()
+	return 1
+
+/obj/machinery/portable_atmospherics/canister/nitrogen/preheated/New()
+	..()
+	src.air_contents.temperature = T0C + 140
 	src.update_icon()
 	return 1
 

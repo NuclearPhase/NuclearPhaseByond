@@ -149,3 +149,14 @@
 /area/sector_b/medical/ward
 	name = "\improper Common Ward"
 	icon_state = "ward"
+
+// C
+
+/area/sector_c/atmos
+	name = "\improper Atmos"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "atmos"
+/area/sector_c/atmos/out
+	name = "\improper Atmos out"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "atmos"

@@ -164,6 +164,21 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		processing_fires = active_fire_zones.Copy()
 		processing_hotspots = active_hotspots.Copy()
 
+	for(var/list/zone/Z in zones)
+		var/amount
+		switch(Z.contents[1].z)
+			if(5)
+				amount = -20
+			if(4)
+				amount = -15
+			if(3)
+				amount = -10
+			if(2)
+				amount = -5
+			if(1)
+				amount = -2.5
+		Z.air.add_thermal_energy(amount * Z.contents.len)
+
 	var/list/curr_tiles = tiles_to_update
 	var/list/curr_defer = deferred
 	var/list/curr_edges = processing_edges
@@ -275,6 +290,8 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 			CHECK_TICK
 		else if (MC_TICK_CHECK)
 			return
+
+	
 
 /datum/controller/subsystem/air/proc/add_zone(zone/z)
 	zones += z

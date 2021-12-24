@@ -1,9 +1,9 @@
 /obj/machinery/power/transformator
     icon = 'icons/obj/power.dmi'
     icon_state = "transformator"
-    var/coef = 1
+    var/coef = 2
     var/obj/machinery/power/transformator/connected = null
-    var/max_cap = 25 AMPER
+    var/max_cap = 75 AMPER
 
     efficiency = 0.75
 

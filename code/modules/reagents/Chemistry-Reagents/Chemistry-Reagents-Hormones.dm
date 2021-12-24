@@ -91,5 +91,5 @@
 			heart.pulse_modificators["potassium_level"] = -volume * 8
 
 /datum/reagent/potassium/affect_blood(mob/living/carbon/human/H, alien, removed)
-	H.bloodstr.add_reagent(/datum/reagent/hormone/potassium, volume)
-	volume = 0	
+	H.bloodstr.add_reagent(/datum/reagent/hormone/potassium, volume * 0.5)
+	volume = 0

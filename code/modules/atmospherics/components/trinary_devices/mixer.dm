@@ -33,7 +33,6 @@
 		icon_state += use_power ? "on" : "off"
 	else
 		icon_state += "off"
-		use_power = 0
 
 /obj/machinery/atmospherics/trinary/mixer/update_underlays()
 	if(..())
@@ -72,7 +71,7 @@
 	last_power_draw = 0
 	last_flow_rate = 0
 
-	if((stat & (NOPOWER|BROKEN)) || !use_power)
+	if((stat & (NOPOWER|BROKEN)) || !use_power || !(node2 && node3 && node1))
 		return
 
 	//Figure out the amount of moles to transfer

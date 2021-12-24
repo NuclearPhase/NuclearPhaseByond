@@ -2053,6 +2053,7 @@
 #include "code\modules\power\tracker.dm"
 #include "code\modules\power\turbine.dm"
 #include "code\modules\power\objects\transformator.dm"
+#include "code\modules\power\objects\transmittor.dm"
 #include "code\modules\power\sensors\powernet_sensor.dm"
 #include "code\modules\power\sensors\sensor_monitoring.dm"
 #include "code\modules\power\singularity\act.dm"
