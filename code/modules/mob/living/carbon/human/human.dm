@@ -9,6 +9,23 @@
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 	var/obj/item/weapon/rig/wearing_rig // This is very not good, but it's much much better than calling get_rig() every update_canmove() call.
 
+/mob/living/carbon/human/proc/calc_weight()
+	// TODO: make this
+
+/mob/living/carbon/human/proc/calc_k()
+	var/isMale = gender == MALE
+	k = (weight * height) / (isMale ? 9440 : 7350)
+
+	if(weight > (isMale ? 59 : 49))
+		k = 1.0/k
+
+/mob/living/carbon/human/proc/setup_cm()
+	calc_k()
+	gvr = k*218.50746
+	mcv = 799920/gvr
+	update_mcv()
+	update_gvr()
+
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
 
 	if(!dna)
@@ -51,6 +68,7 @@
 		dna.s_base = s_base
 		sync_organ_dna()
 	make_blood()
+	setup_cm()
 	bloodstr.add_reagent(/datum/reagent/hormone/glucose, GLUCOSE_LEVEL_NORMAL + 0.2)
 
 /mob/living/carbon/human/Destroy()
@@ -1584,9 +1602,9 @@
 
 // Get fluffy numbers
 /mob/living/carbon/human/proc/get_blood_pressure_fluffy()
-	if(get_blood_pressure() < 30)
+	if(spressure < 30)
 		return "0/0"
-	return "[Floor(get_blood_pressure())]/[Floor(max(10, get_blood_pressure() - 40) + rand(-5, 5))]"
+	return "[Floor(spressure)]/[Floor(dpressure)]"
 
 //Point at which you dun breathe no more. Separate from asystole crit, which is heart-related.
 /mob/living/carbon/human/proc/nervous_system_failure()

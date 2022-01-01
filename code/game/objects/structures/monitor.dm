@@ -46,7 +46,7 @@
 	else if(H.rythme == RYTHME_ASYSTOLE)
 		icon_state = "monitor-asystole"
 
-	if(H.pressure < BLOOD_PRESSURE_L2BAD || H.pressure > BLOOD_PRESSURE_H2BAD)
+	if(attached.mpressure < BLOOD_PRESSURE_L2BAD || attached.mpressure > BLOOD_PRESSURE_H2BAD)
 		overlays += image(icon, "monitor-r")
 	if(attached.get_blood_saturation() < 0.80)
 		overlays += image(icon, "monitor-c")
@@ -73,7 +73,7 @@
 	data["hr"] = H.pulse
 	data["rythme"] = H.get_rythme_fluffy()
 	data["bp"] = attached.get_blood_pressure_fluffy()
-	switch(H.pressure)
+	switch(attached.mpressure)
 		if(-INFINITY to BLOOD_PRESSURE_L2BAD)
 			data["bp_s"] = "bad"
 		if(BLOOD_PRESSURE_L2BAD to BLOOD_PRESSURE_NORMAL - 30)
@@ -105,6 +105,8 @@
 		data["ecg"] += list("Hypercaliemia.")
 	if(H.ischemia)
 		data["ecg"] += list("Ischemia.")
+	data["ecg"] += list("GVR: [round(attached.gvr)] N·s·m<sup><small>-5</small></sup>")
+	data["ecg"] += list("MCV: [round(attached.mcv)/1000] L/m")
 	
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)

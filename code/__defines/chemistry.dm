@@ -35,7 +35,7 @@
 #define CE_SPEEDBOOST    "gofast"       // Hyperzine
 #define CE_SLOWDOWN      "goslow"       // Slowdown
 #define CE_PULSE         "xcardic"      // increases or decreases heart rate
-#define CE_PRESSURE      "bpressure"    // increases or decreases blood pressure
+#define CE_PRESSURE      "bpressure"    // increases or decreases gvr
 #define CE_CARDIAC_OUTPUT "cardoutput"  // multiplies cardiac output
 #define CE_NOPULSE       "heartstop"    // stops heartbeat
 #define CE_ANTITOX       "antitox"

@@ -39,7 +39,7 @@
 /mob/living/carbon/human/proc/drip(var/amt, var/tar = src, var/ddir)
 	if(remove_blood(amt))
 		if(bloodstr.total_volume)
-			var/chem_share = round(0.3 * amt * (bloodstr.total_volume/vessel.total_volume), 0.01)
+			var/chem_share = amt / (bloodstr.total_volume + vessel.total_volume)
 			bloodstr.remove_any(chem_share * bloodstr.total_volume)
 		blood_splatter(tar, src, (ddir && ddir>0), spray_dir = ddir)
 		return amt
@@ -262,18 +262,64 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	B.set_invisibility(0)
 	return B
 
+/mob/living/carbon/human/proc/update_gvr()
+	var/hr = get_heart_rate()
+	if(hr < 10)
+		return
+
+	var/hrp = 60/hr
+	var/hrpd = hrp * 0.109 + 0.159
+	gvr = max(120, k * dpressure * ((hrp-hrpd)/hrpd)) // TODO: simplify math expr
+	gvr += LAZYACCESS0(chem_effects, CE_PRESSURE)
+	gvr += spressure * (0.0402 - 0.0142 * spressure) + 127.7694 // simulate elasticity of vascular resistance
+
+/mob/living/carbon/human/proc/update_mcv()
+	mcv = between(0, ((spressure + dpressure) * 4000) / gvr * get_blood_volume() * get_cardiac_output(), 30000)
+
 // 0-1
 /mob/living/carbon/human/proc/get_blood_volume()
 	. = vessel.get_reagent_amount(/datum/reagent/blood) / species.blood_volume
 
-/mob/living/carbon/human/proc/get_blood_pressure()
+/mob/living/carbon/human/proc/update_cm()
+	update_dpressure()
+	update_spressure()
+	dpressure = min(dpressure, spressure-10)
+	update_mpressure()
+	update_mcv()
+	update_gvr()
+	
+
+
+/mob/living/carbon/human/proc/update_spressure()
+	if(get_heart_rate() < 10)
+		spressure = 0
+		return
+	
+	spressure = between(0, Interpolate(spressure, (50 * mcv) / (27 * get_heart_rate()) + 2.0 * dpressure - (7646*k)/54, 0.5), 280)
+	//spressure = 0.00025 * mcv * gvr - 80
+
+/mob/living/carbon/human/proc/update_dpressure()
+	if(get_heart_rate() < 10)
+		dpressure = 0
+		return
+	var/hr53 = get_heart_rate() * get_cardiac_output() * 53
+	dpressure = max(0, Interpolate(dpressure, (gvr * (2180+hr53))/(k * (17820-hr53)), 0.5))
+
+/mob/living/carbon/human/proc/update_mpressure()
+	mpressure = dpressure + (spressure - dpressure) / 3
+
+/mob/living/carbon/human/proc/get_heart_rate()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	. = Floor(heart?.pressure)
+	. = Floor(heart?.pulse)
+
+/mob/living/carbon/human/proc/get_cardiac_output()
+	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
+	. = heart?.cardiac_output
 
 /mob/living/carbon/human/proc/get_blood_saturation()
 	if(stat == DEAD)
 		return 0
-
+	// TODO: make this by cm standarts
 	. = Clamp(1 - getOxyLoss() / 100 + rand(-0.3, 0.3), 0, 0.99)
 
 // 0-1
@@ -281,15 +327,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	if(stat == DEAD)
 		return 0
 
-	var/bp = get_blood_pressure()
-	var/bp_eff = bp / BLOOD_PRESSURE_NORMAL
-	switch(bp)
-		if(160 to 200)
-			bp_eff *= 0.5
-		if(200 to 230)
-			bp_eff *= 0.4
-		if(230 to 270)
-			bp_eff *= 0.3
-		if(270 to INFINITY)
-			return 0
-	. = CLAMP01(bp_eff * get_blood_saturation())
+	. = CLAMP01((mcv / (3000 * k)) * get_blood_saturation())

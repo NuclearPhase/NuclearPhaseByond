@@ -119,3 +119,14 @@
 	var/adhered_gas = 0
 
 	atom_flags = ATOM_FLAG_NO_REACT
+
+	// cm
+	var/weight = 59
+	var/height = 160
+
+	var/k = 1
+	var/gvr = 0 // general vascular resitance
+	var/mcv = 0 // minute circulation volume
+	var/spressure = 120 // systolic pressure
+	var/dpressure = 80 // dyastolic pressure
+	var/mpressure = 93 // medium pressure
