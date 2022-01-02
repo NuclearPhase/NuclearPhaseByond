@@ -325,7 +325,8 @@
 
 /datum/reagent/atropine/affect_blood(mob/living/carbon/human/H, alien, removed)
 	..()
-	H.add_chemical_effect(CE_PULSE, volume * 10)
+	H.add_chemical_effect(CE_PULSE, volume * 7.5)
+	H.add_chemical_effect(CE_ARRYTHMIC, 1)
 
 /datum/reagent/adenosine
 	name = "Adenosine"
@@ -353,6 +354,7 @@
 
 /datum/reagent/amiodarone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIARRYTHMIC, 1)
+	H.add_chemical_effect(CE_ARRYTHMIC    ,-1)
 
 /datum/reagent/lidocaine
 	name = "Lidocaine"

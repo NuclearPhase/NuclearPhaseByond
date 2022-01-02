@@ -47,6 +47,7 @@
 #define CE_MIND    		 "mindbending"  // Stabilizes or wrecks mind. Used for hallucinations
 #define CE_CRYO 	     "cryogenic"    // Prevents damage from being frozen
 #define CE_ANTIARRYTHMIC "stablerythme" // Prevents arrythmias.
+#define CE_ARRYTHMIC     "arrythmic"    // Causes arrythmia.
 
 //reagent flags
 #define IGNORE_MOB_SIZE 0x1
