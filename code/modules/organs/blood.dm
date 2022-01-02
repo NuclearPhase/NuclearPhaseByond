@@ -271,7 +271,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	var/hrpd = hrp * 0.109 + 0.159
 	gvr = max(120, k * dpressure * ((hrp-hrpd)/hrpd)) // TODO: simplify math expr
 	gvr += LAZYACCESS0(chem_effects, CE_PRESSURE)
-	gvr += spressure * (0.0402 - 0.0142 * spressure) + 127.7694 // simulate elasticity of vascular resistance
+	gvr += spressure * (0.0008 * spressure - 0.8833) + 94 // simulate elasticity of vascular resistance
 
 /mob/living/carbon/human/proc/update_mcv()
 	mcv = between(0, ((spressure + dpressure) * 4000) / gvr * get_blood_volume() * get_cardiac_output(), 30000)
@@ -327,4 +327,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	if(stat == DEAD)
 		return 0
 
-	. = CLAMP01((mcv / (3000 * k)) * get_blood_saturation())
+	. = CLAMP01((mcv / (4000 * k)) * get_blood_saturation())

@@ -19,7 +19,7 @@
 	generate_hormone(/datum/reagent/hormone/noradrenaline, 0.1, 2.5)
 	generate_hormone(/datum/reagent/hormone/adrenaline, 0.1, 2.5)
 
-	//if(owner.get_blood_pressure() <= BLOOD_PRESSURE_LBAD || owner.get_blood_perfusion() <= BLOOD_PERFUSION_OKAY)
-		//var/pressure_diff = BLOOD_PRESSURE_NORMAL - owner.get_blood_pressure()
-		//free_up_to_hormone(/datum/reagent/hormone/noradrenaline, pressure_diff / 7 / 2)
-		//free_up_to_hormone(/datum/reagent/hormone/adrenaline   , pressure_diff / 8 / 2)
+	if(owner.spressure <= BLOOD_PRESSURE_LBAD || owner.get_blood_perfusion() <= BLOOD_PERFUSION_OKAY)
+		var/to_increase = owner.spressure * (0.0008 * owner.spressure - 0.8833) + 94
+		free_up_to_hormone(/datum/reagent/hormone/noradrenaline, (to_increase / 2 - 1) / 1.2)
+		free_up_to_hormone(/datum/reagent/hormone/adrenaline   , (to_increase / 2 - 5) / 1.8)

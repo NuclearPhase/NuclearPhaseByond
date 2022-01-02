@@ -51,7 +51,7 @@
 
 /datum/reagent/tramadol/overdose(mob/living/carbon/M, alien)
 	..()
-	M.hallucination(120, 30)
+	M.hallucination(30, 120)
 	M.make_drugged(10)
 	M.add_chemical_effect(CE_PAINKILLER, pain_power*0.5) //extra painkilling for extra trouble
 	M.add_chemical_effect(CE_BREATHLOSS, 0.6) //Have trouble breathing, need more air
@@ -144,10 +144,10 @@
 /datum/reagent/tramadol/opium/heroin/affect_blood(mob/living/carbon/M, alien, removed)
 	..()
 	M.add_chemical_effect(CE_SLOWDOWN, 1)
-	M.hallucination(110, 30)
+	M.hallucination(60, 120)
 
 /datum/reagent/tramadol/opium/heroin/handle_painkiller_overdose(mob/living/carbon/M)
-	M.hallucination(120, 30)
+	M.hallucination(50, 150)
 	var/whole_volume = (volume + M.chem_doses[type]) // side effects are more robust (dose-wise) than in the case of *legal* painkillers usage
 	if(whole_volume > soft_overdose)
 		M.hallucination(30, 30)
@@ -249,12 +249,13 @@
 /datum/reagent/nicotine/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	if(alien == IS_DIONA)
 		return
-	if(prob(volume*20))
-		M.add_chemical_effect(CE_PULSE, 1)
+	M.add_chemical_effect(CE_PULSE, rand(10, 20))
+	if(prob(50))
+		M.add_chemical_effect(CE_BREATHLOSS, 1)
 
 /datum/reagent/nicotine/overdose(var/mob/living/carbon/M, var/alien)
 	..()
-	M.add_chemical_effect(CE_PULSE, 2)
+	affect_blood(M, alien)
 
 /datum/reagent/tobacco
 	name = "Tobacco"
@@ -309,7 +310,7 @@
 
 /datum/reagent/nitroglycerin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	..()
-	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - volume * 0.05, 0.6, 1))
+	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - volume * 0.01, 0.6, 1))
 
 	var/obj/item/organ/internal/heart/H = M.internal_organs_by_name[BP_HEART]
 	if(!H)

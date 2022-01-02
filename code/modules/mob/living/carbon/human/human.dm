@@ -1536,8 +1536,12 @@
 			status += "MISSING"
 		if(org.status & ORGAN_MUTATED)
 			status += "MISSHAPEN"
-		if(org.status & ORGAN_BLEEDING)
+		if(org.status & ORGAN_BLEEDING && !org.is_clamped())
 			status += "BLEEDING"
+		if(org.clamped < 0)
+			status += "NUMB"
+		if(org.clamped > 0)
+			status += "TIGHTENED"
 		if(org.dislocated == 2)
 			status += "DISLOCATED"
 		if(org.status & ORGAN_BROKEN)

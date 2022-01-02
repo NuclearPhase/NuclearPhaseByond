@@ -231,7 +231,7 @@
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
 		var/obj/item/organ/external/affected = target.get_organ(target_zone)
-		return affected && affected.open() && !affected.clamped()
+		return affected && affected.open() && !affected.is_clamped()
 
 /datum/surgery_step/generic/clamp_bleeders/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
@@ -397,3 +397,46 @@
 	"<span class='warning'>Your hand slips, sawwing through the bone in [target]'s [affected.name] with \the [tool]!</span>")
 	affected.take_damage(30, 0, (DAM_SHARP|DAM_EDGE), used_weapon = tool)
 	affected.fracture()
+
+//////////////////////////////////////////////////////////////////
+//	 gauze remove step
+//////////////////////////////////////////////////////////////////
+/datum/surgery_step/generic/remove_gauze
+	allowed_tools = list(
+	/obj/item/weapon/scissors = 100, \
+	/obj/item/weapon/wirecutters = 75
+	)
+
+	min_duration = 110
+	max_duration = 160
+
+/datum/surgery_step/generic/remove_gauze/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	if (affected == null)
+		return 0
+	//if (affected.open())
+		// TODO: when we add cm surgeon system this will be needed
+		//to_chat(user,"<span class='warning'>You can't get a clean cut with incisions getting in the way.</span>")
+		//return SURGERY_FAILURE
+	return affected.gauzed
+
+/datum/surgery_step/generic/remove_gauze/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("[user] is beginning to remove gauze on [target]'s [affected.name] with \the [tool]." , \
+	"You are beginning to cut through gauze on [target]'s [affected] with \the [tool].")
+	..()
+
+/datum/surgery_step/generic/remove_gauze/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='notice'>[user] removes gauze on [target]'s [affected.name] with \the [tool].</span>", \
+	"<span class='notice'>You remove gauze on [target]'s [affected.name] with \the [tool].</span>")
+	affected.gauzed = 0
+
+/datum/surgery_step/generic/amputate/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='warning'>[user]'s hand slips, cutting the [target]'s [affected.name] with \the [tool]!</span>", \
+	"<span class='warning'>Your hand slips, cutting the [target]'s [affected.name] with \the [tool]!</span>")
+	affected.take_damage(5, 0, DAM_SHARP, used_weapon = tool)
+	

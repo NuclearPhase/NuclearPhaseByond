@@ -146,6 +146,10 @@
 	name = "\improper Toilet"
 	icon_state = "toilet"
 
+/area/sector_b/medical/virology
+	name = "\improper Virology"
+	icon_state = "virology"
+
 /area/sector_b/medical/ward
 	name = "\improper Common Ward"
 	icon_state = "ward"

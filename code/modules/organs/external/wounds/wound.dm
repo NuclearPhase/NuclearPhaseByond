@@ -30,6 +30,12 @@
 	var/tmp/list/desc_list = list()
 	var/tmp/list/damage_list = list()
 
+/datum/wound/proc/is_bandaged()
+	return bandaged || parent_organ?.gauzed
+
+/datum/wound/proc/is_clamped()
+	return clamped || parent_organ?.clamped
+
 /datum/wound/New(damage)
 
 	created = world.time
@@ -71,7 +77,7 @@
 	if(!embedded_objects.len)
 		switch(damage_type)
 			if(BRUISE, CUT, PIERCE)
-				return bandaged
+				return is_bandaged()
 			if(BURN)
 				return salved
 
@@ -162,7 +168,7 @@
 	for(var/obj/item/thing in embedded_objects)
 		if(thing.w_class > ITEM_SIZE_SMALL)
 			return FALSE
-	if(bandaged || clamped)
+	if(is_bandaged() || is_clamped())
 		return FALSE
 	return ((bleed_timer > 0 || wound_damage() > bleed_threshold) && current_stage <= max_bleeding_stage)
 

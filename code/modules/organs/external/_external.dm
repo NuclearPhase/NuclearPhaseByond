@@ -81,6 +81,9 @@
 	var/atom/movable/applied_pressure
 	var/atom/movable/splinted
 
+	var/gauzed = FALSE					// Time when gauze was applied.
+	var/clamped = FALSE                 // Time when harness was applied.
+
 	// HUD element variable, see organ_icon.dm get_damage_hud_image()
 	var/image/hud_damage_image
 
@@ -559,6 +562,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//** Handle the effects of infections
 		handle_germ_effects()
 
+		if(is_gauze_breed())
+			germ_level += 1.5
+
+/obj/item/organ/external/proc/is_gauze_breed()
+	return gauzed && (world.time - gauzed > 7 MINUTES)
+
 /obj/item/organ/external/proc/handle_germ_sync()
 	var/antibiotics = LAZYACCESS0(owner.chem_effects, CE_ANTIBIOTIC)
 	for(var/datum/wound/W in wounds)
@@ -897,6 +906,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 0
 	return 1
 
+/obj/item/organ/external/proc/is_gauzed()
+	return gauzed
+
+/obj/item/organ/external/proc/is_clamped()
+	return clamped
+
 // checks if all wounds on the organ are salved
 /obj/item/organ/external/proc/is_salved()
 	for(var/datum/wound/W in wounds)
@@ -910,6 +925,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(!W.disinfected)
 			return 0
 	return 1
+
+/obj/item/organ/external/proc/gauze()
+	status &= ~ORGAN_BLEEDING
+	var/rval = 0
+	for(var/datum/wound/W in wounds)
+		rval |= !W.bandaged
+		W.bandaged = 1
+	if(rval)
+		owner.update_surgery()
+	gauzed = world.time
+
+/obj/item/organ/external/proc/clamp_()
+	clamped = world.time
+
+	for(var/obj/item/organ/external/C in children)
+		clamped = -1
 
 /obj/item/organ/external/proc/bandage()
 	var/rval = 0
@@ -934,19 +965,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		rval |= !W.disinfected
 		W.disinfect()
 	return rval
-
-/obj/item/organ/external/proc/clamp_()
-	var/rval = 0
-	src.status &= ~ORGAN_BLEEDING
-	for(var/datum/wound/W in wounds)
-		rval |= !W.clamped
-		W.clamped = 1
-	return rval
-
-/obj/item/organ/external/proc/clamped()
-	for(var/datum/wound/W in wounds)
-		if(W.clamped)
-			return 1
 
 /obj/item/organ/external/proc/fracture()
 	if(!config.bones_can_break)

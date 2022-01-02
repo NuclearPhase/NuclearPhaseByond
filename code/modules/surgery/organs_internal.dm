@@ -28,7 +28,7 @@
 /datum/surgery_step/internal/fix_organ
 	allowed_tools = list(
 	/obj/item/stack/medical/advanced/bruise_pack= 100,		\
-	/obj/item/stack/medical/bruise_pack = 40,	\
+	/obj/item/stack/medical/ointment = 40,	\
 	/obj/item/weapon/tape_roll = 20
 	)
 
@@ -56,7 +56,7 @@
 	var/tool_name = "\the [tool]"
 	if (istype(tool, /obj/item/stack/medical/advanced/bruise_pack))
 		tool_name = "regenerative membrane"
-	else if (istype(tool, /obj/item/stack/medical/bruise_pack))
+	else if (istype(tool, /obj/item/stack/medical/ointment))
 		tool_name = "the bandaid"
 
 	if (!hasorgans(target))
@@ -76,7 +76,7 @@
 	var/tool_name = "\the [tool]"
 	if (istype(tool, /obj/item/stack/medical/advanced/bruise_pack))
 		tool_name = "regenerative membrane"
-	if (istype(tool, /obj/item/stack/medical/bruise_pack))
+	if (istype(tool, /obj/item/stack/medical/ointment))
 		tool_name = "the bandaid"
 
 	if (!hasorgans(target))
