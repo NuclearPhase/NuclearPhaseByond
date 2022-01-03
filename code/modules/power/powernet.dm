@@ -22,8 +22,9 @@
 	var/voltage = 0
 	var/newvoltage = 0
 
-/datum/powernet/proc/get_heat(var/resistance) // {OHM} -> {K}, simple joule lenz's law implementation
-	return (get_amperage() ** 2 * resistance)
+/datum/powernet/proc/get_heat(var/resistance) // {OHM} -> {delta K}, simple joule lenz's law implementation
+	var/j = (get_amperage() ** 2 * resistance)
+	return 0.30462405 * j // j/4.1868 * 1.2754
 
 /datum/powernet/proc/get_amperage()
 	return min(avail, viewload)
@@ -169,14 +170,12 @@
 	voltage = newvoltage
 	newvoltage = 0
 
-	var/gresistance = 0 // some dispersion simulating
-	for(var/obj/structure/cable/C in cables)
-		gresistance += C.resistance * 10
+	var/coef = min(1, cables.len * 0.045)
 
 	for(var/obj/structure/cable/C in cables)
 		var/turf/T = get_turf(C)
 		var/datum/gas_mixture/environment = T.return_air()
-		environment.add_thermal_energy(get_heat(C.resistance) * max(0.25, (100 - (gresistance - C.resistance)) / 100))
+		environment.add_thermal_energy(get_heat(C.resistance) / coef)
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)

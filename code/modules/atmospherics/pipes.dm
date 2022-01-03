@@ -173,14 +173,18 @@
 	var/minimum_temperature_difference = 300
 	var/thermal_conductivity = 0 //WALL_HEAT_TRANSFER_COEFFICIENT No
 
-	var/maximum_pressure = 210*ONE_ATMOSPHERE
-	var/fatigue_pressure = 170*ONE_ATMOSPHERE
-	alert_pressure = 170*ONE_ATMOSPHERE
+	var/maximum_pressure = 320*ONE_ATMOSPHERE
+	var/fatigue_pressure = 210*ONE_ATMOSPHERE
+	alert_pressure = 200*ONE_ATMOSPHERE
 
 	level = 1
 
 /obj/machinery/atmospherics/pipe/simple/New()
 	..()
+	if(dir==2)
+		set_dir(1)
+	else if(dir==8)
+		set_dir(4)
 
 	// Pipe colors and icon states are handled by an image cache - so color and icon should
 	//  be null. For mapping purposes color is defined in the object definitions.
@@ -223,6 +227,8 @@
 
 	var/pressure_difference = pressure - environment.return_pressure()
 
+	// TODO: fix bursting
+	/*
 	if(pressure_difference > maximum_pressure)
 		burst()
 
@@ -232,6 +238,8 @@
 			burst()
 
 	else return 1
+	*/
+	return 1
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
 	ASSERT(parent)
@@ -1422,7 +1430,7 @@
 
 /obj/machinery/atmospherics/proc/universal_underlays(var/obj/machinery/atmospherics/node, var/direction)
 	var/turf/T = loc
-	if(node)
+	if(istype(node))
 		var/node_dir = get_dir(src,node)
 		if(node.icon_connect_type == "-supply")
 			add_underlay_adapter(T, , node_dir, "")

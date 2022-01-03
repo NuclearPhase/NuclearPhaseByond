@@ -15,9 +15,6 @@
 	adjust_solar_output(1.5)
 
 /datum/event/solar_storm/proc/adjust_solar_output(var/mult = 1)
-	if(isnull(base_solar_gen_rate)) base_solar_gen_rate = solar_gen_rate
-	solar_gen_rate = mult * base_solar_gen_rate
-
 
 /datum/event/solar_storm/start()
 	command_announcement.Announce("The solar storm has reached the [station_name()]. Please refain from EVA and remain inside until it has passed.", "[station_name()] Sensor Array")

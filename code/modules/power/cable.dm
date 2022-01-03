@@ -24,16 +24,16 @@ By design, d1 is the smallest direction and d2 is the highest
 
 var/list/possible_cable_coil_colours
 
-#define CABLE_1MM2_RESISTANCE 0.25 OHM
+#define CABLE_1MM_RESISTANCE 0.002 OHM
 /obj/structure/cable
 	level = 1
 	anchored =1
 	var/datum/powernet/powernet
 	name = "power cable"
-	desc = "A flexible superconducting cable for heavy-duty power transfer."
+	desc = "A cable for power transfer."
 	icon = 'icons/obj/power_cond_white.dmi'
 	icon_state = "0-1"
-	var/resistance = CABLE_1MM2_RESISTANCE / 1000 // 1000 mm^2
+	var/resistance = CABLE_1MM_RESISTANCE / 1000 // 10 cm
 	var/d1 = 0
 	var/d2 = 1
 
@@ -54,7 +54,7 @@ var/list/possible_cable_coil_colours
 	return PN.draw_power(amount)
 
 /obj/structure/cable/heavy
-	resistance = CABLE_1MM2_RESISTANCE / 10000 // 10000 mm^2
+	resistance = CABLE_1MM_RESISTANCE / 5000 // 50 cm
 	icon = 'icons/obj/power_cond_heavy.dmi'
 	color = null
 

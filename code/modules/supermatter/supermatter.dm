@@ -230,14 +230,6 @@
 		var/random_change = rand(100 - DETONATION_SHUTDOWN_RNG_FACTOR, 100 + DETONATION_SHUTDOWN_RNG_FACTOR) / 100
 		S.energy_fail(round(DETONATION_SHUTDOWN_SMES * random_change))
 
-	// Effect 3: Break solar arrays
-
-	for(var/obj/machinery/power/solar/S in SSmachines.machinery)
-		if(!(S.z in affected_z))
-			continue
-		if(prob(DETONATION_SOLAR_BREAK_CHANCE))
-			S.broken()
-
 
 
 	// Effect 4: Medium scale explosion

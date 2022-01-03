@@ -56,7 +56,6 @@
 
 /obj/item/weapon/circuitboard/solar_control
 	name = T_BOARD("solar control console")
-	build_path = /obj/machinery/power/solar_control
 	origin_tech = list(TECH_DATA = 2, TECH_POWER = 2)
 
 /obj/item/weapon/circuitboard/powermonitor

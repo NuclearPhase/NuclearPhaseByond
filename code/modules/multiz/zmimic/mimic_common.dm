@@ -12,6 +12,9 @@
 	..()
 	if (above)
 		update_above()
+	
+	if (bound_overlay)
+		QDEL_NULL(bound_overlay)
 
 /atom/movable/update_icon()
 	..()

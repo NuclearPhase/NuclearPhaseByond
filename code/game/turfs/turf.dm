@@ -35,7 +35,7 @@
 
 	var/list/variants
 
-/turf/New()
+/turf/Initialize(mapload, ...)
 	..()
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
@@ -47,8 +47,17 @@
 	else
 		luminosity = 1
 
+	//if (mapload && permit_ao)
+		//queue_ao()
+	
+	if (z_flags & ZM_MIMIC_BELOW)
+		setup_zmimic(mapload) 
+
 /turf/Destroy()
 	remove_cleanables()
+	if (bound_overlay)
+		QDEL_NULL(bound_overlay)
+		
 	..()
 	return QDEL_HINT_IWILLGC
 

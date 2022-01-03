@@ -623,9 +623,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.update_body(1)
 
 		germ_level++
-		owner.adjustToxLoss(0.5)
+		owner.adjustToxLoss(1)
 	if(germ_level >= INFECTION_LEVEL_THREE - 100)
-		owner.reagents.add_reagent(/datum/reagent/toxin, germ_level / (INFECTION_LEVEL_FOUR + antibiotics * 65) * 0.8)
+		owner.reagents.add_reagent(/datum/reagent/toxin, germ_level / (INFECTION_LEVEL_FOUR + antibiotics * 65))
 
 //Updating wounds. Handles wound natural I had some free spachealing, internal bleedings and infections
 /obj/item/organ/external/proc/update_wounds()

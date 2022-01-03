@@ -69,7 +69,6 @@
 #define INIT_ORDER_SQUEAK -40
 #define INIT_ORDER_CHAT -90
 #define INIT_ORDER_PERSISTENCE -100
-#define INIT_OPEN_SPACE -150
 #define INIT_BAY_LEGACY -200
 
 // SS runlevels

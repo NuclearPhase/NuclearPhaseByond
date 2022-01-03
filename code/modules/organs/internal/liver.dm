@@ -63,5 +63,14 @@
 		heal_damage(to_regen)
 		absorbed += to_regen
 
+	if(prob(2) && absorbed)
+		switch(absorbed)
+			if(8 to 15)
+				to_chat(owner, SPAN_WARNING("You fill faint."))
+			if(15 to 22)
+				to_chat(owner, SPAN_WARNING("You feel poisoned."))
+			if(22 to 30)
+				to_chat(owner, SPAN_DANGER("You feel poisoned."))
+
 	//Blood regeneration if there is some space
 	owner.regenerate_blood(0.1 + owner.chem_effects[CE_BLOODRESTORE])

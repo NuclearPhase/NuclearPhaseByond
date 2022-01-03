@@ -145,17 +145,13 @@ obj/structure/closet/crate
 
 /obj/structure/closet/crate/solar/WillContain()
 	return list(
-		/obj/item/solar_assembly = 14,
-		/obj/item/weapon/circuitboard/solar_control,
-		/obj/item/weapon/tracker_electronics,
-		/obj/item/weapon/paper/solar
 	)
 
 /obj/structure/closet/crate/solar_assembly
 	name = "solar assembly crate"
 
 /obj/structure/closet/crate/solar_assembly/WillContain()
-	return list(/obj/item/solar_assembly = 16)
+	return list()
 
 /obj/structure/closet/crate/freezer
 	name = "freezer"

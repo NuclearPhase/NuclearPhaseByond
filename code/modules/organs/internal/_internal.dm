@@ -237,7 +237,7 @@
 
 /obj/item/organ/internal/rejuvenate(var/ignore_prosthetic_prefs)
 	germ_level = 0
-	diseases.Cut()
+	diseases?.Cut()
 	hormones = initial(hormones)
 
 	..()

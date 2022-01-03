@@ -7,8 +7,8 @@
 	name = "Gas filter"
 
 	use_power = 1
-	idle_power_usage = 150		//internal circuitry, friction losses and stuff
-	power_rating = 7500	//This also doubles as a measure of how powerful the filter is, in Watts. 7500 W ~ 10 HP
+	idle_power_usage = 500		//internal circuitry, friction losses and stuff
+	power_rating = 30 KWATT	//This also doubles as a measure of how powerful the filter is, in Watts. 7500 W ~ 10 HP
 
 	var/temp = null // -- TLE
 
@@ -69,7 +69,6 @@
 		icon_state += use_power ? "on" : "off"
 	else
 		icon_state += "off"
-		use_power = 0
 
 /obj/machinery/atmospherics/trinary/filter/update_underlays()
 	if(..())
@@ -96,7 +95,7 @@
 	last_power_draw = 0
 	last_flow_rate = 0
 
-	if((stat & (NOPOWER|BROKEN)) || !use_power)
+	if((stat & (NOPOWER|BROKEN)) || !use_power || !(node2 && node3 && node1))
 		return
 
 	//Figure out the amount of moles to transfer
