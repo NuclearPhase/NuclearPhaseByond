@@ -7,8 +7,8 @@
 	name = "Gas filter"
 
 	use_power = 1
-	idle_power_usage = 150		//internal circuitry, friction losses and stuff
-	power_rating = 7500	//This also doubles as a measure of how powerful the filter is, in Watts. 7500 W ~ 10 HP
+	idle_power_usage = 500		//internal circuitry, friction losses and stuff
+	power_rating = 30 KWATT	//This also doubles as a measure of how powerful the filter is, in Watts. 7500 W ~ 10 HP
 
 	var/temp = null // -- TLE
 

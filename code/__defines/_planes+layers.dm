@@ -69,13 +69,6 @@ What is the naming convention for planes or layers?
 	#define DEBRIS_LAYER 1
 	#define DUST_LAYER 2
 
-//Reserve planes for openspace
-#define OPENSPACE_PLANE_START -462
-#define OPENSPACE_PLANE_END -22
-#define OPENSPACE_PLANE -463
-#define OVER_OPENSPACE_PLANE -22
-
-
 #define BELOW_TURF_PLANE             -22 // objects that are below turfs. Useful for asteroid smoothing or other such magic.
 	// TURF_LAYER 2
 

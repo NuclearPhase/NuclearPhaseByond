@@ -57,17 +57,12 @@
 
 /decl/hierarchy/supply_pack/engineering/solar
 	name = "Solar Pack crate"
-	contains  = list(/obj/item/solar_assembly = 14,
-					/obj/item/weapon/circuitboard/solar_control,
-					/obj/item/weapon/tracker_electronics,
-					/obj/item/weapon/paper/solar
-					)
 	cost = 15
 	containername = "\improper Solar Pack crate"
 
 /decl/hierarchy/supply_pack/engineering/solar_assembly
 	name = "Solar Assembly crate"
-	contains  = list(/obj/item/solar_assembly = 16)
+	contains  = list()
 	cost = 10
 	containername = "\improper Solar Assembly crate"
 

@@ -227,6 +227,8 @@
 
 	var/pressure_difference = pressure - environment.return_pressure()
 
+	// TODO: fix bursting
+	/*
 	if(pressure_difference > maximum_pressure)
 		burst()
 
@@ -236,6 +238,8 @@
 			burst()
 
 	else return 1
+	*/
+	return 1
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
 	ASSERT(parent)
@@ -1426,7 +1430,7 @@
 
 /obj/machinery/atmospherics/proc/universal_underlays(var/obj/machinery/atmospherics/node, var/direction)
 	var/turf/T = loc
-	if(node)
+	if(istype(node))
 		var/node_dir = get_dir(src,node)
 		if(node.icon_connect_type == "-supply")
 			add_underlay_adapter(T, , node_dir, "")

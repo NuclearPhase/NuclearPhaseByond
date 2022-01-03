@@ -67,6 +67,9 @@ SUBSYSTEM_DEF(air)
 	init_order = INIT_ORDER_AIR
 	flags = SS_POST_FIRE_TIMING
 
+	// Air cooling by z table
+	var/list/coolingtable = list()
+
 	//Geometry lists
 	var/list/zones = list()
 	var/list/edges = list()
@@ -156,6 +159,9 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 
 		report_progress("Air settling completed in [(REALTIMEOFDAY - starttime)/10] seconds!")
 
+	for(var/i in 1 to 12)
+		coolingtable[i] = (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1 
+
 	..(timeofday)
 
 /datum/controller/subsystem/air/fire(resumed = FALSE, no_mc_tick = FALSE)
@@ -164,20 +170,10 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		processing_fires = active_fire_zones.Copy()
 		processing_hotspots = active_hotspots.Copy()
 
-	for(var/list/zone/Z in zones)
-		var/amount
-		switch(Z.contents[1].z)
-			if(5)
-				amount = -20
-			if(4)
-				amount = -15
-			if(3)
-				amount = -10
-			if(2)
-				amount = -5
-			if(1)
-				amount = -2.5
-		Z.air.add_thermal_energy(amount * Z.contents.len)
+	if(round_duration_in_ticks > (5 MINUTES))
+		spawn()
+			for(var/list/zone/Z in zones)
+				Z.air.add_thermal_energy(coolingtable[Z.contents[1].z] * Z.contents.len)
 
 	var/list/curr_tiles = tiles_to_update
 	var/list/curr_defer = deferred
@@ -291,7 +287,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		else if (MC_TICK_CHECK)
 			return
 
-	
+
 
 /datum/controller/subsystem/air/proc/add_zone(zone/z)
 	zones += z

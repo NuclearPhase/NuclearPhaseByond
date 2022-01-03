@@ -30,7 +30,7 @@ var/list/possible_cable_coil_colours
 	anchored =1
 	var/datum/powernet/powernet
 	name = "power cable"
-	desc = "A flexible superconducting cable for heavy-duty power transfer."
+	desc = "A cable for power transfer."
 	icon = 'icons/obj/power_cond_white.dmi'
 	icon_state = "0-1"
 	var/resistance = CABLE_1MM_RESISTANCE / 1000 // 10 cm

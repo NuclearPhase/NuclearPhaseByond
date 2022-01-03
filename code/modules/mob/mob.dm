@@ -98,8 +98,8 @@
 			M.show_message(blind_message, AUDIBLE_MESSAGE)
 			continue
 	//Multiz, have shadow do same
-	if(shadow)
-		shadow.visible_message(message, self_message, blind_message)
+	if(bound_overlay)
+		bound_overlay.visible_message(message, self_message, blind_message)
 
 // Returns an amount of power drawn from the object (-1 if it's not viable).
 // If drain_check is set it will not actually drain power, just return a value.

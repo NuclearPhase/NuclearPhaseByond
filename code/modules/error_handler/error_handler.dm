@@ -1,7 +1,7 @@
 GLOBAL_VAR_INIT(total_runtimes, 0)
 GLOBAL_VAR_INIT(total_runtimes_skipped, 0)
 
-#ifdef DEBUG
+//#ifdef DEBUG
 /world/Error(exception/E, datum/e_src)
 	if(!istype(E)) //Something threw an unusual exception
 		log_world("\[[time_stamp()]] Uncaught exception: [E]")
@@ -96,4 +96,4 @@ GLOBAL_VAR_INIT(total_runtimes_skipped, 0)
 	for(var/line in desclines)
 		to_world_log(line)
 
-#endif
+//#endif

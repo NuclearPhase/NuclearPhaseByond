@@ -32,6 +32,13 @@
 			pulledby.pulling = null
 		pulledby = null
 
+	if (bound_overlay)
+		QDEL_NULL(bound_overlay)
+
+	if(virtual_mob && !ispath(virtual_mob))
+		qdel(virtual_mob)
+		virtual_mob = null
+
 /atom/movable/Bump(var/atom/A, yes)
 	if(src.throwing)
 		src.throw_impact(A)

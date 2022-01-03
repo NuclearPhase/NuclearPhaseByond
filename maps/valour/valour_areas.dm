@@ -152,6 +152,10 @@
 
 // C
 
+/area/sector_c/atmos/heatchamber
+	name = "\improper Atmos Heating Chamber"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "atmos"
 /area/sector_c/atmos
 	name = "\improper Atmos"
 	icon = 'icons/turf/areas.dmi'
