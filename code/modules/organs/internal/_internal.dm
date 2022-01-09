@@ -58,7 +58,7 @@
 /obj/item/organ/internal/proc/generate_hormone(T, amount, max = INFINITY)
 	if(!owner)
 		return
-	var/cur_amount = LAZYACCESS(hormones, T)
+	var/cur_amount = LAZYACCESS0(hormones, T)
 	amount = min(cur_amount + amount, max) - cur_amount
 	if(amount <= 0)
 		return
@@ -89,7 +89,7 @@
 
 /obj/item/organ/internal/New(var/mob/living/carbon/holder)
 	if(max_damage)
-		min_bruised_damage = Floor(max_damage / 4)
+		min_bruised_damage = round(max_damage / 4)
 	..()
 	if(istype(holder))
 		holder.internal_organs |= src

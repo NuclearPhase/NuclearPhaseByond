@@ -1,7 +1,7 @@
 /*
 	Unit tests for ATMOSPHERICS primitives
 */
-#define ALL_GASIDS gas_data.gases
+#define ALL_GASIDS GLOB.fluid_data
 
 /datum/unit_test/atmos_machinery
 	var/list/test_cases = list()
@@ -11,7 +11,7 @@
 	for(var/mix_name in gas_mix_data)
 		var/list/mix_data = gas_mix_data[mix_name]
 
-		var/datum/gas_mixture/gas_mix = new (CELL_VOLUME, mix_data["temperature"])
+		var/datum/fluid_mixture/gas_mix = new (CELL_VOLUME, mix_data["temperature"])
 
 		var/list/initial_gas = mix_data["initial_gas"]
 		if(initial_gas.len)
@@ -29,8 +29,8 @@
 	for(var/mix_name in before_gas_mixes & after_gas_mixes)
 		var/change = list()
 
-		var/datum/gas_mixture/before = before_gas_mixes[mix_name]
-		var/datum/gas_mixture/after = after_gas_mixes[mix_name]
+		var/datum/fluid_mixture/before = before_gas_mixes[mix_name]
+		var/datum/fluid_mixture/after = after_gas_mixes[mix_name]
 
 		var/list/all_gases = before.gas | after.gas
 		for(var/gasid in all_gases)
@@ -42,15 +42,15 @@
 
 /datum/unit_test/atmos_machinery/proc/check_moles_conserved(var/case_name, var/list/before_gas_mixes, var/list/after_gas_mixes)
 	var/failed = FALSE
-	for(var/gasid in gas_data.gases)
+	for(var/gasid in GLOB.fluid_data)
 		var/before = 0
 		for(var/gasmix in before_gas_mixes)
-			var/datum/gas_mixture/G = before_gas_mixes[gasmix]
+			var/datum/fluid_mixture/G = before_gas_mixes[gasmix]
 			before += G.get_gas(gasid)
 
 		var/after = 0
 		for(var/gasmix in after_gas_mixes)
-			var/datum/gas_mixture/G = after_gas_mixes[gasmix]
+			var/datum/fluid_mixture/G = after_gas_mixes[gasmix]
 			after += G.get_gas(gasid)
 
 		if(abs(before - after) > ATMOS_PRECISION)
@@ -197,7 +197,7 @@
 	name = "ATMOS MACHINERY: scrub_gas() Conserves Moles"
 
 /datum/unit_test/atmos_machinery/conserve_moles/scrub_gas/start_test()
-	var/list/filtering = gas_data.gases
+	var/list/filtering = GLOB.fluid_data
 
 	for(var/case_name in test_cases)
 		var/gas_mix_data = test_cases[case_name]
@@ -214,7 +214,7 @@
 	name = "ATMOS MACHINERY: filter_gas() Conserves Moles"
 
 /datum/unit_test/atmos_machinery/conserve_moles/filter_gas/start_test()
-	var/list/filtering = gas_data.gases
+	var/list/filtering = GLOB.fluid_data
 
 	for(var/case_name in test_cases)
 		var/gas_mix_data = test_cases[case_name]
@@ -237,7 +237,7 @@
 		var/list/after_gas_mixes = create_gas_mixes(gas_mix_data)
 
 		var/list/filtering = list()
-		for(var/gasid in gas_data.gases)
+		for(var/gasid in GLOB.fluid_data)
 			filtering[gasid] = after_gas_mixes["sink"] //just filter everything to sink
 
 		filter_gas_multi(null, filtering, after_gas_mixes["source"], after_gas_mixes["sink"], null, INFINITY)
@@ -257,8 +257,8 @@
 
 		var/list/mix_sources = list()
 		for(var/gasid in ALL_GASIDS)
-			var/datum/gas_mixture/mix_source = after_gas_mixes["sink"]
-			mix_sources[mix_source] = 1.0/gas_data.gases.len //doesn't work as a macro for some reason
+			var/datum/fluid_mixture/mix_source = after_gas_mixes["sink"]
+			mix_sources[mix_source] = 1.0/GLOB.fluid_data.len //doesn't work as a macro for some reason
 
 		mix_gas(null, mix_sources, after_gas_mixes["sink"], null, INFINITY)
 

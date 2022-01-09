@@ -163,9 +163,9 @@ obj/structure/closet/crate
 	var/cooling_power = 40
 
 	return_air()
-		var/datum/gas_mixture/gas = (..())
+		var/datum/fluid_mixture/gas = (..())
 		if(!gas)	return null
-		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
+		var/datum/fluid_mixture/newgas = new/datum/fluid_mixture()
 		newgas.copy_from(gas)
 		if(newgas.temperature <= target_temp)	return
 

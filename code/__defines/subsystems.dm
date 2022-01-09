@@ -23,8 +23,9 @@
 #define FLIGHTSUIT_PROCESSING_FULL 1
 
 #define INITIALIZATION_INSSATOMS 0	//New should not call Initialize
-#define INITIALIZATION_INNEW_MAPLOAD 1	//New should call Initialize(TRUE)
-#define INITIALIZATION_INNEW_REGULAR 2	//New should call Initialize(FALSE)
+#define INITIALIZATION_INSSATOMS_LATE 1	//New should not call Initialize; after the first pass is complete (handled differently)
+#define INITIALIZATION_INNEW_MAPLOAD 2	//New should call Initialize(TRUE)
+#define INITIALIZATION_INNEW_REGULAR 3	//New should call Initialize(FALSE)
 
 #define INITIALIZE_HINT_NORMAL   0  //Nothing happens
 #define INITIALIZE_HINT_LATELOAD 1  //Call LateInitialize
@@ -33,7 +34,7 @@
 //type and all subtypes should always call Initialize in New()
 #define INITIALIZE_IMMEDIATE(X) ##X/New(loc, ...){\
 	..();\
-	if(!initialized) {\
+	if(!(atom_flags & ATOM_FLAG_INITIALIZED)) {\
 		args[1] = TRUE;\
 		SSatoms.InitAtom(src, args);\
 	}\
@@ -43,33 +44,34 @@
 // Subsystems shutdown in the reverse of the order they initialize in
 // The numbers just define the ordering, they are meaningless otherwise.
 
-#define INIT_ORDER_SKYBOX 19
-#define INIT_ORDER_DBCORE 18
-#define INIT_ORDER_BLACKBOX 17
-#define INIT_ORDER_SERVER_MAINT 16
-#define INIT_ORDER_JOBS 15
-#define INIT_ORDER_EVENTS 14
-#define INIT_ORDER_TICKER 13
-#define INIT_ORDER_MAPPING 12
-#define INIT_ORDER_ATOMS 11
-#define INIT_ORDER_LANGUAGE 10
-#define INIT_ORDER_MACHINES 9
-#define INIT_ORDER_SHUTTLE 3
-#define INIT_ORDER_TIMER 1
-#define INIT_ORDER_DEFAULT 0
-#define INIT_ORDER_AIR -1
-#define INIT_ORDER_MINIMAP -2
-#define INIT_ORDER_ASSETS -3
-#define INIT_ORDER_ICON_SMOOTHING -5
-#define INIT_ORDER_OVERLAY -6
-#define INIT_ORDER_ZCOPY -7
-#define INIT_ORDER_XKEYSCORE -10
-#define INIT_ORDER_STICKY_BAN -10
-#define INIT_ORDER_LIGHTING -20
-#define INIT_ORDER_SQUEAK -40
-#define INIT_ORDER_CHAT -90
-#define INIT_ORDER_PERSISTENCE -100
-#define INIT_BAY_LEGACY -200
+#define SS_INIT_SKYBOX 19
+#define SS_INIT_DBCORE 18
+#define SS_INIT_BLACKBOX 17
+#define SS_INIT_SERVER_MAINT 16
+#define SS_INIT_JOBS 15
+#define SS_INIT_EVENTS 14
+#define SS_INIT_TICKER 13
+#define SS_INIT_MAPPING 12
+#define SS_INIT_ATOMS 11
+#define SS_INIT_LANGUAGE 10
+#define SS_INIT_MACHINES 9
+#define SS_INIT_SHUTTLE 3
+#define SS_INIT_TIMER 1
+#define SS_INIT_DEFAULT 0
+#define SS_INIT_AIR -1
+#define SS_INIT_MINIMAP -2
+#define SS_INIT_ASSETS -3
+#define SS_INIT_ICON_SMOOTHING -5
+#define SS_INIT_OVERLAY -6
+#define SS_INIT_ZCOPY -7
+#define SS_INIT_XKEYSCORE -10
+#define SS_INIT_STICKY_BAN -10
+#define SS_INIT_LIGHTING -20
+#define SS_INIT_ICON_UPDATE -30
+#define SS_INIT_SQUEAK -40
+#define SS_INIT_CHAT -90
+#define SS_INIT_PERSISTENCE -100
+#define SS_INIT_LEGACY -200
 
 // SS runlevels
 

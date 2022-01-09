@@ -27,7 +27,7 @@
 	if (!( istype(T, /turf) ))
 		return
 
-	var/datum/gas_mixture/env = T.return_air()
+	var/datum/fluid_mixture/env = T.return_air()
 
 	var/t = "<span class='notice'>Coordinates: [T.x],[T.y],[T.z]</span>\n"
 	t += "<span class='warning'>Temperature: [env.temperature]</span>\n"

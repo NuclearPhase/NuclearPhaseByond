@@ -27,7 +27,7 @@
 	. = ..()
 	if(!scrubbing_gas)
 		scrubbing_gas = list()
-		for(var/g in gas_data.gases)
+		for(var/g in GLOB.fluid_data)
 			if(g != "oxygen" && g != "nitrogen")
 				scrubbing_gas += g
 
@@ -65,7 +65,7 @@
 	var/power_draw = -1
 
 	if(on && cell && cell.charge)
-		var/datum/gas_mixture/environment
+		var/datum/fluid_mixture/environment
 		if(holding)
 			environment = holding.air_contents
 		else
@@ -196,7 +196,7 @@
 
 	var/power_draw = -1
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/fluid_mixture/environment = loc.return_air()
 
 	var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles
 

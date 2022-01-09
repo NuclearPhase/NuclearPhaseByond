@@ -77,7 +77,7 @@ Data storage vars:
 			for(var/sleep_time=delay;sleep_time>0;sleep_time--) //uhh, this is ugly. But I see no other way to terminate sleeping proc. Such disgrace.
 				if(!control_switch)
 					return 0
-				sleep(1)
+				stoplag()
 		return 0
 
 	proc/start(list/arguments=null)
@@ -104,7 +104,7 @@ Data storage vars:
 	proc/state_check()
 		var/lag = 0
 		while(state)
-			sleep(1)
+			stoplag()
 			if(++lag>10)
 				CRASH("The global_iterator loop \ref[src] failed to terminate in designated timeframe. This may be caused by server lagging.")
 		return 1

@@ -8,7 +8,7 @@
  *
  *   The goal is to have all sorts of tests that run and to run them as quickly as possible.
  *
- *   Tests that require time to run we instead just check back on their results later instead of waiting around in a sleep(1) for each test.
+ *   Tests that require time to run we instead just check back on their results later instead of waiting around in a stoplag() for each test.
  *   This allows us to finish unit testing quicker since we can start other tests while we're waiting on that one to finish.
  *
  *   An example of that is listed in mob_tests.dm with the human_breath test.  We spawn the mob in space and set the async flag to 1 so that we run the check later.
@@ -153,7 +153,7 @@ proc/load_unit_test_changes()
 
 	world.save_mode("extended")
 
-	sleep(1)
+	stoplag()
 
 	ticker.current_state = GAME_STATE_SETTING_UP
 	Master.SetRunLevel(RUNLEVEL_SETUP)
@@ -229,7 +229,7 @@ proc/load_unit_test_changes()
 				continue
 			if(result)				// 0 Means come back, 1 means we got results so move on.
 				async_test.Remove(test)
-		sleep(1)
+		stoplag()
 
 	//
 	// Make sure all Unit Tests reported a result

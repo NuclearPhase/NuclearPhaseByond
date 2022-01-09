@@ -26,15 +26,15 @@
 	<div class="itemContent">
 		{{:helper.displayBar(data.resistance, data.minresistance, data.maxresistance)}}
 		<div style="clear: both; padding-top: 4px;">
-			{{:helper.link('-', null, {'adj' : -0.01}, (data.resistance > data.minresistance) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'adj' : -0.001}, (data.resistance > data.minresistance) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'adj' : -0.0001}, (data.resistance > data.minresistance) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'adj' : -0.00001}, (data.resistance > data.minresistance) ? null : 'disabled')}}
+			{{:helper.link('-', null, {'adj' : -0.5}, (data.resistance > data.minresistance) ? null : 'disabled')}}
+			{{:helper.link('-', null, {'adj' : -0.05}, (data.resistance > data.minresistance) ? null : 'disabled')}}
+			{{:helper.link('-', null, {'adj' : -0.005}, (data.resistance > data.minresistance) ? null : 'disabled')}}
+			{{:helper.link('-', null, {'adj' : -0.0005}, (data.resistance > data.minresistance) ? null : 'disabled')}}
 			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.resistance}} Ohm&nbsp;</div>
-			{{:helper.link('+', null, {'adj' : 0.00001}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'adj' : 0.0001}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'adj' : 0.001}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'adj' : 0.01}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
+			{{:helper.link('+', null, {'adj' : 0.0005}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
+			{{:helper.link('+', null, {'adj' : 0.005}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
+			{{:helper.link('+', null, {'adj' : 0.05}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
+			{{:helper.link('+', null, {'adj' : 0.5}, (data.resistance < data.maxresistance) ? null : 'disabled')}}
 		</div>
 	</div>
 </div>

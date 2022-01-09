@@ -62,7 +62,7 @@
 	icon_state = "desert[rand(0,5)]"
 	..()
 
-/turf/simulated/floor/exoplanet/desert/fire_act(datum/gas_mixture/air, temperature, volume)
+/turf/simulated/floor/exoplanet/desert/fire_act(datum/fluid_mixture/air, temperature, volume)
 	if((temperature > T0C + 1700 && prob(5)) || temperature > T0C + 3000)
 		SetName("molten silica")
 		icon_state = "sandglass"

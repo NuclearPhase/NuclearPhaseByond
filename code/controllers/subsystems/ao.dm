@@ -1,14 +1,14 @@
 SUBSYSTEM_DEF(ao)
 	name = "Ambient Occlusion"
-	init_order = INIT_BAY_LEGACY
+	init_order = SS_INIT_LEGACY
 	wait = 1
 	runlevels = RUNLEVELS_DEFAULT | RUNLEVEL_LOBBY
 	flags = SS_NO_INIT
 	var/list/queue = list()
 	var/list/cache = list()
 
-/datum/controller/subsystem/ao/stat_entry()
-	..("P:[queue.len]")
+/datum/controller/subsystem/ao/stat_entry(text)
+	..("[text] | Queue: [queue.len]")
 
 /datum/controller/subsystem/ao/fire(resumed = 0, no_mc_tick = FALSE)
 	var/list/curr = queue

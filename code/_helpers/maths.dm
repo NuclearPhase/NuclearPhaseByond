@@ -1,39 +1,27 @@
 // Macro functions.
 #define RAND_F(LOW, HIGH) (rand()*(HIGH-LOW) + LOW)
 #define ceil(x) (-round(-(x)))
+#define CEILING(x, y) ( -round(-(x) / (y)) * (y) )
+
+/// The percentage of value in max, rounded to places: 1 = nearest 0.1 , 0 = nearest 1 , -1 = nearest 10, etc
+#define Percent(value, max, places) round((value) / (max) * 100, !(places) || 10 ** -(places))
 
 // min is inclusive, max is exclusive
 /proc/Wrap(val, min, max)
 	var/d = max - min
-	var/t = Floor((val - min) / d)
+	var/t = round((val - min) / d)
 	return val - (t * d)
 
 /proc/Default(a, b)
 	return a ? a : b
 
-// Trigonometric functions.
-/proc/Tan(x)
-	return sin(x) / cos(x)
-
-/proc/Csc(x)
-	return 1 / sin(x)
-
-/proc/Sec(x)
-	return 1 / cos(x)
-
-/proc/Cot(x)
-	return 1 / Tan(x)
+/proc/ctg(x)
+	return 1 / tan(x)
 
 /proc/Atan2(x, y)
 	if(!x && !y) return 0
 	var/a = arccos(x / sqrt(x*x + y*y))
 	return y >= 0 ? a : -a
-
-/proc/Floor(x)
-	return round(x)
-
-/proc/Ceiling(x)
-	return -round(-x)
 
 // Greatest Common Divisor: Euclid's algorithm.
 /proc/Gcd(a, b)
@@ -63,7 +51,7 @@
 	return (val >= min) && (val <= max)
 
 /proc/IsInteger(x)
-	return Floor(x) == x
+	return round(x) == x
 
 /proc/IsMultiple(x, y)
 	return x % y == 0
@@ -75,9 +63,16 @@
 	return  (x & 0x1)
 
 // Performs a linear interpolation between a and b.
-// Note: weight=0 returns a, weight=1 returns b, and weight=0.5 returns the mean of a and b.
-/proc/Interpolate(a, b, weight = 0.5)
-	return a + (b - a) * weight // Equivalent to: a*(1 - weight) + b*weight
+/proc/lerp(a, b, t = 0.5)
+	return a + t * (b - a)
+
+// Note: pass by var only a
+#define LERP(a, b, t) (a) + (t) * ((b) - (a)) 
+
+// Perfoms a cosine interpolation.
+/proc/clerp(a, b, t = 0.5)
+	var/f = (1 - cos(t * M_PI)) * 0.5
+	return a * (1-f) + b * f
 
 /proc/Mean(...)
 	var/sum = 0

@@ -198,7 +198,7 @@
 							new /obj/item/toy/ammo/crossbow(A.loc)
 							qdel(D)
 
-				sleep(1)
+				stoplag()
 
 			spawn(10)
 				if(D)

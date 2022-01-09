@@ -71,8 +71,8 @@
 
 	updateDialog()
 
-	var/datum/gas_mixture/air1 = circ1.return_transfer_air()
-	var/datum/gas_mixture/air2 = circ2.return_transfer_air()
+	var/datum/fluid_mixture/air1 = circ1.return_transfer_air()
+	var/datum/fluid_mixture/air2 = circ2.return_transfer_air()
 
 	lastgen2 = lastgen1
 	lastgen1 = 0

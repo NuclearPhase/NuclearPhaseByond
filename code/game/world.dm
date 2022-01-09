@@ -64,7 +64,7 @@
 
 	return match
 
-#define RECOMMENDED_VERSION 511
+#define RECOMMENDED_VERSION 514
 /world/New()
 	//set window title
 	name = "[server_name] - [GLOB.using_map.full_name]"
@@ -90,6 +90,7 @@
 		log = runtime_log
 
 	callHook("startup")
+
 	//Emergency Fix
 	load_mods()
 	//end-emergency fix

@@ -2,7 +2,7 @@
 /datum/controller/subsystem
 	// Metadata; you should define these.
 	name = "fire coderbus"              //name of the subsystem
-	var/init_order = INIT_ORDER_DEFAULT //order of initialization. Higher numbers are initialized first, lower numbers later. Use defines in __DEFINES/subsystems.dm for easy understanding of order.
+	var/init_order = SS_INIT_DEFAULT //order of initialization. Higher numbers are initialized first, lower numbers later. Use defines in __DEFINES/subsystems.dm for easy understanding of order.
 	var/wait = 20                       //time to wait (in deciseconds) between each call to fire(). Must be a positive integer.
 	var/priority = SS_PRIORITY_DEFAULT  //When mutiple subsystems need to run in the same tick, higher priority subsystems will run first and be given a higher share of the tick before MC_TICK_CHECK triggers a sleep
 
@@ -11,6 +11,8 @@
 	//set to 0 to prevent fire() calls, mostly for admin use or subsystems that may be resumed later
 	//	use the SS_NO_FIRE flag instead for systems that never fire to keep it from even being added to the list
 	var/can_fire = TRUE
+
+	var/initialized = FALSE
 
 	// Bookkeeping variables; probably shouldn't mess with these.
 	var/last_fire = 0		//last world.time we called fire()
@@ -37,10 +39,6 @@
 	var/runlevels = RUNLEVELS_DEFAULT	//points of the game at which the SS can fire
 
 	var/static/list/failure_strikes //How many times we suspect a subsystem type has crashed the MC, 3 strikes and you're out!
-
-//Do not override
-/datum/controller/subsystem/New()
-	return
 
 // Used to initialize the subsystem BEFORE the map has loaded
 // Called AFTER Recover if that is called
@@ -74,6 +72,8 @@
 	can_fire = 0
 	flags |= SS_NO_FIRE
 	Master.subsystems -= src
+
+	return ..()
 
 
 //Queue it to run.
@@ -162,6 +162,7 @@
 
 //used to initialize the subsystem AFTER the map has loaded
 /datum/controller/subsystem/Initialize(start_timeofday)
+	initialized = TRUE
 	var/time = (REALTIMEOFDAY - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] second[time == 1 ? "" : "s"]!"
 	to_chat(world, "<span class='boldannounce'>[msg]</span>")
@@ -169,22 +170,24 @@
 	return time
 
 //hook for printing stats to the "MC" statuspanel for admins to see performance and related stats etc.
-/datum/controller/subsystem/stat_entry(msg)
+/datum/controller/subsystem/stat_entry(text)
 	if(!statclick)
 		statclick = new/obj/effect/statclick/debug(null, "Initializing...", src)
 
-
-
-	if(can_fire && !(SS_NO_FIRE in flags))
-		msg = "[round(cost,1)]ms|[round(tick_usage,1)]%([round(tick_overrun,1)]%)|[round(ticks,0.1)]\t[msg]"
+	if (flags & SS_NO_FIRE)
+		text = "NO FIRE"
+	else if (can_fire && !suspended)
+		text = "[round(cost,1)]ms|[round(tick_usage,1)]%([round(tick_overrun,1)]%)|[round(ticks,0.1)]\t[text]"
+	else if (!can_fire)
+		text = "OFFLINE"
 	else
-		msg = "OFFLINE\t[msg]"
+		text = "SUSPEND"
 
 	var/title = name
 	if (can_fire)
 		title = "\[[state_letter()]][title]"
 
-	stat(title, statclick.update(msg))
+	stat(title, statclick.update(text))
 
 /datum/controller/subsystem/proc/state_letter()
 	switch (state)
@@ -232,7 +235,7 @@
 /datum/controller/subsystem/Recover()
 
 /datum/controller/subsystem/VV_static()
-	return ..() + list("queued_priority")
+	return ..() + list("queued_priority", "suspended")
 
 /decl/vv_set_handler/subsystem_handler
 	handled_type = /datum/controller/subsystem
@@ -240,7 +243,7 @@
 	predicates = list(/proc/is_num_predicate)
 
 /decl/vv_set_handler/subsystem_handler/handle_set_var(var/datum/controller/subsystem/SS, variable, var_value, client)
-	var_value = !!var_value
 	if (var_value)
-		SS.next_fire = world.time + SS.wait
-	SS.can_fire = var_value
+		SS.enable()
+	else
+		SS.disable()

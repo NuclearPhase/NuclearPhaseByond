@@ -121,8 +121,8 @@ var/const/FALLOFF_SOUNDS = 0.5
 
 		S.volume -= max(distance - (world.view + extrarange), 0) * 2 //multiplicative falloff to add on top of natural audio falloff.
 
-		var/datum/gas_mixture/hearer_env = T.return_air()
-		var/datum/gas_mixture/source_env = turf_source.return_air()
+		var/datum/fluid_mixture/hearer_env = T.return_air()
+		var/datum/fluid_mixture/source_env = turf_source.return_air()
 
 		if (hearer_env && source_env)
 			var/pressure = min(hearer_env.return_pressure(), source_env.return_pressure())

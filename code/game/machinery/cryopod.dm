@@ -209,7 +209,7 @@
 	base_icon_state = "redpod0"
 	occupied_icon_state = "redpod1"
 	var/launched = 0
-	var/datum/gas_mixture/airtank
+	var/datum/fluid_mixture/airtank
 
 /obj/machinery/cryopod/lifepod/Initialize()
 	. = ..()

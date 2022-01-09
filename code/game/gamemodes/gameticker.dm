@@ -56,7 +56,7 @@ var/global/datum/controller/gameticker/ticker
 
 		while(current_state == GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
-				sleep(1)
+				stoplag()
 				vote.process()
 			if(round_progressing)
 				pregame_timeleft--
@@ -66,7 +66,7 @@ var/global/datum/controller/gameticker/ticker
 					vote.autogamemode()	//Quit calling this over and over and over and over.
 					while(vote.time_remaining)
 						for(var/i=0, i<10, i++)
-							sleep(1)
+							stoplag()
 							vote.process()
 			if(pregame_timeleft <= 0 || ((initialization_stage & INITIALIZATION_NOW_AND_COMPLETE) == INITIALIZATION_NOW_AND_COMPLETE))
 				current_state = GAME_STATE_SETTING_UP

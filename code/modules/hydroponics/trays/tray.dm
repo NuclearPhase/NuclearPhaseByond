@@ -585,7 +585,7 @@
 
 	if(mechanical)
 		var/turf/T = loc
-		var/datum/gas_mixture/environment
+		var/datum/fluid_mixture/environment
 
 		if(closed_system && (connected_port || holding))
 			environment = air_contents

@@ -167,7 +167,7 @@
 	if(valve_open)
 		return
 	tank_two.air_contents.volume += tank_one.air_contents.volume
-	var/datum/gas_mixture/temp
+	var/datum/fluid_mixture/temp
 	temp = tank_one.air_contents.remove_ratio(1)
 	tank_two.air_contents.merge(temp)
 	valve_open = 1
@@ -182,7 +182,7 @@
 		return
 
 	var/ratio1 = tank_one.air_contents.volume/tank_two.air_contents.volume
-	var/datum/gas_mixture/temp
+	var/datum/fluid_mixture/temp
 	temp = tank_two.air_contents.remove_ratio(ratio1)
 	tank_one.air_contents.merge(temp)
 	tank_two.air_contents.volume -=  tank_one.air_contents.volume

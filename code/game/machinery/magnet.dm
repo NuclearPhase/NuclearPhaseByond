@@ -381,7 +381,7 @@
 				radio_connection.post_signal(src, signal, filter = RADIO_MAGNETS)
 
 			if(speed == 10)
-				sleep(1)
+				stoplag()
 			else
 				sleep(12-speed)
 

@@ -268,7 +268,7 @@
 			origin_turf.visible_message("<span class='danger'>The [thrown.name] splatters against [target]!</span>")
 		qdel(thrown)
 
-/datum/seed/proc/handle_environment(var/turf/current_turf, var/datum/gas_mixture/environment, var/light_supplied, var/check_only)
+/datum/seed/proc/handle_environment(var/turf/current_turf, var/datum/fluid_mixture/environment, var/light_supplied, var/check_only)
 
 	var/health_change = 0
 	// Handle gas consumption.
@@ -302,7 +302,7 @@
 	if(get_trait(TRAIT_ALTER_TEMP) != 0 && !check_only)
 		var/target_temp = get_trait(TRAIT_ALTER_TEMP) > 0 ? 500 : 80
 		if(environment && abs(environment.temperature-target_temp) > 0.1)
-			var/datum/gas_mixture/removed = environment.remove(0.25 * environment.total_moles)
+			var/datum/fluid_mixture/removed = environment.remove(0.25 * environment.total_moles)
 			if(removed)
 				var/heat_transfer = abs(removed.get_thermal_energy_change(target_temp))
 				heat_transfer = min(heat_transfer,abs(get_trait(TRAIT_ALTER_TEMP) * 10000))

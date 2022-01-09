@@ -3,7 +3,7 @@
 /obj/structure/cable/controlled
 	name = "heating cable"
 	desc = "A cable with controlled resistance for heating air."
-	resistance = CABLE_1MM_RESISTANCE / 100
+	resistance = CABLE_1MM_RESISTANCE / 10
 	color = COLOR_BLACK
 
 /obj/structure/cable_controller_beacon
@@ -20,6 +20,7 @@
 	icon_state = "ccpanel"
 	var/_id
 	var/obj/structure/cable_controller_beacon/beacon
+	var/max_resistance = 20
 
 /obj/machinery/cable_controller/proc/find_beacon()
 	if(beacon)
@@ -52,7 +53,7 @@
 
 		var/diff = text2num(href_list["adj"])
 
-		var/newresistance = between(CABLE_1MM_RESISTANCE / 100, cables[1].resistance + diff, CABLE_1MM_RESISTANCE)
+		var/newresistance = between(CABLE_1MM_RESISTANCE / 10, cables[1].resistance + diff, max_resistance)
 
 		for(var/obj/structure/cable/controlled/C in cables)
 			C.resistance = newresistance
@@ -73,11 +74,11 @@
 	var/obj/structure/cable/controlled/FC = get_first_cable()
 	data["resistance"] = FC.resistance
 	var/turf/T = get_turf(FC)
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/fluid_mixture/air = T.return_air()
 	data["temperature"] = air.temperature - T0C
 	data["amperage"] = FC.powernet.get_amperage()
-	data["minresistance"] = CABLE_1MM_RESISTANCE / 100
-	data["maxresistance"] = CABLE_1MM_RESISTANCE
+	data["minresistance"] = CABLE_1MM_RESISTANCE / 10
+	data["maxresistance"] = max_resistance
 
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 

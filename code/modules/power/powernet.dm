@@ -2,10 +2,10 @@
 	var/list/cables = list()	// all cables & junctions
 	var/list/nodes = list()		// all connected machines
 
-	var/load = 0				// the current load on the powernet, increased by each machine at processing {A}
+	var/load = 0				// the current load on the powernet, increased by each machine at processing {W}
 	var/newavail = 0			// what available power was gathered last tick, then becomes...
 	var/avail = 0				//...the current available power in the powernet {A}
-	var/viewload = 0			// the load as it appears on the power console (gradually updated)
+	var/viewload = 0			// the load as it appears on the power console (gradually updated) {W}
 	var/number = 0				// Unused //TODEL
 
 	var/smes_demand = 0			// Amount of power demanded by all SMESs from this network. Needed for load balancing.
@@ -22,22 +22,24 @@
 	var/voltage = 0
 	var/newvoltage = 0
 
+/datum/powernet/proc/get_heat_power(var/resistance) // {OHM} -> {W}
+	return (get_amperage() ** 2 * resistance)
+
 /datum/powernet/proc/get_heat(var/resistance) // {OHM} -> {delta K}, simple joule lenz's law implementation
-	var/j = (get_amperage() ** 2 * resistance)
-	return 0.30462405 * j // j/4.1868 * 1.2754
+	return POWER2HEAT(get_heat_power(resistance))
 
 /datum/powernet/proc/get_amperage()
-	return min(avail, viewload)
-
-/datum/powernet/proc/get_voltage()
-	return voltage
+	var/v = voltage
+	if(!v)
+		return 0
+	return min(avail, viewload / v)
 
 /datum/powernet/proc/get_wattage()
-	return get_amperage() * get_voltage()
+	return get_amperage() * voltage
 
 /datum/powernet/proc/add_power(a, v)
-	if(v >= get_voltage())
-		newavail *= get_voltage() / v
+	if(v >= (voltage - 0.1))
+		newavail *= voltage / v
 		newavail += a
 		newvoltage = v
 
@@ -55,13 +57,13 @@
 	STOP_PROCESSING_POWERNET(src)
 	return ..()
 
-//Returns the amount of excess power (before refunding to SMESs) from last tick.
+//Returns the amount of excess power from last tick.
 //This is for machines that might adjust their power consumption using this data.
 // {W}
 /datum/powernet/proc/last_surplus()
-	if(!get_voltage())
+	if(!voltage)
 		return 0
-	return max(avail - viewload / get_voltage(), 0) * get_voltage()
+	return max(avail - viewload / voltage, 0) * voltage
 
 /datum/powernet/proc/draw_power(w)
 	var/draw = between(0, w, last_surplus())
@@ -120,6 +122,9 @@
 //handles the power changes in the powernet
 //called every ticks by the powernet controller
 /datum/powernet/proc/reset()
+
+	
+	
 	var/numapc = 0
 
 	if(problem > 0)
@@ -143,6 +148,14 @@
 
 		perapc = avail/numapc + perapc_excess
 
+	var/coef = min(1, 0.8 + cables.len * 0.045)
+
+	for(var/obj/structure/cable/C in cables)
+		var/turf/T = get_turf(C)
+		var/datum/fluid_mixture/environment = T.return_air()
+		var/used = draw_power(get_heat(C.resistance) / coef)
+		environment.add_thermal_energy(POWER2HEAT(used))
+	
 	// At this point, all other machines have finished using power. Anything left over may be used up to charge SMESs.
 	if(inputting.len && smes_demand)
 		var/smes_input_percentage = between(0, (netexcess / smes_demand) * 100, 100)
@@ -156,8 +169,7 @@
 		for(var/obj/machinery/power/smes/S in nodes)
 			S.restore(perc)
 
-	//updates the viewed load (as seen on power computers)
-	viewload = round(load)
+	viewload = load
 
 	//reset the powernet
 	load = 0
@@ -170,12 +182,6 @@
 	voltage = newvoltage
 	newvoltage = 0
 
-	var/coef = min(1, cables.len * 0.045)
-
-	for(var/obj/structure/cable/C in cables)
-		var/turf/T = get_turf(C)
-		var/datum/gas_mixture/environment = T.return_air()
-		environment.add_thermal_energy(get_heat(C.resistance) / coef)
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)

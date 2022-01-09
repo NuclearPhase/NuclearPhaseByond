@@ -262,7 +262,7 @@
 		overlays += I
 		return
 
-	var/offset = Floor(20/cards.len)
+	var/offset = round(20/cards.len)
 
 	var/matrix/M = matrix()
 	if(direction)

@@ -508,8 +508,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return locate(x,y,A.z)
 
 //Makes sure MIDDLE is between LOW and HIGH. If not, it adjusts it. Returns the adjusted value. Lower bound takes priority.
-/proc/between(var/low, var/middle, var/high)
-	return max(min(middle, high), low)
+/proc/between(l, m, h) 
+	return clamp(m, l, h)
 
 //returns random gauss number
 proc/GaussRand(var/sigma)
@@ -975,6 +975,10 @@ var/global/list/common_tools = list(
 		if(hitzone in badzones)
 			return FALSE
 
+/*
+	TODO:
+	reverse_direction\((\w*)\) | GLOB.reverse_dir[$1]
+*/
 /proc/reverse_direction(var/dir)
 	switch(dir)
 		if(NORTH)
@@ -1101,13 +1105,15 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 /proc/pass()
 	return
 
+// {J} -> {delta K}
+#define POWER2HEAT(j) (0.30462405 * (j))
+
 #define SPAN(class, X) "<span class='" + ##class + "'>" + ##X + "</span>"
 
 #define SPAN_NOTICE(X)   SPAN("notice", X)
 #define SPAN_WARNING(X)  SPAN("warning", X)
 #define SPAN_DANGER(X)   SPAN("danger", X)
 #define SPAN_OCCULT(X)   SPAN("cult", X)
-#define SPAN_DEADSAY(X)  SPAN("deadsay", X)
 #define SPAN_DEADSAY(X)  SPAN("deadsay", X)
 #define FONT_SMALL(X)    SPAN("small", X)
 #define FONT_NORMAL(X)   SPAN("normal", X)

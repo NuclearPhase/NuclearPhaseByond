@@ -7,7 +7,7 @@
 	icon = 'icons/obj/doors/Doorint.dmi'
 	icon_state = "door1"
 	anchored = 1
-	opacity = 1
+	opacity = 0
 	density = 1
 	layer = CLOSED_DOOR_LAYER
 	var/open_layer = OPEN_DOOR_LAYER

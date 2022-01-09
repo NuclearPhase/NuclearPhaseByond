@@ -383,7 +383,7 @@ swapmap
 		if(id==src) return 0
 		var/savefile/S=mode?(new):new("map_[id].sav")
 		S << src
-		while(locked) sleep(1)
+		while(locked) stoplag()
 		if(mode)
 			fdel("map_[id].txt")
 			S.ExportText("/","map_[id].txt")
@@ -548,7 +548,7 @@ proc/SwapMaps_Load(id)
 			S=new
 			S.ImportText("/",file("map_[id].txt"))
 		S >> M
-		while(M.locked) sleep(1)
+		while(M.locked) stoplag()
 		M.mode=text
 	return M
 
@@ -598,7 +598,7 @@ proc/SwapMaps_CreateFromTemplate(template_id)
 	S.cd="//.0"
 	M.Read(S,M)
 	M.mode=text
-	while(M.locked) sleep(1)
+	while(M.locked) stoplag()
 	return M
 
 proc/SwapMaps_LoadChunk(chunk_id,turf/locorner)
@@ -624,7 +624,7 @@ proc/SwapMaps_LoadChunk(chunk_id,turf/locorner)
 	 */
 	S.cd="//.0"
 	M.Read(S,M,locorner)
-	while(M.locked) sleep(1)
+	while(M.locked) stoplag()
 	qdel(M)
 	return 1
 
@@ -645,7 +645,7 @@ proc/SwapMaps_SaveChunk(chunk_id,turf/corner1,turf/corner2)
 	M.z2=max(corner1.z,corner2.z)
 	M.mode=swapmaps_mode
 	M.Save()
-	while(M.locked) sleep(1)
+	while(M.locked) stoplag()
 	qdel(M)
 	return 1
 
