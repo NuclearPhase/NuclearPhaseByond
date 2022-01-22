@@ -506,7 +506,7 @@
 
 // called when on fire
 
-/obj/machinery/light/fire_act(datum/fluid_mixture/air, exposed_temperature, exposed_volume)
+/obj/machinery/light/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(prob(max(0, exposed_temperature - 673)))   //0% at <400C, 100% at >500C
 		broken()
 
@@ -675,7 +675,7 @@
 		spawn(0)
 			sleep(2)
 			explosion(T, 0, 0, 3, 5)
-			stoplag()
+			sleep(1)
 			qdel(src)
 		status = LIGHT_BROKEN
 	else if(prob(min(60, switchcount*switchcount*0.01)))

@@ -116,7 +116,7 @@
 				src.visible_message("<span class='boldwarning'>\The [src] shudders as it cools itself by releasing extremely hot air!</span>")
 				var/diff = rand(1,1000)
 				rtemperature = rtemperature - diff
-				var/datum/fluid_mixture/environment = loc.return_air()
+				var/datum/gas_mixture/environment = loc.return_air()
 				environment.add_thermal_energy(diff)
 			if(20 to 30)
 				for(var/obj/machinery/power/apc/A in SSmachines.machinery)

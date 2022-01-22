@@ -161,7 +161,7 @@
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
-					stoplag()
+					sleep(1)
 			else
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -173,7 +173,7 @@
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
-					stoplag()
+					sleep(1)
 			a = get_area(src.loc)
 	else
 		var/error = dist_y/2 - dist_x
@@ -190,7 +190,7 @@
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
-					stoplag()
+					sleep(1)
 			else
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -202,7 +202,7 @@
 				dist_since_sleep++
 				if(dist_since_sleep >= speed)
 					dist_since_sleep = 0
-					stoplag()
+					sleep(1)
 
 			a = get_area(src.loc)
 

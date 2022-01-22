@@ -190,7 +190,7 @@
 		Gives traitors more opportunities to sabotage the generator or allows enterprising engineers to build additional
 		cooling in order to get more power out.
 	*/
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
 		var/outer_temp = 0.1 * ctemperature + T0C
 		if(outer_temp > environment.temperature) //sharing the heat
@@ -218,7 +218,7 @@
 
 /obj/machinery/power/port_gen/pacman/handleInactive()
 	var/cooling_temperature = 20
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
 		var/ratio = min(environment.return_pressure()/ONE_ATMOSPHERE, 1)
 		var/ambient = environment.temperature - T20C
@@ -243,7 +243,7 @@
 	//When ground up in a grinder, 1 sheet produces 20 u of phoron -- Chemistry-Machinery.dm
 	//1 mol = 10 u? I dunno. 1 mol of carbon is definitely bigger than a pill
 	var/phoron = (sheets+sheet_left)*20
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
 		environment.adjust_gas_temp("phoron", phoron/10, ctemperature + T0C)
 

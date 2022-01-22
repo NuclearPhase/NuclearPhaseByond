@@ -108,7 +108,7 @@
 	if(stat & (NOPOWER|BROKEN) || !use_power)
 		return 0
 
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
 	var/power_draw = -1
 
@@ -140,7 +140,7 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/dp_vent_pump/proc/get_pressure_delta(datum/fluid_mixture/environment)
+/obj/machinery/atmospherics/binary/dp_vent_pump/proc/get_pressure_delta(datum/gas_mixture/environment)
 	var/pressure_delta = DEFAULT_PRESSURE_DELTA
 	var/environment_pressure = environment.return_pressure()
 
@@ -222,23 +222,23 @@
 		pump_direction = 1
 
 	if(signal.data["set_input_pressure"])
-		input_pressure_min = clamp(
-			text2num(signal.data["set_input_pressure"]),
+		input_pressure_min = between(
 			0,
+			text2num(signal.data["set_input_pressure"]),
 			ONE_ATMOSPHERE*50
 		)
 
 	if(signal.data["set_output_pressure"])
-		output_pressure_max = clamp(
-			text2num(signal.data["set_output_pressure"]),
+		output_pressure_max = between(
 			0,
+			text2num(signal.data["set_output_pressure"]),
 			ONE_ATMOSPHERE*50
 		)
 
 	if(signal.data["set_external_pressure"])
-		external_pressure_bound = clamp(
-			text2num(signal.data["set_external_pressure"]),
+		external_pressure_bound = between(
 			0,
+			text2num(signal.data["set_external_pressure"]),
 			ONE_ATMOSPHERE*50
 		)
 

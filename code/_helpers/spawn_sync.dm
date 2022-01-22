@@ -83,4 +83,4 @@
 	// completed, or the failsafe has expired.
 	while(check())
 		//Add a sleep call to delay each check.
-		stoplag()
+		sleep(1)

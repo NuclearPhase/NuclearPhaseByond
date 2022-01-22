@@ -311,7 +311,7 @@
 			data["temperatureC"] = 0
 			data["gas"] = list()
 		else
-			var/datum/fluid_mixture/env = T.return_air()
+			var/datum/gas_mixture/env = T.return_air()
 			data["reading"] = 1
 			var/pres = env.return_pressure() * 10
 			data["pressure"] = "[round(pres/10)].[pres%10]"
@@ -322,9 +322,7 @@
 			var/gases[0]
 			for(var/g in env.gas)
 				var/gas[0]
-						// FIXME: CUBIC
-		//
-				gas["name"] = GLOB.fluid_data[g].gas_name
+				gas["name"] = gas_data.name[g]
 				gas["percent"] = round((env.gas[g] / t_moles) * 100)
 				gases[++gases.len] = gas
 			data["gas"] = gases

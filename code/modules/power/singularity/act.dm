@@ -52,7 +52,7 @@
 	if(current_size >= STAGE_FOUR)
 		//throw_at(S, 14, 3)
 		step_towards(src,S)
-		stoplag()
+		sleep(1)
 		step_towards(src,S)
 	else if(current_size > STAGE_ONE)
 		step_towards(src,S)

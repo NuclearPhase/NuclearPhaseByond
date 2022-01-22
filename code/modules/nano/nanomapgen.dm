@@ -72,7 +72,7 @@
 
 			if (count % 8000 == 0)
 				world.log << "NanoMapGen: <B>[count] tiles done</B>"
-				stoplag()
+				sleep(1)
 
 	var/mapFilename = "new_[map_image_file_name(currentZ)]"
 

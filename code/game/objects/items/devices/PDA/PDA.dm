@@ -474,7 +474,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(mode==3)
 		var/turf/T = get_turf(user.loc)
 		if(!isnull(T))
-			var/datum/fluid_mixture/environment = T.return_air()
+			var/datum/gas_mixture/environment = T.return_air()
 
 			var/pressure = environment.return_pressure()
 			var/total_moles = environment.total_moles

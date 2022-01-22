@@ -104,7 +104,7 @@
 
 	//Figure out the amount of moles to transfer
 	var/transfer_moles = 0
-	var/datum/fluid_mixture/output_gas = output.air
+	var/datum/gas_mixture/output_gas = output.air
 	var/delta = between(0, (output_gas ? (max_output_pressure - output_gas.return_pressure()) : 0), max_output_pressure)
 	var/transfer_moles_max = INFINITY
 

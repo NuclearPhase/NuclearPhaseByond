@@ -396,7 +396,7 @@
 
 	return
 
-/obj/structure/window/fire_act(datum/fluid_mixture/air, exposed_temperature, exposed_volume)
+/obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > maximal_heat)
 		hit(damage_per_fire_tick, 0)
 	..()

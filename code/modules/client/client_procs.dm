@@ -346,7 +346,7 @@
 	statpanel("Status")
 
 	. = ..()
-	stoplag()
+	sleep(1)
 
 //send resources to the client. It's here in its own proc so we can move it around easiliy if need be
 /client/proc/send_resources()

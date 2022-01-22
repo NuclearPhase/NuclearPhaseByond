@@ -57,7 +57,7 @@
 			debug_variables(transfer_controller)
 			feedback_add_details("admin_verb","DAutovoter")
 		if("Gas Data")
-			debug_variables(GLOB.fluid_data_wrap)
+			debug_variables(gas_data)
 			feedback_add_details("admin_verb","DGasdata")
 		if("Event")
 			debug_variables(GLOB.event_manager)

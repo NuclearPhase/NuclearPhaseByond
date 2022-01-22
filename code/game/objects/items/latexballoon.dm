@@ -9,7 +9,7 @@
 	throw_speed = 1
 	throw_range = 15
 	var/state
-	var/datum/fluid_mixture/air_contents = null
+	var/datum/gas_mixture/air_contents = null
 
 /obj/item/latexballon/proc/blow(obj/item/weapon/tank/tank)
 	if (icon_state == "latexballon_bursted")
@@ -38,7 +38,7 @@
 /obj/item/latexballon/bullet_act()
 	burst()
 
-/obj/item/latexballon/fire_act(datum/fluid_mixture/air, temperature, volume)
+/obj/item/latexballon/fire_act(datum/gas_mixture/air, temperature, volume)
 	if(temperature > T0C+100)
 		burst()
 	return

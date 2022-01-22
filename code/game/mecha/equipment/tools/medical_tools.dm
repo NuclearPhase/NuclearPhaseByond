@@ -315,7 +315,7 @@
 				S.icon = initial(S.icon)
 				S.update_icon()
 				break
-			stoplag()
+			sleep(1)
 	do_after_cooldown()
 	return 1
 

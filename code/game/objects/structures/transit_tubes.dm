@@ -44,7 +44,7 @@
 	anchored = 1.0
 	density = 1
 	var/moving_ = 0
-	var/datum/fluid_mixture/air_contents = new()
+	var/datum/gas_mixture/air_contents = new()
 
 
 
@@ -357,7 +357,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube_pod/return_air()
 	return air_contents
 
-/obj/structure/transit_tube_pod/assume_air(datum/fluid_mixture/giver)
+/obj/structure/transit_tube_pod/assume_air(datum/gas_mixture/giver)
 	return air_contents.merge(giver)
 
 /obj/structure/transit_tube_pod/remove_air(amount)
@@ -367,7 +367,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 //  giving it a chance to mix its internal air supply with the turf it is
 //  currently on.
 /obj/structure/transit_tube_pod/proc/mix_air()
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 
 	//note that share_ratio assumes both gas mixes have the same volume,
 	//so if the volume is changed this may need to be changed as well.

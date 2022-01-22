@@ -65,7 +65,7 @@
 	var/power_draw = -1
 
 	if(on && cell && cell.charge)
-		var/datum/fluid_mixture/environment
+		var/datum/gas_mixture/environment
 		if(holding)
 			environment = holding.air_contents
 		else

@@ -158,7 +158,7 @@
 	var/turf/simulated/location = loc
 	if(!istype(location))	return//returns if loc is not simulated
 
-	var/datum/fluid_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = location.return_air()
 
 	//Handle temperature adjustment here.
 	handle_heating_cooling(environment)
@@ -193,7 +193,7 @@
 
 	return
 
-/obj/machinery/alarm/proc/handle_heating_cooling(var/datum/fluid_mixture/environment)
+/obj/machinery/alarm/proc/handle_heating_cooling(var/datum/gas_mixture/environment)
 	if (!regulating_temperature)
 		//check for when we should start adjusting temperature
 		if(!get_danger_level(target_temperature, TLV["temperature"]) && abs(environment.temperature - target_temperature) > 2.0)
@@ -216,7 +216,7 @@
 		if(target_temperature < T0C + MIN_TEMPERATURE)
 			target_temperature = T0C + MIN_TEMPERATURE
 
-		var/datum/fluid_mixture/gas
+		var/datum/gas_mixture/gas
 		gas = environment.remove(0.25*environment.total_moles)
 		if(gas)
 
@@ -241,7 +241,7 @@
 
 			environment.merge(gas)
 
-/obj/machinery/alarm/proc/overall_danger_level(var/datum/fluid_mixture/environment)
+/obj/machinery/alarm/proc/overall_danger_level(var/datum/gas_mixture/environment)
 	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
 	var/environment_pressure = environment.return_pressure()
 
@@ -275,7 +275,7 @@
 	if(breach_detection	== 0)
 		return 0
 
-	var/datum/fluid_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = location.return_air()
 	var/environment_pressure = environment.return_pressure()
 	var/pressure_levels = TLV["pressure"]
 
@@ -514,7 +514,7 @@
 
 /obj/machinery/alarm/proc/populate_status(var/data)
 	var/turf/location = get_turf(src)
-	var/datum/fluid_mixture/environment = location.return_air()
+	var/datum/gas_mixture/environment = location.return_air()
 	var/total = environment.total_moles
 
 	var/list/environment_data = new
@@ -911,7 +911,7 @@ FIRE ALARM
 			set_light(sl.light_range, sl.light_power, sl.light_color_alarm)
 			src.overlays += image(sl.icon, sl.overlay_alarm)
 
-/obj/machinery/firealarm/fire_act(datum/fluid_mixture/air, temperature, volume)
+/obj/machinery/firealarm/fire_act(datum/gas_mixture/air, temperature, volume)
 	if(src.detecting)
 		if(temperature > T0C+200)
 			src.alarm()			// added check of detector status here

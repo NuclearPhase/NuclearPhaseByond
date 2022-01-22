@@ -80,16 +80,16 @@
 				return 0 //can't launch if you have no fuel TANKS in the ports
 			var/total_flammable_gas_moles = 0
 			for(var/obj/item/weapon/tank/FT in fuel_tanks)
-				total_flammable_gas_moles += FT.air_contents.get_by_flag(XGM_FLUID_FUEL)
+				total_flammable_gas_moles += FT.air_contents.get_by_flag(XGM_GAS_FUEL)
 			if(total_flammable_gas_moles >= fuel_consumption) //launch is possible, so start consuming that fuel
 				var/fuel_to_consume = fuel_consumption
 				for(var/obj/item/weapon/tank/FT in fuel_tanks) //loop through tanks, consume their fuel one by one
-					if(FT.air_contents.get_by_flag(XGM_FLUID_FUEL) >= fuel_to_consume)
-						FT.air_contents.remove_by_flag(XGM_FLUID_FUEL, fuel_to_consume)
+					if(FT.air_contents.get_by_flag(XGM_GAS_FUEL) >= fuel_to_consume)
+						FT.air_contents.remove_by_flag(XGM_GAS_FUEL, fuel_to_consume)
 						return 1 //ALL REQUIRED FUEL HAS BEEN CONSUMED, GO FOR LAUNCH!
 					else //this tank doesn't have enough to launch shuttle by itself, so remove all its fuel, then continue loop
-						fuel_to_consume -= FT.air_contents.get_by_flag(XGM_FLUID_FUEL)
-						FT.air_contents.remove_by_flag(XGM_FLUID_FUEL, FT.air_contents.get_by_flag(XGM_FLUID_FUEL))
+						fuel_to_consume -= FT.air_contents.get_by_flag(XGM_GAS_FUEL)
+						FT.air_contents.remove_by_flag(XGM_GAS_FUEL, FT.air_contents.get_by_flag(XGM_GAS_FUEL))
 			else
 				return 0 //can't launch if you have insufficient fuel
 		else

@@ -50,23 +50,29 @@
 	return 0
 
 /obj/machinery/power/proc/draw_power(var/amount, var/efficiency = 0)
-	ASSERT(efficiency <= 1) // infinity engine is prohibited
+	ASSERT(efficiency < 1) // infinity engine is prohibited
 	if(efficiency == 0)
 		efficiency = src.efficiency
 	if(powernet)
-		var/heat_draw = powernet.draw_power(amount * (1 - efficiency))
+		var/resistance = (powernet.get_voltage() ** 2) / (amount * (1 - efficiency))
+		var/heat_draw = powernet.draw_power(powernet.get_voltage() * 2 * resistance)
 		var/turf/T = get_turf(src)
-		var/datum/fluid_mixture/environment = T.return_air()
-		environment.add_thermal_energy(POWER2HEAT(heat_draw))
-		return powernet.draw_power(amount)
+		var/datum/gas_mixture/environment = T.return_air()
+		environment.add_thermal_energy(powernet.get_heat(resistance))
+		return powernet.draw_power(amount) + heat_draw
 	return 0
 
-// {W}
 /obj/machinery/power/proc/surplus()
-	return powernet?.last_surplus()
+	if(powernet)
+		return powernet.last_surplus()
+	else
+		return 0
 
 /obj/machinery/power/proc/avail()
-	return powernet?.avail
+	if(powernet)
+		return powernet.avail
+	else
+		return 0
 
 /obj/machinery/power/proc/disconnect_terminal(var/obj/machinery/power/terminal/term) // machines without a terminal will just return, no harm no fowl.
 	return

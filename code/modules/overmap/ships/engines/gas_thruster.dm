@@ -94,7 +94,7 @@
 		on = !on
 		return 0
 	var/exhaust_dir = reverse_direction(dir)
-	var/datum/fluid_mixture/removed = air_contents.remove(moles_per_burn * thrust_limit)
+	var/datum/gas_mixture/removed = air_contents.remove(moles_per_burn * thrust_limit)
 	. = calculate_thrust(removed)
 	playsound(loc, 'sound/machines/thruster.ogg', 100 * thrust_limit, 0, world.view * 4, 0.1)
 	var/turf/T = get_step(src,exhaust_dir)
@@ -102,7 +102,7 @@
 		T.assume_air(removed)
 		new/obj/effect/engine_exhaust(T, exhaust_dir, air_contents.check_combustability() && air_contents.temperature >= PHORON_MINIMUM_BURN_TEMPERATURE)
 
-/obj/machinery/atmospherics/unary/engine/proc/calculate_thrust(datum/fluid_mixture/propellant, used_part = 1)
+/obj/machinery/atmospherics/unary/engine/proc/calculate_thrust(datum/gas_mixture/propellant, used_part = 1)
 	return round(sqrt(propellant.get_mass() * used_part * air_contents.return_pressure()/100),0.1)
 
 //Exhaust effect

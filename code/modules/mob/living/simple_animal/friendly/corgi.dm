@@ -84,7 +84,7 @@
 			spawn(0)
 				for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2,1,2,4,8,4,2))
 					set_dir(i)
-					stoplag()
+					sleep(1)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/corgi
 	name = "Corgi meat"
@@ -99,7 +99,7 @@
 			spawn(0)
 				for(var/i in list(1,2,4,8,4,2,1,2))
 					set_dir(i)
-					stoplag()
+					sleep(1)
 	else
 		..()
 
@@ -193,4 +193,4 @@
 			spawn(0)
 				for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2,1,2,4,8,4,2))
 					set_dir(i)
-					stoplag()
+					sleep(1)

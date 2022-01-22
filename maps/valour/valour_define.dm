@@ -6,9 +6,9 @@
 
 	lobby_icon = 'maps/valour/utopia_lobby.dmi'
 
-	station_levels = list(1, 2, 3, 4, 5, 6)
-	contact_levels = list(1, 2, 3, 4, 5, 6)
-	player_levels = list(1, 2, 3, 4, 5, 6)
+	station_levels = list(1, 2, 3, 4, 5)
+	contact_levels = list(1, 2, 3, 4, 5)
+	player_levels = list(1, 2, 3, 4, 5)
 	accessible_z_levels = list("5"=15)
 
 	allowed_spawns = list("Arrivals Shuttle")

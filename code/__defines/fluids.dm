@@ -47,7 +47,7 @@
 		var/obj/effect/fluid/F = locate() in next; \
 		if(!F && !dry_run) {\
 			F = new /obj/effect/fluid(next); \
-			var/datum/fluid_mixture/GM = T:return_air(); \
+			var/datum/gas_mixture/GM = T:return_air(); \
 			if(GM) F.temperature = GM.temperature; \
 		} \
 		if(F) { \

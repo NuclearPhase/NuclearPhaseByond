@@ -13,7 +13,7 @@
 		if(!client)
 			handle_regular_AI()
 
-/mob/living/carbon/slime/handle_environment(datum/fluid_mixture/environment)
+/mob/living/carbon/slime/handle_environment(datum/gas_mixture/environment)
 	if(!environment)
 		adjustToxLoss(rand(10,20))
 		return

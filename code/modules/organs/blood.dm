@@ -89,7 +89,7 @@
 			drip(amt, sprayloc, spraydir)
 			bled += amt
 			if(hit_mob) break
-			stoplag()
+			sleep(1)
 	return bled
 #undef BLOOD_SPRAY_DISTANCE
 
@@ -268,7 +268,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 
 /mob/living/carbon/human/proc/get_blood_pressure()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	. = round(heart?.pressure)
+	. = Floor(heart?.pressure)
 
 /mob/living/carbon/human/proc/get_blood_saturation()
 	if(stat == DEAD)

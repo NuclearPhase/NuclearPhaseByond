@@ -4,7 +4,7 @@
 	var/list/seeds = list()
 	var/list/animals = list()
 	var/max_animal_count
-	var/datum/fluid_mixture/atmosphere
+	var/datum/gas_mixture/atmosphere
 	var/list/breathgas = list()	//list of gases animals/plants require to survive
 	var/badgas					//id of gas that is toxic to life here
 
@@ -97,7 +97,7 @@
 				Z = T.zone
 				break
 		if(Z && !Z.fire_tiles.len && !atmosphere.compare(Z.air)) //let fire die out first if there is one
-			var/datum/fluid_mixture/daddy = new() //make a fake 'planet' zone gas
+			var/datum/gas_mixture/daddy = new() //make a fake 'planet' zone gas
 			daddy.copy_from(atmosphere)
 			daddy.group_multiplier = Z.air.group_multiplier
 			Z.air.equalize(daddy)
@@ -141,7 +141,7 @@
 	if(S.consume_gasses)
 		S.consume_gasses = list(pick(atmosphere.gas)) // ensure that if the plant consumes a gas, the atmosphere will have it
 	for(var/g in atmosphere.gas)
-		if(GLOB.fluid_data[g].flags & XGM_FLUID_CONTAMINANT)
+		if(gas_data.flags[g] & XGM_GAS_CONTAMINANT)
 			S.set_trait(TRAIT_TOXINS_TOLERANCE, rand(10,15))
 
 /obj/effect/overmap/sector/exoplanet/proc/adapt_animal(var/mob/living/simple_animal/A)
@@ -189,7 +189,7 @@
 		atmosphere.adjust_gas("oxygen", MOLES_O2STANDARD, 0)
 		atmosphere.adjust_gas("nitrogen", MOLES_N2STANDARD)
 	else //let the fuckery commence
-		var/list/newgases = GLOB.fluid_data.Copy()
+		var/list/newgases = gas_data.gases.Copy()
 		if(prob(90)) //all phoron planet should be rare
 			newgases -= "phoron"
 		if(prob(50)) //alium gas should be slightly less common than mundane shit
@@ -204,13 +204,13 @@
 			var/ng = pick_n_take(newgases)	//pick a gas
 			if(sanity) //make sure atmosphere is not flammable... always
 				var/badflag = 0
-				if(GLOB.fluid_data[ng].flags & XGM_FLUID_OXIDIZER)
-					badflag = XGM_FLUID_FUEL
-				if(GLOB.fluid_data[ng].flags & XGM_FLUID_FUEL)
-					badflag = XGM_FLUID_OXIDIZER
+				if(gas_data.flags[ng] & XGM_GAS_OXIDIZER)
+					badflag = XGM_GAS_FUEL
+				if(gas_data.flags[ng] & XGM_GAS_FUEL)
+					badflag = XGM_GAS_OXIDIZER
 				if(badflag)
 					for(var/g in newgases)
-						if(GLOB.fluid_data[g].flags & badflag)
+						if(gas_data.flags[g] & badflag)
 							newgases -= g
 					sanity = 0
 
@@ -224,7 +224,7 @@
 	//Set up gases for living things
 	for(var/gas in atmosphere.gas)
 		breathgas[gas] = round(0.4*atmosphere.gas[gas])
-	var/list/badgases = GLOB.fluid_data.Copy()
+	var/list/badgases = gas_data.gases.Copy()
 	badgases -= atmosphere.gas
 	badgas = pick(badgases)
 

@@ -20,7 +20,7 @@ var/list/global/tank_gauge_cache = list()
 	throw_speed = 1
 	throw_range = 4
 
-	var/datum/fluid_mixture/air_contents = null
+	var/datum/gas_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
 	var/integrity = 20
 	var/maxintegrity = 20
@@ -56,7 +56,7 @@ var/list/global/tank_gauge_cache = list()
 	proxyassembly = new /obj/item/device/tankassemblyproxy(src)
 	proxyassembly.tank = src
 
-	air_contents = new /datum/fluid_mixture(volume, T20C)
+	air_contents = new /datum/gas_mixture(volume, T20C)
 	for(var/gas in starting_pressure)
 		air_contents.adjust_gas(gas, starting_pressure[gas]*volume/(R_IDEAL_GAS_EQUATION*T20C), 0)
 	air_contents.update_values()
@@ -316,7 +316,7 @@ var/list/global/tank_gauge_cache = list()
 /obj/item/weapon/tank/return_air()
 	return air_contents
 
-/obj/item/weapon/tank/assume_air(datum/fluid_mixture/giver)
+/obj/item/weapon/tank/assume_air(datum/gas_mixture/giver)
 	air_contents.merge(giver)
 
 	check_status()
@@ -341,8 +341,6 @@ var/list/global/tank_gauge_cache = list()
 	check_status()
 
 /obj/item/weapon/tank/update_icon()
-	if((atom_flags & ATOM_FLAG_INITIALIZED) && istype(loc, /obj/) && !istype(loc, /obj/item/clothing/suit/) && !override) //So we don't eat up our tick. Every tick, when we're not actually in play.
-		return
 	overlays.Cut()
 	if(proxyassembly.assembly || wired)
 		overlays += image(icon,"bomb_assembly")
@@ -452,12 +450,12 @@ var/list/global/tank_gauge_cache = list()
 			var/turf/simulated/T = get_turf(src)
 			if(!T)
 				return
-			var/datum/fluid_mixture/environment = loc.return_air()
+			var/datum/gas_mixture/environment = loc.return_air()
 			var/env_pressure = environment.return_pressure()
 			var/tank_pressure = air_contents.return_pressure()
 
 			var/release_ratio = Clamp(0.002, sqrt(max(tank_pressure-env_pressure,0)/tank_pressure),1)
-			var/datum/fluid_mixture/leaked_gas = air_contents.remove_ratio(release_ratio)
+			var/datum/gas_mixture/leaked_gas = air_contents.remove_ratio(release_ratio)
 			//dynamic air release based on ambient pressure
 
 			T.assume_air(leaked_gas)

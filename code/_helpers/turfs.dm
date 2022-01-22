@@ -85,7 +85,7 @@
 /proc/IsTurfAtmosUnsafe(var/turf/T)
 	if(istype(T, /turf/space)) // Space tiles
 		return "Spawn location is open to space."
-	var/datum/fluid_mixture/air = T.return_air()
+	var/datum/gas_mixture/air = T.return_air()
 	if(!air)
 		return "Spawn location lacks atmosphere."
 	return get_atmosphere_issues(air, 1)
@@ -94,7 +94,7 @@
 	return !IsTurfAtmosUnsafe(T)
 
 /proc/is_below_sound_pressure(var/turf/T)
-	var/datum/fluid_mixture/environment = T ? T.return_air() : null
+	var/datum/gas_mixture/environment = T ? T.return_air() : null
 	var/pressure =  environment ? environment.return_pressure() : 0
 	if(pressure < SOUND_MINIMUM_PRESSURE)
 		return TRUE

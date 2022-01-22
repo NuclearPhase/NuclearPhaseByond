@@ -2,8 +2,6 @@
 #define M_PI    3.14159265
 #define M_E     2.71828182
 
-#define KPA *1000
-#define MPA *1e+6
 #define R_IDEAL_GAS_EQUATION       8.31    // kPa*L/(K*mol).
 #define ONE_ATMOSPHERE             101.325 // kPa.
 #define IDEAL_GAS_ENTROPY_CONSTANT 1164    // (mol^3 * s^3) / (kg^3 * L).
@@ -32,5 +30,3 @@
 
 #define SIMPLE_SIGN(X) ((X) < 0 ? -1 : 1)
 #define SIGN(X)        ((X) ? SIMPLE_SIGN(X) : 0)
-
-#define KJ *1000

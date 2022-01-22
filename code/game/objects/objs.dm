@@ -22,7 +22,7 @@
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/assume_air(datum/fluid_mixture/giver)
+/obj/assume_air(datum/gas_mixture/giver)
 	if(loc)
 		return loc.assume_air(giver)
 	else

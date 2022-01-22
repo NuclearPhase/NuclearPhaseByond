@@ -481,8 +481,7 @@ proc/get_wound_severity(var/damage_ratio, var/vital = 0)
 /obj/item/device/slime_scanner/proc/list_gases(var/gases)
 	. = list()
 	for(var/g in gases)
-		// FIXME: CUBIC
-		//. += "[GLOB.fluid_data[g].name] ([gases[g]]%)"
+		. += "[gas_data.name[g]] ([gases[g]]%)"
 	return english_list(.)
 
 /obj/item/device/slime_scanner/afterattack(mob/target, mob/user, proximity)
@@ -497,12 +496,9 @@ proc/get_wound_severity(var/damage_ratio, var/vital = 0)
 		var/mob/living/carbon/human/H = target
 		user.show_message("<span class='notice'>Data for [H]:</span>")
 		user.show_message("Species:\t[H.species]")
-				// FIXME: CUBIC
-		//user.show_message("Breathes:\t[GLOB.fluid_data.name[H.species.breath_type]]")
-				// FIXME: CUBIC
-		//user.show_message("Exhales:\t[GLOB.fluid_data.name[H.species.exhale_type]]")
-			// FIXME: CUBIC
-		//	user.show_message("Known toxins:\t[GLOB.fluid_data.name[H.species.poison_type]]")
+		user.show_message("Breathes:\t[gas_data.name[H.species.breath_type]]")
+		user.show_message("Exhales:\t[gas_data.name[H.species.exhale_type]]")
+		user.show_message("Known toxins:\t[gas_data.name[H.species.poison_type]]")
 		user.show_message("Temperature comfort zone:\t[H.species.cold_discomfort_level] K to [H.species.heat_discomfort_level] K")
 		user.show_message("Pressure comfort zone:\t[H.species.warning_low_pressure] kPa to [H.species.warning_high_pressure] kPa")
 	else if(istype(target, /mob/living/simple_animal))

@@ -3,8 +3,8 @@ obj/machinery/atmospherics/binary
 	initialize_directions = SOUTH|NORTH
 	use_power = 1
 
-	var/datum/fluid_mixture/air1
-	var/datum/fluid_mixture/air2
+	var/datum/gas_mixture/air1
+	var/datum/gas_mixture/air2
 
 	var/datum/pipe_network/network1
 	var/datum/pipe_network/network2

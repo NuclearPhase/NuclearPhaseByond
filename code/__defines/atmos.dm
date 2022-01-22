@@ -74,10 +74,10 @@
 #define LIQUIDFUEL_AMOUNT_TO_MOL		0.45  //mol/volume unit
 
 // XGM gas flags.
-#define XGM_FLUID_FUEL        1
-#define XGM_FLUID_OXIDIZER    2
-#define XGM_FLUID_CONTAMINANT 4
-#define XGM_FLUID_FUSION_FUEL 8
+#define XGM_GAS_FUEL        1
+#define XGM_GAS_OXIDIZER    2
+#define XGM_GAS_CONTAMINANT 4
+#define XGM_GAS_FUSION_FUEL 8
 
 #define TANK_LEAK_PRESSURE     (30 * ONE_ATMOSPHERE) // Tank starts leaking.
 #define TANK_RUPTURE_PRESSURE  (40 * ONE_ATMOSPHERE) // Tank spills all contents into atmosphere.
@@ -105,32 +105,26 @@
 #define MAX_PUMP_PRESSURE		15000	// Maximal pressure setting for pumps and vents
 #define MAX_OMNI_PRESSURE		15000	// Maximal output(s) pressure for omni devices (filters/mixers)
 
-#define FLUID_OXYGEN				"oxygen"
-#define FLUID_CO2					"carbon_dioxide"
-#define FLUID_CO					"carbon_monoxide"
-#define FLUID_METHYL_BROMIDE		"methyl_bromide"
-#define FLUID_N2O					"sleeping_agent"
-#define FLUID_NITROGEN			"nitrogen"
-#define FLUID_NO2					"nitrodioxide"
-#define FLUID_NO					"nitricoxide"
-#define FLUID_METHANE				"methane"
-#define FLUID_ALIEN				"aliether"
-#define FLUID_HYDROGEN			"hydrogen"
-#define FLUID_DEUTERIUM			"deuterium"
-#define FLUID_TRITIUM				"tritium"
-#define FLUID_HELIUM				"helium"
-#define FLUID_ARGON				"argon"
-#define FLUID_KRYPTON				"krypton"
-#define FLUID_NEON				"neon"
-#define FLUID_XENON				"xenon"
-#define FLUID_AMMONIA				"ammonia"
-#define FLUID_CHLORINE			"chlorine"
-#define FLUID_SULFUR				"sulfurdioxide"
-#define FLUID_WATER				"water"
-#define FLUID_PHORON				"phoron"
-
-
-#define FLUID_PHASE_SOLID 1
-#define FLUID_PHASE_LIQUID 2
-#define FLUID_PHASE_GAS 3
-#define FLUID_PHASE_HYPERCRITICAL 4
+#define GAS_OXYGEN				"oxygen"
+#define GAS_CO2					"carbon_dioxide"
+#define GAS_CO					"carbon_monoxide"
+#define GAS_METHYL_BROMIDE		"methyl_bromide"
+#define GAS_N2O					"sleeping_agent"
+#define GAS_NITROGEN			"nitrogen"
+#define GAS_NO2					"nitrodioxide"
+#define GAS_NO					"nitricoxide"
+#define GAS_METHANE				"methane"
+#define GAS_ALIEN				"aliether"
+#define GAS_HYDROGEN			"hydrogen"
+#define GAS_DEUTERIUM			"deuterium"
+#define GAS_TRITIUM				"tritium"
+#define GAS_HELIUM				"helium"
+#define GAS_ARGON				"argon"
+#define GAS_KRYPTON				"krypton"
+#define GAS_NEON				"neon"
+#define GAS_XENON				"xenon"
+#define GAS_AMMONIA				"ammonia"
+#define GAS_CHLORINE			"chlorine"
+#define GAS_SULFUR				"sulfurdioxide"
+#define GAS_STEAM				"water"
+#define GAS_PHORON				"phoron"

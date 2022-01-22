@@ -83,8 +83,8 @@
 			pulse = rand(200, 260)
 		else
 			var/n_pulse = initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)
-			pulse = lerp(pulse, n_pulse, 0.5)
-	pulse = round(Clamp(pulse, 0, 260))
+			pulse = Interpolate(pulse, n_pulse, 0.5)
+	pulse = Floor(Clamp(pulse, 0, 260))
 
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
@@ -97,7 +97,7 @@
 	var/last = nc
 	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - pressure
 	nc /= (pressure / pulse)
-	nc = Clamp(lerp(last, nc, 0.5), -40, 40)
+	nc = Clamp(Interpolate(last, nc, 0.5), -40, 40)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
 	make_nc()
@@ -177,7 +177,7 @@
 	n_pressure *= mulListAndCutAssoc(blood_pressure_modificators)
 	n_pressure *= owner.get_blood_volume()
 
-	pressure = lerp(pressure, n_pressure, 0.25)
+	pressure = Interpolate(pressure, n_pressure, 0.25)
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()
 	if(pulse >= 90 || owner.shock_stage >= 10 || is_below_sound_pressure(get_turf(owner)))
@@ -198,7 +198,7 @@
 	ischemia = min(ischemia, 100 + infarct_strength)
 
 	if(ischemia > 30)
-		damage += lerp(0.1, 0.5, (ischemia - 30) / 70)
+		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
 		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)
@@ -237,7 +237,7 @@
 					blood_max += W.damage / 40
 
 		if(temp.status & ORGAN_ARTERY_CUT)
-			var/bleed_amount = round((owner.vessel.total_volume / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
+			var/bleed_amount = Floor((owner.vessel.total_volume / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
 			if(bleed_amount)
 				if(open_wound)
 					blood_max += bleed_amount

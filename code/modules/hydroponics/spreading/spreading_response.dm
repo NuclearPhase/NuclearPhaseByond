@@ -96,7 +96,7 @@
 		if(can_grab)
 			src.visible_message("<span class='danger'>Tendrils lash out from \the [src] and drag \the [victim] in!</span>")
 			victim.forceMove(src.loc)
-			stoplag()
+			sleep(1)
 			//entangling people
 			if(victim.loc == src.loc)
 				buckle_mob(victim)

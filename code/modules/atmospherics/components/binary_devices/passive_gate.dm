@@ -143,9 +143,9 @@
 		unlocked = !unlocked
 
 	if("set_target_pressure" in signal.data)
-		target_pressure = clamp(
-			text2num(signal.data["set_target_pressure"]),
+		target_pressure = between(
 			0,
+			text2num(signal.data["set_target_pressure"]),
 			max_pressure_setting
 		)
 
@@ -246,8 +246,8 @@
 	if (unlocked)
 		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], turn it off first.</span>")
 		return 1
-	var/datum/fluid_mixture/int_air = return_air()
-	var/datum/fluid_mixture/env_air = loc.return_air()
+	var/datum/gas_mixture/int_air = return_air()
+	var/datum/gas_mixture/env_air = loc.return_air()
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
 		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], it too exerted due to internal pressure.</span>")
 		add_fingerprint(user)

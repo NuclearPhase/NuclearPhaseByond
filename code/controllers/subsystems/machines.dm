@@ -35,7 +35,7 @@ if(Datum.is_processing) {\
 SUBSYSTEM_DEF(machines)
 	name = "Machines"
 	priority = SS_PRIORITY_MACHINERY
-	init_order = SS_INIT_MACHINES
+	init_order = INIT_ORDER_MACHINES
 	flags = SS_KEEP_TIMING
 	runlevels = RUNLEVEL_GAME|RUNLEVEL_POSTGAME
 
@@ -122,21 +122,20 @@ datum/controller/subsystem/machines/proc/setup_atmos_machinery(list/machines)
 		machine.build_network()
 		CHECK_TICK
 
-/datum/controller/subsystem/machines/stat_entry(text)
-	text = {"[text] | \n\
-		Queues: \
-		Pipes [pipenets.len] \
-		Machines [processing.len] \
-		Networks [powernets.len] \
-		Objects [power_objects.len]\n\
-		Costs: \
-		Pipes [round(cost_pipenets)] \
-		Machines [round(cost_machinery)] \
-		Networks [round(cost_powernets)] \
-		Objects [round(cost_power_objects)]\n\
-		Overall [round(cost ? processing.len / cost : 0, 0.1)]
-	"}
-	..(text)
+/datum/controller/subsystem/machines/stat_entry()
+	var/msg = list()
+	msg += "C:{"
+	msg += "PI:[round(cost_pipenets,1)]|"
+	msg += "MC:[round(cost_machinery,1)]|"
+	msg += "PN:[round(cost_powernets,1)]|"
+	msg += "PO:[round(cost_power_objects,1)]"
+	msg += "} "
+	msg += "PI:[pipenets.len]|"
+	msg += "MC:[processing.len]|"
+	msg += "PN:[powernets.len]|"
+	msg += "PO:[power_objects.len]|"
+	msg += "MC/MS:[round((cost ? processing.len/cost : 0),0.1)]"
+	..(jointext(msg, null))
 
 /datum/controller/subsystem/machines/proc/process_pipenets(resumed = 0)
 	if (!resumed)

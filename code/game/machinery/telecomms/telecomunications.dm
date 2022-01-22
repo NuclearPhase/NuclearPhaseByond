@@ -192,7 +192,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/proc/checkheat()
 	// Checks heat from the environment and applies any integrity damage
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	var/damage_chance = 0                           // Percent based chance of applying 1 integrity damage this tick
 	switch(environment.temperature)
 		if((T0C + 40) to (T0C + 70))                // 40C-70C, minor overheat, 10% chance of taking damage
@@ -225,11 +225,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(!(stat & (NOPOWER|BROKEN)))
 		var/turf/simulated/L = loc
 		if(istype(L))
-			var/datum/fluid_mixture/env = L.return_air()
+			var/datum/gas_mixture/env = L.return_air()
 
 			var/transfer_moles = 0.25 * env.total_moles
 
-			var/datum/fluid_mixture/removed = env.remove(transfer_moles)
+			var/datum/gas_mixture/removed = env.remove(transfer_moles)
 
 			if(removed)
 

@@ -127,11 +127,11 @@ var/list/possible_cable_coil_colours
 	return "[round(powernet.get_wattage())] W"
 
 /obj/structure/cable/proc/get_voltage()
-	if(powernet.voltage >= 1 MVOLT)
-		return "[round(powernet.voltage/(1 MVOLT), 0.01)] MV"
-	if(powernet.voltage >= 1 KVOLT)
-		return "[round(powernet.voltage/(1 KVOLT), 0.01)] kV"
-	return "[round(powernet.voltage)] V"
+	if(powernet.get_voltage() >= 1 MVOLT)
+		return "[round(powernet.get_voltage()/(1 MVOLT), 0.01)] MV"
+	if(powernet.get_voltage() >= 1 KVOLT)
+		return "[round(powernet.get_voltage()/(1 KVOLT), 0.01)] kV"
+	return "[round(powernet.get_voltage())] V"
 
 /obj/structure/cable/proc/get_amperage()
 	if(powernet.get_amperage() >= 1 MAMPER)

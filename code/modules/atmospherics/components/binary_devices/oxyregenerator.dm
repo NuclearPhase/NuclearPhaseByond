@@ -16,7 +16,7 @@
 	var/intake_power_efficiency = 1
 	var/const/carbon_moles_per_piece = 50 //One 12g per mole * 50 = 600 g chunk of coal
 	var/phase = "filling"//"filling", "processing", "releasing"
-	var/datum/fluid_mixture/inner_tank = new
+	var/datum/gas_mixture/inner_tank = new
 	var/tank_volume = 400//Litres
 
 /obj/machinery/atmospherics/binary/oxyregenerator/New()
@@ -126,7 +126,7 @@
 			var/co2_intake = between(0, inner_tank.gas["carbon_dioxide"], power_setting*delay/10)
 			last_flow_rate = co2_intake
 			inner_tank.adjust_gas("carbon_dioxide", -co2_intake, 1)
-			var/datum/fluid_mixture/new_oxygen = new
+			var/datum/gas_mixture/new_oxygen = new
 			new_oxygen.adjust_gas("oxygen",  co2_intake)
 			new_oxygen.temperature = T20C+30 //it's sort of hot after molecular bond breaking
 			inner_tank.merge(new_oxygen)

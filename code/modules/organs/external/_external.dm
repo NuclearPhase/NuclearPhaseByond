@@ -592,7 +592,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if(target_organ)
 		if(target_organ.germ_level < germ_level - 250)
-			if(prob(lerp(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
+			if(prob(Interpolate(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
 				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
 		target_organ.germ_level++
 	else

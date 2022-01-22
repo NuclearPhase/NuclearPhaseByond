@@ -194,7 +194,7 @@ Class Procs:
 	else return A
 
 /connection_edge/unsimulated/var/turf/B
-/connection_edge/unsimulated/var/datum/fluid_mixture/air
+/connection_edge/unsimulated/var/datum/gas_mixture/air
 
 /connection_edge/unsimulated/New(zone/A, turf/B)
 	src.A = A
@@ -247,7 +247,7 @@ Class Procs:
 	if(!A.air.compare(air, vacuum_exception = 1))
 		SSair.mark_edge_active(src)
 
-proc/ShareHeat(datum/fluid_mixture/A, datum/fluid_mixture/B, connecting_tiles)
+proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	//This implements a simplistic version of the Stefan-Boltzmann law.
 	var/energy_delta = ((A.temperature - B.temperature) ** 4) * STEFAN_BOLTZMANN_CONSTANT * connecting_tiles * 2.5
 	var/maximum_energy_delta = max(0, min(A.temperature * A.heat_capacity * A.group_multiplier, B.temperature * B.heat_capacity * B.group_multiplier))

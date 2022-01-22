@@ -20,6 +20,6 @@
 	return null
 
 /spell/create_air/cast(var/list/targets, var/mob/holder, var/channel_count)
-	var/datum/fluid_mixture/environment = targets[1]
+	var/datum/gas_mixture/environment = targets[1]
 	for(var/gas in air_change)
 		environment.adjust_gas(gas, air_change[gas])

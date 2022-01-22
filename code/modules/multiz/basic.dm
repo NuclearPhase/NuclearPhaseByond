@@ -8,7 +8,7 @@ GLOBAL_LIST_EMPTY(z_levels)
 		return
 	if(_height)
 		height = _height
-	//GLOB.z_levels[loc.z] = TRUE
+	GLOB.z_levels[loc.z] = TRUE
 
 /obj/effect/landmark/map_data/Initialize()
 	..()

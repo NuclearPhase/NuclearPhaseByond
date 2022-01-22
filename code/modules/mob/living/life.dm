@@ -13,7 +13,7 @@
 		machine = null
 
 	//Handle temperature/pressure differences between body and environment
-	var/datum/fluid_mixture/environment = loc.return_air()
+	var/datum/gas_mixture/environment = loc.return_air()
 	if(environment)
 		handle_environment(environment)
 
@@ -52,7 +52,7 @@
 /mob/living/proc/handle_random_events()
 	return
 
-/mob/living/proc/handle_environment(var/datum/fluid_mixture/environment)
+/mob/living/proc/handle_environment(var/datum/gas_mixture/environment)
 	return
 
 /mob/living/proc/handle_stomach()
@@ -112,7 +112,7 @@
 	if(force)
 		druggy = vol
 	else if(druggy < vol)
-		druggy = lerp(druggy, vol, weigth)
+		druggy = Interpolate(druggy, vol, weigth)
 
 /mob/living/proc/handle_drugged()
 	if(druggy)

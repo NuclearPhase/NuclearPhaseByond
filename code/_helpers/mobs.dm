@@ -153,7 +153,7 @@ proc/ageAndGender2Desc(age, gender)//Used for the radio
 	var/starttime = world.time
 	. = 1
 	while (world.time < endtime)
-		stoplag()
+		sleep(1)
 		if (progress)
 			progbar.update(world.time - starttime)
 		if(!user || !target)
@@ -205,7 +205,7 @@ proc/ageAndGender2Desc(age, gender)//Used for the radio
 	var/starttime = world.time
 	. = 1
 	while (world.time < endtime)
-		stoplag()
+		sleep(1)
 		if (progress)
 			progbar.update(world.time - starttime)
 

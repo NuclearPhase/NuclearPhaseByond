@@ -3,9 +3,9 @@ obj/machinery/atmospherics/trinary
 	initialize_directions = SOUTH|NORTH|WEST
 	use_power = 0
 
-	var/datum/fluid_mixture/air1
-	var/datum/fluid_mixture/air2
-	var/datum/fluid_mixture/air3
+	var/datum/gas_mixture/air1
+	var/datum/gas_mixture/air2
+	var/datum/gas_mixture/air3
 
 	var/obj/machinery/atmospherics/node3
 

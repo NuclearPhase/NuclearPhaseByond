@@ -33,7 +33,7 @@ var/list/floor_decals = list()
 		if(!T.decals) T.decals = list()
 		T.decals |= floor_decals[cache_key]
 		T.overlays |= floor_decals[cache_key]
-	atom_flags |= ATOM_FLAG_INITIALIZED
+	initialized = TRUE
 	return INITIALIZE_HINT_QDEL
 
 /obj/effect/floor_decal/reset
@@ -43,7 +43,7 @@ var/list/floor_decals = list()
 	var/turf/T = get_turf(src)
 	T.remove_decals()
 	T.update_icon()
-	atom_flags |= ATOM_FLAG_INITIALIZED
+	initialized = TRUE
 	return INITIALIZE_HINT_QDEL
 
 /obj/effect/floor_decal/carpet

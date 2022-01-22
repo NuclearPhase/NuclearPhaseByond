@@ -24,7 +24,7 @@
 	item_path = /obj/item/bodybag/cryobag
 
 	storage_types = CLOSET_STORAGE_MOBS
-	var/datum/fluid_mixture/airtank
+	var/datum/gas_mixture/airtank
 
 	var/stasis_power = 20
 	var/degradation_time = 150 //ticks until stasis power degrades, ~5 minutes

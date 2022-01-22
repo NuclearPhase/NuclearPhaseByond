@@ -6,7 +6,7 @@ var/list/gear_datums = list()
 	var/gear_slot = 1  //The current gear save slot
 
 /datum/preferences/proc/Gear()
-	return LAZYACCESS(gear_list, gear_slot)
+	return gear_list[gear_slot]
 
 /datum/loadout_category
 	var/category = ""

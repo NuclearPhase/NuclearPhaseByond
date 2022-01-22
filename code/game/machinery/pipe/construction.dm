@@ -79,15 +79,15 @@ Buildable meters
 		else if(istype(make_from, /obj/machinery/atmospherics/binary/pump))
 			src.pipe_type = PIPE_PUMP
 		else if(istype(make_from, /obj/machinery/atmospherics/trinary/filter/m_filter))
-			src.pipe_type = PIPE_FLUID_FILTER_M
+			src.pipe_type = PIPE_GAS_FILTER_M
 		else if(istype(make_from, /obj/machinery/atmospherics/trinary/mixer/t_mixer))
-			src.pipe_type = PIPE_FLUID_MIXER_T
+			src.pipe_type = PIPE_GAS_MIXER_T
 		else if(istype(make_from, /obj/machinery/atmospherics/trinary/mixer/m_mixer))
-			src.pipe_type = PIPE_FLUID_MIXER_M
+			src.pipe_type = PIPE_GAS_MIXER_M
 		else if(istype(make_from, /obj/machinery/atmospherics/trinary/filter))
-			src.pipe_type = PIPE_FLUID_FILTER
+			src.pipe_type = PIPE_GAS_FILTER
 		else if(istype(make_from, /obj/machinery/atmospherics/trinary/mixer))
-			src.pipe_type = PIPE_FLUID_MIXER
+			src.pipe_type = PIPE_GAS_MIXER
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/vent_scrubber))
 			src.pipe_type = PIPE_SCRUBBER
 		else if(istype(make_from, /obj/machinery/atmospherics/binary/passive_gate))
@@ -373,11 +373,11 @@ Buildable meters
 			return dir|flip|cw|acw
 		if(PIPE_MANIFOLD, PIPE_SUPPLY_MANIFOLD, PIPE_SCRUBBERS_MANIFOLD, PIPE_FUEL_MANIFOLD)
 			return flip|cw|acw
-		if(PIPE_FLUID_FILTER, PIPE_FLUID_MIXER, PIPE_MTVALVE)
+		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER, PIPE_MTVALVE)
 			return dir|flip|cw
-		if(PIPE_FLUID_FILTER_M, PIPE_FLUID_MIXER_M, PIPE_MTVALVEM)
+		if(PIPE_GAS_FILTER_M, PIPE_GAS_MIXER_M, PIPE_MTVALVEM)
 			return dir|flip|acw
-		if(PIPE_FLUID_MIXER_T)
+		if(PIPE_GAS_MIXER_T)
 			return dir|cw|acw
 		if(PIPE_CAP, PIPE_SUPPLY_CAP, PIPE_SCRUBBERS_CAP, PIPE_FUEL_CAP)
 			return dir
@@ -878,7 +878,7 @@ Buildable meters
 				P.node2.atmos_init()
 				P.node2.build_network()
 
-		if(PIPE_FLUID_FILTER)		//gas filter
+		if(PIPE_GAS_FILTER)		//gas filter
 			var/obj/machinery/atmospherics/trinary/filter/P = new(src.loc)
 			P.set_dir(dir)
 			P.initialize_directions = pipe_dir
@@ -898,7 +898,7 @@ Buildable meters
 				P.node3.atmos_init()
 				P.node3.build_network()
 
-		if(PIPE_FLUID_MIXER)		//gas mixer
+		if(PIPE_GAS_MIXER)		//gas mixer
 			var/obj/machinery/atmospherics/trinary/mixer/P = new(src.loc)
 			P.set_dir(dir)
 			P.initialize_directions = pipe_dir
@@ -918,7 +918,7 @@ Buildable meters
 				P.node3.atmos_init()
 				P.node3.build_network()
 
-		if(PIPE_FLUID_FILTER_M)		//gas filter mirrored
+		if(PIPE_GAS_FILTER_M)		//gas filter mirrored
 			var/obj/machinery/atmospherics/trinary/filter/m_filter/P = new(src.loc)
 			P.set_dir(dir)
 			P.initialize_directions = pipe_dir
@@ -938,7 +938,7 @@ Buildable meters
 				P.node3.atmos_init()
 				P.node3.build_network()
 
-		if(PIPE_FLUID_MIXER_T)		//gas mixer-t
+		if(PIPE_GAS_MIXER_T)		//gas mixer-t
 			var/obj/machinery/atmospherics/trinary/mixer/t_mixer/P = new(src.loc)
 			P.set_dir(dir)
 			P.initialize_directions = pipe_dir
@@ -958,7 +958,7 @@ Buildable meters
 				P.node3.atmos_init()
 				P.node3.build_network()
 
-		if(PIPE_FLUID_MIXER_M)		//gas mixer mirrored
+		if(PIPE_GAS_MIXER_M)		//gas mixer mirrored
 			var/obj/machinery/atmospherics/trinary/mixer/m_mixer/P = new(src.loc)
 			P.set_dir(dir)
 			P.initialize_directions = pipe_dir
@@ -1311,16 +1311,16 @@ Buildable meters
 #undef PIPE_SVALVE
 #undef PIPE_PUMP
 #undef PIPE_SCRUBBER
-#undef PIPE_FLUID_FILTER
-#undef PIPE_FLUID_MIXER
+#undef PIPE_GAS_FILTER
+#undef PIPE_GAS_MIXER
 #undef PIPE_PASSIVE_GATE
 #undef PIPE_VOLUME_PUMP
 #undef PIPE_OUTLET_INJECT
 #undef PIPE_MTVALVE
 #undef PIPE_MTVALVEM
-#undef PIPE_FLUID_FILTER_M
-#undef PIPE_FLUID_MIXER_T
-#undef PIPE_FLUID_MIXER_M
+#undef PIPE_GAS_FILTER_M
+#undef PIPE_GAS_MIXER_T
+#undef PIPE_GAS_MIXER_M
 #undef PIPE_SUPPLY_STRAIGHT
 #undef PIPE_SUPPLY_BENT
 #undef PIPE_SCRUBBERS_STRAIGHT
