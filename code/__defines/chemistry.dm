@@ -35,7 +35,7 @@
 #define CE_SPEEDBOOST    "gofast"       // Hyperzine
 #define CE_SLOWDOWN      "goslow"       // Slowdown
 #define CE_PULSE         "xcardic"      // increases or decreases heart rate
-#define CE_PRESSURE      "bpressure"    // increases or decreases blood pressure
+#define CE_PRESSURE      "bpressure"    // increases or decreases gvr
 #define CE_CARDIAC_OUTPUT "cardoutput"  // multiplies cardiac output
 #define CE_NOPULSE       "heartstop"    // stops heartbeat
 #define CE_ANTITOX       "antitox"
@@ -47,6 +47,7 @@
 #define CE_MIND    		 "mindbending"  // Stabilizes or wrecks mind. Used for hallucinations
 #define CE_CRYO 	     "cryogenic"    // Prevents damage from being frozen
 #define CE_ANTIARRYTHMIC "stablerythme" // Prevents arrythmias.
+#define CE_ARRYTHMIC     "arrythmic"    // Causes arrythmia.
 
 //reagent flags
 #define IGNORE_MOB_SIZE 0x1

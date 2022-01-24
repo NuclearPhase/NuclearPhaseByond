@@ -3,6 +3,7 @@
  *		Retractor
  *		Hemostat
  *		Cautery
+ *		Scissors
  *		Surgical Drill
  *		Scalpel
  *		Circular Saw
@@ -48,6 +49,22 @@
 	w_class = ITEM_SIZE_SMALL
 	origin_tech = list(TECH_MATERIAL = 1, TECH_BIO = 1)
 	attack_verb = list("burnt")
+
+/*
+ * Scissors
+ */
+/obj/item/weapon/scissors
+	name = "scissors"
+	desc = "Cuts stuff."
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "scissors"
+	matter = list(DEFAULT_WALL_MATERIAL = 5000, "glass" = 2500)
+	obj_flags = OBJ_FLAG_CONDUCTIBLE
+	w_class = ITEM_SIZE_TINY
+	origin_tech = list(TECH_MATERIAL = 1, TECH_BIO = 1)
+	attack_verb = list("stabbed")
+	sharp = 1
+	sharpness = 25
 
 /*
  * Surgical Drill

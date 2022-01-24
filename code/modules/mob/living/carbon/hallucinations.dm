@@ -55,9 +55,10 @@
 		if(H.can_affect(src))
 			candidates += H
 	if(candidates.len)
-		var/datum/hallucination/H = pick(candidates)
-		H.holder = src
-		H.activate()
+		for(var/i in 1 to round(hallucination_power / 50))
+			var/datum/hallucination/H = pick(candidates)
+			H.holder = src
+			H.activate()
 
 /mob/living/carbon/proc/is_hallucinating()
 	return hallucination_power && hallucination_duration
@@ -104,13 +105,11 @@
 		qdel(src)
 
 
-// no vents in build :d
-/*
 #define FAKE_FLOOD_EXPAND_TIME 5
 #define FAKE_FLOOD_MAX_RADIUS 30
 
 /datum/hallucination/fake_flood
-	// Plasma starts flooding from the nearby vent
+	// Plasma starts flooding from the random point
 	var/turf/center
 	var/list/flood_images = list()
 	var/list/turf/flood_turfs = list()
@@ -121,17 +120,8 @@
 	duration = 1 MINUTE
 	min_power = 40
 
-/datum/hallucination/fake_flood/can_affect(mob/living/carbon/C)
-	for(var/obj/machinery/atmospherics/unary/vent_pump/U in view(7, usr))
-		if(!U.welded)
-			return TRUE
-	return FALSE
-
 /datum/hallucination/fake_flood/start()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/U in view(7, usr))
-		if(!U.welded)
-			center = get_turf(U)
-			break
+	center = get_turf(pick(view(7, holder)))
 
 	if(!center)
 		qdel(src)
@@ -170,7 +160,7 @@
 	for(var/turf/FT in flood_turfs)
 		for(var/dir in GLOB.cardinal)
 			var/turf/T = get_step(FT, dir)
-			if((T in flood_turfs) || !FT.CanZASPass(T))
+			if(T in flood_turfs)
 				continue
 			var/image/new_plasma = image(image_icon, T, image_state)
 			new_plasma.alpha = 50
@@ -187,10 +177,11 @@
 
 	if(holder.client)
 		holder.client.images.Remove(flood_images)
-	QDEL_LIST(flood_images)
+	for(var/I in flood_images)
+		qdel(I)
 	flood_turfs.Cut()
 	holder.hallucinations -= src
-*/
+
 
 //Playing a random sound
 /datum/hallucination/sound
@@ -312,11 +303,11 @@
 	var/client/client
 
 /obj/item/mirage_item/pickup(mob/living/carbon/human/H)
-	H.visible_message(SPAN_NOTICE("[H] tried to take something, but only grabbed air."),
+	H.visible_message(SPAN_NOTICE("[H] tried to take something, but just grabbed air."),
 		SPAN_WARNING("Your hand seems to go right through the [name ? src : "item"]. It's like it doesn't exist."))
 
 	client.images -= img
-	qdel(src)
+	del(src) // FIXME: hard deleting 
 
 /datum/hallucination/item_mirage
 	duration = 30 SECONDS
@@ -324,10 +315,6 @@
 	var/list/items = list() // items
 	var/sound // Pop!
 	var/volume = 25
-
-/datum/hallucination/item_mirage/Destroy()
-	end()
-	. = ..()
 
 /datum/hallucination/item_mirage/proc/generate_mirage(turf/loc)
 	var/obj/item/mirage_item/I = new(loc)
@@ -376,6 +363,7 @@
 		return
 	for(var/obj/item/mirage_item/I in items)
 		holder.client.images -= I.img
+		items -= I
 		qdel(I)
 
 // Singulo
@@ -387,7 +375,7 @@
 
 /obj/item/mirage_item/singulo/Destroy()
 	STOP_PROCESSING(SSobj, src)
-	..()
+	return ..()
 
 /obj/item/mirage_item/singulo/Process()
 	step_to(src, target, 1)
@@ -420,7 +408,7 @@
 
 /obj/item/mirage_item/balloon/Destroy()
 	STOP_PROCESSING(SSfastprocess, src)
-	..()
+	return ..()
 
 /obj/item/mirage_item/balloon/Process()
 	pixel_x += sin(world.time) * 16 * mdir * rand(-1, 1)
@@ -460,7 +448,7 @@
 
 /obj/item/mirage_item/bhole/Destroy()
 	STOP_PROCESSING(SSfastprocess, src)
-	..()
+	return ..()
 
 /obj/item/mirage_item/bhole/Process()
 	pixel_x += sin(world.time) * 32 * mdir * rand(-1, 1)
@@ -499,10 +487,6 @@
 	var/sound // Pop!
 	var/volume = 25
 
-/datum/hallucination/mirage/Destroy()
-	end()
-	. = ..()
-
 /datum/hallucination/mirage/proc/generate_mirage()
 	var/icon/T = new('icons/obj/trash.dmi')
 	return image(T, pick(T.IconStates()), layer = BELOW_TABLE_LAYER)
@@ -531,8 +515,8 @@
 	var/main  = rgb(rand(0,255), rand(0, 255), rand(0, 255))
 	var/shade = rgb(rand(0,255), rand(0, 255), rand(0, 255))
 
-	var/icon/mainOverlay = new/icon('icons/effects/crayondecal.dmi',"[state]",2.1)
-	var/icon/shadeOverlay = new/icon('icons/effects/crayondecal.dmi',"[state]s",2.1)
+	var/icon/mainOverlay = new('icons/effects/crayondecal.dmi',"[state]",2.1)
+	var/icon/shadeOverlay = new('icons/effects/crayondecal.dmi',"[state]s",2.1)
 
 	mainOverlay.Blend(main, ICON_ADD)
 	shadeOverlay.Blend(shade, ICON_ADD)
@@ -564,13 +548,6 @@
 		I.pixel_y = rand(-10, 10)
 		return I
 
-/datum/hallucination/mirage/portal
-	min_power = 50
-
-/datum/hallucination/mirage/portal/generate_mirage()
-	sound = 'sound/effects/phasein.ogg'
-	return image('icons/obj/stationobjs.dmi', prob(50) ? "portal" : "portal1", layer = ABOVE_OBJ_LAYER)
-
 /datum/hallucination/mirage/explosions
 	min_power = 50
 	duration = 10
@@ -579,47 +556,6 @@
 /datum/hallucination/mirage/explosions/generate_mirage()
 	sound = get_sfx("explosion")
 	return image('icons/effects/96x96.dmi', prob(50) ? "explosion" : "explosionfast", layer = FLY_LAYER)
-
-//Fake telepathy
-/datum/hallucination/telepahy
-	allow_duplicates = 0
-	duration = 20 MINUTES
-
-/datum/hallucination/telepahy/start()
-	to_chat(holder,"<span class = 'notice'>You expand your mind outwards.</span>")
-	holder.verbs += /mob/living/carbon/human/proc/fakeremotesay
-
-/datum/hallucination/telepahy/end()
-	if(holder)
-		holder.verbs -= /mob/living/carbon/human/proc/fakeremotesay
-
-/mob/living/carbon/human/proc/fakeremotesay()
-	set name = "Telepathic Message"
-	set category = "Superpower"
-
-	if(!hallucination_power)
-		src.verbs -= /mob/living/carbon/human/proc/fakeremotesay
-		return
-
-	if(stat)
-		to_chat(usr, "<span class = 'warning'>You're not in any state to use your powers right now!'</span>")
-		return
-
-	if(chem_effects[CE_MIND] > 0)
-		to_chat(usr, "<span class = 'warning'>Chemicals in your blood prevent you from using your power!'</span>")
-
-	var/list/creatures = list()
-	for(var/mob/living/carbon/C in SSmobs.mob_list)
-		creatures += C
-	creatures -= usr
-	var/mob/target = input("Who do you want to project your mind to ?") as null|anything in creatures
-	if (isnull(target))
-		return
-
-	var/msg = sanitize(input(usr, "What do you wish to transmit"))
-	show_message("<span class = 'notice'>You project your mind into [target.name]: \"[msg]\"</span>")
-	if(!stat && prob(20))
-		say(msg)
 
 //Fake attack
 /datum/hallucination/fakeattack

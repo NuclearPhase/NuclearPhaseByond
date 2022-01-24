@@ -47,7 +47,7 @@
 
 // 1u glucagone produce 0.1u glucose increase.
 /datum/reagent/hormone/glucagone
-	name = "glucagone"
+	name = "Glucagone"
 
 // MARKERS
 

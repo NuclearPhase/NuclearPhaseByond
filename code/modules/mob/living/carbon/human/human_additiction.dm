@@ -85,7 +85,7 @@
 		return
 	var/P = abs(power)
 	if(prob(10))
-		H.take_overall_damage(brute = P * 0.25, "Opioid additiction")
+		H.take_overall_damage(brute = P * 0.25)
 		switch(P)
 			if(0 to 6)
 				H.custom_pain("Your body stings slightly.", P * 2, 0, null, 0)

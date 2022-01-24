@@ -483,10 +483,7 @@
 	if(alien == IS_DIONA)
 		return
 	M.add_chemical_effect(CE_MIND, -2)
-	if(alien == IS_SKRELL)
-		M.hallucination(25, 30)
-	else
-		M.hallucination(50, 50)
+	M.hallucination(50, 80)
 
 /datum/reagent/psilocybin
 	name = "Psilocybin"

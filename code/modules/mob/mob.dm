@@ -519,11 +519,12 @@
 	for(var/obj/item/organ/external/E in organs)
 		if((E.status & ORGAN_BROKEN) && !E.splinted)
 			return TRUE
-		if(E.status & ORGAN_BLEEDING)
-			return 1
-		for(var/datum/wound/W in E.wounds)
-			if(W.bleeding())
-				return TRUE
+		if(!E.splinted)
+			if(E.status & ORGAN_BLEEDING)
+				return 1
+			for(var/datum/wound/W in E.wounds)
+				if(W.bleeding())
+					return TRUE
 	return FALSE
 
 /mob/MouseDrop(mob/M as mob)
@@ -887,6 +888,55 @@
 
 /mob/proc/embedded_needs_process()
 	return (embedded.len > 0)
+
+/mob/proc/remove_harness()
+	set category = "Object"
+	set name = "Remove harness"
+	set desc = "Remove an harness"
+	set src in view(1)
+
+	if(!ishuman(usr) || !usr.canClick())
+		return
+	usr.setClickCooldown(20)
+
+	if(usr.stat == 1)
+		to_chat(usr, "You are unconcious and cannot do that!")
+		return
+
+	if(usr.restrained())
+		to_chat(usr, "You are restrained and cannot do that!")
+		return
+
+	var/mob/living/carbon/human/S = src
+	var/mob/U = usr
+	var/list/valid_harnesses = list()
+
+	for(var/obj/item/organ/external/E in S.organs)
+		if(E.clamped > 0)
+			valid_harnesses += E
+	var/obj/item/organ/external/choice = input("Which limb do you wanna to remove the harness from?", "Limbs") in valid_harnesses
+
+	var/self = S == U
+
+	if(!do_mob(U, S, 30))
+		return
+	if(!S || !U || !choice)
+		return
+
+	if(self)
+		visible_message("<span class='warning'><b>[src] removes harness out of their [choice].</b></span>","<span class='warning'><b>You rip harness out of your [choice].</b></span>")
+	else
+		visible_message("<span class='warning'><b>[usr] removes harness out of [src]'s [choice].</b></span>","<span class='warning'><b>[usr] rips harness out of your [choice].</b></span>")
+
+	valid_harnesses.Cut()
+	for(var/obj/item/organ/external/E in S.organs)
+		if(E.clamped)
+			valid_harnesses += E
+	if(valid_harnesses.len == 1)
+		src.verbs -= /mob/proc/remove_harness
+	choice.clamped = 0
+
+
 
 mob/proc/yank_out_object()
 	set category = "Object"

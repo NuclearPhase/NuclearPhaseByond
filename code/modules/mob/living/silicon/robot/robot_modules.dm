@@ -283,7 +283,7 @@ var/global/list/robot_modules = list(
 	synths += medicine
 
 	var/obj/item/stack/medical/ointment/O = new /obj/item/stack/medical/ointment(src)
-	var/obj/item/stack/medical/bruise_pack/B = new /obj/item/stack/medical/bruise_pack(src)
+	var/obj/item/stack/medical/ointment/B = new /obj/item/stack/medical/ointment(src)
 	var/obj/item/stack/medical/splint/S = new /obj/item/stack/medical/splint(src)
 	O.uses_charge = 1
 	O.charge_costs = list(1000)

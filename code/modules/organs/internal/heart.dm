@@ -6,9 +6,8 @@
 	organ_tag = "heart"
 	parent_organ = BP_CHEST
 	dead_icon = "heart-off"
-	var/pulse = 70
-	var/cardiac_output = BLOOD_PRESSURE_NORMAL / 70
-	var/pressure = BLOOD_PRESSURE_NORMAL
+	var/pulse = 60
+	var/cardiac_output = 1
 	var/list/pulse_modificators = list()
 	var/list/cardiac_output_modificators = list() // *
 	var/list/blood_pressure_modificators = list() // *
@@ -33,15 +32,13 @@
 		owner.add_chemical_effect(CE_PULSE, amount * 5)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.05)
 	if(ishormone(T, noradrenaline))
-		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.05)
+		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 1.2)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * -0.01)
 		owner.add_chemical_effect(CE_PULSE, amount * 2)
 	if(ishormone(T, dopamine))
-		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 0.025)
+		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 2)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
-		var/suggested_rythme = min(RYTHME_NORM + remove_frac(amount / 10), RYTHME_VFIB)
-		if(amount > 10 && prob(5) && prob(RYTHME_ASYSTOLE - suggested_rythme) && rythme < suggested_rythme)
-			change_rythme(rythme + 1, 30 SECONDS)
+		owner.add_chemical_effect(CE_ARRYTHMIC, amount / 10)
 
 
 /obj/item/organ/internal/heart/die()
@@ -56,7 +53,6 @@
 	if(owner.stat == DEAD)
 		rythme = RYTHME_ASYSTOLE
 		pulse = 0
-		pressure = 0
 		ischemia = 100
 		return
 
@@ -66,7 +62,6 @@
 
 	handle_pulse()
 	handle_cardiac_output()
-	handle_blood_pressure()
 
 	handle_blood()
 	post_handle_rythme()
@@ -91,12 +86,12 @@
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
 
 /obj/item/organ/internal/heart/proc/make_nc()
-	if(!pulse || !(pressure / pulse))
+	if(!pulse)
 		nc = 0
 		return
 	var/last = nc
-	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - pressure
-	nc /= (pressure / pulse)
+	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - owner.mpressure
+	nc /= (owner.mpressure / pulse)
 	nc = Clamp(Interpolate(last, nc, 0.5), -40, 40)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
@@ -134,26 +129,24 @@
 
 /obj/item/organ/internal/heart/proc/change_rythme(newrythme, timerequired = 0)
 	if(timerequired)
-		if((world.time - last_rythm_change) < timerequired)
+		if((last_rythm_change + timerequired) < world.time)
 			return
 
 	rythme = newrythme
 	last_rythm_change = world.time
 	pulse_modificators.Cut()
 	blood_pressure_modificators.Cut()
-
-
 	
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
 	var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
+	var/arrythmic = LAZYACCESS0(owner.chem_effects, CE_ARRYTHMIC)
 
 	if(rythme < RYTHME_ASYSTOLE && prob(5))
-	
-		if(damage / max_damage >= 0.75 && rythme < RYTHME_AFIB_RR)
+		if((damage / max_damage >= 0.75 || arrythmic >= 2) && rythme < RYTHME_AFIB_RR)
 			change_rythme(rythme + 1, 1.5 MINUTES)
-		else if(damage / max_damage >= 0.25 && rythme < RYTHME_AFIB)
+		else if((damage / max_damage >= 0.25 || arrythmic >= 1) && rythme < RYTHME_AFIB)
 			change_rythme(rythme + 1, 1.5 MINUTES)
-		else if(pressure > BLOOD_PRESSURE_HBAD && !antiarrythmic)
+		else if((owner.mpressure > BLOOD_PRESSURE_H2BAD || (arrythmic >= 3 && rythme < RYTHME_VFIB)) && !antiarrythmic)
 			change_rythme(rythme + 1, 1.5 MINUTES)
 	switch(rythme)
 		if(RYTHME_AFIB)
@@ -171,13 +164,6 @@
 		rythme = RYTHME_NORM
 	if(antiarrythmic > 1 && rythme == RYTHME_AFIB_RR && prob(10))
 		rythme = RYTHME_AFIB
-
-/obj/item/organ/internal/heart/proc/handle_blood_pressure()
-	var/n_pressure = 35 + (pulse - 20) * cardiac_output * (M_E ** -((pulse - 60) / (M_PI * 100)))
-	n_pressure *= mulListAndCutAssoc(blood_pressure_modificators)
-	n_pressure *= owner.get_blood_volume()
-
-	pressure = Interpolate(pressure, n_pressure, 0.25)
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()
 	if(pulse >= 90 || owner.shock_stage >= 10 || is_below_sound_pressure(get_turf(owner)))
@@ -245,7 +231,7 @@
 				else
 					owner.vessel.remove_reagent(/datum/reagent/blood, bleed_amount)
 
-		blood_max *= pressure / BLOOD_PRESSURE_NORMAL
+		blood_max *= owner.mpressure / BLOOD_PRESSURE_NORMAL
 
 		if(world.time >= next_blood_squirt && istype(owner.loc, /turf) && do_spray.len)
 			owner.visible_message("<span class='danger'>Blood squirts from [pick(do_spray)]!</span>")
