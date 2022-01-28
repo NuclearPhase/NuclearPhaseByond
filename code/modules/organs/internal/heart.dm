@@ -38,7 +38,7 @@
 	if(ishormone(T, dopamine))
 		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 2)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
-		owner.add_chemical_effect(CE_ARRYTHMIC, amount / 10)
+		owner.add_chemical_effect(CE_ARRYTHMIC, amount / 15)
 
 
 /obj/item/organ/internal/heart/die()
@@ -78,7 +78,7 @@
 			pulse = rand(200, 260)
 		else
 			var/n_pulse = initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)
-			pulse = Interpolate(pulse, n_pulse, 0.5)
+			pulse = lerp(pulse, n_pulse, 0.5)
 	pulse = Floor(Clamp(pulse, 0, 260))
 
 
@@ -92,7 +92,7 @@
 	var/last = nc
 	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - owner.mpressure
 	nc /= (owner.mpressure / pulse)
-	nc = Clamp(Interpolate(last, nc, 0.5), -40, 40)
+	nc = Clamp(lerp(last, nc, 0.5), -40, 40)
 
 /obj/item/organ/internal/heart/proc/make_modificators()
 	make_nc()
@@ -184,7 +184,7 @@
 	ischemia = min(ischemia, 100 + infarct_strength)
 
 	if(ischemia > 30)
-		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
+		damage += lerp(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
 		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)

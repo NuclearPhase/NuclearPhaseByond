@@ -267,7 +267,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	if(hr < 10)
 		return
 
-	var/hrp = 60/hr
+	var/hrp = 60.0/hr
 	var/hrpd = hrp * 0.109 + 0.159
 	gvr = max(120, k * dpressure * ((hrp-hrpd)/hrpd)) // TODO: simplify math expr
 	gvr += LAZYACCESS0(chem_effects, CE_PRESSURE)
@@ -287,23 +287,23 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	update_mpressure()
 	update_mcv()
 	update_gvr()
-	
+
 
 
 /mob/living/carbon/human/proc/update_spressure()
 	if(get_heart_rate() < 10)
 		spressure = 0
 		return
-	
-	spressure = between(0, Interpolate(spressure, (50 * mcv) / (27 * get_heart_rate()) + 2.0 * dpressure - (7646*k)/54, 0.5), 280)
+
+	spressure = between(0, lerp(spressure, (50 * mcv) / (27 * get_heart_rate()) + 2.0 * dpressure - (7646*k)/54, 0.5), 280)
 	//spressure = 0.00025 * mcv * gvr - 80
 
 /mob/living/carbon/human/proc/update_dpressure()
-	if(get_heart_rate() < 10)
+	if(get_heart_rate() <= 10)
 		dpressure = 0
 		return
 	var/hr53 = get_heart_rate() * get_cardiac_output() * 53
-	dpressure = max(0, Interpolate(dpressure, (gvr * (2180+hr53))/(k * (17820-hr53)), 0.5))
+	dpressure = max(0, lerp(dpressure, (gvr * (2180+hr53))/(k * (17820-hr53)), 0.5))
 
 /mob/living/carbon/human/proc/update_mpressure()
 	mpressure = dpressure + (spressure - dpressure) / 3
@@ -327,4 +327,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	if(stat == DEAD)
 		return 0
 
-	. = CLAMP01((mcv / (4000 * k)) * get_blood_saturation())
+	. = CLAMP01((mcv / (4700 * k)) * get_blood_saturation())

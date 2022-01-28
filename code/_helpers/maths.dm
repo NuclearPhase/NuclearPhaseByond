@@ -74,10 +74,8 @@
 /proc/IsOdd(x)
 	return  (x & 0x1)
 
-// Performs a linear interpolation between a and b.
-// Note: weight=0 returns a, weight=1 returns b, and weight=0.5 returns the mean of a and b.
-/proc/Interpolate(a, b, weight = 0.5)
-	return a + (b - a) * weight // Equivalent to: a*(1 - weight) + b*weight
+/proc/lerp(a, b, t = 0.5)
+	return a + t * (b - a)
 
 /proc/Mean(...)
 	var/sum = 0

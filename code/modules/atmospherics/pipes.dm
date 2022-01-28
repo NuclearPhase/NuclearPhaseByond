@@ -223,9 +223,9 @@
 	if (!istype(loc, /turf))
 		return 1
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	//var/datum/gas_mixture/environment = loc.return_air()
 
-	var/pressure_difference = pressure - environment.return_pressure()
+	//var/pressure_difference = pressure - environment.return_pressure()
 
 	// TODO: fix bursting
 	/*
