@@ -327,4 +327,4 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	if(stat == DEAD)
 		return 0
 
-	. = CLAMP01((mcv / (4700 * k)) * get_blood_saturation())
+	. = CLAMP01((mcv / (4300 * k)) * get_blood_saturation())

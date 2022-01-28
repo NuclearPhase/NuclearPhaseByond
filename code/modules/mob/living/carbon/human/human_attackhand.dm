@@ -98,7 +98,7 @@
 				for(var/i in 1 to punches)
 					if(!do_after(H, rand(4, 8) - acls_quality, src))
 						return
-					
+
 					var/pulse_amount = rand(30, 45) * (1 + acls_quality)
 					if("CPR" in heart.pulse_modificators)
 						heart.pulse_modificators["CPR"] += pulse_amount
@@ -132,7 +132,7 @@
 
 
 					if(prob(acls_quality * 13))
-						heart.rythme = prob(100 - acls_quality * 20) ? RYTHME_AFIB_RR : RYTHME_NORM
+						heart.get_ow_arrythmia()?.weak(heart)
 
 
 

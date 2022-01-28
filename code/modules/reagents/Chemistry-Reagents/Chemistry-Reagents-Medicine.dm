@@ -315,7 +315,7 @@
 	var/obj/item/organ/internal/heart/H = M.internal_organs_by_name[BP_HEART]
 	if(!H)
 		return
-	
+
 	H.ischemia = max(0, H.ischemia - volume / 2.5)
 
 /datum/reagent/atropine
@@ -337,13 +337,16 @@
 	metabolism = 0.5
 
 /datum/reagent/adenosine/affect_blood(mob/living/carbon/human/H, alien, removed)
+	var/obj/item/organ/internal/heart/heart = H.internal_organs_by_name[BP_HEART]
+	if(!heart)
+		return
+
 	// initial rush.
-	if(volume > 2 && H.chem_doses[type] < 2 && H.get_rythme() >= RYTHME_AFIB)
+	if(volume > 2 && H.chem_doses[type] < 2)
 		H.make_heart_rate(-140, "adenosine_av_blockage")
 	else
-		H.make_heart_rate(-30, "adenosine_av_blockage")
-		if(H.get_rythme() == RYTHME_AFIB_RR)
-			H.set_rythme(RYTHME_AFIB)
+		if(ARRYTHMIA_AFIB in heart.arrythmias)
+			heart.arrythmias[ARRYTHMIA_AFIB].weak(heart)
 			volume = 0
 
 /datum/reagent/amiodarone
