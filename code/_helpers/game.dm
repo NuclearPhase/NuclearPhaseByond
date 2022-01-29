@@ -64,9 +64,10 @@
 
 // Like view but bypasses luminosity check
 
+// FIXME: replace this by dview
 /proc/hear(var/range, var/atom/source)
 
-	var/lum = source.luminosity
+	var/lum = source.light_range
 	source.luminosity = 6
 
 	var/list/heard = view(range, source)

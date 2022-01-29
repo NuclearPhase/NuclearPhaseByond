@@ -187,7 +187,7 @@
 	light_range = 2
 	light_power = 1
 
-	light_color_alarm = COLOR_GREEN
+	light_color_alarm = LIGHT_COLOR_GREEN
 	light_color_status_display = COLOR_GREEN
 
 	overlay_alarm = "alarm_green"
@@ -200,7 +200,7 @@
 
 	light_range = 2
 	light_power = 1
-	light_color_alarm = COLOR_BLUE
+	light_color_alarm = LIGHT_COLOR_BLUE
 	light_color_status_display = COLOR_BLUE
 
 	overlay_alarm = "alarm_blue"
@@ -214,7 +214,7 @@
 
 	light_range = 4
 	light_power = 2
-	light_color_alarm = COLOR_RED
+	light_color_alarm = LIGHT_COLOR_RED
 	light_color_status_display = COLOR_RED
 
 	overlay_alarm = "alarm_red"
@@ -228,7 +228,7 @@
 
 	light_range = 4
 	light_power = 2
-	light_color_alarm = COLOR_RED
+	light_color_alarm = LIGHT_COLOR_RED
 	light_color_status_display = COLOR_NAVY_BLUE
 
 	overlay_alarm = "alarm_delta"

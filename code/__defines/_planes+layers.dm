@@ -169,11 +169,11 @@ What is the naming convention for planes or layers?
 
 #define LIGHTING_PLANE 			       -2 // For Lighting. - The highest plane (ignoring all other even higher planes)
 
-	#define LIGHTBULB_LAYER        0
-	#define LIGHTING_LAYER         1
-	#define ABOVE_LIGHTING_LAYER   2
-	#define SUPER_PORTAL_LAYER     3
-	#define NARSIE_GLOW            4
+	#define LIGHTBULB_LAYER        7
+	#define LIGHTING_LAYER         8
+	#define ABOVE_LIGHTING_LAYER   9
+	#define SUPER_PORTAL_LAYER     10
+	#define NARSIE_GLOW            11
 
 #define EFFECTS_ABOVE_LIGHTING_PLANE   -1 // For glowy eyes, laser beams, etc. that shouldn't be affected by darkness
 	#define EYE_GLOW_LAYER         1

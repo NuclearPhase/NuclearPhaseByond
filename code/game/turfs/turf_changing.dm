@@ -27,11 +27,6 @@
 			N = below.density ? /turf/simulated/floor/airless : /turf/simulated/open
 
 	var/obj/fire/old_fire = fire
-	var/old_opacity = opacity
-	var/old_dynamic_lighting = dynamic_lighting
-	var/old_affecting_lights = affecting_lights
-	var/old_lighting_overlay = lighting_overlay
-	var/old_corners = corners
 	var/old_ao_neighbors = ao_neighbors
 
 //	log_debug("Replacing [src.type] with [N]")
@@ -48,9 +43,12 @@
 		var/turf/simulated/S = src
 		if(S.zone) S.zone.rebuild()
 
-	var/turf/simulated/W = new N( locate(src.x, src.y, src.z) )
+	var/turf/simulated/W = new N(src)
 
-	W.opaque_counter = opaque_counter
+	if (permit_ao)
+		regenerate_ao()
+
+	//W.opaque_counter = opaque_counter
 
 	if(ispath(N, /turf/simulated))
 		if(old_fire)
@@ -70,6 +68,7 @@
 	. = W
 
 	W.ao_neighbors = old_ao_neighbors
+	/*
 	if(lighting_overlays_initialised)
 		lighting_overlay = old_lighting_overlay
 		affecting_lights = old_affecting_lights
@@ -81,6 +80,7 @@
 				lighting_build_overlay()
 			else
 				lighting_clear_overlay()
+	*/
 
 /turf/proc/transport_properties_from(turf/other)
 	if(!istype(other, src.type))
