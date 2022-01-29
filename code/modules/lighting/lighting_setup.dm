@@ -6,5 +6,10 @@
 	ASSERT(zlevel)
 
 	for(var/turf/T in block(locate(1, 1, zlevel), locate(world.maxx, world.maxy, zlevel)))
-		if(T.dynamic_lighting)
-			T.lighting_build_overlay()
+		if (!IS_DYNAMIC_LIGHTING(T))
+			continue
+
+		var/area/A = T.loc
+		if (!IS_DYNAMIC_LIGHTING(A))
+			continue
+		T.lighting_build_overlay()

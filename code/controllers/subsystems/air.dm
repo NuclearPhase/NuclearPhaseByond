@@ -160,7 +160,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		report_progress("Air settling completed in [(REALTIMEOFDAY - starttime)/10] seconds!")
 
 	for(var/i in 1 to 12)
-		coolingtable[i] = (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1 
+		coolingtable += (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1 
 
 	..(timeofday)
 
@@ -170,7 +170,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		processing_fires = active_fire_zones.Copy()
 		processing_hotspots = active_hotspots.Copy()
 
-	if(round_duration_in_ticks > (5 MINUTES))
+	if(FALSE && round_duration_in_ticks > (5 MINUTES))
 		spawn()
 			for(var/list/zone/Z in zones)
 				Z.air.add_thermal_energy(coolingtable[Z.contents[1].z] * Z.contents.len)

@@ -196,28 +196,24 @@
 
 /mob/living/proc/get_rythme()
 	return RYTHME_NORM
+
 /mob/living/carbon/human/get_rythme()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	return heart?.rythme
-
-/mob/living/proc/set_rythme(rythme)
-	return
-
-/mob/living/carbon/human/set_rythme(rythme)
-	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	heart?.rythme = rythme
+	var/datum/arrythmia/A = heart?.get_ow_arrythmia()
+	return A ? (A.id) : "normal"
 
 /mob/living/proc/is_asystole()
 	return FALSE
 
 /mob/living/carbon/human/is_asystole()
-	return get_rythme() == RYTHME_ASYSTOLE
+	return get_rythme() == ARRYTHMIA_ASYSTOLE
 
 /mob/living/proc/is_vfib()
 	return FALSE
 
 /mob/living/carbon/human/is_vfib()
-	return get_rythme() == RYTHME_VFIB
+	var/rythme = get_rythme()
+	return rythme == ARRYTHMIA_VFIB || rythme == ARRYTHMIA_VFLAUNT
 
 /mob/living/carbon/human/proc/make_heart_rate(amount, source = "misc")
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]

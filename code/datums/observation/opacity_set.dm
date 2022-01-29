@@ -14,6 +14,7 @@ GLOBAL_DATUM_INIT(opacity_set_event, /decl/observ/opacity_set, new)
 	name = "Opacity Set"
 	expected_type = /atom
 
+/*
 /*******************
 * Opacity Handling *
 *******************/
@@ -25,6 +26,7 @@ GLOBAL_DATUM_INIT(opacity_set_event, /decl/observ/opacity_set, new)
 		return TRUE
 	else
 		return FALSE
+*/
 
 /turf/ChangeTurf()
 	var/old_opacity = opacity

@@ -601,7 +601,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if(target_organ)
 		if(target_organ.germ_level < germ_level - 250)
-			if(prob(Interpolate(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
+			if(prob(lerp(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
 				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
 		target_organ.germ_level++
 	else
@@ -1223,7 +1223,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/proc/open()
 	var/datum/wound/cut/incision = get_incision()
 	. = 0
-	if(!incision)
+	if(!incision || gauzed)
 		return 0
 	var/smol_threshold = min_broken_damage * 0.4
 	var/beeg_threshold = min_broken_damage * 0.6
@@ -1408,6 +1408,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 		to_chat(user, "<span class='warning'>The tendons in [name] are severed!</span>")
 	if(dislocated == 2)
 		to_chat(user, "<span class='warning'>The [joint] is dislocated!</span>")
+	if(gauzed)
+		if(is_gauze_breed())
+			to_chat(user, SPAN_WARNING("The gauze on [name] is breeding!"))
+		else
+			to_chat(user, SPAN_NOTICE("The [name] are gauzed."))
 	return 1
 
 /obj/item/organ/external/listen()

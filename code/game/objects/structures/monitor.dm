@@ -39,12 +39,11 @@
 		icon_state = "monitor-asystole"
 		return
 
-	if(H.rythme < RYTHME_VFIB)
+	var/owa = H.get_ow_arrythmia()
+	if(owa)
+		icon_state = "monitor-[owa]"
+	else
 		icon_state = "monitor-normal"
-	else if(H.rythme == RYTHME_VFIB)
-		icon_state = "monitor-vfib"
-	else if(H.rythme == RYTHME_ASYSTOLE)
-		icon_state = "monitor-asystole"
 
 	if(attached.mpressure < BLOOD_PRESSURE_L2BAD || attached.mpressure > BLOOD_PRESSURE_H2BAD)
 		overlays += image(icon, "monitor-r")

@@ -11,8 +11,7 @@
 	var/list/pulse_modificators = list()
 	var/list/cardiac_output_modificators = list() // *
 	var/list/blood_pressure_modificators = list() // *
-	var/last_rythm_change = 0
-	var/rythme = RYTHME_NORM
+	var/list/arrythmias = list()
 	var/ischemia = 0
 	var/heartbeat = 0
 	var/beat_sound = 'sound/effects/singlebeat.ogg'
@@ -20,12 +19,12 @@
 	relative_size = 15
 	max_damage = 100
 	var/open
-	var/nc
 	influenced_hormones = list(
 		/datum/reagent/hormone/adrenaline,
 		/datum/reagent/hormone/noradrenaline,
 		/datum/reagent/hormone/dopamine
 	)
+	var/last_arrythmia_gain
 
 /obj/item/organ/internal/heart/influence_hormone(T, amount)
 	if(ishormone(T, adrenaline))
@@ -38,7 +37,7 @@
 	if(ishormone(T, dopamine))
 		owner.add_chemical_effect(CE_PRESSURE, 1 + amount * 2)
 		owner.add_chemical_effect(CE_CARDIAC_OUTPUT, 1 + amount * 0.005)
-		owner.add_chemical_effect(CE_ARRYTHMIC, amount / 10)
+		owner.add_chemical_effect(CE_ARRYTHMIC, amount / 15)
 
 
 /obj/item/organ/internal/heart/die()
@@ -51,7 +50,7 @@
 	if(!owner)
 		return
 	if(owner.stat == DEAD)
-		rythme = RYTHME_ASYSTOLE
+		make_arrythmia(/datum/arrythmia/asystole)
 		pulse = 0
 		ischemia = 100
 		return
@@ -71,36 +70,19 @@
 
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
-	switch(rythme)
-		if(RYTHME_ASYSTOLE)
-			pulse = sumListAndCutAssoc(pulse_modificators)
-		if(RYTHME_VFIB)
-			pulse = rand(200, 260)
-		else
-			var/n_pulse = initial(pulse) + nc + sumListAndCutAssoc(pulse_modificators)
-			pulse = Interpolate(pulse, n_pulse, 0.5)
-	pulse = Floor(Clamp(pulse, 0, 260))
+	var/n_pulse = initial(pulse) + sumListAndCutAssoc(pulse_modificators)
+	pulse = lerp(pulse, n_pulse, 0.5)
+	pulse = Floor(Clamp(pulse, 0, 500))
 
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
 	cardiac_output = initial(cardiac_output) * mulListAndCutAssoc(cardiac_output_modificators)
 
-/obj/item/organ/internal/heart/proc/make_nc()
-	if(!pulse)
-		nc = 0
-		return
-	var/last = nc
-	nc = BLOOD_PRESSURE_NORMAL * mulListAssoc(blood_pressure_modificators) - owner.mpressure
-	nc /= (owner.mpressure / pulse)
-	nc = Clamp(Interpolate(last, nc, 0.5), -40, 40)
-
 /obj/item/organ/internal/heart/proc/make_modificators()
-	make_nc()
-	if(rythme != RYTHME_ASYSTOLE)
-		pulse_modificators["hypoperfusion"] = (1 - owner.get_blood_perfusion()) * 100
-		pulse_modificators["shock"] = owner.shock_stage
-		if(CE_PULSE in owner.chem_effects)
-			pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
+	pulse_modificators["hypoperfusion"] = (1 - owner.get_blood_perfusion()) * 100
+	pulse_modificators["shock"] = owner.shock_stage
+	if(CE_PULSE in owner.chem_effects)
+		pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
 	if(CE_PRESSURE in owner.chem_effects)
 		blood_pressure_modificators["chem"] = owner.chem_effects[CE_PRESSURE]
 	if(CE_CARDIAC_OUTPUT in owner.chem_effects)
@@ -108,62 +90,38 @@
 	cardiac_output_modificators["damage"] = 1 - (damage / max_damage)
 
 /obj/item/organ/internal/heart/proc/handle_rythme()
-	switch(rythme)
-		if(RYTHME_AFIB)
-			if(ischemia < 15)
-				ischemia += 0.15
-			cardiac_output_modificators["afib"] = 0.85
-			pulse_modificators["afib"] = rand(-20, 20)
-		if(RYTHME_AFIB_RR)
-			if(ischemia < 20)
-				ischemia += 0.20
-			cardiac_output_modificators["afib_rr"] = 0.3
-			pulse_modificators["afib_rr"] = rand(25, 70)
-		if(RYTHME_VFIB)
-			ischemia += 0.40
-			cardiac_output_modificators["vfib"] = 0.05
-		if(RYTHME_ASYSTOLE)
-			ischemia += 0.70
-	if(rythme <= RYTHME_AFIB)
-		ischemia = max(0, ischemia - 0.2)
+	for(var/T in arrythmias)
+		var/datum/arrythmia/A = arrythmias[T]
+		ischemia += A.ischemia_mod
+		cardiac_output_modificators[A.name] = A.co_mod
+		pulse_modificators[A.name] = A.get_hr_mod(src)
+	ischemia = max(0, ischemia - 0.2)
 
-/obj/item/organ/internal/heart/proc/change_rythme(newrythme, timerequired = 0)
-	if(timerequired)
-		if((last_rythm_change + timerequired) < world.time)
-			return
-
-	rythme = newrythme
-	last_rythm_change = world.time
-	pulse_modificators.Cut()
-	blood_pressure_modificators.Cut()
-	
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
-	var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
-	var/arrythmic = LAZYACCESS0(owner.chem_effects, CE_ARRYTHMIC)
+	for(var/T in arrythmias)
+		var/datum/arrythmia/A = arrythmias[T]
+		if(!A.is_over_period())
+			break
+		if(A.can_weaken(src))
+			A.weak(src)
+			break
+		if(A.can_strengthen(src))
+			A.mutate(src, A.strengthening_type)
+			break
+	var/period = world.time - last_arrythmia_gain
 
-	if(rythme < RYTHME_ASYSTOLE && prob(5))
-		if((damage / max_damage >= 0.75 || arrythmic >= 2) && rythme < RYTHME_AFIB_RR)
-			change_rythme(rythme + 1, 1.5 MINUTES)
-		else if((damage / max_damage >= 0.25 || arrythmic >= 1) && rythme < RYTHME_AFIB)
-			change_rythme(rythme + 1, 1.5 MINUTES)
-		else if((owner.mpressure > BLOOD_PRESSURE_H2BAD || (arrythmic >= 3 && rythme < RYTHME_VFIB)) && !antiarrythmic)
-			change_rythme(rythme + 1, 1.5 MINUTES)
-	switch(rythme)
-		if(RYTHME_AFIB)
-			change_rythme(RYTHME_NORM, 3 MINUTES)
-		if(RYTHME_AFIB_RR)
-			change_rythme(RYTHME_AFIB, 5 MINUTES)
-		if(RYTHME_VFIB)
-			change_rythme(RYTHME_ASYSTOLE, 2 MINUTES)
-		if(RYTHME_ASYSTOLE)
-			var/critical_point = 145 + (ischemia / 50) * 40 - antiarrythmic * 10
-			if(pulse > critical_point)
-				change_rythme(RYTHME_VFIB, 10 SECONDS)
-
-	if(antiarrythmic && rythme == RYTHME_AFIB && prob(antiarrythmic * 25))
-		rythme = RYTHME_NORM
-	if(antiarrythmic > 1 && rythme == RYTHME_AFIB_RR && prob(10))
-		rythme = RYTHME_AFIB
+	if(prob(5) && period > 1.5 MINUTES)
+		var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
+		var/arrythmic = LAZYACCESS0(owner.chem_effects, CE_ARRYTHMIC)
+		if(arrythmic >= 2 || (damage / max_damage >= 0.75) && get_arrythmia_score() < 3)
+			make_common_arrythmia(2)
+		else if(arrythmic >= 1 || (damage / max_damage >= 0.25) && get_arrythmia_score() < 2)
+			make_common_arrythmia(1)
+		else if((owner.mpressure > BLOOD_PRESSURE_H2BAD || (arrythmic >= 3) && !antiarrythmic && get_arrythmia_score() < 3))
+			make_common_arrythmia(3)
+		else if((owner.mpressure < BLOOD_PRESSURE_L2BAD) && !antiarrythmic && get_arrythmia_score() < 5)
+			make_common_arrythmia(4)
+		return
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()
 	if(pulse >= 90 || owner.shock_stage >= 10 || is_below_sound_pressure(get_turf(owner)))
@@ -184,7 +142,7 @@
 	ischemia = min(ischemia, 100 + infarct_strength)
 
 	if(ischemia > 30)
-		damage += Interpolate(0.1, 0.5, (ischemia - 30) / 70)
+		damage += lerp(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
 		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)
@@ -223,7 +181,7 @@
 					blood_max += W.damage / 40
 
 		if(temp.status & ORGAN_ARTERY_CUT)
-			var/bleed_amount = Floor((owner.vessel.total_volume / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
+			var/bleed_amount = Floor((500 / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
 			if(bleed_amount)
 				if(open_wound)
 					blood_max += bleed_amount
@@ -258,7 +216,7 @@
 	var/strength
 	if(cardiac_output <= (initial(cardiac_output) / 2))
 		strength = "faint "
-	var/rythme_d = rythme == RYTHME_NORM ? "regular " : "irregular "
+	var/rythme_d = (get_arrythmia_score() < 3) ? "regular " : "irregular "
 
 	var/speed
 	switch(pulse)
@@ -276,16 +234,11 @@
 	. = "[strength][rythme_d][speed] pulse."
 
 /obj/item/organ/internal/heart/proc/get_rythme_fluffy()
-	switch(rythme)
-		if(RYTHME_NORM)
-			return "Normal"
-		if(RYTHME_AFIB)
-			return "Atrial fibrillation"
-		if(RYTHME_AFIB_RR)
-			return "Atrial fibrillation with rapid heart rate"
-		if(RYTHME_VFIB)
-			return "Ventricular fibrillation"
-		if(RYTHME_ASYSTOLE)
-			return "Asystole"
-		else
-			return "UNKNOWN BIOLOGY"
+	var/list/rythmes = list()
+	for(var/T in arrythmias)
+		var/datum/arrythmia/A = arrythmias[T]
+		rythmes += A.name
+	if(rythmes.len)
+		return english_list(rythmes)
+	else
+		return "Normal"

@@ -359,10 +359,10 @@
 	playsound(get_turf(src), 'sound/machines/defib_success.ogg', 50, 0)
 	var/obj/item/organ/internal/heart/heart = H.internal_organs_by_name[BP_HEART]
 	if(H.is_vfib())
-		heart.rythme = prob(50 + quality * 10) ? RYTHME_NORM : RYTHME_AFIB_RR
+		heart.get_ow_arrythmia()?.weak()
 	else if(!H.is_asystole() && quality <= SKILL_TRAINED)
 		heart.pulse_modificators["defibrillation"] = rand(80, 120)
-		heart.rythme++
+		heart.make_common_arrythmia(1)
 	log_and_message_admins("used \a [src] to revive [key_name(H)].")
 
 

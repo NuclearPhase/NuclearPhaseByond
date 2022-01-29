@@ -30,7 +30,7 @@
 /datum/reagent/hormone/glucose
 	name = "Glucose"
 	metabolism = 0 // reduces only by insulin.
-	
+
 // 1u insulin produce 0.1u glucose decrease.
 
 /datum/reagent/hormone/insulin
@@ -81,13 +81,14 @@
 	switch(amount)
 		if(POTASSIUM_LEVEL_HBAD to POTASSIUM_LEVEL_HCRITICAL)
 			heart.cardiac_output_modificators["potassium_level"] = 0.7
-			if(prob(10) && heart.rythme < RYTHME_AFIB)
-				++heart.rythme
+			if(prob(10) && heart.get_arrythmia_score() < 1)
+				heart.make_common_arrythmia(1)
+
 			heart.pulse_modificators["potassium_level"] = -volume * 10
 		if(POTASSIUM_LEVEL_HCRITICAL to INFINITY)
 			heart.cardiac_output_modificators["potassium_level"] = 0.65
-			if(prob(45 - heart.rythme) && heart.rythme < RYTHME_ASYSTOLE)
-				++heart.rythme
+			if(prob(20) && !(heart.get_ow_arrythmia()))
+				heart.make_common_arrythmia(rand(1, ARRYTHMIA_SEVERITY_OVERWRITING))
 			heart.pulse_modificators["potassium_level"] = -volume * 8
 
 /datum/reagent/potassium/affect_blood(mob/living/carbon/human/H, alien, removed)

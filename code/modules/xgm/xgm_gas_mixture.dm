@@ -211,7 +211,8 @@
 			gas -= g
 		else
 			total_moles += gas[g]
-	update_heat_capacity()
+	if(gas_data)
+		update_heat_capacity()
 
 
 //Returns the pressure of the gas mix.  Only accurate if there have been no gas modifications since update_values() has been called.
