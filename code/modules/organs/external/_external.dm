@@ -1223,7 +1223,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /obj/item/organ/external/proc/open()
 	var/datum/wound/cut/incision = get_incision()
 	. = 0
-	if(!incision || gauzed)
+	if(!incision)
 		return 0
 	var/smol_threshold = min_broken_damage * 0.4
 	var/beeg_threshold = min_broken_damage * 0.6

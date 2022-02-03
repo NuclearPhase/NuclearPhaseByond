@@ -18,6 +18,9 @@
 		return 0
 
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	return affected && !(affected.robotic >= ORGAN_ROBOT) && affected.encased && affected.open() >= SURGERY_RETRACTED
 
 //////////////////////////////////////////////////////////////////
@@ -41,7 +44,6 @@
 	return ..() && affected && affected.open() == SURGERY_RETRACTED
 
 /datum/surgery_step/open_encased/saw/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-
 	if (!hasorgans(target))
 		return
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)

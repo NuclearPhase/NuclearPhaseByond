@@ -57,9 +57,12 @@
 		var/obj/item/weapon/flame/F = tool
 		if(!F.lit)
 			return FALSE
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	if(affected.burn_dam > 30)
 		to_chat(user, SPAN_WARNING("[target]'s [affected.name] is too burned!"))
-
+		return SURGERY_FAILURE
 
 	return TRUE
 
@@ -189,6 +192,12 @@
 		var/obj/item/organ/external/affected = target.get_organ(target_zone)
 		if(!istype(affected))
 			return
+		if(affected.gauzed)
+			if(istype(tool, /obj/item/weapon/scalpel))
+				return
+			else
+				to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+				return SURGERY_FAILURE
 		if(affected.open())
 			var/datum/wound/cut/incision = affected.get_incision()
 			to_chat(user, "<span class='notice'>The [incision.desc] provides enough access, another incision isn't needed.</span>")
@@ -272,7 +281,7 @@
 /datum/surgery_step/generic/retract_skin/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
 		var/obj/item/organ/external/affected = target.get_organ(target_zone)
-		return affected && affected.open() == SURGERY_OPEN //&& !(affected.status & ORGAN_BLEEDING)
+		return affected && affected.open() == SURGERY_OPEN && !affected.gauzed//&& !(affected.status & ORGAN_BLEEDING)
 
 /datum/surgery_step/generic/retract_skin/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
@@ -322,6 +331,9 @@
 		return FALSE
 	if(!affected.get_incision(1))
 		to_chat(user, "<span class='warning'>There are no incisions on [target]'s [affected.name] that can be sutured cleanly with \the [tool]!</span>")
+		return SURGERY_FAILURE
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
 		return SURGERY_FAILURE
 	if(affected.is_stump()) // Copypasting some stuff here to avoid having to modify ..() for a single surgery
 		return affected.status & ORGAN_ARTERY_CUT
@@ -404,6 +416,7 @@
 /datum/surgery_step/generic/remove_gauze
 	allowed_tools = list(
 	/obj/item/weapon/scissors = 100, \
+	/obj/item/weapon/scalpel = 90, \
 	/obj/item/weapon/wirecutters = 75
 	)
 

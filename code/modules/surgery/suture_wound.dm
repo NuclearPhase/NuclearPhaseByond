@@ -16,6 +16,9 @@
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
 	if(!affected || affected.is_stump() || (affected.status & ORGAN_ROBOT))
 		return 0
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	for(var/datum/wound/W in affected.wounds)
 		if(W.damage_type == CUT && W.damage)
 			return 1

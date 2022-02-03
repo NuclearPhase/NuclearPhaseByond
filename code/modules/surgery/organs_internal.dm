@@ -44,6 +44,9 @@
 		return FALSE
 	if(affected.robotic >= ORGAN_ROBOT)
 		return FALSE
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	for(var/obj/item/organ/internal/I in affected.internal_organs)
 		if(I.damage > 0)
 			if(I.surface_accessible)
@@ -144,6 +147,10 @@
 	if(affected.robotic >= ORGAN_ROBOT)
 		return 0
 
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
+
 	target.op_stage.current_organ = null
 
 	var/list/attached_organs = list()
@@ -206,8 +213,9 @@
 	if(!affected)
 		return 0
 
-	if(!affected)
-		return 0
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 
 	var/list/removable_organs = list()
 	for(var/obj/item/organ/internal/I in affected.implants)
@@ -277,6 +285,10 @@
 
 	if(!istype(O))
 		return 0
+
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 
 	if((affected.robotic >= ORGAN_ROBOT) && !(O.robotic >= ORGAN_ROBOT))
 		to_chat(user, "<span class='danger'>You cannot install a naked organ into a robotic body.</span>")
@@ -361,6 +373,10 @@
 		// robotic attachment handled via screwdriver
 		return 0
 
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
+
 	var/list/attachable_organs = list()
 	for(var/obj/item/organ/I in affected.implants)
 		if(I && (I.status & ORGAN_CUT_AWAY))
@@ -429,6 +445,10 @@
 
 	if(!affected)
 		return 0
+
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 
 	if(affected.robotic >= ORGAN_ROBOT)
 		return 0

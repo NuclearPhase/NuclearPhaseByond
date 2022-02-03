@@ -25,6 +25,9 @@
 	if(!hasorgans(target))
 		return 0
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	return affected && (affected.status & ORGAN_TENDON_CUT) && affected.open() >= SURGERY_RETRACTED
 
 /datum/surgery_step/fix_tendon/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -68,8 +71,10 @@
 /datum/surgery_step/fix_vein/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!hasorgans(target))
 		return 0
-
 	var/obj/item/organ/external/affected = target.get_organ(target_zone)
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	return affected && (affected.status & ORGAN_ARTERY_CUT) && affected.open() >= SURGERY_RETRACTED
 
 /datum/surgery_step/fix_vein/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -168,6 +173,9 @@
 		return 0
 	if(affected.is_disinfected())
 		return 0
+	if(affected.gauzed)
+		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
+		return SURGERY_FAILURE
 	var/obj/item/weapon/reagent_containers/container = tool
 	if(!istype(container))
 		return 0
