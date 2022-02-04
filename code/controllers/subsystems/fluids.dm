@@ -27,8 +27,8 @@ SUBSYSTEM_DEF(fluids)
 		'sound/effects/gurgle4.ogg'
 		)
 
-/datum/controller/subsystem/fluids/stat_entry()
-	..("A:[active_fluids.len] S:[water_sources.len]")
+/datum/controller/subsystem/fluids/stat_entry(text)
+	..("[text] | Sources: [water_sources.len] Active Fluids: [active_fluids.len]")
 
 /datum/controller/subsystem/fluids/fire(resumed = 0)
 	if (!resumed)
@@ -148,8 +148,8 @@ SUBSYSTEM_DEF(fluids)
 			F.set_dir(setting_dir)
 
 			if(islist(F.equalizing_fluids) && F.equalizing_fluids.len > 1)
-				F.equalize_avg_depth = Floor(F.equalize_avg_depth/F.equalizing_fluids.len)
-				F.equalize_avg_temp = Floor(F.equalize_avg_temp/F.equalizing_fluids.len)
+				F.equalize_avg_depth = round(F.equalize_avg_depth/F.equalizing_fluids.len)
+				F.equalize_avg_temp = round(F.equalize_avg_temp/F.equalizing_fluids.len)
 				for(var/thing in F.equalizing_fluids)
 					var/obj/effect/fluid/other = thing
 					if(!QDELETED(other))

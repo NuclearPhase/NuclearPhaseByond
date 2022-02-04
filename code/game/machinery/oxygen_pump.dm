@@ -154,7 +154,7 @@
 /obj/machinery/oxygen_pump/examine(var/mob/user)
 	. = ..()
 	if(tank)
-		to_chat(user, "The meter shows [round(tank.air_contents.return_pressure())]")
+		to_chat(user, "The meter shows [round(RETURN_PRESSURE(tank.air_contents))]")
 	else
 		to_chat(user, "<span class='warning'>It is missing a tank!</span>")
 
@@ -195,7 +195,7 @@
 		data["tankInstalled"] = 0
 	// this is the data which will be sent to the ui
 	if(tank)
-		data["tankPressure"] = round(tank.air_contents.return_pressure() ? tank.air_contents.return_pressure() : 0)
+		data["tankPressure"] = round(RETURN_PRESSURE(tank.air_contents) ? RETURN_PRESSURE(tank.air_contents) : 0)
 		data["releasePressure"] = round(tank.distribute_pressure ? tank.distribute_pressure : 0)
 		data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
 		data["maxReleasePressure"] = round(TANK_MAX_RELEASE_PRESSURE)

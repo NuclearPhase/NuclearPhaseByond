@@ -90,6 +90,7 @@
 		log = runtime_log
 
 	callHook("startup")
+
 	//Emergency Fix
 	load_mods()
 	//end-emergency fix

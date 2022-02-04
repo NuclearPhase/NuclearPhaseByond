@@ -123,7 +123,7 @@
 	if(!ptank)
 		to_chat(user, "<span class='notice'>Attach a hydrogen tank first!</span>")
 		return
-	var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank.air_contents.return_pressure()]<BR>\nAmount to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_amount] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove hydrogen tank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
+	var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [RETURN_PRESSURE(ptank.air_contents)]<BR>\nAmount to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_amount] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove hydrogen tank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
 	user << browse(dat, "window=flamethrower;size=600x300")
 	onclose(user, "flamethrower")
 	return
@@ -188,7 +188,7 @@
 /obj/item/weapon/flamethrower/proc/ignite_turf(turf/target)
 	//TODO: DEFERRED Consider checking to make sure tank pressure is high enough before doing this...
 	//Transfer 5% of current tank air contents to turf
-	var/datum/gas_mixture/air_transfer = ptank.air_contents.remove_ratio(0.02*(throw_amount/100))
+	var/datum/fluid_mixture/air_transfer = ptank.air_contents.remove_ratio(0.02*(throw_amount/100))
 	//air_transfer.toxins = air_transfer.toxins * 5 // This is me not comprehending the air system. I realize this is retarded and I could probably make it work without fucking it up like this, but there you have it. -- TLE
 	new/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(target,air_transfer.gas["hydrogen"],get_dir(loc,target))
 	air_transfer.gas["hydrogen"] = 0

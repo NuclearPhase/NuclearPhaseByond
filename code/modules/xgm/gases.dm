@@ -1,42 +1,79 @@
-/decl/xgm_gas/oxygen
-	id = GAS_OXYGEN
-	name = "Oxygen"
+/datum/xgm_fluid/oxygen
+	id = FLUID_OXYGEN
+	gas_name = "Oxygen"
+	liquid_name = "Liquid Oxygen"
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.032	// kg/mol
-	flags = XGM_GAS_OXIDIZER | XGM_GAS_FUSION_FUEL
+	flags = XGM_FLUID_OXIDIZER | XGM_FLUID_FUSION_FUEL
 	breathed_product = /datum/reagent/oxygen
 	symbol_html = "O<sub>2</sub>"
 	symbol = "O2"
+	triple_point_temperature = 54.36
+	triple_point_pressure = 156
+	hypercritical_point_temperature = 154.8
+	hypercritical_point_pressure = 5.076 MPA
+	just_solid_temp = 53.15
+	lambda = 441.6
 
 
-/decl/xgm_gas/nitrogen
-	id = GAS_NITROGEN
-	name = "Nitrogen"
+/datum/xgm_fluid/nitrogen
+	id = FLUID_NITROGEN
+	gas_name = "Nitrogen"
+	liquid_name = "Liquid Nitrogen"
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.028	// kg/mol
 	symbol_html = "N<sub>2</sub>"
 	symbol = "N2"
+	triple_point_temperature = 63.15
+	triple_point_pressure = 12.53 KPA
+	hypercritical_point_temperature = 126.6
+	hypercritical_point_pressure = 3.398 MPA
+	just_solid_temp = 63.15
+	lambda = 719.6
 
-/decl/xgm_gas/carbon_dioxide
-	id = GAS_CO2
-	name = "Carbon Dioxide"
+/datum/xgm_fluid/hydrogen
+	id = FLUID_HYDROGEN
+	gas_name = "Hydrogen"
+	liquid_name = "Liquid Hydrogen"
+	specific_heat = 100	// J/(mol*K)
+	molar_mass = 0.002	// kg/mol
+	flags = XGM_FLUID_FUEL|XGM_FLUID_FUSION_FUEL
+	burn_product = FLUID_WATER
+	symbol_html = "H<sub>2</sub>"
+	symbol = "H2"
+	triple_point_temperature = 13.96
+	triple_point_pressure = 7.2 KPA
+	hypercritical_point_temperature = 33
+	hypercritical_point_pressure = 1.297 MPA
+	lambda = 118
+
+/datum/xgm_fluid/carbon_dioxide
+	id = FLUID_CO2
+	gas_name = "Carbon Dioxide"
+	liquid_name = "Liquid Carbon Dioxide"
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol
 	symbol_html = "CO<sub>2</sub>"
 	symbol = "CO2"
+	triple_point_temperature = 216.16
+	triple_point_pressure = 0.516 MPA
+	hypercritical_point_temperature = 303.9
+	hypercritical_point_pressure = 7.37 MPA
+	just_solid_temp = 195.15
+	lambda = 2.504 KJ
 
-/decl/xgm_gas/methyl_bromide
-	id = GAS_METHYL_BROMIDE
-	name = "Methyl Bromide"
+/datum/xgm_fluid/methyl_bromide
+	id = FLUID_METHYL_BROMIDE
+	gas_name = "Methyl Bromide"
 	specific_heat = 42.59 // J/(mol*K)
 	molar_mass = 0.095	  // kg/mol
 	breathed_product = /datum/reagent/toxin/methyl_bromide
 	symbol_html = "CH<sub>3</sub>Br"
 	symbol = "CH3Br"
 
-/decl/xgm_gas/phoron
-	id = GAS_PHORON
-	name = "Phoron"
+/datum/xgm_fluid/phoron
+	id = FLUID_PHORON
+	gas_name = "Phoron"
 
 	//Note that this has a significant impact on TTV yield.
 	//Because it is so high, any leftover phoron soaks up a lot of heat and drops the yield pressure.
@@ -49,50 +86,50 @@
 
 	tile_color = "#ff9940"
 	overlay_limit = 0.7
-	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_FUSION_FUEL
+	flags = XGM_FLUID_FUEL | XGM_FLUID_CONTAMINANT | XGM_FLUID_FUSION_FUEL
 	breathed_product = /datum/reagent/toxin/phoron
 	symbol_html = "Ph"
 	symbol = "Ph"
 
-/decl/xgm_gas/sleeping_agent
-	id = GAS_N2O
-	name = "Nitrous Oxide"
+/datum/xgm_fluid/sleeping_agent
+	id = FLUID_N2O
+	gas_name = "Nitrous Oxide"
 	specific_heat = 40	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol. N2O
-	flags = XGM_GAS_OXIDIZER //N2O is a powerful oxidizer
+	flags = XGM_FLUID_OXIDIZER //N2O is a powerful oxidizer
 	breathed_product = /datum/reagent/nitrous_oxide
 	symbol_html = "N<sub>2</sub>O"
 	symbol = "N2O"
 
-/decl/xgm_gas/methane
-	id = GAS_METHANE
-	name = "Methane"
+/datum/xgm_fluid/methane
+	id = FLUID_METHANE
+	gas_name = "Methane"
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.016	// kg/mol
-	flags = XGM_GAS_FUEL
+	flags = XGM_FLUID_FUEL
 	symbol_html = "CH<sub>4</sub>"
 	symbol = "CH4"
 
-/decl/xgm_gas/alium
-	id = GAS_ALIEN
-	name = "Aliether"
+/datum/xgm_fluid/alium
+	id = FLUID_ALIEN
+	gas_name = "Aliether"
 	hidden_from_codex = TRUE
 	symbol_html = "X"
 	symbol = "X"
 
-/decl/xgm_gas/alium/New()
+/datum/xgm_fluid/alium/New()
 	var/num = rand(100,999)
-	name = "Compound #[num]"
+	gas_name = "Compound #[num]"
 	specific_heat = rand(1, 400)	// J/(mol*K)
 	molar_mass = rand(20,800)/1000	// kg/mol
 	if(prob(40))
-		flags |= XGM_GAS_FUEL
+		flags |= XGM_FLUID_FUEL
 	else if(prob(40)) //it's prooobably a bad idea for gas being oxidizer to itself.
-		flags |= XGM_GAS_OXIDIZER
+		flags |= XGM_FLUID_OXIDIZER
 	if(prob(40))
-		flags |= XGM_GAS_CONTAMINANT
+		flags |= XGM_FLUID_CONTAMINANT
 	if(prob(40))
-		flags |= XGM_GAS_FUSION_FUEL
+		flags |= XGM_FLUID_FUSION_FUEL
 
 	symbol_html = "X<sup>[num]</sup>"
 	symbol = "X-[num]"
@@ -100,130 +137,107 @@
 		tile_color = RANDOM_RGB
 		overlay_limit = 0.5
 
-/decl/xgm_gas/hydrogen
-	id = GAS_HYDROGEN
-	name = "Hydrogen"
-	specific_heat = 100	// J/(mol*K)
-	molar_mass = 0.002	// kg/mol
-	flags = XGM_GAS_FUEL|XGM_GAS_FUSION_FUEL
-	burn_product = GAS_STEAM
-	symbol_html = "H<sub>2</sub>"
-	symbol = "H2"
-
-/decl/xgm_gas/hydrogen/deuterium
-	id = GAS_DEUTERIUM
-	name = "Deuterium"
+/datum/xgm_fluid/hydrogen/deuterium
+	id = FLUID_DEUTERIUM
+	gas_name = "Deuterium"
 	symbol_html = "D"
 	symbol = "D"
 
-/decl/xgm_gas/hydrogen/tritium
-	id = GAS_TRITIUM
-	name = "Tritium"
+/datum/xgm_fluid/hydrogen/tritium
+	id = FLUID_TRITIUM
+	gas_name = "Tritium"
 	symbol_html = "T"
 	symbol = "T"
 
-/decl/xgm_gas/helium
-	id = GAS_HELIUM
-	name = "Helium"
+/datum/xgm_fluid/helium
+	id = FLUID_HELIUM
+	gas_name = "Helium"
 	specific_heat = 80	// J/(mol*K)
 	molar_mass = 0.004	// kg/mol
-	flags = XGM_GAS_FUSION_FUEL
+	flags = XGM_FLUID_FUSION_FUEL
 	breathed_product = /datum/reagent/helium
 	symbol_html = "He"
 	symbol = "He"
 
-/decl/xgm_gas/argon
-	id = GAS_ARGON
-	name = "Argon"
+/datum/xgm_fluid/argon
+	id = FLUID_ARGON
+	gas_name = "Argon"
 	specific_heat = 10	// J/(mol*K)
 	molar_mass = 0.018	// kg/mol
 	symbol_html = "Ar"
 	symbol = "Ar"
 
 // If narcosis is ever simulated, krypton has a narcotic potency seven times greater than regular airmix.
-/decl/xgm_gas/krypton
-	id = GAS_KRYPTON
-	name = "Krypton"
+/datum/xgm_fluid/krypton
+	id = FLUID_KRYPTON
+	gas_name = "Krypton"
 	specific_heat = 5	// J/(mol*K)
 	molar_mass = 0.036	// kg/mol
 	symbol_html = "Kr"
 	symbol = "Kr"
 
-/decl/xgm_gas/neon
-	id = GAS_NEON
-	name = "Neon"
+/datum/xgm_fluid/neon
+	id = FLUID_NEON
+	gas_name = "Neon"
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.01	// kg/mol
 	symbol_html = "Ne"
 	symbol = "Ne"
 
-/decl/xgm_gas/xenon
-	id = GAS_XENON
-	name = "Xenon"
+/datum/xgm_fluid/xenon
+	id = FLUID_XENON
+	gas_name = "Xenon"
 	specific_heat = 3	// J/(mol*K)
 	molar_mass = 0.054	// kg/mol
 	breathed_product = /datum/reagent/nitrous_oxide/xenon
 	symbol_html = "Xe"
 	symbol = "Xe"
 
-/decl/xgm_gas/nitrodioxide
-	id = GAS_NO2
-	name = "Nitrogen Dioxide"
+/datum/xgm_fluid/nitrodioxide
+	id = FLUID_NO2
+	gas_name = "Nitrogen Dioxide"
 	tile_color = "#ca6409"
 	specific_heat = 37	// J/(mol*K)
 	molar_mass = 0.054	// kg/mol
-	flags = XGM_GAS_OXIDIZER
+	flags = XGM_FLUID_OXIDIZER
 	breathed_product = /datum/reagent/toxin
 	symbol_html = "NO<sub>2</sub>"
 	symbol = "NO2"
 
-/decl/xgm_gas/nitricoxide
-	id = GAS_NO
-	name = "Nitric Oxide"
+/datum/xgm_fluid/nitricoxide
+	id = FLUID_NO
+	gas_name = "Nitric Oxide"
 
 	specific_heat = 10	// J/(mol*K)
 	molar_mass = 0.030	// kg/mol
-	flags = XGM_GAS_OXIDIZER
+	flags = XGM_FLUID_OXIDIZER
 	symbol_html = "NO"
 	symbol = "NO"
 
-/decl/xgm_gas/chlorine
-	id = GAS_CHLORINE
-	name = "Chlorine"
+/datum/xgm_fluid/chlorine
+	id = FLUID_CHLORINE
+	gas_name = "Chlorine"
 	tile_color = "#c5f72d"
 	overlay_limit = 0.5
 	specific_heat = 5	// J/(mol*K)
 	molar_mass = 0.017	// kg/mol
-	flags = XGM_GAS_CONTAMINANT
+	flags = XGM_FLUID_CONTAMINANT
 	breathed_product = /datum/reagent/toxin/chlorine
 	symbol_html = "Cl"
 	symbol = "Cl"
 
-/decl/xgm_gas/vapor
-	id = GAS_STEAM
-	name = "Steam"
-	tile_overlay = "generic"
-	overlay_limit = 0.5
-	specific_heat = 30	// J/(mol*K)
-	molar_mass = 0.020	// kg/mol
-	breathed_product =     /datum/reagent/water
-	condensation_product = /datum/reagent/water
-	condensation_point =   308.15 // 35C. Dew point is ~20C but this is better for gameplay considerations.
-	symbol_html = "H<sub>2</sub>O"
-	symbol = "H2O"
-
-/decl/xgm_gas/sulfurdioxide
-	id = GAS_SULFUR
-	name = "Sulfur Dioxide"
+/datum/xgm_fluid/sulfurdioxide
+	id = FLUID_SULFUR
+	gas_name = "Sulfur Dioxide"
 
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol
 	symbol_html = "SO<sub>2</sub>"
 	symbol = "SO2"
 
-/decl/xgm_gas/ammonia
-	id = GAS_AMMONIA
-	name = "Ammonia"
+/datum/xgm_fluid/ammonia
+	id = FLUID_AMMONIA
+	gas_name = "Ammonia"
 
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.017	// kg/mol
@@ -231,9 +245,9 @@
 	symbol_html = "NH<sub>3</sub>"
 	symbol = "NH3"
 
-/decl/xgm_gas/carbon_monoxide
-	id = GAS_CO
-	name = "Carbon Monoxide"
+/datum/xgm_fluid/carbon_monoxide
+	id = FLUID_CO
+	gas_name = "Carbon Monoxide"
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.028	// kg/mol
 	breathed_product = /datum/reagent/carbon_monoxide

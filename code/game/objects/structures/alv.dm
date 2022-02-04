@@ -71,7 +71,7 @@
 
 	if(!L)
 		return
-	var/datum/gas_mixture/breath = attached.get_breath_from_environment()
+	var/datum/fluid_mixture/breath = attached.get_breath_from_environment()
 	var/fail = L.handle_breath(breath, 1)
 	if(!fail && prob(20))
 		to_chat(src, SPAN_NOTICE("You feel a breath of fresh air enter your lungs. It feels so good."))

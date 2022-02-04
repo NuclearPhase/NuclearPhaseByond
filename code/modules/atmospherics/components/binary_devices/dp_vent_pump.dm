@@ -108,7 +108,7 @@
 	if(stat & (NOPOWER|BROKEN) || !use_power)
 		return 0
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/fluid_mixture/environment = loc.return_air()
 
 	var/power_draw = -1
 
@@ -140,20 +140,20 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/dp_vent_pump/proc/get_pressure_delta(datum/gas_mixture/environment)
+/obj/machinery/atmospherics/binary/dp_vent_pump/proc/get_pressure_delta(datum/fluid_mixture/environment)
 	var/pressure_delta = DEFAULT_PRESSURE_DELTA
-	var/environment_pressure = environment.return_pressure()
+	var/environment_pressure = RETURN_PRESSURE(environment)
 
 	if(pump_direction) //internal -> external
 		if(pressure_checks & PRESSURE_CHECK_EXTERNAL)
 			pressure_delta = min(pressure_delta, external_pressure_bound - environment_pressure) //increasing the pressure here
 		if(pressure_checks & PRESSURE_CHECK_INPUT)
-			pressure_delta = min(pressure_delta, air1.return_pressure() - input_pressure_min) //decreasing the pressure here
+			pressure_delta = min(pressure_delta, RETURN_PRESSURE(air1) - input_pressure_min) //decreasing the pressure here
 	else //external -> internal
 		if(pressure_checks & PRESSURE_CHECK_EXTERNAL)
 			pressure_delta = min(pressure_delta, environment_pressure - external_pressure_bound) //decreasing the pressure here
 		if(pressure_checks & PRESSURE_CHECK_OUTPUT)
-			pressure_delta = min(pressure_delta, output_pressure_max - air2.return_pressure()) //increasing the pressure here
+			pressure_delta = min(pressure_delta, output_pressure_max - RETURN_PRESSURE(air2)) //increasing the pressure here
 
 	return pressure_delta
 
@@ -222,23 +222,23 @@
 		pump_direction = 1
 
 	if(signal.data["set_input_pressure"])
-		input_pressure_min = between(
-			0,
+		input_pressure_min = clamp(
 			text2num(signal.data["set_input_pressure"]),
+			0,
 			ONE_ATMOSPHERE*50
 		)
 
 	if(signal.data["set_output_pressure"])
-		output_pressure_max = between(
-			0,
+		output_pressure_max = clamp(
 			text2num(signal.data["set_output_pressure"]),
+			0,
 			ONE_ATMOSPHERE*50
 		)
 
 	if(signal.data["set_external_pressure"])
-		external_pressure_bound = between(
-			0,
+		external_pressure_bound = clamp(
 			text2num(signal.data["set_external_pressure"]),
+			0,
 			ONE_ATMOSPHERE*50
 		)
 

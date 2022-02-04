@@ -62,13 +62,13 @@
 	if(!..())
 		return 0
 
-	var/datum/gas_mixture/output_air = output.air	//BYOND doesn't like referencing "output.air.return_pressure()" so we need to make a direct reference
-	var/datum/gas_mixture/input_air = input.air		// it's completely happy with them if they're in a loop though i.e. "P.air.return_pressure()"... *shrug*
+	var/datum/fluid_mixture/output_air = output.air	//BYOND doesn't like referencing "RETURN_PRESSURE(output.air)" so we need to make a direct reference
+	var/datum/fluid_mixture/input_air = input.air		// it's completely happy with them if they're in a loop though i.e. "RETURN_PRESSURE(P.air)"... *shrug*
 
-	var/delta = between(0, (output_air ? (max_output_pressure - output_air.return_pressure()) : 0), max_output_pressure)
+	var/delta = between(0, (output_air ? (max_output_pressure - RETURN_PRESSURE(output_air)) : 0), max_output_pressure)
 	var/transfer_moles_max = calculate_transfer_moles(input_air, output_air, delta, (output && output.network && output.network.volume) ? output.network.volume : 0)
 	for(var/datum/omni_port/filter_output in gas_filters)
-		delta = between(0, (filter_output.air ? (max_output_pressure - filter_output.air.return_pressure()) : 0), max_output_pressure)
+		delta = between(0, (filter_output.air ? (max_output_pressure - RETURN_PRESSURE(filter_output.air)) : 0), max_output_pressure)
 		transfer_moles_max = min(transfer_moles_max, (calculate_transfer_moles(input_air, filter_output.air, delta, (filter_output && filter_output.network && filter_output.network.volume) ? filter_output.network.volume : 0)))
 
 	//Figure out the amount of moles to transfer

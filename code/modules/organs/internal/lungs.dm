@@ -119,7 +119,7 @@
 		owner.custom_pain("You feel a stabbing pain in your [parent.name]!", 50, affecting = parent)
 	bruise()
 
-/obj/item/organ/internal/lungs/proc/handle_breath(datum/gas_mixture/breath, var/forced)
+/obj/item/organ/internal/lungs/proc/handle_breath(datum/fluid_mixture/breath, var/forced)
 	if(!owner)
 		return 1
 	if(!breath)
@@ -130,8 +130,8 @@
 	var/breath_pressure = breath.total_moles*R_IDEAL_GAS_EQUATION*breath.temperature/BREATH_VOLUME
 	//exposure to extreme pressures can rupture lungs
 	if(breath_pressure < species.hazard_low_pressure || breath_pressure > species.hazard_high_pressure)
-		var/datum/gas_mixture/environment = loc.return_air_for_internal_lifeform()
-		var/env_pressure = environment.return_pressure()
+		var/datum/fluid_mixture/environment = loc.return_air_for_internal_lifeform()
+		var/env_pressure = RETURN_PRESSURE(environment)
 		var/lung_rupture_prob = prob(5)
 		if(env_pressure < species.hazard_low_pressure || env_pressure > species.hazard_high_pressure)
 			if(!is_bruised() && lung_rupture_prob) //only rupture if NOT already ruptured
@@ -232,7 +232,7 @@
 				breathing = 1
 
 	handle_temperature_effects(breath)
-	breath.update_values()
+	UPDATE_VALUES(breath)
 
 	if(failed_breath)
 		handle_failed_breath()
@@ -254,7 +254,7 @@
 
 	owner.oxygen_alert = max(owner.oxygen_alert, 2)
 
-/obj/item/organ/internal/lungs/proc/handle_temperature_effects(datum/gas_mixture/breath)
+/obj/item/organ/internal/lungs/proc/handle_temperature_effects(datum/fluid_mixture/breath)
 	// Hot air hurts :(
 	if((breath.temperature < species.cold_level_1 || breath.temperature > species.heat_level_1) && !(COLD_RESISTANCE in owner.mutations))
 		var/damage = 0

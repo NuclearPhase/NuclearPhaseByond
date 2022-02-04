@@ -144,7 +144,7 @@
 	var/turf/T = get_turf(src)
 	if(!istype(T))
 		return
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/fluid_mixture/air = T.return_air()
 	if(!air)
 		return 0
 	return round((air.total_moles / air.group_multiplier) / 23.1, 0.01)
@@ -153,7 +153,7 @@
 	var/turf/T = get_turf(src)
 	if(!T)
 		return SUPERMATTER_ERROR
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/fluid_mixture/air = T.return_air()
 	if(!air)
 		return SUPERMATTER_ERROR
 
@@ -308,8 +308,8 @@
 		supermatter_pull(src)
 
 	//Ok, get the air from the turf
-	var/datum/gas_mixture/removed = null
-	var/datum/gas_mixture/env = null
+	var/datum/fluid_mixture/removed = null
+	var/datum/fluid_mixture/env = null
 
 	//ensure that damage doesn't increase too quickly due to super high temperatures resulting from no coolant, for example. We dont want the SM exploding before anyone can react.
 	//We want the cap to scale linearly with power (and explosion_point). Let's aim for a cap of 5 at power = 300 (based on testing, equals roughly 5% per SM alert announcement).
@@ -330,7 +330,7 @@
 
 		//Ok, 100% oxygen atmosphere = best reaction
 		//Maxes out at 100% oxygen pressure
-		oxygen = Clamp((removed.get_by_flag(XGM_GAS_OXIDIZER) - (removed.gas["nitrogen"] * NITROGEN_RETARDATION_FACTOR)) / removed.total_moles, 0, 1)
+		oxygen = Clamp((removed.get_by_flag(XGM_FLUID_OXIDIZER) - (removed.gas["nitrogen"] * NITROGEN_RETARDATION_FACTOR)) / removed.total_moles, 0, 1)
 
 		//calculate power gain for oxygen reaction
 		var/temp_factor
@@ -414,7 +414,7 @@
 	var/data[0]
 
 	data["integrity_percentage"] = round(get_integrity())
-	var/datum/gas_mixture/env = null
+	var/datum/fluid_mixture/env = null
 	var/turf/T = get_turf(src)
 
 	if(istype(T))
@@ -425,7 +425,7 @@
 		data["ambient_pressure"] = 0
 	else
 		data["ambient_temp"] = round(env.temperature)
-		data["ambient_pressure"] = round(env.return_pressure())
+		data["ambient_pressure"] = round(RETURN_PRESSURE(env))
 	data["detonating"] = grav_pulling
 	data["energy"] = power
 

@@ -520,8 +520,8 @@ datum/projectile_data
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 		var/cp=0
 		if(T && istype(T) && T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
-			cp = environment.return_pressure()
+			var/datum/fluid_mixture/environment = T.return_air()
+			cp = RETURN_PRESSURE(environment)
 		else
 			if(istype(T,/turf/simulated))
 				continue
@@ -551,20 +551,20 @@ datum/projectile_data
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 		var/list/rstats = new /list(stats.len)
 		if(T && istype(T) && T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
+			var/datum/fluid_mixture/environment = T.return_air()
 			for(var/i=1;i<=stats.len;i++)
 				if(stats[i] == "pressure")
-					rstats[i] = environment.return_pressure()
+					rstats[i] = RETURN_PRESSURE(environment)
 				else
 					rstats[i] = environment.vars[stats[i]]
 		else if(istype(T, /turf/simulated))
 			rstats = null // Exclude zone (wall, door, etc).
 		else if(istype(T, /turf))
 			// Should still work.  (/turf/return_air())
-			var/datum/gas_mixture/environment = T.return_air()
+			var/datum/fluid_mixture/environment = T.return_air()
 			for(var/i=1;i<=stats.len;i++)
 				if(stats[i] == "pressure")
-					rstats[i] = environment.return_pressure()
+					rstats[i] = RETURN_PRESSURE(environment)
 				else
 					rstats[i] = environment.vars[stats[i]]
 		temps[direction] = rstats

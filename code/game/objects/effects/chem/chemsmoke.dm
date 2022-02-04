@@ -184,8 +184,8 @@
 	var/smoke_duration = 150
 
 	var/pressure = 0
-	var/datum/gas_mixture/environment = location.return_air()
-	if(environment) pressure = environment.return_pressure()
+	var/datum/fluid_mixture/environment = location.return_air()
+	if(environment) pressure = RETURN_PRESSURE(environment)
 	smoke_duration = between(5, smoke_duration*pressure/(ONE_ATMOSPHERE/3), smoke_duration)
 
 	var/const/arcLength = 2.3559 //distance between each smoke cloud

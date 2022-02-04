@@ -3,12 +3,12 @@ PROCESSING_SUBSYSTEM_DEF(icon_update)
 	wait = 1	// ticks
 	flags = SS_TICKER
 	priority = SS_PRIORITY_ICON_UPDATE
-	init_order = INIT_ORDER_ICON_UPDATE
+	init_order = SS_INIT_ICON_UPDATE
 
 	var/list/queue = list()
 
-/datum/controller/subsystem/processing/icon_update/stat_entry()
-	..("QU:[queue.len]")
+/datum/controller/subsystem/processing/icon_update/stat_entry(text)
+	..("[text] | Queue [queue.len]")
 
 /datum/controller/subsystem/processing/icon_update/Initialize()
 	fire(FALSE, TRUE)

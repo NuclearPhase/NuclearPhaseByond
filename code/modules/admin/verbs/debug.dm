@@ -27,11 +27,11 @@
 	if (!( istype(T, /turf) ))
 		return
 
-	var/datum/gas_mixture/env = T.return_air()
+	var/datum/fluid_mixture/env = T.return_air()
 
 	var/t = "<span class='notice'>Coordinates: [T.x],[T.y],[T.z]</span>\n"
 	t += "<span class='warning'>Temperature: [env.temperature]</span>\n"
-	t += "<span class='warning'>Pressure: [env.return_pressure()]kPa</span>\n"
+	t += "<span class='warning'>Pressure: [RETURN_PRESSURE(env)]kPa</span>\n"
 	for(var/g in env.gas)
 		t += "<span class='notice'>[g]: [env.gas[g]] / [env.gas[g] * R_IDEAL_GAS_EQUATION * env.temperature / env.volume]kPa</span>\n"
 

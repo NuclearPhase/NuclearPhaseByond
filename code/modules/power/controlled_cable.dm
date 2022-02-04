@@ -73,9 +73,9 @@
 	var/obj/structure/cable/controlled/FC = get_first_cable()
 	data["resistance"] = FC.resistance
 	var/turf/T = get_turf(FC)
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/fluid_mixture/air = T.return_air()
 	data["temperature"] = air.temperature - T0C
-	data["amperage"] = FC.powernet.get_amperage()
+	data["amperage"] = POWERNET_AMPERAGE(FC.powernet)
 	data["minresistance"] = CABLE_1MM_RESISTANCE / 100
 	data["maxresistance"] = CABLE_1MM_RESISTANCE
 

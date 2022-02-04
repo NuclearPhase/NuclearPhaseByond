@@ -40,7 +40,7 @@
 				if(FP.contents.len)
 					var/obj/item/weapon/tank/fuel_tank = FP.contents[1]
 					if(istype(fuel_tank))
-						fuel_pressure += fuel_tank.air_contents.return_pressure()
+						fuel_pressure += RETURN_PRESSURE(fuel_tank.air_contents)
 						fuel_max_pressure += 1013
 
 	if(fuel_max_pressure == 0) fuel_max_pressure = 1

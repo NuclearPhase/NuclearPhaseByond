@@ -511,7 +511,7 @@ BLIND     // can't see anything
 		var/mob/M = src.loc
 		M.update_inv_wear_mask()
 
-/obj/item/clothing/mask/proc/filter_air(datum/gas_mixture/air)
+/obj/item/clothing/mask/proc/filter_air(datum/fluid_mixture/air)
 	return
 
 /obj/item/clothing/mask/proc/adjust_mask(var/mob/user)

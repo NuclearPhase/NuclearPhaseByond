@@ -19,9 +19,9 @@
 	// Remove all gases from all pipenets
 	for(var/net in SSmachines.pipenets)
 		var/datum/pipe_network/PN = net
-		for(var/datum/gas_mixture/G in PN.gases)
+		for(var/datum/fluid_mixture/G in PN.gases)
 			G.gas = list()
-			G.update_values()
+			UPDATE_VALUES(G)
 
 	to_chat(usr, "\[2/5\] - All pipenets purged of gas.")
 
@@ -32,8 +32,8 @@
 	to_chat(usr, "\[3/5\] - All ZAS Zones removed.")
 
 	var/list/unsorted_overlays = list()
-	for(var/id in gas_data.tile_overlay)
-		unsorted_overlays |= gas_data.tile_overlay[id]
+	for(var/id in GLOB.fluid_data.tile_overlay)
+		unsorted_overlays |= GLOB.fluid_data[id].tile_overlay
 
 	for(var/turf/simulated/T in world)
 		T.air = null

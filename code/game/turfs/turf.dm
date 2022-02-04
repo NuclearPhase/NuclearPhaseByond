@@ -50,7 +50,7 @@
 	//if (mapload && permit_ao)
 		//queue_ao()
 	
-	if (z_flags & ZM_MIMIC_BELOW)
+	if (z_flags & ZM_MIMIC_BELOW && !shadower)
 		setup_zmimic(mapload) 
 
 /turf/Destroy()

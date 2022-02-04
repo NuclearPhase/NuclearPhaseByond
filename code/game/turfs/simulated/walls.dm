@@ -32,10 +32,10 @@
 		reinf_material = get_material_by_name(rmaterialtype)
 	update_material()
 	hitsound = material.hitsound
-	processing_turfs |= src
+	START_PROCESSING(SSturf, src)
 
 /turf/simulated/wall/Destroy()
-	processing_turfs -= src
+	STOP_PROCESSING(SSturf, src)
 	dismantle_wall(null,null,1)
 	. = ..()
 
@@ -48,7 +48,7 @@
 	var/obj/O = A
 	return (istype(O) && O.hides_under_flooring()) || ..()
 
-/turf/simulated/wall/process()
+/turf/simulated/wall/Process()
 	// Calling parent will kill processing
 	if(!radiate())
 		return PROCESS_KILL
@@ -158,10 +158,10 @@
 
 	return
 
-/turf/simulated/wall/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
+/turf/simulated/wall/fire_act(datum/fluid_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
 	burn(exposed_temperature)
 
-/turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
+/turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/fluid_mixture/adj_air, adj_temp, adj_volume)
 	burn(adj_temp)
 	if(adj_temp > material.melting_point)
 		take_damage(log(RAND_F(0.9, 1.1) * (adj_temp - material.melting_point)))

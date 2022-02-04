@@ -416,7 +416,7 @@
 	var/obj/item/weapon/tank/jetpack/current_jetpack = installed_jetpack()
 	if (current_jetpack)
 		stat("Internal Atmosphere Info", current_jetpack.name)
-		stat("Tank Pressure", current_jetpack.air_contents.return_pressure())
+		stat("Tank Pressure", RETURN_PRESSURE(current_jetpack.air_contents))
 
 
 // this function returns the robots jetpack, if one is installed
@@ -687,7 +687,7 @@
 
 //Robots take half damage from basic attacks.
 /mob/living/silicon/robot/attack_generic(var/mob/user, var/damage, var/attack_message)
-	return ..(user,Floor(damage/2),attack_message)
+	return ..(user,round(damage/2),attack_message)
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all

@@ -20,7 +20,7 @@ var/list/global/tank_gauge_cache = list()
 	throw_speed = 1
 	throw_range = 4
 
-	var/datum/gas_mixture/air_contents = null
+	var/datum/fluid_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
 	var/integrity = 20
 	var/maxintegrity = 20
@@ -56,10 +56,10 @@ var/list/global/tank_gauge_cache = list()
 	proxyassembly = new /obj/item/device/tankassemblyproxy(src)
 	proxyassembly.tank = src
 
-	air_contents = new /datum/gas_mixture(volume, T20C)
+	air_contents = new /datum/fluid_mixture(volume, T20C)
 	for(var/gas in starting_pressure)
 		air_contents.adjust_gas(gas, starting_pressure[gas]*volume/(R_IDEAL_GAS_EQUATION*T20C), 0)
-	air_contents.update_values()
+	UPDATE_VALUES(air_contents)
 
 	START_PROCESSING(SSobj, src)
 	update_icon()
@@ -225,7 +225,7 @@ var/list/global/tank_gauge_cache = list()
 
 	// this is the data which will be sent to the ui
 	var/data[0]
-	data["tankPressure"] = round(air_contents.return_pressure() ? air_contents.return_pressure() : 0)
+	data["tankPressure"] = round(RETURN_PRESSURE(air_contents) ? RETURN_PRESSURE(air_contents) : 0)
 	data["releasePressure"] = round(distribute_pressure ? distribute_pressure : 0)
 	data["defaultReleasePressure"] = round(TANK_DEFAULT_RELEASE_PRESSURE)
 	data["maxReleasePressure"] = round(TANK_MAX_RELEASE_PRESSURE)
@@ -316,7 +316,7 @@ var/list/global/tank_gauge_cache = list()
 /obj/item/weapon/tank/return_air()
 	return air_contents
 
-/obj/item/weapon/tank/assume_air(datum/gas_mixture/giver)
+/obj/item/weapon/tank/assume_air(datum/fluid_mixture/giver)
 	air_contents.merge(giver)
 
 	check_status()
@@ -326,7 +326,7 @@ var/list/global/tank_gauge_cache = list()
 	if(!air_contents)
 		return null
 
-	var/tank_pressure = air_contents.return_pressure()
+	var/tank_pressure = RETURN_PRESSURE(air_contents)
 	if(tank_pressure < distribute_pressure)
 		distribute_pressure = tank_pressure
 
@@ -341,6 +341,8 @@ var/list/global/tank_gauge_cache = list()
 	check_status()
 
 /obj/item/weapon/tank/update_icon()
+	if((atom_flags & ATOM_FLAG_INITIALIZED) && istype(loc, /obj/) && !istype(loc, /obj/item/clothing/suit/) && !override) //So we don't eat up our tick. Every tick, when we're not actually in play.
+		return
 	overlays.Cut()
 	if(proxyassembly.assembly || wired)
 		overlays += image(icon,"bomb_assembly")
@@ -356,7 +358,7 @@ var/list/global/tank_gauge_cache = list()
 
 	var/gauge_pressure = 0
 	if(air_contents)
-		gauge_pressure = air_contents.return_pressure()
+		gauge_pressure = RETURN_PRESSURE(air_contents)
 		if(gauge_pressure > TANK_IDEAL_PRESSURE)
 			gauge_pressure = -1
 		else
@@ -372,7 +374,7 @@ var/list/global/tank_gauge_cache = list()
 	if(!air_contents)
 		return 0
 
-	var/pressure = air_contents.return_pressure()
+	var/pressure = RETURN_PRESSURE(air_contents)
 
 	if(pressure > TANK_FRAGMENT_PRESSURE)
 		if(integrity <= 7)
@@ -385,7 +387,7 @@ var/list/global/tank_gauge_cache = list()
 			air_contents.react()
 			air_contents.react()
 
-			pressure = air_contents.return_pressure()
+			pressure = RETURN_PRESSURE(air_contents)
 			var/strength = ((pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE)
 
 			var/mult = ((air_contents.volume/140)**(1/2)) * (air_contents.total_moles**2/3)/((29*0.64) **2/3) //tanks appear to be experiencing a reduction on scale of about 0.64 total moles
@@ -450,12 +452,12 @@ var/list/global/tank_gauge_cache = list()
 			var/turf/simulated/T = get_turf(src)
 			if(!T)
 				return
-			var/datum/gas_mixture/environment = loc.return_air()
-			var/env_pressure = environment.return_pressure()
-			var/tank_pressure = air_contents.return_pressure()
+			var/datum/fluid_mixture/environment = loc.return_air()
+			var/env_pressure = RETURN_PRESSURE(environment)
+			var/tank_pressure = RETURN_PRESSURE(air_contents)
 
 			var/release_ratio = Clamp(0.002, sqrt(max(tank_pressure-env_pressure,0)/tank_pressure),1)
-			var/datum/gas_mixture/leaked_gas = air_contents.remove_ratio(release_ratio)
+			var/datum/fluid_mixture/leaked_gas = air_contents.remove_ratio(release_ratio)
 			//dynamic air release based on ambient pressure
 
 			T.assume_air(leaked_gas)
@@ -495,7 +497,7 @@ var/list/global/tank_gauge_cache = list()
 
 	air_contents.gas["phoron"] = phoron_amt
 	air_contents.gas["oxygen"] = oxygen_amt
-	air_contents.update_values()
+	UPDATE_VALUES(air_contents)
 	valve_welded = 1
 	air_contents.temperature = PHORON_MINIMUM_BURN_TEMPERATURE-1
 

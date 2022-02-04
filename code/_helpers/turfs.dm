@@ -85,7 +85,7 @@
 /proc/IsTurfAtmosUnsafe(var/turf/T)
 	if(istype(T, /turf/space)) // Space tiles
 		return "Spawn location is open to space."
-	var/datum/gas_mixture/air = T.return_air()
+	var/datum/fluid_mixture/air = T.return_air()
 	if(!air)
 		return "Spawn location lacks atmosphere."
 	return get_atmosphere_issues(air, 1)
@@ -94,8 +94,8 @@
 	return !IsTurfAtmosUnsafe(T)
 
 /proc/is_below_sound_pressure(var/turf/T)
-	var/datum/gas_mixture/environment = T ? T.return_air() : null
-	var/pressure =  environment ? environment.return_pressure() : 0
+	var/datum/fluid_mixture/environment = T ? T.return_air() : null
+	var/pressure =  environment ? RETURN_PRESSURE(environment) : 0
 	if(pressure < SOUND_MINIMUM_PRESSURE)
 		return TRUE
 	return FALSE
@@ -188,9 +188,10 @@
 		if(isEye(M)) continue // If we need to check for more mobs, I'll add a variable
 		M.forceMove(new_turf)
 
-	new_turf.air?.gas.Cut()
-	new_turf.air?.gas = source?.air.gas.Copy()
-	new_turf.air?.temperature = source?.air.temperature
-	new_turf.air?.update_values()
+	if(new_turf.air)
+		new_turf.air.gas.Cut()
+		new_turf.air.gas = source?.air.gas.Copy()
+		new_turf.air.temperature = source.air.temperature
+		UPDATE_VALUES(new_turf.air)
 
 	return new_turf

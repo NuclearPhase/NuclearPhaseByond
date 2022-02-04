@@ -15,7 +15,7 @@
 	..()
 	if(atmosphere)
 		atmosphere.temperature = T20C + rand(20, 100)
-		atmosphere.update_values()
+		UPDATE_VALUES(atmosphere)
 
 /obj/effect/overmap/sector/exoplanet/garbage/update_biome()
 	..()

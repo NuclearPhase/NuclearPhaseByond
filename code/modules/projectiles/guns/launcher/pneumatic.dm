@@ -86,11 +86,11 @@
 	var/environment_pressure = 10
 	var/turf/T = get_turf(src)
 	if(T)
-		var/datum/gas_mixture/environment = T.return_air()
+		var/datum/fluid_mixture/environment = T.return_air()
 		if(environment)
-			environment_pressure = environment.return_pressure()
+			environment_pressure = RETURN_PRESSURE(environment)
 
-	fire_pressure = (tank.air_contents.return_pressure() - environment_pressure)*pressure_setting/100
+	fire_pressure = (RETURN_PRESSURE(tank.air_contents) - environment_pressure)*pressure_setting/100
 	if(fire_pressure < 10)
 		to_chat(user, "There isn't enough gas in the tank to fire [src].")
 		return null
@@ -104,7 +104,7 @@
 		return
 	to_chat(user, "The valve is dialed to [pressure_setting]%.")
 	if(tank)
-		to_chat(user, "The tank dial reads [tank.air_contents.return_pressure()] kPa.")
+		to_chat(user, "The tank dial reads [RETURN_PRESSURE(tank.air_contents)] kPa.")
 	else
 		to_chat(user, "Nothing is attached to the tank valve!")
 
@@ -118,7 +118,7 @@
 /obj/item/weapon/gun/launcher/pneumatic/handle_post_fire()
 	if(tank)
 		var/lost_gas_amount = tank.air_contents.total_moles*(pressure_setting/100)
-		var/datum/gas_mixture/removed = tank.air_contents.remove(lost_gas_amount)
+		var/datum/fluid_mixture/removed = tank.air_contents.remove(lost_gas_amount)
 
 		var/turf/T = get_turf(src.loc)
 		if(T) T.assume_air(removed)

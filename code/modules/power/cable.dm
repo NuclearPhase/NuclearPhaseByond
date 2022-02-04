@@ -120,25 +120,25 @@ var/list/possible_cable_coil_colours
 ///////////////////////////////////
 
 /obj/structure/cable/proc/get_wattage()
-	if(powernet.get_wattage() >= (1 MWATT))
-		return "[round(powernet.get_wattage()/(1 MWATT), 0.01)] MW"
-	if(powernet.get_wattage() >= (1 KWATT))
-		return "[round(powernet.get_wattage()/(1 KWATT), 0.01)] kW"
-	return "[round(powernet.get_wattage())] W"
+	if(POWERNET_WATTAGE(powernet) >= (1 MWATT))
+		return "[round(POWERNET_WATTAGE(powernet)/(1 MWATT), 0.01)] MW"
+	if(POWERNET_WATTAGE(powernet) >= (1 KWATT))
+		return "[round(POWERNET_WATTAGE(powernet)/(1 KWATT), 0.01)] kW"
+	return "[round(POWERNET_WATTAGE(powernet))] W"
 
 /obj/structure/cable/proc/get_voltage()
-	if(powernet.get_voltage() >= 1 MVOLT)
-		return "[round(powernet.get_voltage()/(1 MVOLT), 0.01)] MV"
-	if(powernet.get_voltage() >= 1 KVOLT)
-		return "[round(powernet.get_voltage()/(1 KVOLT), 0.01)] kV"
-	return "[round(powernet.get_voltage())] V"
+	if(powernet.voltage >= 1 MVOLT)
+		return "[round(powernet.voltage/(1 MVOLT), 0.01)] MV"
+	if(powernet.voltage >= 1 KVOLT)
+		return "[round(powernet.voltage/(1 KVOLT), 0.01)] kV"
+	return "[round(powernet.voltage)] V"
 
 /obj/structure/cable/proc/get_amperage()
-	if(powernet.get_amperage() >= 1 MAMPER)
-		return "[round(powernet.get_amperage()/(1 MAMPER), 0.01)] MA"
-	if(powernet.get_amperage() >= 1 KAMPER)
-		return "[round(powernet.get_amperage()/(1 KAMPER), 0.01)] kA"
-	return "[round(powernet.get_amperage())] A"
+	if(POWERNET_AMPERAGE(powernet) >= 1 MAMPER)
+		return "[round(POWERNET_AMPERAGE(powernet)/(1 MAMPER), 0.01)] MA"
+	if(POWERNET_AMPERAGE(powernet) >= 1 KAMPER)
+		return "[round(POWERNET_AMPERAGE(powernet)/(1 KAMPER), 0.01)] kA"
+	return "[round(POWERNET_AMPERAGE(powernet))] A"
 
 //If underfloor, hide the cable
 /obj/structure/cable/hide(var/i)

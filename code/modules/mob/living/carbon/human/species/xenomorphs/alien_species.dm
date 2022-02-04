@@ -130,7 +130,7 @@
 
 	var/turf/T = H.loc
 	if(!T) return
-	var/datum/gas_mixture/environment = T.return_air()
+	var/datum/fluid_mixture/environment = T.return_air()
 	if(!environment) return
 
 	var/obj/effect/vine/plant = locate() in T

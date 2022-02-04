@@ -11,8 +11,8 @@
 #define PIPE_PUMP				10
 #define PIPE_SCRUBBER			11
 //#define unsed	12
-#define PIPE_GAS_FILTER			13
-#define PIPE_GAS_MIXER			14
+#define PIPE_FLUID_FILTER			13
+#define PIPE_FLUID_MIXER			14
 #define PIPE_PASSIVE_GATE       15
 #define PIPE_VOLUME_PUMP        16
 #define PIPE_HEAT_EXCHANGE      17
@@ -23,9 +23,9 @@
 #define PIPE_UP					21
 #define PIPE_DOWN				22
 ///// Z-Level stuff
-#define PIPE_GAS_FILTER_M		23
-#define PIPE_GAS_MIXER_T		24
-#define PIPE_GAS_MIXER_M		25
+#define PIPE_FLUID_FILTER_M		23
+#define PIPE_FLUID_MIXER_T		24
+#define PIPE_FLUID_MIXER_M		25
 #define PIPE_OMNI_MIXER			26
 #define PIPE_OMNI_FILTER		27
 ///// Supply, scrubbers and universal pipes

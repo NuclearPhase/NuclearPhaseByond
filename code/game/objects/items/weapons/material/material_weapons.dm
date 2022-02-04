@@ -103,7 +103,7 @@ Commenting this out pending rebalancing of radiation based on small objects.
 
 /*
 // Commenting this out while fires are so spectacularly lethal, as I can't seem to get this balanced appropriately.
-/obj/item/weapon/material/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/item/weapon/material/fire_act(datum/fluid_mixture/air, exposed_temperature, exposed_volume)
 	TemperatureAct(exposed_temperature)
 
 // This might need adjustment. Will work that out later.

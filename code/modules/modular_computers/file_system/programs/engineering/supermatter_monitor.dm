@@ -67,7 +67,7 @@
 		if(!T)
 			active = null
 			return
-		var/datum/gas_mixture/air = T.return_air()
+		var/datum/fluid_mixture/air = T.return_air()
 		if(!istype(air))
 			active = null
 			return
@@ -76,7 +76,7 @@
 		data["SM_integrity"] = active.get_integrity()
 		data["SM_power"] = active.power
 		data["SM_ambienttemp"] = air.temperature
-		data["SM_ambientpressure"] = air.return_pressure()
+		data["SM_ambientpressure"] = RETURN_PRESSURE(air)
 		data["SM_EPR"] = active.get_epr()
 		if(air.total_moles)
 			data["SM_gas_O2"] = round(100*air.gas["oxygen"]/air.total_moles,0.01)

@@ -96,7 +96,7 @@
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["on"] = use_power ? 1 : 0
-	data["gasPressure"] = round(air_contents.return_pressure())
+	data["gasPressure"] = round(RETURN_PRESSURE(air_contents))
 	data["gasTemperature"] = round(air_contents.temperature)
 	data["minGasTemperature"] = 0
 	data["maxGasTemperature"] = round(max_temperature)

@@ -1,6 +1,6 @@
 SUBSYSTEM_DEF(light)
 	name = "Light"
-	init_order = INIT_ORDER_LIGHTING
+	init_order = SS_INIT_LIGHTING
 	wait = 2
 	priority = SS_PRIORITY_LIGHTING
 	flags = SS_POST_FIRE_TIMING

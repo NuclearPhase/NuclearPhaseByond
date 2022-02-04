@@ -56,8 +56,8 @@
 	if(!unlocked)
 		return 0
 
-	var/output_starting_pressure = air2.return_pressure()
-	var/input_starting_pressure = air1.return_pressure()
+	var/output_starting_pressure = RETURN_PRESSURE(air2)
+	var/input_starting_pressure = RETURN_PRESSURE(air1)
 
 	var/pressure_delta
 	switch (regulate_mode)
@@ -143,9 +143,9 @@
 		unlocked = !unlocked
 
 	if("set_target_pressure" in signal.data)
-		target_pressure = between(
-			0,
+		target_pressure = clamp(
 			text2num(signal.data["set_target_pressure"]),
+			0,
 			max_pressure_setting
 		)
 
@@ -187,8 +187,8 @@
 		"on" = unlocked,
 		"pressure_set" = round(target_pressure*100),	//Nano UI can't handle rounded non-integers, apparently.
 		"max_pressure" = max_pressure_setting,
-		"input_pressure" = round(air1.return_pressure()*100),
-		"output_pressure" = round(air2.return_pressure()*100),
+		"input_pressure" = round(RETURN_PRESSURE(air1)*100),
+		"output_pressure" = round(RETURN_PRESSURE(air2)*100),
 		"regulate_mode" = regulate_mode,
 		"set_flow_rate" = round(set_flow_rate*10),
 		"last_flow_rate" = round(last_flow_rate*10),
@@ -246,9 +246,9 @@
 	if (unlocked)
 		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], turn it off first.</span>")
 		return 1
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+	var/datum/fluid_mixture/int_air = return_air()
+	var/datum/fluid_mixture/env_air = loc.return_air()
+	if ((RETURN_PRESSURE(int_air)-RETURN_PRESSURE(env_air)) > 2*ONE_ATMOSPHERE)
 		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], it too exerted due to internal pressure.</span>")
 		add_fingerprint(user)
 		return 1

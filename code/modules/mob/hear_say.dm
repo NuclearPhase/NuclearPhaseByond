@@ -12,8 +12,8 @@
 	//make sure the air can transmit speech - hearer's side
 	var/turf/T = get_turf(src)
 	if ((T) && (!(isghost(src)))) //Ghosts can hear even in vacuum.
-		var/datum/gas_mixture/environment = T.return_air()
-		var/pressure = (environment)? environment.return_pressure() : 0
+		var/datum/fluid_mixture/environment = T.return_air()
+		var/pressure = (environment)? RETURN_PRESSURE(environment) : 0
 		if(pressure < SOUND_MINIMUM_PRESSURE && get_dist(speaker, src) > 1)
 			return
 

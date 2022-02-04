@@ -1,5 +1,5 @@
 /datum/pipe_network
-	var/list/datum/gas_mixture/gases = list() //All of the gas_mixtures continuously connected in this network
+	var/list/datum/fluid_mixture/gases = list() //All of the gas_mixtures continuously connected in this network
 	var/volume = 0	//caches the total volume for atmos machines to use in gas calculations
 
 	var/list/obj/machinery/atmospherics/normal_members = list()
@@ -76,7 +76,7 @@
 	for(var/datum/pipeline/line_member in line_members)
 		gases += line_member.air
 
-	for(var/datum/gas_mixture/air in gases)
+	for(var/datum/fluid_mixture/air in gases)
 		volume += air.volume
 
 /datum/pipe_network/proc/reconcile_air()

@@ -30,8 +30,15 @@ SUBSYSTEM_DEF(timer)
 	var/static/times_flushed = 0
 	var/static/times_crashed = 0
 
-/datum/controller/subsystem/timer/stat_entry(msg)
-	..("B:[bucket_count] P:[length(processing)] H:[length(hashes)] C:[length(clienttime_timers)][times_crashed ? " F:[times_crashed]" : ""]")
+/datum/controller/subsystem/timer/stat_entry(text)
+	text = {"\
+		[text] | \
+		Buckets [bucket_count] \
+		Hashes [length(hashes)] \
+		Client Timers [length(clienttime_timers)] \
+		Size [length(timer_id_dict)] \
+		"}
+	..(text)
 
 /datum/controller/subsystem/timer/fire(resumed = FALSE)
 	var/lit = last_invoke_tick

@@ -27,7 +27,7 @@
 	. = ..()
 	if(!scrubbing_gas)
 		scrubbing_gas = list()
-		for(var/g in gas_data.gases)
+		for(var/g in GLOB.fluid_data)
 			if(g != "oxygen" && g != "nitrogen")
 				scrubbing_gas += g
 
@@ -65,7 +65,7 @@
 	var/power_draw = -1
 
 	if(on && cell && cell.charge)
-		var/datum/gas_mixture/environment
+		var/datum/fluid_mixture/environment
 		if(holding)
 			environment = holding.air_contents
 		else
@@ -107,7 +107,7 @@
 /obj/machinery/portable_atmospherics/powered/scrubber/ui_interact(mob/user, ui_key = "rcon", datum/nanoui/ui=null, force_open=1)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
-	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
+	data["tankPressure"] = round(RETURN_PRESSURE(air_contents) > 0 ? RETURN_PRESSURE(air_contents) : 0)
 	data["rate"] = round(volume_rate)
 	data["minrate"] = round(minrate)
 	data["maxrate"] = round(maxrate)
@@ -118,7 +118,7 @@
 
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
-		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
+		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(RETURN_PRESSURE(holding.air_contents) > 0 ? RETURN_PRESSURE(holding.air_contents) : 0))
 
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -196,7 +196,7 @@
 
 	var/power_draw = -1
 
-	var/datum/gas_mixture/environment = loc.return_air()
+	var/datum/fluid_mixture/environment = loc.return_air()
 
 	var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles
 

@@ -16,7 +16,7 @@
 	var/intake_power_efficiency = 1
 	var/const/carbon_moles_per_piece = 50 //One 12g per mole * 50 = 600 g chunk of coal
 	var/phase = "filling"//"filling", "processing", "releasing"
-	var/datum/gas_mixture/inner_tank = new
+	var/datum/fluid_mixture/inner_tank = new
 	var/tank_volume = 400//Litres
 
 /obj/machinery/atmospherics/binary/oxyregenerator/New()
@@ -109,7 +109,7 @@
 	last_power_draw = 0
 	//TODO Add overlay with F-P-R letter to display current state
 	if (phase == "filling")//filling tank
-		var/pressure_delta = target_pressure - inner_tank.return_pressure()
+		var/pressure_delta = target_pressure - RETURN_PRESSURE(inner_tank)
 		if (pressure_delta > 0.01 && air1.temperature > 0)
 			var/transfer_moles = calculate_transfer_moles(air1, inner_tank, pressure_delta)
 			power_draw = pump_gas(src, air1, inner_tank, transfer_moles, power_rating*power_setting) * intake_power_efficiency
@@ -118,7 +118,7 @@
 				use_power(power_draw)
 				if(network1)
 					network1.update = 1
-		if (air1.return_pressure() < 0.1 * ONE_ATMOSPHERE || inner_tank.return_pressure() >= 10 * ONE_ATMOSPHERE)//if pipe is good as empty or tank is full
+		if (RETURN_PRESSURE(air1) < 0.1 * ONE_ATMOSPHERE || RETURN_PRESSURE(inner_tank) >= 10 * ONE_ATMOSPHERE)//if pipe is good as empty or tank is full
 			phase = "processing"
 
 	if (phase == "processing")//processing CO2 in tank
@@ -126,7 +126,7 @@
 			var/co2_intake = between(0, inner_tank.gas["carbon_dioxide"], power_setting*delay/10)
 			last_flow_rate = co2_intake
 			inner_tank.adjust_gas("carbon_dioxide", -co2_intake, 1)
-			var/datum/gas_mixture/new_oxygen = new
+			var/datum/fluid_mixture/new_oxygen = new
 			new_oxygen.adjust_gas("oxygen",  co2_intake)
 			new_oxygen.temperature = T20C+30 //it's sort of hot after molecular bond breaking
 			inner_tank.merge(new_oxygen)
@@ -143,7 +143,7 @@
 
 	if (phase == "releasing")//releasing processed gas mix
 		power_draw = -1
-		var/pressure_delta = target_pressure - air2.return_pressure()
+		var/pressure_delta = target_pressure - RETURN_PRESSURE(air2)
 		if (pressure_delta > 0.01 && inner_tank.temperature > 0)
 			var/transfer_moles = calculate_transfer_moles(inner_tank, air2, pressure_delta, (network2)? network2.volume : 0)
 			power_draw = pump_gas(src, inner_tank, air2, transfer_moles, power_rating*power_setting)
@@ -154,7 +154,7 @@
 					network2.update = 1
 		else//can't push outside harder than target pressure. Device is not intended to be used as a pump after all
 			phase = "filling"
-		if (inner_tank.return_pressure() <= 0)
+		if (RETURN_PRESSURE(inner_tank) <= 0)
 			phase = "filling"
 
 /obj/machinery/atmospherics/binary/oxyregenerator/update_icon()
@@ -174,9 +174,9 @@
 	data["on"] = use_power ? 1 : 0
 	data["powerSetting"] = power_setting
 	data["gasProcessed"] = last_flow_rate
-	data["air1Pressure"] = round(air1.return_pressure())
-	data["air2Pressure"] = round(air2.return_pressure())
-	data["tankPressure"] = round(inner_tank.return_pressure())
+	data["air1Pressure"] = round(RETURN_PRESSURE(air1))
+	data["air2Pressure"] = round(RETURN_PRESSURE(air2))
+	data["tankPressure"] = round(RETURN_PRESSURE(inner_tank))
 	data["targetPressure"] = round(target_pressure)
 	data["phase"] = phase
 	if (inner_tank.total_moles > 0)

@@ -53,9 +53,7 @@
 //Must return an Initialize hint. Defined in __DEFINES/subsystems.dm
 
 /atom/proc/Initialize(mapload, ...)
-	if(initialized)
-		crash_with("Warning: [src]([type]) initialized multiple times!")
-	initialized = TRUE
+	atom_flags |= ATOM_FLAG_INITIALIZED
 
 	if(light_power && light_range)
 		update_light()
@@ -73,7 +71,7 @@
 /atom/proc/reveal_blood()
 	return
 
-/atom/proc/assume_air(datum/gas_mixture/giver)
+/atom/proc/assume_air(datum/fluid_mixture/giver)
 	return null
 
 /atom/proc/remove_air(amount)
