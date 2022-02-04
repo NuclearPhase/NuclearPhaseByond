@@ -158,12 +158,12 @@
 /obj/machinery/space_heater/Process()
 	if(on)
 		if(powered() || (cell && cell.charge))
-			var/datum/gas_mixture/env = loc.return_air()
+			var/datum/fluid_mixture/env = loc.return_air()
 			if(env && abs(env.temperature - set_temperature) <= 0.1)
 				active = 0
 			else
 				var/transfer_moles = 0.25 * env.total_moles
-				var/datum/gas_mixture/removed = env.remove(transfer_moles)
+				var/datum/fluid_mixture/removed = env.remove(transfer_moles)
 
 				if(removed)
 					var/heat_transfer = removed.get_thermal_energy_change(set_temperature)

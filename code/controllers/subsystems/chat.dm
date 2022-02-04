@@ -3,10 +3,9 @@ SUBSYSTEM_DEF(chat)
 	flags = SS_TICKER
 	wait = 1 // SS_TICKER means this runs every tick
 	priority = SS_PRIORITY_CHAT
-	init_order = INIT_ORDER_CHAT
+	init_order = SS_INIT_CHAT
 
 	var/list/msg_queue = list()
-	var/initialized = TRUE
 
 /datum/controller/subsystem/chat/PreInit()
 	spawn(0) // init_vchat() does some fileops so we're spawning it off so it can break off the stack during load.
@@ -24,8 +23,8 @@ SUBSYSTEM_DEF(chat)
 		if(MC_TICK_CHECK)
 			return
 
-/datum/controller/subsystem/chat/stat_entry()
-	..("C:[msg_queue.len]")
+/datum/controller/subsystem/chat/stat_entry(text)
+	..("[text] | C:[msg_queue.len]")
 
 /datum/controller/subsystem/chat/proc/queue(target, time, message, handle_whitespace = TRUE)
 	if(!target || !message)

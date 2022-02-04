@@ -91,7 +91,7 @@
 				qdel(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
-				stat("Tank Pressure", internal.air_contents.return_pressure())
+				stat("Tank Pressure", RETURN_PRESSURE(internal.air_contents))
 				stat("Distribution Pressure", internal.distribute_pressure)
 
 		var/obj/item/organ/internal/xenos/plasmavessel/P = internal_organs_by_name[BP_PLASMA]
@@ -1608,7 +1608,7 @@
 /mob/living/carbon/human/proc/get_blood_pressure_fluffy()
 	if(spressure < 30)
 		return "0/0"
-	return "[Floor(spressure)]/[Floor(dpressure)]"
+	return "[round(spressure)]/[round(dpressure)]"
 
 //Point at which you dun breathe no more. Separate from asystole crit, which is heart-related.
 /mob/living/carbon/human/proc/nervous_system_failure()

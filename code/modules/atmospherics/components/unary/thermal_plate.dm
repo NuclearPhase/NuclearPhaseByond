@@ -21,12 +21,12 @@
 	Process()
 		..()
 
-		var/datum/gas_mixture/environment = loc.return_air()
+		var/datum/fluid_mixture/environment = loc.return_air()
 
 		//Get processable air sample and thermal info from environment
 
 		var/transfer_moles = 0.25 * environment.get_total_moles()
-		var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
+		var/datum/fluid_mixture/external_removed = environment.remove(transfer_moles)
 
 		if (!external_removed)
 			return radiate()
@@ -37,7 +37,7 @@
 		//Get same info from connected gas
 
 		var/internal_transfer_moles = 0.25 * air_contents.get_total_moles()
-		var/datum/gas_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
+		var/datum/fluid_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
 
 		if (!internal_removed)
 			environment.merge(external_removed)
@@ -62,7 +62,7 @@
 	proc/radiate()
 
 		var/internal_transfer_moles = 0.25 * air_contents.get_total_moles()
-		var/datum/gas_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
+		var/datum/fluid_mixture/internal_removed = air_contents.remove(internal_transfer_moles)
 
 		if (!internal_removed)
 			return 1

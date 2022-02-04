@@ -8,9 +8,9 @@ obj/machinery/atmospherics/pipe/mains_component
 		parent_pipe = loc
 
 	check_pressure(pressure)
-		var/datum/gas_mixture/environment = loc.loc.return_air()
+		var/datum/fluid_mixture/environment = loc.loc.return_air()
 
-		var/pressure_difference = pressure - environment.return_pressure()
+		var/pressure_difference = pressure - RETURN_PRESSURE(environment)
 
 		if(pressure_difference > parent_pipe.maximum_pressure)
 			mains_burst()
@@ -77,9 +77,9 @@ obj/machinery/atmospherics/mains_pipe
 			burst()
 
 	proc/check_pressure(pressure)
-		var/datum/gas_mixture/environment = loc.return_air()
+		var/datum/fluid_mixture/environment = loc.return_air()
 
-		var/pressure_difference = pressure - environment.return_pressure()
+		var/pressure_difference = pressure - RETURN_PRESSURE(environment)
 
 		if(pressure_difference > maximum_pressure)
 			burst()

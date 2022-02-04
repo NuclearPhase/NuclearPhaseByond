@@ -64,7 +64,7 @@ Class Procs:
 SUBSYSTEM_DEF(air)
 	name = "Air"
 	priority = SS_PRIORITY_AIR
-	init_order = INIT_ORDER_AIR
+	init_order = SS_INIT_AIR
 	flags = SS_POST_FIRE_TIMING
 
 	// Air cooling by z table
@@ -86,6 +86,8 @@ SUBSYSTEM_DEF(air)
 	var/tmp/list/processing_fires
 	var/tmp/list/processing_hotspots
 	var/tmp/list/processing_zones
+
+	var/list/fluid_phases_cache = list()
 
 	var/active_zones = 0
 	var/next_id = 1
@@ -120,15 +122,16 @@ SUBSYSTEM_DEF(air)
 	next_fire = world.time + wait
 	can_fire = TRUE
 
-/datum/controller/subsystem/air/stat_entry()
-	var/list/out = list(
-		"TtU:[tiles_to_update.len] ",
-		"ZtU:[zones_to_update.len] ",
-		"AFZ:[active_fire_zones.len] ",
-		"AH:[active_hotspots.len] ",
-		"AE:[active_edges.len]"
-	)
-	..(out.Join())
+/datum/controller/subsystem/air/stat_entry(text)
+	text = {"\
+		[text] | \
+		TtU: [tiles_to_update.len] \
+		ZtU: [zones_to_update.len] \
+		AFZ: [active_fire_zones.len] \
+		AH: [active_hotspots.len] \
+		AE: [active_edges.len]\
+	"}
+	..(text)
 
 /datum/controller/subsystem/air/Initialize(timeofday, simulate = TRUE)
 
@@ -160,8 +163,16 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		report_progress("Air settling completed in [(REALTIMEOFDAY - starttime)/10] seconds!")
 
 	for(var/i in 1 to 12)
-		coolingtable += (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1 
+		coolingtable += (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1
 
+	starttime = REALTIMEOFDAY
+
+	for(var/id in GLOB.fluid_data)
+		var/datum/xgm_fluid/fluid = GLOB.fluid_data[id]
+		for(var/temp in 0 to 350 step 5)
+			for(var/pressure in 0 to (5 MPA) step (100 KPA))
+				fluid_phases_cache[FLUID_PHASE_KEY(id, pressure, temp)] = compute_fluid_phase(fluid, temp, pressure)
+	report_progress("Fluid phases cache generated in [(REALTIMEOFDAY - starttime)/10] seconds!")
 	..(timeofday)
 
 /datum/controller/subsystem/air/fire(resumed = FALSE, no_mc_tick = FALSE)
@@ -170,11 +181,13 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		processing_fires = active_fire_zones.Copy()
 		processing_hotspots = active_hotspots.Copy()
 
-	if(FALSE && round_duration_in_ticks > (5 MINUTES))
+/*
+	if(round_duration_in_ticks > (5 MINUTES))
 		spawn()
 			for(var/list/zone/Z in zones)
 				Z.air.add_thermal_energy(coolingtable[Z.contents[1].z] * Z.contents.len)
-
+*/
+// FIXME: Cubic
 	var/list/curr_tiles = tiles_to_update
 	var/list/curr_defer = deferred
 	var/list/curr_edges = processing_edges
@@ -208,10 +221,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		T.update_air_properties()
 		T.post_update_air_properties()
 		T.needs_air_update = 0
-		#ifdef ZASDBG
-		T.overlays -= mark
-		updated++
-		#endif
 
 		if (no_mc_tick)
 			CHECK_TICK
@@ -225,10 +234,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		T.update_air_properties()
 		T.post_update_air_properties()
 		T.needs_air_update = 0
-		#ifdef ZASDBG
-		T.overlays -= mark
-		updated++
-		#endif
 
 		if (no_mc_tick)
 			CHECK_TICK
@@ -348,9 +353,8 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 			merge(A.zone,B.zone)
 			return
 
-	var
-		a_to_b = get_dir(A,B)
-		b_to_a = get_dir(B,A)
+	var/a_to_b = get_dir(A,B)
+	var/b_to_a = get_dir(B,A)
 
 	if(!A.connections) A.connections = new
 	if(!B.connections) B.connections = new

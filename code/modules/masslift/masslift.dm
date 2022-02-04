@@ -248,7 +248,7 @@ var/global/list/datum/masslift/masslifts = list()
 			status = "Falling"
 	data["status"] = status
 	data["depth"] = lift.depth
-	data["zlevel"] = lift.get_zlevel(Floor(lift.depth, 100))
+	data["zlevel"] = lift.get_zlevel(round(lift.depth, 100))
 	data["depth_max"] = lift.zlevel2depth(1)
 	data["requests"] = lift.targets
 
@@ -269,7 +269,7 @@ var/global/list/datum/masslift/masslifts = list()
 	if(!istype(lift))
 		return
 
-	var/level = lift.get_zlevel(Floor(lift.depth, 100))
+	var/level = lift.get_zlevel(round(lift.depth, 100))
 	if(level < 1 || level > 5)
 		level = lift.get_zlevel(lift.last)
 	overlays += image(icon, "[level]")

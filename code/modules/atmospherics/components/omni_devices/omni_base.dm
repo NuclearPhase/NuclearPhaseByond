@@ -78,9 +78,9 @@
 
 	var/int_pressure = 0
 	for(var/datum/omni_port/P in ports)
-		int_pressure += P.air.return_pressure()
-	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_pressure - env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+		int_pressure += RETURN_PRESSURE(P.air)
+	var/datum/fluid_mixture/env_air = loc.return_air()
+	if ((int_pressure - RETURN_PRESSURE(env_air)) > 2*ONE_ATMOSPHERE)
 		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], it is too exerted due to internal pressure.</span>")
 		add_fingerprint(user)
 		return 1

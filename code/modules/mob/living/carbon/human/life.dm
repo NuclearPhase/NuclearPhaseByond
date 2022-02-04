@@ -272,7 +272,7 @@
 
 	/** breathing **/
 
-/mob/living/carbon/human/handle_chemical_smoke(var/datum/gas_mixture/environment)
+/mob/living/carbon/human/handle_chemical_smoke(var/datum/fluid_mixture/environment)
 	if(wear_mask && (wear_mask.item_flags & ITEM_FLAG_BLOCK_GAS_SMOKE_EFFECT))
 		return
 	if(glasses && (glasses.item_flags & ITEM_FLAG_BLOCK_GAS_SMOKE_EFFECT))
@@ -281,7 +281,7 @@
 		return
 	..()
 
-/mob/living/carbon/human/handle_post_breath(datum/gas_mixture/breath)
+/mob/living/carbon/human/handle_post_breath(datum/fluid_mixture/breath)
 	..()
 	//spread some viruses while we are at it
 	if(breath && !internal && virus2.len > 0 && prob(10))
@@ -307,7 +307,7 @@
 			internals.icon_state = "internal0"
 	return null
 
-/mob/living/carbon/human/handle_breath(datum/gas_mixture/breath)
+/mob/living/carbon/human/handle_breath(datum/fluid_mixture/breath)
 	if(status_flags & GODMODE)
 		return
 	var/species_organ = species.breathing_organ
@@ -321,7 +321,7 @@
 		failed_last_breath = L.handle_breath(breath) //if breath is null or vacuum, the lungs will handle it for us
 	return !failed_last_breath
 
-/mob/living/carbon/human/handle_environment(datum/gas_mixture/environment)
+/mob/living/carbon/human/handle_environment(datum/fluid_mixture/environment)
 	if(!environment)
 		return
 
@@ -331,12 +331,12 @@
 	species.handle_environment_special(src)
 
 	//Moved pressure calculations here for use in skip-processing check.
-	var/pressure = environment.return_pressure()
+	var/pressure = RETURN_PRESSURE(environment)
 	var/adjusted_pressure = calculate_affecting_pressure(pressure)
 
 	//Check for contaminants before anything else because we don't want to skip it.
 	for(var/g in environment.gas)
-		if(gas_data.flags[g] & XGM_GAS_CONTAMINANT && environment.gas[g] > gas_data.overlay_limit[g] + 1)
+		if(GLOB.fluid_data[g].flags & XGM_FLUID_CONTAMINANT && environment.gas[g] > GLOB.fluid_data[g].overlay_limit + 1)
 			pl_effects()
 			break
 

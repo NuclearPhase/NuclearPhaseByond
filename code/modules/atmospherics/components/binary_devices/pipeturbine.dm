@@ -10,8 +10,8 @@
 
 	var/efficiency = 0.4
 	var/kin_energy = 0
-	var/datum/gas_mixture/air_in = new
-	var/datum/gas_mixture/air_out = new
+	var/datum/fluid_mixture/air_in = new
+	var/datum/fluid_mixture/air_out = new
 	var/volume_ratio = 0.2
 	var/kin_loss = 0.001
 
@@ -54,12 +54,12 @@
 		..()
 		if(anchored && !(stat&BROKEN))
 			kin_energy *= 1 - kin_loss
-			dP = max(air_in.return_pressure() - air_out.return_pressure(), 0)
+			dP = max(RETURN_PRESSURE(air_in) - RETURN_PRESSURE(air_out), 0)
 			if(dP > 10)
 				kin_energy += 1/ADIABATIC_EXPONENT * dP * air_in.volume * (1 - volume_ratio**ADIABATIC_EXPONENT) * efficiency
 				air_in.temperature *= volume_ratio**ADIABATIC_EXPONENT
 
-				var/datum/gas_mixture/air_all = new
+				var/datum/fluid_mixture/air_all = new
 				air_all.volume = air_in.volume + air_out.volume
 				air_all.merge(air_in.remove_ratio(1))
 				air_all.merge(air_out.remove_ratio(1))

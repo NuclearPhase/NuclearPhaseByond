@@ -299,15 +299,15 @@
 
 	fire_stacks = max(0, fire_stacks - 0.2) //I guess the fire runs out of fuel eventually
 
-	var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
-	if(G.get_by_flag(XGM_GAS_OXIDIZER) < 1)
+	var/datum/fluid_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
+	if(G.get_by_flag(XGM_FLUID_OXIDIZER) < 1)
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return 1
 
 	var/turf/location = get_turf(src)
 	location.hotspot_expose(fire_burn_temperature(), 50, 1)
 
-/mob/living/fire_act(datum/gas_mixture/air, temperature, volume)
+/mob/living/fire_act(datum/fluid_mixture/air, temperature, volume)
 	//once our fire_burn_temperature has reached the temperature of the fire that's giving fire_stacks, stop adding them.
 	//allow fire_stacks to go up to 4 for fires cooler than 700 K, since are being immersed in flame after all.
 	if(fire_stacks <= 4 || fire_burn_temperature() < temperature)

@@ -76,7 +76,7 @@
 	// Check that pressure, heat and light are all within bounds.
 	// First, handle an open system or an unconnected closed system.
 	var/turf/T = loc
-	var/datum/gas_mixture/environment
+	var/datum/fluid_mixture/environment
 	// If we're closed, take from our internal sources.
 	if(closed_system && (connected_port || holding))
 		environment = air_contents

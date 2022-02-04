@@ -1,6 +1,7 @@
 /proc/create_all_lighting_overlays()
 	for(var/zlevel = 1 to world.maxz)
 		create_lighting_overlays_zlevel(zlevel)
+		CHECK_TICK
 
 /proc/create_lighting_overlays_zlevel(var/zlevel)
 	ASSERT(zlevel)

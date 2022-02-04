@@ -62,8 +62,8 @@ proc/test_air_in_area(var/test_area, var/expectation = UT_NORMAL)
 
 		var/t_msg = "Turf: [T] |  Location: [T.x] // [T.y] // [T.z]"
 
-		var/datum/gas_mixture/GM = T.return_air()
-		var/pressure = GM.return_pressure()
+		var/datum/fluid_mixture/GM = T.return_air()
+		var/pressure = RETURN_PRESSURE(GM)
 		var/temp = GM.temperature
 
 		switch(expectation)

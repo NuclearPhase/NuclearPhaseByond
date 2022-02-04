@@ -127,7 +127,7 @@
 	var/atom/A = loc
 	if(!loc)
 		return 1
-	var/datum/gas_mixture/environment = A.return_air()
+	var/datum/fluid_mixture/environment = A.return_air()
 
 	if(environment)
 		if( abs(environment.temperature - bodytemperature) > 40 )

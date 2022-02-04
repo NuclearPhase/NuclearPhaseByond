@@ -29,7 +29,7 @@
 #define N_NORTHEAST 32
 #define N_NORTHWEST 512
 #define N_SOUTHEAST 64
-#define N_SOUTHWEST 1024 
+#define N_SOUTHWEST 1024
 
 #define TURF_HAS_VALID_ZONE(T) (istype(T, /turf/simulated) && T:zone && !T:zone:invalid)
 
@@ -117,3 +117,57 @@ var/list/gzn_check = list(NORTH, SOUTH, EAST, WEST)
 	}
 
 #endif
+
+#define UPDATE_VALUES_SAFE(mixture) \
+	mixture.total_moles = 0; \
+	for(var/_g in mixture.gas) { \
+		if(mixture.gas[_g] <= 0) { \
+			mixture.gas -= _g; mixture.phases -= _g; \
+		} \
+		else { \
+			mixture.total_moles += mixture.gas[_g]; \
+			if(!mixture.phases[_g]) mixture.phases[_g] = FLUID_PHASE_GAS; \
+		} \
+	}
+
+#define UPDATE_VALUES(mixture) \
+	UPDATE_VALUES_SAFE(mixture) \
+	if(GLOB.fluid_data) {\
+		UPDATE_HEAT_CAPACITY(mixture) \
+		mixture.handle_fluids_phase_transition(); \
+	}
+
+#define DIVIDE_MIXTURE(mixture, factor) \
+	for(var/_g in mixture.gas) { \
+		mixture.gas[_g] /= factor; \
+	} \
+	UPDATE_VALUES(mixture)
+
+#define MULTIPLY_MIXTURE(mixture, factor) \
+	for(var/_g in mixture.gas) { \
+		mixture.gas[_g] *= factor; \
+	} \
+	UPDATE_VALUES(mixture)
+
+#define SUBSTRACT_MIXTURE(mixture, rtexture) \
+	for(var/_g in mixture.gas) { \
+		mixture.gas[_g] -= rtexture.gas[_g]; \
+	} \
+	UPDATE_VALUES(mixture)
+
+#define COPY_MIXTURE(destmixture, srcmixture) \
+	destmixture.gas = srcmixture.gas.Copy(); \
+	destmixture.temperature = srcmixture.temperature; \
+	UPDATE_VALUES(destmixture)
+
+#define UPDATE_HEAT_CAPACITY(mixture) \
+	mixture.heat_capacity = 0; \
+	for(var/_g in mixture.gas) { \
+		mixture.heat_capacity += GLOB.fluid_data[_g].specific_heat * mixture.gas[_g]; \
+	} \
+	mixture.heat_capacity *= mixture.group_multiplier;
+
+#define RETURN_PRESSURE(mixture) (mixture.volume ? (mixture.total_moles * R_IDEAL_GAS_EQUATION * mixture.temperature / mixture.volume) : 0)
+
+// pressure in Pa
+#define FLUID_PHASE_KEY(gasid, pressure, temperature) "[gasid][round(pressure, 100 KPA)][round(temperature, 5)]"

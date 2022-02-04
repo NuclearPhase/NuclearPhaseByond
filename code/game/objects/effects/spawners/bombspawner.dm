@@ -174,13 +174,13 @@
 	PT.air_contents.gas["carbon_dioxide"] = carbon_amt
 	PT.air_contents.total_moles = phoron_amt + carbon_amt
 	PT.air_contents.temperature = PHORON_MINIMUM_BURN_TEMPERATURE+1
-	PT.air_contents.update_values()
+	UPDATE_VALUES(PT.air_contents)
 
 	OT.valve_welded = 1
 	OT.air_contents.gas["oxygen"] = oxygen_amt
 	OT.air_contents.total_moles = oxygen_amt
 	OT.air_contents.temperature = PHORON_MINIMUM_BURN_TEMPERATURE+1
-	OT.air_contents.update_values()
+	UPDATE_VALUES(OT.air_contents)
 
 
 	var/obj/item/device/assembly/S = new assembly_type(V)

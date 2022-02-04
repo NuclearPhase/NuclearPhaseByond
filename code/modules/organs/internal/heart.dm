@@ -72,7 +72,7 @@
 /obj/item/organ/internal/heart/proc/handle_pulse()
 	var/n_pulse = initial(pulse) + sumListAndCutAssoc(pulse_modificators)
 	pulse = lerp(pulse, n_pulse, 0.5)
-	pulse = Floor(Clamp(pulse, 0, 500))
+	pulse = round(Clamp(pulse, 0, 500))
 
 
 /obj/item/organ/internal/heart/proc/handle_cardiac_output()
@@ -181,7 +181,7 @@
 					blood_max += W.damage / 40
 
 		if(temp.status & ORGAN_ARTERY_CUT)
-			var/bleed_amount = Floor((500 / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
+			var/bleed_amount = round((500 / (temp.applied_pressure || !open_wound ? 400 : 250)) * temp.arterial_bleed_severity)
 			if(bleed_amount)
 				if(open_wound)
 					blood_max += bleed_amount

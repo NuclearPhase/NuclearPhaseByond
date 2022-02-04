@@ -310,7 +310,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 
 /mob/living/carbon/human/proc/get_heart_rate()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
-	. = Floor(heart?.pulse)
+	. = round(heart?.pulse)
 
 /mob/living/carbon/human/proc/get_cardiac_output()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]

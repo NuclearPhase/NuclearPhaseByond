@@ -4,7 +4,7 @@
 
 	layer = ABOVE_TILE_LAYER
 
-	var/datum/gas_mixture/air_contents
+	var/datum/fluid_mixture/air_contents
 
 	var/obj/machinery/atmospherics/node
 

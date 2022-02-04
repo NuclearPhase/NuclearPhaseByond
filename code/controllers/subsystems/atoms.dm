@@ -2,19 +2,23 @@
 #define BAD_INIT_DIDNT_INIT 2
 #define BAD_INIT_SLEPT 4
 #define BAD_INIT_NO_HINT 8
+#define BAD_INIT_INITIALIZED 16
 
 SUBSYSTEM_DEF(atoms)
 	name = "Atoms"
-	init_order = INIT_ORDER_ATOMS
+	init_order = SS_INIT_ATOMS
 	flags = SS_NO_FIRE
 
-	var/initialized = INITIALIZATION_INSSATOMS
+	initialized = INITIALIZATION_INSSATOMS
 	var/old_initialized
 
 	var/list/late_loaders
 	var/list/created_atoms
 
 	var/list/BadInitializeCalls = list()
+
+/datum/controller/subsystem/atoms/stat_entry(text)
+	..("[text] | Bad Inits: [BadInitializeCalls.len]")
 
 /datum/controller/subsystem/atoms/Initialize(timeofday)
 	initialized = INITIALIZATION_INNEW_MAPLOAD
@@ -67,6 +71,10 @@ SUBSYSTEM_DEF(atoms)
 	var/the_type = A.type
 	if(QDELING(A))
 		BadInitializeCalls[the_type] |= BAD_INIT_QDEL_BEFORE
+		return TRUE
+
+	if(A.atom_flags & ATOM_FLAG_INITIALIZED)
+		BadInitializeCalls[the_type] |= BAD_INIT_INITIALIZED
 		return TRUE
 
 	var/start_tick = world.time
@@ -128,6 +136,8 @@ SUBSYSTEM_DEF(atoms)
 			. += "- Qdel'd in New()\n"
 		if(fails & BAD_INIT_SLEPT)
 			. += "- Slept during Initialize()\n"
+		if(fails & BAD_INIT_INITIALIZED)
+			. += "- Initialized multiple times"
 
 /datum/controller/subsystem/atoms/Shutdown()
 	var/initlog = InitLog()
@@ -138,3 +148,4 @@ SUBSYSTEM_DEF(atoms)
 #undef BAD_INIT_DIDNT_INIT
 #undef BAD_INIT_SLEPT
 #undef BAD_INIT_NO_HINT
+#undef BAD_INIT_INITIALIZED

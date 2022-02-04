@@ -73,7 +73,7 @@ Thus, the two variables affect pump operation are set in New():
 		return
 
 	var/power_draw = -1
-	var/pressure_delta = target_pressure - air2.return_pressure()
+	var/pressure_delta = target_pressure - RETURN_PRESSURE(air2)
 
 	if(pressure_delta > 0.01 && air1.temperature > 0)
 		//Figure out how much gas to transfer to meet the target pressure.
@@ -220,9 +220,9 @@ Thus, the two variables affect pump operation are set in New():
 	if (!(stat & NOPOWER) && use_power)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")
 		return 1
-	var/datum/gas_mixture/int_air = return_air()
-	var/datum/gas_mixture/env_air = loc.return_air()
-	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
+	var/datum/fluid_mixture/int_air = return_air()
+	var/datum/fluid_mixture/env_air = loc.return_air()
+	if ((RETURN_PRESSURE(int_air)-RETURN_PRESSURE(env_air)) > 2*ONE_ATMOSPHERE)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], it too exerted due to internal pressure.</span>")
 		add_fingerprint(user)
 		return 1

@@ -89,9 +89,9 @@
 
 	// Take some gas up from our environment.
 	var/added_particles = FALSE
-	var/datum/gas_mixture/uptake_gas = owned_core.loc.return_air()
+	var/datum/fluid_mixture/uptake_gas = owned_core.loc.return_air()
 	if(uptake_gas)
-		uptake_gas = uptake_gas.remove_by_flag(XGM_GAS_FUSION_FUEL, rand(50,100))
+		uptake_gas = uptake_gas.remove_by_flag(XGM_FLUID_FUSION_FUEL, rand(50,100))
 	if(uptake_gas && uptake_gas.total_moles)
 		for(var/gasname in uptake_gas.gas)
 			if(uptake_gas.gas[gasname]*10 > reactants[gasname])
@@ -99,7 +99,7 @@
 				uptake_gas.adjust_gas(gasname, -(uptake_gas.gas[gasname]), update=FALSE)
 				added_particles = TRUE
 		if(added_particles)
-			uptake_gas.update_values()
+			UPDATE_VALUES(uptake_gas)
 
 	//let the particles inside the field react
 	React()
@@ -254,9 +254,9 @@
 	// Create our plasma field and dump it into our environment.
 	var/turf/T = get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/plasma
+		var/datum/fluid_mixture/plasma
 		for(var/reactant in reactants)
-			if(!gas_data.name[reactant])
+			if(!GLOB.fluid_data[reactant].name)
 				continue
 			if(!plasma)
 				plasma = new
@@ -264,7 +264,7 @@
 		if(!plasma)
 			return
 		plasma.temperature = (plasma_temperature/2)
-		plasma.update_values()
+		UPDATE_VALUES(plasma)
 		T.assume_air(plasma)
 		T.hotspot_expose(plasma_temperature)
 		plasma = null
@@ -282,7 +282,7 @@
 /obj/effect/fusion_em_field/proc/Radiate()
 	if(istype(loc, /turf))
 		var/empsev = max(1, min(3, ceil(size/2)))
-		for(var/atom/movable/AM in range(max(1,Floor(size/2)), loc))
+		for(var/atom/movable/AM in range(max(1,round(size/2)), loc))
 
 			if(AM == src || AM == owned_core || !AM.simulated)
 				continue
@@ -300,7 +300,7 @@
 			AM.emp_act(empsev)
 
 	if(owned_core && owned_core.loc)
-		var/datum/gas_mixture/environment = owned_core.loc.return_air()
+		var/datum/fluid_mixture/environment = owned_core.loc.return_air()
 		if(environment && environment.temperature < (T0C+1000)) // Putting an upper bound on it to stop it being used in a TEG.
 			environment.add_thermal_energy(plasma_temperature*20000)
 	radiation = 0
@@ -332,7 +332,7 @@
 		//determine a random amount to actually react this cycle, and remove it from the standard pool
 		//this is a hack, and quite nonrealistic :(
 		for(var/reactant in react_pool)
-			react_pool[reactant] = rand(Floor(react_pool[reactant]/2),react_pool[reactant])
+			react_pool[reactant] = rand(round(react_pool[reactant]/2),react_pool[reactant])
 			reactants[reactant] -= react_pool[reactant]
 			if(!react_pool[reactant])
 				react_pool -= reactant

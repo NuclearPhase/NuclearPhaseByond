@@ -15,7 +15,7 @@
 	..()
 	if(atmosphere)
 		atmosphere.temperature = T20C + rand(20, 100)
-		atmosphere.update_values()
+		UPDATE_VALUES(atmosphere)
 
 /obj/effect/overmap/sector/exoplanet/desert/adapt_seed(var/datum/seed/S)
 	..()
@@ -62,7 +62,7 @@
 	icon_state = "desert[rand(0,5)]"
 	..()
 
-/turf/simulated/floor/exoplanet/desert/fire_act(datum/gas_mixture/air, temperature, volume)
+/turf/simulated/floor/exoplanet/desert/fire_act(datum/fluid_mixture/air, temperature, volume)
 	if((temperature > T0C + 1700 && prob(5)) || temperature > T0C + 3000)
 		SetName("molten silica")
 		icon_state = "sandglass"

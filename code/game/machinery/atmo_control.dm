@@ -33,10 +33,10 @@
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
 
-		var/datum/gas_mixture/air_sample = return_air()
+		var/datum/fluid_mixture/air_sample = return_air()
 
 		if(output&1)
-			signal.data["pressure"] = num2text(round(air_sample.return_pressure(),0.1),)
+			signal.data["pressure"] = num2text(round(RETURN_PRESSURE(air_sample),0.1),)
 		if(output&2)
 			signal.data["temperature"] = round(air_sample.temperature,0.1)
 

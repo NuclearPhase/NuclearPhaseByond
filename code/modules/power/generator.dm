@@ -71,8 +71,8 @@
 
 	updateDialog()
 
-	var/datum/gas_mixture/air1 = circ1.return_transfer_air()
-	var/datum/gas_mixture/air2 = circ2.return_transfer_air()
+	var/datum/fluid_mixture/air1 = circ1.return_transfer_air()
+	var/datum/fluid_mixture/air2 = circ2.return_transfer_air()
 
 	lastgen2 = lastgen1
 	lastgen1 = 0
@@ -177,9 +177,9 @@
 		data["primaryDir"] = vertical ? "top" : "left"
 		data["primaryOutput"] = last_circ1_gen/1000
 		data["primaryFlowCapacity"] = circ1.volume_capacity_used*100
-		data["primaryInletPressure"] = circ1.air1.return_pressure()
+		data["primaryInletPressure"] = RETURN_PRESSURE(circ1.air1)
 		data["primaryInletTemperature"] = circ1.air1.temperature
-		data["primaryOutletPressure"] = circ1.air2.return_pressure()
+		data["primaryOutletPressure"] = RETURN_PRESSURE(circ1.air2)
 		data["primaryOutletTemperature"] = circ1.air2.temperature
 
 	if(circ2)
@@ -187,9 +187,9 @@
 		data["secondaryDir"] = vertical ? "bottom" : "right"
 		data["secondaryOutput"] = last_circ2_gen/1000
 		data["secondaryFlowCapacity"] = circ2.volume_capacity_used*100
-		data["secondaryInletPressure"] = circ2.air1.return_pressure()
+		data["secondaryInletPressure"] = RETURN_PRESSURE(circ2.air1)
 		data["secondaryInletTemperature"] = circ2.air1.temperature
-		data["secondaryOutletPressure"] = circ2.air2.return_pressure()
+		data["secondaryOutletPressure"] = RETURN_PRESSURE(circ2.air2)
 		data["secondaryOutletTemperature"] = circ2.air2.temperature
 
 	if(circ1 && circ2)

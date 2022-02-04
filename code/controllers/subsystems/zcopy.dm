@@ -5,7 +5,7 @@
 SUBSYSTEM_DEF(zcopy)
 	name = "Z-Copy"
 	wait = 1
-	init_order = INIT_ORDER_ZCOPY
+	init_order = SS_INIT_ZCOPY
 	priority = SS_PRIORITY_ZCOPY
 	runlevels = RUNLEVELS_DEFAULT | RUNLEVEL_LOBBY
 
@@ -73,8 +73,17 @@ SUBSYSTEM_DEF(zcopy)
 
 	enable()
 
-/datum/controller/subsystem/zcopy/stat_entry()
-	..("Q:{T:[queued_turfs.len - (qt_idex - 1)]|O:[queued_overlays.len - (qo_idex - 1)]} T:{T:[openspace_turfs]|O:[openspace_overlays]}")
+/datum/controller/subsystem/zcopy/stat_entry(text)
+	text = {"\
+		[text]\n\
+		Queues: \
+		Turfs [queued_turfs.len - (qt_idex - 1)] \
+		Overlays [queued_overlays.len - (qo_idex - 1)]\n\
+		Open Turfs: \
+		Turfs [openspace_turfs] \
+		Overlays [openspace_overlays]\n\
+		"}
+	..(text)
 
 /datum/controller/subsystem/zcopy/Initialize(timeofday)
 	// Flush the queue.

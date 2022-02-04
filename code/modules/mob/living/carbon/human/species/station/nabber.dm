@@ -113,9 +113,12 @@
 		/mob/living/carbon/human/proc/threat_display
 		)
 
+/*
 	equip_adjust = list(
 		slot_back_str = list(NORTH = list("x" = 0, "y" = 7), EAST = list("x" = 0, "y" = 8), SOUTH = list("x" = 0, "y" = 8), WEST = list("x" = 0, "y" = 8))
 			)
+*/
+// FIXME: Cubic
 
 /datum/species/nabber/get_eyes(var/mob/living/carbon/human/H)
 	var/obj/item/organ/internal/eyes/nabber/O = H.internal_organs_by_name[BP_EYES]
@@ -139,10 +142,10 @@
 	return "haemolymph"
 
 /datum/species/nabber/can_overcome_gravity(var/mob/living/carbon/human/H)
-	var/datum/gas_mixture/mixture = H.loc.return_air()
+	var/datum/fluid_mixture/mixture = H.loc.return_air()
 
 	if(mixture)
-		var/pressure = mixture.return_pressure()
+		var/pressure = RETURN_PRESSURE(mixture)
 		if(pressure > 50)
 			var/turf/below = GetBelow(H)
 			var/turf/T = H.loc
@@ -158,10 +161,10 @@
 
 // Nabbers will only fall when there isn't enough air pressure for them to keep themselves aloft.
 /datum/species/nabber/can_fall(var/mob/living/carbon/human/H)
-	var/datum/gas_mixture/mixture = H.loc.return_air()
+	var/datum/fluid_mixture/mixture = H.loc.return_air()
 
 	if(mixture)
-		var/pressure = mixture.return_pressure()
+		var/pressure = RETURN_PRESSURE(mixture)
 		if(pressure > 80)
 			return FALSE
 
@@ -170,10 +173,10 @@
 // Even when nabbers do fall, if there's enough air pressure they won't hurt themselves.
 /datum/species/nabber/handle_fall_special(var/mob/living/carbon/human/H, var/turf/landing)
 
-	var/datum/gas_mixture/mixture = H.loc.return_air()
+	var/datum/fluid_mixture/mixture = H.loc.return_air()
 
 	if(mixture)
-		var/pressure = mixture.return_pressure()
+		var/pressure = RETURN_PRESSURE(mixture)
 		if(pressure > 50)
 			if(istype(landing, /turf/simulated/open))
 				H.visible_message("\The [src] descends from the deck above through \the [landing]!", "Your wings slow your descent.")

@@ -98,7 +98,7 @@
 	if(attached.stat == DEAD || !brain)
 		data["ecg"] += list("Neurological activity not present")
 	else
-		data["ecg"] += list("Neurological system activity: [100 - Floor(100 * CLAMP01(brain.damage / brain.max_damage))]% of normal.")
+		data["ecg"] += list("Neurological system activity: [100 - round(100 * CLAMP01(brain.damage / brain.max_damage))]% of normal.")
 
 	if(attached.bloodstr.get_reagent_amount(/datum/reagent/hormone/potassium) > POTASSIUM_LEVEL_HBAD)
 		data["ecg"] += list("Hypercaliemia.")

@@ -103,7 +103,7 @@
 	if(other.zone)
 		if(!src.air)
 			src.make_air()
-		src.air.copy_from(other.zone.air)
+		COPY_MIXTURE(src.air, other.zone.air)
 		other.zone.remove(other)
 	return 1
 

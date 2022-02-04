@@ -464,7 +464,7 @@
 	icon = 'icons/obj/doors/Doorphoron.dmi'
 	mineral = "phoron"
 
-/obj/machinery/door/airlock/phoron/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/machinery/door/airlock/phoron/fire_act(datum/fluid_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
 		PhoronBurn(exposed_temperature)
 

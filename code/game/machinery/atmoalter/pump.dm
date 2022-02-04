@@ -65,7 +65,7 @@
 	var/power_draw = -1
 
 	if(on && cell && cell.charge)
-		var/datum/gas_mixture/environment
+		var/datum/fluid_mixture/environment
 		if(holding)
 			environment = holding.air_contents
 		else
@@ -75,11 +75,11 @@
 		var/output_volume
 		var/air_temperature
 		if(direction_out)
-			pressure_delta = target_pressure - environment.return_pressure()
+			pressure_delta = target_pressure - RETURN_PRESSURE(environment)
 			output_volume = environment.volume * environment.group_multiplier
 			air_temperature = environment.temperature? environment.temperature : air_contents.temperature
 		else
-			pressure_delta = environment.return_pressure() - target_pressure
+			pressure_delta = RETURN_PRESSURE(environment) - target_pressure
 			output_volume = air_contents.volume * air_contents.group_multiplier
 			air_temperature = air_contents.temperature? air_contents.temperature : environment.temperature
 
@@ -121,7 +121,7 @@
 /obj/machinery/portable_atmospherics/powered/pump/ui_interact(mob/user, ui_key = "rcon", datum/nanoui/ui=null, force_open=1)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
-	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
+	data["tankPressure"] = round(RETURN_PRESSURE(air_contents) > 0 ? RETURN_PRESSURE(air_contents) : 0)
 	data["targetpressure"] = round(target_pressure)
 	data["pump_dir"] = direction_out
 	data["minpressure"] = round(pressuremin)
@@ -133,7 +133,7 @@
 
 	data["hasHoldingTank"] = holding ? 1 : 0
 	if (holding)
-		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
+		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(RETURN_PRESSURE(holding.air_contents) > 0 ? RETURN_PRESSURE(holding.air_contents) : 0))
 
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)

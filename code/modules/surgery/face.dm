@@ -39,9 +39,9 @@
 	if(affected.gauzed)
 		to_chat(user, SPAN_WARNING("Gauze on [target]'s [affected.name] blocks surgery!"))
 		return SURGERY_FAILURE
-	return ..() && target_zone == BP_MOUTH && target.op_stage.face == 0 && 
+	return ..() && target_zone == BP_MOUTH && target.op_stage.face == 0
 
-/datum/surgery_step/generic/cut_face/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+/datum/surgery_step/generic/cut_face/begin_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts to cut open [target]'s face and neck with \the [tool].", \
 	"You start to cut open [target]'s face and neck with \the [tool].")
 	..()
