@@ -67,10 +67,12 @@
 	return a + t * (b - a)
 
 // Note: pass by var only a
-#define LERP(a, b, t) (a) + (t) * ((b) - (a)) 
+#define LERP(a, b, t) ((a) + (t) * ((b) - (a)) )
 
 // Perfoms a cosine interpolation.
 /proc/clerp(a, b, t = 0.5)
+	if(t > 1)
+		return LERP(a, b, t)
 	var/f = (1 - cos(t * M_PI)) * 0.5
 	return a * (1-f) + b * f
 

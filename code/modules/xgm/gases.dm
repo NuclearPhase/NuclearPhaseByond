@@ -5,7 +5,7 @@
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.032	// kg/mol
 	flags = XGM_FLUID_OXIDIZER | XGM_FLUID_FUSION_FUEL
-	breathed_product = /datum/reagent/oxygen
+	reagent = /datum/reagent/oxygen
 	symbol_html = "O<sub>2</sub>"
 	symbol = "O2"
 	triple_point_temperature = 54.36
@@ -67,7 +67,7 @@
 	gas_name = "Methyl Bromide"
 	specific_heat = 42.59 // J/(mol*K)
 	molar_mass = 0.095	  // kg/mol
-	breathed_product = /datum/reagent/toxin/methyl_bromide
+	reagent = /datum/reagent/toxin/methyl_bromide
 	symbol_html = "CH<sub>3</sub>Br"
 	symbol = "CH3Br"
 

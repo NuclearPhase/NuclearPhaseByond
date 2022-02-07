@@ -166,15 +166,15 @@ Class Procs:
 	// Handle condensation from the air.
 	for(var/g in air.gas)
 		var/product = GLOB.fluid_data[g].reagent
-		if(product && air.temperature <= GLOB.fluid_data[g].condensation_point)
+		if(product && air.phases[g] == FLUID_PHASE_LIQUID)
 			var/condensation_area = air.group_multiplier
 			while(condensation_area > 0)
 				condensation_area--
 				var/turf/flooding = pick(contents)
-				var/condense_amt = min(air.gas[g], rand(3,5))
+				var/condense_amt = min(air.gas[g], rand(3, 5))
 				if(condense_amt < 1)
 					break
-				air.adjust_gas(g, -condense_amt)
+				ADJUST_FLUID_UPDATE(air, g, -condense_amt)
 				flooding.add_fluid(condense_amt, product)
 
 	// Update atom temperature.

@@ -19,7 +19,7 @@
 	//List of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
 	var/list/graphic = list()
 	//Cache of gas overlay objects
-	var/list/tile_overlay_cache
+	var/list/tile_overlay_cache = list()
 
 	var/heat_capacity = 0
 
@@ -38,13 +38,7 @@
 
 //Takes a gas string and the amount of moles to adjust by.  Calls update_values if update isn't 0.
 /datum/fluid_mixture/proc/adjust_gas(gasid, moles, update = 1)
-	if(moles == 0)
-		return
-
-	if (group_multiplier != 1)
-		gas[gasid] += moles/group_multiplier
-	else
-		gas[gasid] += moles
+	ADJUST_FLUID(src, gasid, moles)
 
 	if(update)
 		UPDATE_VALUES(src)
@@ -156,54 +150,9 @@
 
 	return thermal_energy
 
-/*
-// precalculating into tables r too expensive for memory ;(
-/proc/compute_fluid_phase(temperature, pressure, id)
-	var/datum/xgm_fluid/data = GLOB.fluid_data[id]
-	var/just_solid_temp = data.just_solid_temp
-
-	if(temperature < just_solid_temp)
-		return FLUID_PHASE_SOLID
-
-	// hypercritical are less likely maybe? TODO: reorder if it makes sense
-	var/list/hypercritical_point = data.hypercritical_point
-
-	var/hc_temp = FLUID_POINT_TEMPERATURE(hypercritical_point)
-	var/hc_pressure = FLUID_POINT_PRESSURE(hypercritical_point)
-	if(temperature > hc_temp && pressure > hc_pressure)
-		return FLUID_PHASE_HYPERCRITICAL
-
-	var/list/triple_point = data.triple_point
-
-	var/tp_pressure = FLUID_POINT_PRESSURE(triple_point)
-	var/tp_temp = FLUID_POINT_TEMPERATURE(triple_point)
-
-	if(pressure >= LERP(tp_pressure, hc_pressure, CLAMP01((temperature - tp_temp) / (hc_temp - tp_temp))))
-		return FLUID_PHASE_LIQUID
-	return FLUID_PHASE_GAS
-
-/datum/fluid_mixture/proc/compute_fluid_phase(id)
-	return global.compute_fluid_phase(temperature, return_pressure() * 1000, id)
-*/
-
-/proc/compute_fluid_phase(var/datum/xgm_fluid/data, temperature, pressure) // pressure in Pa
-	if(temperature < data.just_solid_temp)
-		return FLUID_PHASE_SOLID
-
-	var/hc_pressure = data.hypercritical_point_pressure
-	if(pressure > hc_pressure && temperature > data.hypercritical_point_temperature)
-		return FLUID_PHASE_HYPERCRITICAL
-
-	var/tp_pressure = data.triple_point_pressure
-	// (temperature - tp_temp) / (hc_temp - tp_temp) -v
-	var/max_gas_pressure = LERP(tp_pressure, hc_pressure, (temperature - data.triple_point_temperature) * data.pc_rev_hct_m_tpt)
-
-	return (pressure > max_gas_pressure) ? FLUID_PHASE_LIQUID : FLUID_PHASE_GAS
-
 /datum/fluid_mixture/proc/handle_fluids_phase_transition()
-	var/pressure = RETURN_PRESSURE(src) * 1 KPA // to Pa
-	/*
 	for(var/id in gas)
+		var/pressure = RETURN_PARTIAL_PRESSURE(src, id)
 		var/datum/xgm_fluid/data = GLOB.fluid_data[id]
 		if(temperature < data.just_solid_temp)
 			phases[id] = FLUID_PHASE_SOLID
@@ -214,14 +163,14 @@
 			phases[id] = FLUID_PHASE_HYPERCRITICAL
 			continue
 
+		var/tp_temp = data.triple_point_temperature
 		var/tp_pressure = data.triple_point_pressure
-		// (temperature - tp_temp) / (hc_temp - tp_temp) -v
-		var/max_gas_pressure = LERP(tp_pressure, hc_pressure, (temperature - data.triple_point_temperature) * data.pc_rev_hct_m_tpt)
-
+		var/max_gas_pressure
+		if(temperature >= tp_temp)
+			max_gas_pressure = clerp(tp_pressure, hc_pressure, (temperature - tp_temp) * data.pc_rev_hct_m_tpt)
+		else
+			max_gas_pressure = clerp(0, tp_pressure, temperature / tp_temp)
 		phases[id] = (pressure > max_gas_pressure) ? FLUID_PHASE_LIQUID : FLUID_PHASE_GAS
-*/
-	for(var/id in gas)
-		phases[id] = SSair.fluid_phases_cache[FLUID_PHASE_KEY(id, pressure, temperature)]
 
 /datum/fluid_mixture/proc/get_fluid_phase(id)
 	return phases[id]
@@ -278,6 +227,9 @@
 //Returns the pressure of the gas mix.  Only accurate if there have been no gas modifications since update_values has been called.
 /datum/fluid_mixture/proc/return_pressure()
 	return RETURN_PRESSURE(src)
+
+/datum/fluid_mixture/proc/return_partial_pressure(gasid)
+	return RETURN_PARTIAL_PRESSURE(src, gasid)
 
 
 //Removes moles from the gas mixture and returns a gas_mixture containing the removed air.
@@ -403,12 +355,15 @@
 //Rechecks the gas_mixture and adjusts the graphic list if needed.
 //Two lists can be passed by reference if you need know specifically which graphics were added and removed.
 /datum/fluid_mixture/proc/check_tile_graphic(list/graphic_add = null, list/graphic_remove = null)
+	if(!GLOB.fluid_data)
+		return
+
 	for(var/obj/effect/gas_overlay/O in graphic)
-		if(gas[O.gas_id] <= GLOB.fluid_data?[O.gas_id]?.overlay_limit)
+		if(gas[O.gas_id] <= GLOB.fluid_data.[O.gas_id].overlay_limit)
 			LAZYADD(graphic_remove, O)
 	for(var/g in gas)
 		//Overlay isn't applied for this gas, check if it's valid and needs to be added.
-		if(gas[g] > GLOB.fluid_data?[g]?.overlay_limit)
+		if(gas[g] > GLOB.fluid_data.[g].overlay_limit)
 			var/tile_overlay = get_tile_overlay(g)
 			if(!(tile_overlay in graphic))
 				LAZYADD(graphic_add, tile_overlay)
@@ -421,15 +376,15 @@
 		graphic -= graphic_remove
 		. = 1
 	if(graphic.len)
-		var/pressure_mod = Clamp(RETURN_PRESSURE(src) / ONE_ATMOSPHERE, 0, 2)
 		for(var/obj/effect/gas_overlay/O in graphic)
+			var/pressure_mod = Clamp(RETURN_PARTIAL_PRESSURE(src, O.gas_id) / ONE_ATMOSPHERE, 0, 2)
 			var/concentration_mod = Clamp(gas[O.gas_id] / total_moles, 0.1, 1)
 			var/new_alpha = min(230, round(pressure_mod * concentration_mod * 180, 5))
 			if(new_alpha != O.alpha)
 				O.update_alpha_animation(new_alpha)
 
 /datum/fluid_mixture/proc/get_tile_overlay(gas_id)
-	if(!LAZYACCESS(tile_overlay_cache, gas_id))
+	if(!(gas_id in tile_overlay_cache))
 		LAZYSET(tile_overlay_cache, gas_id, new/obj/effect/gas_overlay(null, gas_id))
 	return tile_overlay_cache[gas_id]
 

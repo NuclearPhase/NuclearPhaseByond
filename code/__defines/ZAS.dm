@@ -163,11 +163,18 @@ var/list/gzn_check = list(NORTH, SOUTH, EAST, WEST)
 #define UPDATE_HEAT_CAPACITY(mixture) \
 	mixture.heat_capacity = 0; \
 	for(var/_g in mixture.gas) { \
-		mixture.heat_capacity += GLOB.fluid_data[_g].specific_heat * mixture.gas[_g]; \
+		var/datum/xgm_fluid/_data = GLOB.fluid_data[_g]; \
+		mixture.heat_capacity += (_data.specific_heat * mixture.gas[_g] + (mixture.temperature * 0.5) + (RETURN_PARTIAL_PRESSURE(mixture, _g) * 0.00001)) * mixture.phases[_g]; \
 	} \
 	mixture.heat_capacity *= mixture.group_multiplier;
 
-#define RETURN_PRESSURE(mixture) (mixture.volume ? (mixture.total_moles * R_IDEAL_GAS_EQUATION * mixture.temperature / mixture.volume) : 0)
+#define RETURN_PRESSURE(mixture) (mixture.volume ? ((mixture.total_moles * R_IDEAL_GAS_EQUATION * mixture.temperature) / mixture.volume) : 0)
 
-// pressure in Pa
-#define FLUID_PHASE_KEY(gasid, pressure, temperature) "[gasid][round(pressure, 100 KPA)][round(temperature, 5)]"
+// returns Pa
+#define RETURN_PARTIAL_PRESSURE(mixture, gasid) ((mixture.gas[gasid] / mixture.total_moles) * (RETURN_PRESSURE(mixture) * (1 KPA)))
+
+
+#define ADJUST_FLUID(mixture, id, moles) mixture.gas[id] += moles / mixture.group_multiplier;
+#define ADJUST_FLUID_UPDATE(mixture, id, moles) \
+	ADJUST_FLUID(mixture, id, moles) \
+	UPDATE_VALUES(mixture)
