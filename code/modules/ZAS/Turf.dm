@@ -264,7 +264,7 @@ var/verbose = TRUE // FIXME: Cubic
 	var/datum/fluid_mixture/my_air = return_air()
 
 	if(isnull(temp))
-		my_air.adjust_gas(gasid, moles)
+		ADJUST_FLUID(my_air, gasid, moles)
 	else
 		my_air.adjust_gas_temp(gasid, moles, temp)
 

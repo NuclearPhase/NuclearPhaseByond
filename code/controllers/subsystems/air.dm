@@ -165,14 +165,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 	for(var/i in 1 to 12)
 		coolingtable += (i * (-0.6944 * i * i + 6.6667 * i - 25.8532) + 5) * 1.1
 
-	starttime = REALTIMEOFDAY
-
-	for(var/id in GLOB.fluid_data)
-		var/datum/xgm_fluid/fluid = GLOB.fluid_data[id]
-		for(var/temp in 0 to 350 step 5)
-			for(var/pressure in 0 to (5 MPA) step (100 KPA))
-				fluid_phases_cache[FLUID_PHASE_KEY(id, pressure, temp)] = compute_fluid_phase(fluid, temp, pressure)
-	report_progress("Fluid phases cache generated in [(REALTIMEOFDAY - starttime)/10] seconds!")
 	..(timeofday)
 
 /datum/controller/subsystem/air/fire(resumed = FALSE, no_mc_tick = FALSE)
