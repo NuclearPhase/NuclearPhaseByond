@@ -42,10 +42,10 @@
 	return world.time > (appear_time + mutate_period)
 
 /datum/arrythmia/proc/can_weaken(var/obj/item/organ/internal/heart/H)
-	return FALSE
+	return weakening_type
 
 /datum/arrythmia/proc/can_strengthen(var/obj/item/organ/internal/heart/H)
-	return FALSE
+	return strengthening_type
 
 /datum/arrythmia/proc/can_appear(var/obj/item/organ/internal/heart/H)
 	return TRUE
@@ -55,7 +55,7 @@
 		return
 
 	var/datum/arrythmia/A = allocated || (new T)
-	if(A.severity >= ARRYTHMIA_SEVERITY_OVERWRITING)
+	if(A.severity == ARRYTHMIA_SEVERITY_OVERWRITING)
 		arrythmias.Cut()
 	arrythmias[A.id] = A
 
@@ -65,7 +65,7 @@
 /obj/item/organ/internal/heart/proc/make_common_arrythmia(severity)
 	for(var/T in subtypesof(/datum/arrythmia))
 		var/datum/arrythmia/A = new T
-		if(A.severity == severity && !(A.id in arrythmias) && A.can_appear(src))
+		if(A.severity <= severity && !(A.id in arrythmias) && A.can_appear(src))
 			make_arrythmia(, allocated = A)
 			return
 
@@ -132,8 +132,29 @@
 /datum/arrythmia/afib/rr/can_weaken(var/obj/item/organ/internal/heart/H)
 	return LAZYACCESS0(H.owner.chem_effects, CE_ANTIARRYTHMIC) > 1
 
-/datum/arrythmia/afib/rr/can_strengthen()
-	return FALSE
+/datum/arrythmia/tachycardia
+	id = ARRYTHMIA_TACHYCARDIA
+	name = "Tachycardia"
+	severity = 2
+	co_mod = 0.9
+	ischemia_mod = 0.1
+	weakening_type = null
+	strengthening_type = /datum/arrythmia/tachycardia/paroxysmal
+
+/datum/arrythmia/tachycardia/get_hr_mod()
+	return rand(40, 90)
+
+/datum/arrythmia/tachycardia/paroxysmal
+	name = "Paroxysmal tachycardia"
+	severity = 2
+	co_mod = 0.8
+	ischemia_mod = 0.2
+	weakening_type = /datum/arrythmia/tachycardia
+	strengthening_type = null
+	mutate_period = 0.5 MINUTE
+
+/datum/arrythmia/tachycardia/paroxysmal/get_hr_mod()
+	return rand(90, 90)
 
 /datum/arrythmia/vfib
 	id = ARRYTHMIA_VFIB
@@ -183,5 +204,3 @@
 	return -145 - (H.ischemia / 50) * 40 + LAZYACCESS0(H.owner.chem_effects, CE_ANTIARRYTHMIC) * 10
 /datum/arrythmia/asystole/can_weaken(var/obj/item/organ/internal/heart/H)
 	return H.pulse > 0
-/datum/arrythmia/asystole/can_strengthen()
-	return FALSE

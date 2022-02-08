@@ -79,8 +79,6 @@
 
 		handle_glucose_level()
 
-		update_cm()
-
 		if(!client && !mind)
 			species.handle_npc(src)
 

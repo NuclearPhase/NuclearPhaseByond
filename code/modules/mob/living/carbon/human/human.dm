@@ -23,8 +23,7 @@
 	calc_k()
 	gvr = k*218.50746
 	mcv = 799920/gvr
-	update_mcv()
-	update_gvr()
+	update_cm()
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species = null)
 
@@ -71,9 +70,14 @@
 	setup_cm()
 	bloodstr.add_reagent(/datum/reagent/hormone/glucose, GLUCOSE_LEVEL_NORMAL + 0.2)
 
+/mob/living/carbon/human/Initialize()
+	..()
+	SSmedicine.processing |= src
+
 /mob/living/carbon/human/Destroy()
 	GLOB.human_mob_list -= src
 	worn_underwear = null
+	SSmedicine.processing -= src
 	for(var/organ in organs)
 		qdel(organ)
 	return ..()

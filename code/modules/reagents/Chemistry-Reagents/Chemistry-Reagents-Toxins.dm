@@ -7,10 +7,8 @@
 	taste_mult = 1.2
 	reagent_state = LIQUID
 	color = "#cf3600"
-	metabolism = REM * 0.25 // 0.05 by default. They last a while and slowly kill you.
-
 	var/target_organ
-	var/strength = 4 // How much damage it deals per unit
+	var/strength = 5 // How much damage it deals per unit
 
 /datum/reagent/toxin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	if(strength && alien != IS_DIONA)

@@ -112,7 +112,7 @@
 	if(force)
 		druggy = vol
 	else if(druggy < vol)
-		druggy = lerp(druggy, vol, weigth)
+		druggy = clerp(druggy, vol, weigth)
 
 /mob/living/proc/handle_drugged()
 	if(druggy)

@@ -507,8 +507,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/y = min(world.maxy, max(1, A.y + dy))
 	return locate(x,y,A.z)
 
-//Makes sure MIDDLE is between LOW and HIGH. If not, it adjusts it. Returns the adjusted value. Lower bound takes priority.
-/proc/between(l, m, h) 
+
+proc/between(l, m, h)
 	return clamp(m, l, h)
 
 //returns random gauss number

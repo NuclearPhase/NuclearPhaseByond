@@ -11,7 +11,7 @@
 PROCESSING_SUBSYSTEM_DEF(airflow)
 	name = "Airflow"
 	wait = 1
-	flags = SS_NO_INIT
+	flags = SS_NO_INIT | SS_BACKGROUND
 	priority = SS_PRIORITY_AIRFLOW
 
 
