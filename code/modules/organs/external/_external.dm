@@ -601,7 +601,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if(target_organ)
 		if(target_organ.germ_level < germ_level - 250)
-			if(prob(lerp(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
+			if(prob(clerp(20, 70, germ_level / INFECTION_LEVEL_THREE) - antibiotics))
 				target_organ.germ_level = max(0, target_organ.germ_level + (germ_level - 250) / 5)
 		target_organ.germ_level++
 	else
@@ -655,17 +655,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 		// slow healing
 		var/heal_amt = 0
 		// if damage >= 50 AFTER treatment then it's probably too severe to heal within the timeframe of a round.
-		if (!owner.chem_effects[CE_TOXIN] && W.can_autoheal() && W.wound_damage() && brute_ratio < 0.5 && burn_ratio < 0.5)
+		if ((owner.chem_effects[CE_TOXIN] < 20) && W.can_autoheal() && W.wound_damage() && brute_ratio < 0.5 && burn_ratio < 0.5)
 			heal_amt += 0.5
 
 		//we only update wounds once in [wound_update_accuracy] ticks so have to emulate realtime
-		heal_amt = heal_amt * wound_update_accuracy
+		heal_amt *= wound_update_accuracy
 		//configurable regen speed woo, no-regen hardcore or instaheal hugbox, choose your destiny
-		heal_amt = heal_amt * config.organ_regeneration_multiplier
+		heal_amt *= config.organ_regeneration_multiplier
 		// amount of healing is spread over all the wounds
-		heal_amt = heal_amt / (wounds.len + 1)
+		heal_amt /= (wounds.len + 1)
 		// making it look prettier on scanners
-		heal_amt = round(heal_amt,0.1)
+		heal_amt = round(heal_amt, 0.1)
 		var/dam_type = BRUTE
 		if(W.damage_type == BURN)
 			dam_type = BURN
@@ -713,8 +713,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/proc/update_damage_ratios()
 	var/limb_loss_threshold = max_damage
-	brute_ratio = brute_dam / (limb_loss_threshold * 2)
-	burn_ratio = burn_dam / (limb_loss_threshold * 2)
+	brute_ratio /= (limb_loss_threshold * 2)
+	burn_ratio /= (limb_loss_threshold * 2)
 
 //Returns 1 if damage_state changed
 /obj/item/organ/external/proc/update_damstate()

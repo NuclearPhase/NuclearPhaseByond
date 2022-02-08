@@ -10,7 +10,6 @@
 	var/cardiac_output = 1
 	var/list/pulse_modificators = list()
 	var/list/cardiac_output_modificators = list() // *
-	var/list/blood_pressure_modificators = list() // *
 	var/list/arrythmias = list()
 	var/ischemia = 0
 	var/heartbeat = 0
@@ -71,7 +70,7 @@
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
 	var/n_pulse = initial(pulse) + sumListAndCutAssoc(pulse_modificators)
-	pulse = lerp(pulse, n_pulse, 0.5)
+	pulse = clerp(pulse, n_pulse, 0.5)
 	pulse = round(Clamp(pulse, 0, 500))
 
 
@@ -83,8 +82,6 @@
 	pulse_modificators["shock"] = owner.shock_stage
 	if(CE_PULSE in owner.chem_effects)
 		pulse_modificators["chem"] = owner.chem_effects[CE_PULSE]
-	if(CE_PRESSURE in owner.chem_effects)
-		blood_pressure_modificators["chem"] = owner.chem_effects[CE_PRESSURE]
 	if(CE_CARDIAC_OUTPUT in owner.chem_effects)
 		cardiac_output_modificators["chem"] = owner.chem_effects[CE_CARDIAC_OUTPUT]
 	cardiac_output_modificators["damage"] = 1 - (damage / max_damage)
@@ -110,7 +107,7 @@
 			break
 	var/period = world.time - last_arrythmia_gain
 
-	if(prob(5) && period > 1.5 MINUTES)
+	if(prob(1) && period > 1.5 MINUTES)
 		var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
 		var/arrythmic = LAZYACCESS0(owner.chem_effects, CE_ARRYTHMIC)
 		if(arrythmic >= 2 || (damage / max_damage >= 0.75) && get_arrythmia_score() < 3)
@@ -142,7 +139,7 @@
 	ischemia = min(ischemia, 100 + infarct_strength)
 
 	if(ischemia > 30)
-		damage += lerp(0.1, 0.5, (ischemia - 30) / 70)
+		damage += clerp(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
 		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)

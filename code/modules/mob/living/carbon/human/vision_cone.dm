@@ -17,30 +17,26 @@ client/
 	if(fov_view)
 		if(rel_x >= -1 && rel_x <= 1 && rel_y >= -1 && rel_y <= 1) //Cheap way to check inside that 3x3 box around you
 			return TRUE //Also checks if both are 0 to stop division by zero
-	
+
 		// Get the vector length so we can create a good directional vector
-		var/vector_len = sqrt(abs(rel_x) ** 2 + abs(rel_y) ** 2)
-	
+		var/vector_len = sqrt(rel_x ** 2 + rel_y ** 2)
+
 		/// Getting a direction vector
-		var/dir_x
-		var/dir_y
+		var/dir_x = 0
+		var/dir_y = 0
 		switch(dir)
 			if(SOUTH)
-				dir_x = 0
 				dir_y = -vector_len
 			if(NORTH)
-				dir_x = 0
 				dir_y = vector_len
 			if(EAST)
 				dir_x = vector_len
-				dir_y = 0
 			if(WEST)
 				dir_x = -vector_len
-				dir_y = 0
-	
+
 		///Calculate angle
 		var/angle = arccos((dir_x * rel_x + dir_y * rel_y) / (sqrt(dir_x**2 + dir_y**2) * sqrt(rel_x**2 + rel_y**2)))
-	
+
 		/// Calculate vision angle and compare
 		var/vision_angle = (360 - fov_view) / 2
 		if(angle < vision_angle)
@@ -73,8 +69,7 @@ mob/proc/update_vision_cone()
 		src.client.hidden_mobs = list()
 		src.fov.dir = dir
 		if(fov.alpha != 0)
-			var/mob/living/M
-			var/list/viewed = view(7, src)
+			var/list/viewed = view(src)
 			if(pulling)
 				viewed -= pulling
 			viewed -= contents // FIXME: lol
@@ -84,10 +79,11 @@ mob/proc/update_vision_cone()
 					I.override = 1
 					src.client.images += I
 					src.client.hidden_atoms += I
-					src.client.hidden_mobs += M
-
+					src.client.hidden_mobs += probablyIgnored
 	//				else if(M.footstep >= 1)
-					M.in_vision_cones[src.client] = 1
+					var/mob/living/L = probablyIgnored
+					if(L)
+						L.in_vision_cones += src.client
 
 			for(var/obj/item/probablyIgnored in viewed)
 				if(!in_fov(probablyIgnored))

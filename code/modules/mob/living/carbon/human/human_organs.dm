@@ -194,10 +194,7 @@
 	for(var/obj/item/organ/O in all_bits)
 		O.set_dna(dna)
 
-/mob/living/proc/get_rythme()
-	return RYTHME_NORM
-
-/mob/living/carbon/human/get_rythme()
+/mob/living/carbon/human/proc/get_rythme()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]
 	var/datum/arrythmia/A = heart?.get_ow_arrythmia()
 	return A ? (A.id) : "normal"
