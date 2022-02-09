@@ -133,7 +133,9 @@
 
 #define QDEL_NULL(x) if(x) { qdel(x) ; x = null }
 
-#define ARGS_DEBUG log_debug("[__FILE__] - [__LINE__]") ; for(var/arg in args) { log_debug("\t[log_info_line(arg)]") }
+#define ASSOC_LIST_DEBUG(L) log_debug("[__FILE__] - [__LINE__]") ; for(var/_l in L) { log_debug("\t[_l] = [L[_l]]") }
+#define LIST_DEBUG(L) log_debug("[__FILE__] - [__LINE__]") ; for(var/_l in L) { log_debug("\t[log_info_line(_l)]") }
+#define ARGS_DEBUG LIST_DEBUG(args)
 
 // Helper macros to aid in optimizing lazy instantiation of lists.
 // All of these are null-safe, you can use them without knowing if the list var is initialized yet

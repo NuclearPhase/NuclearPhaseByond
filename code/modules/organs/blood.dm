@@ -278,21 +278,20 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large,var/spra
 	var/hrpd = hrp * 0.109 + 0.159
 	var/coeff = get_blood_volume() * get_cardiac_output() * (hrpd * 3.73134328) // 1 = hrpd(where hr = 60) => 3.73...
 
+// update GVR
+	gvr = k*218.50746//max(120, k * dpressure * ((hrp-hrpd)/hrpd))
+	gvr += LAZYACCESS0(chem_effects, CE_PRESSURE)
+	gvr += spressure * (0.0008 * spressure - 0.8833) + 94 // simulate elasticity of vascular resistance
 // update dpressure
 	var/hr53 = hr * coeff * 53.0
-	dpressure = max(0, clerp(dpressure, (gvr * (2180 + hr53))/(k * (17820 - hr53)), 0.5))
+	dpressure = max(0, LERP(dpressure, (gvr * (2180 + hr53))/(k * (17820 - hr53)), 0.5))
 // update spressure
-	spressure = clamp(clerp(spressure, (50 * mcv) / (27 * hr) + 2.0 * dpressure - (7646.0 * k)/54.0, 0.5), 0, MAX_PRESSURE)
+	spressure = clamp(LERP(spressure, (50 * mcv) / (27 * hr) + 2.0 * dpressure - (7646.0 * k)/54.0, 0.5), 0, MAX_PRESSURE)
 	dpressure = min(dpressure, spressure-10)
 // update mpressure
 	mpressure = dpressure + (spressure - dpressure) / 3.0
 // update MCV
-	
 	mcv = clamp((((spressure + dpressure) * 4000) / gvr) * coeff, 0, MAX_MCV)
-// update GVR
-	gvr = max(120, k * dpressure * ((hrp-hrpd)/hrpd))
-	gvr += LAZYACCESS0(chem_effects, CE_PRESSURE)
-	gvr += spressure * (0.0008 * spressure - 0.8833) + 94 // simulate elasticity of vascular resistance
 
 /mob/living/carbon/human/proc/get_heart_rate()
 	var/obj/item/organ/internal/heart/heart = internal_organs_by_name[BP_HEART]

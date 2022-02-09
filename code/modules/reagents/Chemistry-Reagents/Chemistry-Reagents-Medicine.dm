@@ -310,7 +310,7 @@
 
 /datum/reagent/nitroglycerin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
 	..()
-	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - volume * 0.01, 0.6, 1))
+	M.add_chemical_effect(CE_CARDIAC_OUTPUT, Clamp(1 - M.chem_doses[type] * 0.01, 0.6, 1))
 
 	var/obj/item/organ/internal/heart/H = M.internal_organs_by_name[BP_HEART]
 	if(!H)
@@ -326,7 +326,7 @@
 
 /datum/reagent/atropine/affect_blood(mob/living/carbon/human/H, alien, removed)
 	..()
-	H.add_chemical_effect(CE_PULSE, volume * 7.5)
+	H.add_chemical_effect(CE_PULSE, H.chem_doses[type] * 7.5)
 	H.add_chemical_effect(CE_ARRYTHMIC, 1)
 
 /datum/reagent/adenosine
@@ -341,13 +341,28 @@
 	if(!heart)
 		return
 
+	if(volume < 5)
+		return
 	// initial rush.
-	if(volume > 2 && H.chem_doses[type] < 2)
-		H.make_heart_rate(-140, "adenosine_av_blockage")
-	else
-		if(ARRYTHMIA_AFIB in heart.arrythmias)
+	if(H.chem_doses[type] < 5)
+		H.make_heart_rate(-140 + sin(world.time / 20) * 60, "adenosine_av_blockage")
+		return
+
+	// TODO: rewrite this more compact
+	if(ARRYTHMIA_AFIB in heart.arrythmias)
+		var/required = 5 * heart.arrythmias[ARRYTHMIA_AFIB].strength
+		if(volume >= required)
 			heart.arrythmias[ARRYTHMIA_AFIB].weak(heart)
-			volume = 0
+			volume -= required
+		return
+	if(ARRYTHMIA_TACHYCARDIA in heart.arrythmias)
+		var/required = 5 * heart.arrythmias[ARRYTHMIA_TACHYCARDIA].strength
+		if(volume >= required)
+			heart.arrythmias[ARRYTHMIA_TACHYCARDIA].weak(heart)
+			volume -= required
+		return
+
+
 
 /datum/reagent/amiodarone
 	name = "Amiodarone"
@@ -358,7 +373,6 @@
 
 /datum/reagent/amiodarone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIARRYTHMIC, 1)
-	H.add_chemical_effect(CE_ARRYTHMIC    ,-1)
 
 /datum/reagent/lidocaine
 	name = "Lidocaine"
@@ -397,7 +411,7 @@
 
 /datum/reagent/ceftriaxone/affect_blood(mob/living/carbon/human/H, alien, removed)
 	H.add_chemical_effect(CE_ANTIBIOTIC, volume * 4)
-	H.adjustToxLoss(0.02 * volume)
+	H.adjustToxLoss(0.02 * H.chem_doses[type])
 
 /datum/reagent/charcoal
 	name = "Charcoal"

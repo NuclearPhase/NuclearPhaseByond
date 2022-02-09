@@ -54,8 +54,8 @@
 		ischemia = 100
 		return
 
-	handle_rythme()
 	make_modificators()
+	handle_rythme()
 	handle_ischemia()
 
 	handle_pulse()
@@ -70,7 +70,7 @@
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
 	var/n_pulse = initial(pulse) + sumListAndCutAssoc(pulse_modificators)
-	pulse = clerp(pulse, n_pulse, 0.5)
+	pulse = LERP(pulse, n_pulse, 0.5)
 	pulse = round(Clamp(pulse, 0, 500))
 
 
@@ -94,6 +94,7 @@
 		pulse_modificators[A.name] = A.get_hr_mod(src)
 	ischemia = max(0, ischemia - 0.2)
 
+
 /obj/item/organ/internal/heart/proc/post_handle_rythme()
 	for(var/T in arrythmias)
 		var/datum/arrythmia/A = arrythmias[T]
@@ -103,22 +104,18 @@
 			A.weak(src)
 			break
 		if(A.can_strengthen(src))
-			A.mutate(src, A.strengthening_type)
+			A.strengthen(src)
 			break
 	var/period = world.time - last_arrythmia_gain
 
-	if(prob(1) && period > 1.5 MINUTES)
-		var/antiarrythmic = LAZYACCESS0(owner.chem_effects, CE_ANTIARRYTHMIC)
-		var/arrythmic = LAZYACCESS0(owner.chem_effects, CE_ARRYTHMIC)
-		if(arrythmic >= 2 || (damage / max_damage >= 0.75) && get_arrythmia_score() < 3)
-			make_common_arrythmia(2)
-		else if(arrythmic >= 1 || (damage / max_damage >= 0.25) && get_arrythmia_score() < 2)
-			make_common_arrythmia(1)
-		else if((owner.mpressure > BLOOD_PRESSURE_H2BAD || (arrythmic >= 3) && !antiarrythmic && get_arrythmia_score() < 3))
-			make_common_arrythmia(3)
-		else if((owner.mpressure < BLOOD_PRESSURE_L2BAD) && !antiarrythmic && get_arrythmia_score() < 5)
-			make_common_arrythmia(4)
-		return
+	if(prob(1) && period > 1.5 MINUTES && !get_ow_arrythmia())
+		var/arrythmic = get_arrythmic()
+
+		if(arrythmic >= 1 && (get_arrythmia_score() < arrythmic))
+			make_common_arrythmia(arrythmic)
+		if(get_arrythmia_score() >= (ARRYTHMIA_SEVERITY_OVERWRITING - 1) || get_arrythmic() >= (ARRYTHMIA_SEVERITY_OVERWRITING - 1))
+			make_specific_arrythmia(ARRYTHMIA_SEVERITY_OVERWRITING)
+
 
 /obj/item/organ/internal/heart/proc/handle_heartbeat()
 	if(pulse >= 90 || owner.shock_stage >= 10 || is_below_sound_pressure(get_turf(owner)))
@@ -139,7 +136,7 @@
 	ischemia = min(ischemia, 100 + infarct_strength)
 
 	if(ischemia > 30)
-		damage += clerp(0.1, 0.5, (ischemia - 30) / 70)
+		damage += lerp(0.1, 0.5, (ischemia - 30) / 70)
 	cardiac_output_modificators["ischemia"] = max(1 - (ischemia / 100), 0.3)
 	if(damage / max_damage > (20 / max_damage))
 		make_up_to_hormone(/datum/reagent/hormone/marker/troponin_t, damage / max_damage * 2)

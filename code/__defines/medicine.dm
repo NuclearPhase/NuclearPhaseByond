@@ -26,13 +26,15 @@
 
 // in ml
 #define MAX_MCV 30000
-#define NORMAL_MCV 4100
+#define NORMAL_MCV 3900
 
 #define MAX_PRESSURE 280
 #define ARRYTHMIA_SEVERITY_OVERWRITING 5
 
 #define ARRYTHMIA_AFIB "afib"
+#define ARRYTHMIA_AFLAUNT "aflaunt"
 #define ARRYTHMIA_VFIB "vfib"
 #define ARRYTHMIA_TACHYCARDIA "tachycardia"
 #define ARRYTHMIA_VFLAUNT "vflaunt"
 #define ARRYTHMIA_ASYSTOLE "asystole"
+#define ARRYTHMIA_EXTRASYSTOLIC "extrasystolic"

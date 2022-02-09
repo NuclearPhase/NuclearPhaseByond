@@ -14,6 +14,8 @@
 		visible_message("\The [attached] is taken off \the [src]")
 		attached = null
 	else if(over_object)
+		if(!ishuman(over_object))
+			return
 		visible_message("\The [usr] connects \the [over_object] up to \the [src].")
 		if(!do_after(usr, 30, over_object))
 			return
@@ -39,9 +41,9 @@
 		icon_state = "monitor-asystole"
 		return
 
-	var/owa = H.get_ow_arrythmia()
+	var/datum/arrythmia/owa = H.get_ow_arrythmia()
 	if(owa)
-		icon_state = "monitor-[owa]"
+		icon_state = "monitor-[owa.id]"
 	else
 		icon_state = "monitor-normal"
 
@@ -93,7 +95,7 @@
 	data["status"] = (attached.stat == CONSCIOUS) ? "CONSCIOUS" : "UNCONSCIOUS"
 
 	data["ecg"] = list()
-	
+
 	var/obj/item/organ/internal/brain/brain = attached.internal_organs_by_name[BP_BRAIN]
 	if(attached.stat == DEAD || !brain)
 		data["ecg"] += list("Neurological activity not present")
@@ -106,7 +108,7 @@
 		data["ecg"] += list("Ischemia.")
 	data["ecg"] += list("GVR: [round(attached.gvr)] N·s·m<sup><small>-5</small></sup>")
 	data["ecg"] += list("MCV: [round(attached.mcv)/1000] L/m")
-	
+
 	ui = GLOB.nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "monitor.tmpl", "Monitor", 450, 270)
