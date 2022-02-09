@@ -70,6 +70,9 @@
 
 /obj/item/organ/internal/heart/proc/handle_pulse()
 	var/n_pulse = initial(pulse) + sumListAndCutAssoc(pulse_modificators)
+	var/datum/arrythmia/OW = get_ow_arrythmia()
+	if(OW && OW.id == ARRYTHMIA_ASYSTOLE)
+		return
 	pulse = LERP(pulse, n_pulse, 0.5)
 	pulse = round(Clamp(pulse, 0, 500))
 
