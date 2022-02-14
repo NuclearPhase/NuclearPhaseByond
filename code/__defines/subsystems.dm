@@ -60,7 +60,6 @@
 #define SS_INIT_DEFAULT 0
 #define SS_INIT_AIR -1
 #define SS_INIT_MINIMAP -2
-#define SS_INIT_ASSETS -3
 #define SS_INIT_ICON_SMOOTHING -5
 #define SS_INIT_OVERLAY -6
 #define SS_INIT_ZCOPY -7
@@ -69,7 +68,6 @@
 #define SS_INIT_LIGHTING -20
 #define SS_INIT_ICON_UPDATE -30
 #define SS_INIT_SQUEAK -40
-#define SS_INIT_CHAT -90
 #define SS_INIT_PERSISTENCE -100
 #define SS_INIT_LEGACY -200
 

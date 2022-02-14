@@ -10,7 +10,7 @@
 
 /obj/item/device/gps/attack_self(var/mob/user as mob)
 	var/turf/T = get_turf(src)
-	to_chat(user, "<span class='notice'>[bicon(src)] \The [src] flashes <i>[T.x]:[T.y]:[T.z]</i>.</span>")
+	to_chat(user, "<span class='notice'>\icon[src] \The [src] flashes <i>[T.x]:[T.y]:[T.z]</i>.</span>")
 
 /obj/item/device/gps/examine(var/mob/user)
 	..()
@@ -152,7 +152,7 @@
 
 			positive_locations.Add(D)
 
-			to_chat(user, "<span class='notice'>[bicon(src)] [src] pings.</span>")
+			to_chat(user, "<span class='notice'>\icon[src] [src] pings.</span>")
 
 	else if(istype(A, /obj/structure/boulder))
 		var/obj/structure/boulder/B = A
@@ -170,7 +170,7 @@
 
 			positive_locations.Add(D)
 
-			to_chat(user, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
+			to_chat(user, "<span class='notice'>\icon[src] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
 
 /obj/item/device/depth_scanner/attack_self(var/mob/living/user)
 	interact(user)

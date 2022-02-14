@@ -41,7 +41,7 @@
 
 /obj/item/weapon/extinguisher/examine(mob/user)
 	if(..(user, 0))
-		to_chat(user, text("[bicon(src)] [] contains [] units of water left!", src.name, src.reagents.total_volume))
+		to_chat(user, text("\icon[src] [] contains [] units of water left!", src.name, src.reagents.total_volume))
 	return
 
 /obj/item/weapon/extinguisher/attack_self(mob/user as mob)

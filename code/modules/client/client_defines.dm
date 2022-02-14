@@ -17,9 +17,6 @@
 	var/moving			= null
 	var/adminobs		= null
 
-	var/datum/chatOutput/chatOutput
-	var/chatOutputLoadedAt
-
 	var/adminhelped = 0
 
 	var/staffwarn = null

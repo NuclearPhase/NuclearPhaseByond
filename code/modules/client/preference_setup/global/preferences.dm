@@ -236,19 +236,3 @@ var/list/_client_preferences_by_type
 	options = list(GLOB.PREF_SHOW, GLOB.PREF_HIDE)
 	default_value = GLOB.PREF_HIDE
 	flags = R_ADMIN|R_DEBUG
-
-// VCHAT
-/datum/client_preference/vchat
-	description = "Use Fancy Chat"
-	key = "USE_VCHAT"
-
-/datum/client_preference/vchat/changed(var/mob/preference_mob, var/new_value)
-	if(preference_mob && preference_mob.client)
-		var/client/C = preference_mob.client
-		if(new_value == GLOB.PREF_YES)
-			C.chatOutput.loaded = FALSE
-			C.chatOutput.user_prefers_legacy = FALSE
-			C.chatOutput.start()
-		else
-			C.chatOutput.become_broken()
-			C.chatOutput.user_prefers_legacy = TRUE

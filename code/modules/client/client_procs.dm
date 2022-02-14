@@ -89,11 +89,6 @@
 		if("usr")		hsrc = mob
 		if("prefs")		return prefs.process_link(usr,href_list)
 		if("vars")		return view_var_Topic(href,href_list,hsrc)
-		if("chat")		return chatOutput.Topic(href, href_list)
-	
-	switch(href_list["action"])
-		if("openLink")
-			send_link(src, href_list["link"])
 
 	..()	//redirect to hsrc.Topic()
 
@@ -117,8 +112,6 @@
 	///////////
 /client/New(TopicData)
 	TopicData = null							//Prevent calls to client.Topic from connect
-
-	chatOutput = new /datum/chatOutput(src) //vchat
 
 	if(!(connection in list("seeker", "web")))					//Invalid connection type.
 		return null
@@ -166,9 +159,6 @@
 
 	. = ..()	//calls mob.Login()
 	prefs.sanitize_preferences()
-
-	chatOutput.send_resources()
-
 	GLOB.using_map.map_info(src)
 
 	if(custom_event_msg && custom_event_msg != "")
@@ -176,10 +166,6 @@
 		to_chat(src, "<h2 class='alert'>A custom event is taking place. OOC Info:</h2>")
 		to_chat(src, "<span class='alert'>[custom_event_msg]</span>")
 		to_chat(src, "<br>")
-
-	if(get_preference_value(/datum/client_preference/vchat) == GLOB.PREF_YES)
-		chatOutput.start()
-
 
 	if(holder)
 		add_admin_verbs()

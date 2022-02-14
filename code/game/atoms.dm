@@ -256,7 +256,7 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<span class='info'>It's too far away to see clearly.</span>")
 			return
 
-	to_chat(user, "[bicon(src)] That's [f_name] [suffix]")
+	to_chat(user, "\icon[src] That's [f_name] [suffix]")
 	to_chat(user, desc)
 
 	return distance == -1 || (get_dist(src, user) <= distance)

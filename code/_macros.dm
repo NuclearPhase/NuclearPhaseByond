@@ -112,6 +112,7 @@
 #define send_rsc(target, rsc_content, rsc_name)             target << browse_rsc(rsc_content, rsc_name)
 #define sound_to(target, sound)               to_target(target, sound)
 #define image_to(target, image)               to_target(target, image)
+#define to_chat(target, message) to_target(target, message)
 
 #define MAP_IMAGE_PATH "nano/images/[GLOB.using_map.path]/"
 
