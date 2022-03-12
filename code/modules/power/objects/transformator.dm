@@ -20,5 +20,5 @@
 
     if(surplus() > connected.surplus())
         var/v = powernet.voltage
-        var/transfered = draw_power(min(surplus(), max_cap * v))
+        var/transfered = draw_power(min(surplus(), min(max_cap, connected.powernet.vload) * v))
         connected.powernet.add_power((transfered / v) / coef , v * coef)

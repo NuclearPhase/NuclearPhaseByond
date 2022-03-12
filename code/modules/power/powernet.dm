@@ -7,7 +7,8 @@
 	var/avail = 0				//...the current available power in the powernet {A}
 	var/viewload = 0			// the load as it appears on the power console (gradually updated) {W}
 	var/number = 0				// Unused //TODEL
-
+	var/vload   = 0				// virtual load, not depends on surplus. helpful in power generation {W}
+	var/vload_r = 0				// real virtual load
 	var/smes_demand = 0			// Amount of power demanded by all SMESs from this network. Needed for load balancing.
 	var/list/inputting = list()	// List of SMESs that are demanding power from this network. Needed for load balancing.
 
@@ -24,9 +25,19 @@
 
 /datum/powernet/proc/add_power(a, v)
 	if(v >= (voltage - 0.1))
-		newavail *= voltage / v
-		newavail += a
-		newvoltage = v
+		return
+	newavail *= voltage / v
+	newavail += a
+	newvoltage = v
+
+/datum/powernet/proc/generate_power(a, v) // add_power, but considers vload, returns used {W}
+	if(v < (voltage - 0.1))
+		return
+	newavail *= voltage / v
+	newvoltage = v
+	var/power = min(a * v, vload)
+	newavail += power / v
+	return power
 
 /datum/powernet/New()
 	START_PROCESSING_POWERNET(src)
@@ -51,6 +62,7 @@
 	return max(avail - viewload / voltage, 0) * voltage
 
 /datum/powernet/proc/draw_power(w)
+	vload_r += w
 	var/draw = between(0, w, last_surplus())
 	load += draw
 	return draw
@@ -107,9 +119,6 @@
 //handles the power changes in the powernet
 //called every ticks by the powernet controller
 /datum/powernet/proc/reset()
-
-
-
 	var/numapc = 0
 
 	if(problem > 0)
@@ -166,6 +175,8 @@
 	smes_newavail = 0
 	voltage = newvoltage
 	newvoltage = 0
+	vload = vload_r
+	vload_r = 0
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)

@@ -16,12 +16,9 @@
 
 // Expects /obj/effect/fluid for F, int for amt.
 #define LOSE_FLUID(F, amt) \
-	F:fluid_amount = max(-1, F:fluid_amount - amt); \
+	F:reagents.remove_any(amt); \
 	ADD_ACTIVE_FLUID(F)
-#define SET_FLUID_DEPTH(F, amt) \
-	F:fluid_amount = min(FLUID_MAX_DEPTH, amt); \
-	ADD_ACTIVE_FLUID(F)
-
+	
 // Expects turf for T,
 #define UPDATE_FLUID_BLOCKED_DIRS(T) \
 	if(isnull(T:fluid_blocked_dirs)) {\

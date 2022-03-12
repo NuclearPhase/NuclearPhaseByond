@@ -61,7 +61,7 @@
 	if (!removed) //Just in case
 		return -1
 
-	var/power_draw = specific_power*transfer_moles
+	var/power_draw = specific_power * transfer_moles * POWER_TO_PUMP
 
 	sink.merge(removed)
 

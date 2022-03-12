@@ -1191,6 +1191,20 @@
 	..()
 	icon_state = "air"
 
+/obj/machinery/atmospherics/pipe/tank/water
+	name = "Pressure Tank (Water)"
+	icon_state = "air_map"
+
+/obj/machinery/atmospherics/pipe/tank/water/New()
+	air_temporary = new
+	air_temporary.volume = volume
+	air_temporary.temperature = T0C + 3
+
+	air_temporary.adjust_gas(FLUID_WATER, (start_pressure)*(air_temporary.volume)/(R_IDEAL_GAS_EQUATION*air_temporary.temperature))
+
+	..()
+	icon_state = "air"
+
 /obj/machinery/atmospherics/pipe/tank/oxygen
 	name = "Pressure Tank (Oxygen)"
 	icon_state = "o2_map"

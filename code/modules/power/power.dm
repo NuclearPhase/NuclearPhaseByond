@@ -49,6 +49,9 @@
 		return 1
 	return 0
 
+/obj/machinery/power/proc/generate_power(var/a, var/v = 1 KVOLT)
+	return powernet ? powernet.generate_power(a, v) : 0
+
 /obj/machinery/power/proc/draw_power(var/amount, var/efficiency = 0)
 	ASSERT(efficiency <= 1) // infinity engine is prohibited
 	if(efficiency == 0)

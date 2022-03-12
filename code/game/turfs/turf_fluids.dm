@@ -13,7 +13,9 @@
 	if(!flooded)
 		var/obj/effect/fluid/F = locate() in src
 		if(!F) F = new(src)
-		SET_FLUID_DEPTH(F, F.fluid_amount + amount)
+
+		F.reagents.add_reagent(fluid, amount)
+		ADD_ACTIVE_FLUID(F)
 
 /turf/proc/remove_fluid(var/amount = 0)
 	var/obj/effect/fluid/F = locate() in src
@@ -42,7 +44,7 @@
 	if(is_flooded(absolute=1))
 		return FLUID_MAX_DEPTH
 	var/obj/effect/fluid/F = return_fluid()
-	return (istype(F) ? F.fluid_amount : 0 )
+	return (istype(F) ? F.reagents?.total_volume : 0 )
 
 /turf/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0)
 	. = ..()
@@ -77,7 +79,7 @@
 	var/dry_run = TRUE
 	if(flooded)
 		var/flooded_a_neighbor = 0
-		FLOOD_TURF_NEIGHBORS(src, dry_run)
+		//FLOOD_TURF_NEIGHBORS(src, dry_run)
 		if(flooded_a_neighbor)
 			ADD_ACTIVE_FLUID_SOURCE(src)
 	else

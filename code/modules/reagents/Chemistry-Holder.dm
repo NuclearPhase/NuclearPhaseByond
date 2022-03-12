@@ -5,6 +5,7 @@ GLOBAL_DATUM_INIT(temp_reagents_holder, /obj, new)
 	var/total_volume = 0
 	var/maximum_volume = 120
 	var/atom/my_atom = null
+	var/no_react = FALSE
 
 /datum/reagents/New(var/maximum_volume = 120, var/atom/my_atom)
 	if(!istype(my_atom))
@@ -69,7 +70,7 @@ GLOBAL_DATUM_INIT(temp_reagents_holder, /obj, new)
 		return 0
 	if(!my_atom.loc) //No reactions inside GC'd containers
 		return 0
-	if(my_atom.atom_flags & ATOM_FLAG_NO_REACT) // No reactions here
+	if(no_react || my_atom.atom_flags & ATOM_FLAG_NO_REACT) // No reactions here
 		return 0
 
 	var/reaction_occured = 0
@@ -244,7 +245,14 @@ GLOBAL_DATUM_INIT(temp_reagents_holder, /obj, new)
 	process_reactions()
 	return amount
 
-/datum/reagents/proc/trans_to_holder(var/datum/reagents/target, var/amount = 1, var/multiplier = 1, var/copy = 0) // Transfers [amount] reagents from [src] to [target], multiplying them by [multiplier]. Returns actual amount removed from [src] (not amount transferred to [target]).
+/datum/reagents/proc/multiply(amount = 1)
+	for(var/datum/reagent/current in reagent_list)
+		current.volume *= amount
+
+	update_total()
+	process_reactions()
+
+/datum/reagents/proc/trans_to_holder(var/datum/reagents/target, var/amount = 1, var/multiplier = 1, var/copy = 0, var/safety = FALSE) // Transfers [amount] reagents from [src] to [target], multiplying them by [multiplier]. Returns actual amount removed from [src] (not amount transferred to [target]).
 	if(!target || !istype(target))
 		return
 
@@ -261,7 +269,7 @@ GLOBAL_DATUM_INIT(temp_reagents_holder, /obj, new)
 		if(!copy)
 			remove_reagent(current.type, amount_to_transfer, 1)
 
-	if(!copy)
+	if(!copy && !safety)
 		process_reactions()
 	target.process_reactions()
 	return amount

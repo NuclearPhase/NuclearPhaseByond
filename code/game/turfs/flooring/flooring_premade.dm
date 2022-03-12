@@ -118,6 +118,9 @@
 /turf/simulated/floor/reinforced/oxygen
 	initial_gas = list("oxygen" = ATMOSTANK_OXYGEN)
 
+/turf/simulated/floor/reinforced/water
+	initial_gas = list(FLUID_WATER = ATMOSTANK_OXYGEN)
+
 /turf/simulated/floor/reinforced/phoron
 	initial_gas = list("phoron" = ATMOSTANK_PHORON)
 

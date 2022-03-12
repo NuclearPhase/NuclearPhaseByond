@@ -43,7 +43,7 @@ SUBSYSTEM_DEF(fluids)
 		var/turf/T = curr_sources[curr_sources.len]
 		curr_sources.len--
 
-		FLOOD_TURF_NEIGHBORS(T, dry_run)
+		//FLOOD_TURF_NEIGHBORS(T, dry_run)
 
 		if (MC_TICK_CHECK)
 			return
@@ -63,7 +63,7 @@ SUBSYSTEM_DEF(fluids)
 				qdel(F)
 				continue
 
-			if(F.fluid_amount <= FLUID_EVAPORATION_POINT)
+			if(!F.reagents || F.reagents.total_volume <= FLUID_EVAPORATION_POINT)
 				continue
 
 			F.equalizing_fluids = list(F)
@@ -74,7 +74,7 @@ SUBSYSTEM_DEF(fluids)
 				if(istype(current, /turf/simulated/open))
 					var/turf/T = GetBelow(F)
 					var/obj/effect/fluid/other = locate() in T
-					if((!istype(other) || other.fluid_amount < FLUID_MAX_DEPTH) && T.CanFluidPass(UP))
+					if((!istype(other) || !other.reagents || other.reagents.total_volume < FLUID_MAX_DEPTH) && T.CanFluidPass(UP))
 						if(!other)
 							other = new /obj/effect/fluid(T)
 						F.equalizing_fluids += other
@@ -91,10 +91,10 @@ SUBSYSTEM_DEF(fluids)
 				if((T.fluid_blocked_dirs & coming_from) || !T.CanFluidPass(coming_from))
 					continue
 				var/turf/current = get_turf(F)
-				if((F.fluid_amount + current.height) <= T.height) //Water cannot flow up height differences
+				if((F.reagents.total_volume + current.height) <= T.height) //Water cannot flow up height differences
 					continue
 				var/obj/effect/fluid/other = locate() in T.contents
-				if(other && (QDELETED(other) || other.fluid_amount <= FLUID_DELETING))
+				if(other && (QDELETED(other) || other.reagents.total_volume <= FLUID_DELETING))
 					continue
 				if(!other)
 					other = new /obj/effect/fluid(T)
@@ -112,11 +112,11 @@ SUBSYSTEM_DEF(fluids)
 			processing_fluids -= F
 		else
 			// Equalize across our neighbors. Hardcoded here for performance reasons.
-			if(!F.loc || F.loc != F.start_loc || !F.equalizing_fluids || !F.equalizing_fluids.len || F.fluid_amount <= FLUID_EVAPORATION_POINT)
+			if(!F.loc || F.loc != F.start_loc || !F.equalizing_fluids || !F.equalizing_fluids.len || F.reagents.total_volume <= FLUID_EVAPORATION_POINT)
 				continue
 
-			F.equalize_avg_depth = 0
 			F.equalize_avg_temp = 0
+			F.equalize_avg_reagents.clear_reagents()
 			F.flow_amount = 0
 
 			// Flow downward first, since gravity. TODO: add check for gravity.
@@ -124,23 +124,26 @@ SUBSYSTEM_DEF(fluids)
 				var/obj/effect/fluid/downward_fluid = F.equalizing_fluids[downward_fluid_overlay_position]
 				if(downward_fluid.z == F.z-1) // It's below us.
 					F.equalizing_fluids -= downward_fluid
-					var/transfer_amount = min(F.fluid_amount, (FLUID_MAX_DEPTH-downward_fluid.fluid_amount))
+					var/transfer_amount = min(F.reagents.total_volume, (FLUID_MAX_DEPTH-downward_fluid.reagents.total_volume))
 					if(transfer_amount > 0)
-						SET_FLUID_DEPTH(downward_fluid, downward_fluid.fluid_amount + transfer_amount)
-						LOSE_FLUID(F, transfer_amount)
-						if(F.fluid_amount <= FLUID_EVAPORATION_POINT)
+						F.reagents.trans_to_holder(downward_fluid.reagents, transfer_amount, safety = TRUE)
+						ADD_ACTIVE_FLUID(F)
+						ADD_ACTIVE_FLUID(downward_fluid)
+
+						if(F.reagents.total_volume <= FLUID_EVAPORATION_POINT)
 							continue
 
 			var/setting_dir = 0
 
 			for(var/obj/effect/fluid/other in F.equalizing_fluids)
-				if(!istype(other) || QDELETED(other) || other.fluid_amount <= FLUID_DELETING)
+				if(!istype(other) || QDELETED(other) || other.reagents.total_volume <= FLUID_DELETING)
 					F.equalizing_fluids -= other
 					continue
-				F.equalize_avg_depth += other.fluid_amount
 				F.equalize_avg_temp += other.temperature
+				other.reagents.trans_to_holder(F.equalize_avg_reagents, INFINITY, copy = TRUE)
 
-				var/flow_amount = F.fluid_amount - other.fluid_amount
+
+				var/flow_amount = F.reagents.total_volume - other.reagents.total_volume
 				if(F.flow_amount < flow_amount && flow_amount >= FLUID_PUSH_THRESHOLD)
 					F.flow_amount = flow_amount
 					setting_dir = get_dir(F, other)
@@ -148,16 +151,18 @@ SUBSYSTEM_DEF(fluids)
 			F.set_dir(setting_dir)
 
 			if(islist(F.equalizing_fluids) && F.equalizing_fluids.len > 1)
-				F.equalize_avg_depth = round(F.equalize_avg_depth/F.equalizing_fluids.len)
 				F.equalize_avg_temp = round(F.equalize_avg_temp/F.equalizing_fluids.len)
+				F.equalize_avg_reagents.multiply(1.0/F.equalizing_fluids.len)
+
 				for(var/thing in F.equalizing_fluids)
 					var/obj/effect/fluid/other = thing
 					if(!QDELETED(other))
-						SET_FLUID_DEPTH(other, F.equalize_avg_depth)
+						other.reagents.clear_reagents()
+						F.equalize_avg_reagents.trans_to_holder(other.reagents, INFINITY, copy = TRUE)
 						other.temperature = F.equalize_avg_temp
 			F.equalizing_fluids.Cut()
-			if(istype(F.loc, /turf/space))
-				LOSE_FLUID(F, max((FLUID_EVAPORATION_POINT-1),F.fluid_amount * 0.5))
+			//if(istype(F.loc, /turf/space))
+				//LOSE_FLUID(F, max((FLUID_EVAPORATION_POINT-1),F.reagents.total_volume * 0.5))
 
 		if (MC_TICK_CHECK)
 			return
@@ -180,10 +185,10 @@ SUBSYSTEM_DEF(fluids)
 						pushing_atoms[AM] = TRUE
 						step(AM, F.dir)
 
-			if (F.fluid_amount <= FLUID_EVAPORATION_POINT & prob(10))
+			if (F.reagents.total_volume <= FLUID_EVAPORATION_POINT && prob(10))
 				LOSE_FLUID(F, rand(1, 3))
 
-			if (F.fluid_amount <= FLUID_DELETING)
+			if (F.reagents.total_volume <= FLUID_DELETING)
 				qdel(F)
 			else
 				F.update_icon()
@@ -203,6 +208,6 @@ SUBSYSTEM_DEF(fluids)
 			if(istype(T) && !QDELETED(F))
 				for(var/atom/movable/A in T.contents)
 					if(A.simulated && !A.waterproof)
-						A.water_act(F.fluid_amount)
+						A.water_act(F.reagents.total_volume)
 			if (MC_TICK_CHECK)
 				return

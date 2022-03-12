@@ -19,6 +19,7 @@
 #define SS_PRIORITY_OBJECTS       60	// processing_objects processing.
 #define SS_PRIORITY_TEMPERATURE   50
 #define SS_PRIORITY_PROCESSING    30	// Generic datum processor. Replaces objects processor.
+#define SS_PRIORITY_MECHANIC      26
 #define SS_PRIORITY_GARBAGE       25	// Garbage collection.
 #define SS_PRIORITY_ICON_UPDATE   20
 #define SS_PRIORITY_TURF          15

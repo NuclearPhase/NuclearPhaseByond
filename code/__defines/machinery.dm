@@ -86,10 +86,12 @@ var/list/restricted_camera_networks = list(NETWORK_ERT,NETWORK_MERCENARY,"Secret
 
 // The flow rate/effectiveness of various atmos devices is limited by their internal volume,
 // so for many atmos devices these will control maximum flow rates in L/s.
-#define ATMOS_DEFAULT_VOLUME_PUMP   300 // Liters.
+#define ATMOS_DEFAULT_VOLUME_PUMP   700 // Liters.
 #define ATMOS_DEFAULT_VOLUME_FILTER 1000 // L.
 #define ATMOS_DEFAULT_VOLUME_MIXER  1000 // L.
-#define ATMOS_DEFAULT_VOLUME_PIPE   70  // L.
+#define ATMOS_DEFAULT_VOLUME_PIPE   200  // L.
+
+#define POWER_TO_PUMP               1000 // W / mol
 
 #define TELECOMMS_RECEPTION_NONE 0
 #define TELECOMMS_RECEPTION_SENDER 1

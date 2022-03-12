@@ -164,7 +164,15 @@
 	name = "\improper Atmos"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "atmos"
+/area/sector_c/atmos/storage
+	name = "\improper Atmos"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "atmos_storage"
 /area/sector_c/atmos/out
 	name = "\improper Atmos out"
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "atmos"
+/area/sector_c/engine
+	name = "\improper Engine"
+	icon = 'icons/turf/areas.dmi'
+	icon_state = "engine"

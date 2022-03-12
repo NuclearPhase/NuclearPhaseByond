@@ -9,10 +9,9 @@
 	alpha = 0
 	color = COLOR_OCEAN
 
-	var/fluid_amount = 0
 	var/turf/start_loc
 	var/list/equalizing_fluids = list()
-	var/equalize_avg_depth = 0
+	var/datum/reagents/equalize_avg_reagents
 	var/equalize_avg_temp = 0
 	var/flow_amount = 0
 
@@ -33,6 +32,10 @@
 		T.unwet_floor(FALSE)
 	forceMove(start_loc)
 	update_icon()
+	
+	reagents = new(FLUID_MAX_DEPTH, src)
+	equalize_avg_reagents = new(FLUID_MAX_DEPTH * 4, src)
+	equalize_avg_reagents.no_react = TRUE
 
 /obj/effect/fluid/Destroy()
 	if(start_loc)
@@ -48,7 +51,12 @@
 /obj/effect/fluid/update_icon()
 
 	overlays.Cut()
+	if(reagents?.total_volume)
+		color = reagents.get_color()
+	else
+		color = initial(color)
 
+	var/fluid_amount = reagents?.total_volume
 	if(fluid_amount > FLUID_OVER_MOB_HEAD)
 		layer = DEEP_FLUID_LAYER
 	else
@@ -57,13 +65,13 @@
 	if(fluid_amount > FLUID_DEEP)
 		alpha = FLUID_MAX_ALPHA
 	else
-		alpha = min(FLUID_MAX_ALPHA,max(FLUID_MIN_ALPHA,ceil(255*(fluid_amount/FLUID_DEEP))))
+		alpha = min(FLUID_MAX_ALPHA, max(FLUID_MIN_ALPHA, ceil(255 * (fluid_amount / FLUID_DEEP))))
 
 	if(fluid_amount > FLUID_DELETING && fluid_amount <= FLUID_EVAPORATION_POINT)
 		APPLY_FLUID_OVERLAY("shallow_still")
 	else if(fluid_amount > FLUID_EVAPORATION_POINT && fluid_amount < FLUID_SHALLOW)
 		APPLY_FLUID_OVERLAY("mid_still")
-	else if(fluid_amount >= FLUID_SHALLOW && fluid_amount < (FLUID_DEEP*2))
+	else if(fluid_amount >= FLUID_SHALLOW && fluid_amount < (FLUID_DEEP * 2))
 		APPLY_FLUID_OVERLAY("deep_still")
 	else if(fluid_amount >= (FLUID_DEEP*2))
 		APPLY_FLUID_OVERLAY("ocean")
@@ -75,7 +83,6 @@
 	icon_state = "shallow_still"
 	color = COLOR_OCEAN
 
-	var/fluid_amount = FLUID_MAX_DEPTH
 
 /obj/effect/fluid_mapped/Initialize()
 	..()
@@ -83,7 +90,6 @@
 	if(istype(T))
 		var/obj/effect/fluid/F = locate() in T
 		if(!F) F = new(T)
-		SET_FLUID_DEPTH(F, fluid_amount)
 	return INITIALIZE_HINT_QDEL
 
 // Permaflood overlay.

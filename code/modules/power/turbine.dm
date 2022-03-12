@@ -55,48 +55,55 @@
 			turbine.stat &= !BROKEN
 			turbine.compressor = src
 
-
 #define COMPFRICTION 5e5
 #define COMPSTARTERLOAD 2800
 
 /obj/machinery/compressor/Process()
 	if(!starter)
 		return
-	overlays.Cut()
 	if(stat & BROKEN)
 		return
 	if(!turbine)
 		stat |= BROKEN
 		return
-	rpm = 0.9* rpm + 0.1 * rpmtarget
+
+	handle_contains()
+	handle_rpm()
+	update_icon()
+
+/obj/machinery/compressor/proc/handle_contains()
 	var/datum/fluid_mixture/environment = inturf.return_air()
 	var/transfer_moles = environment.total_moles / 10
 	//var/transfer_moles = rpm/10000*capacity
 	var/datum/fluid_mixture/removed = inturf.remove_air(transfer_moles)
 	gas_contained.merge(removed)
 
-	rpm = max(0, rpm - (rpm*rpm)/COMPFRICTION)
-
-
+/obj/machinery/compressor/proc/handle_rpm()
+	rpm = 0.9 * rpm + 0.1 * rpmtarget
+	rpm = max(0, rpm - (rpm * rpm) / COMPFRICTION)
 	if(starter && !(stat & NOPOWER))
 		use_power(2800)
-		if(rpm<1000)
-			rpmtarget = 1000
+		if(rpm < 800)
+			rpmtarget = 800
 	else
-		if(rpm<1000)
+		if(rpm < 800)
 			rpmtarget = 0
 
 
+/obj/machinery/compressor/update_icon()
+	overlays.Cut()
+	switch(rpm)
+		if(50000 to INFINITY)
+			overlays += image('icons/obj/pipes.dmi', "comp-o4", FLY_LAYER)
+		if(10000 to 50000)
+			overlays += image('icons/obj/pipes.dmi', "comp-o3", FLY_LAYER)
+		if(2000 to 10000)
+			overlays += image('icons/obj/pipes.dmi', "comp-o2", FLY_LAYER)
+		if(500 to 2000)
+			overlays += image('icons/obj/pipes.dmi', "comp-o1", FLY_LAYER)
 
-	if(rpm>50000)
-		overlays += image('icons/obj/pipes.dmi', "comp-o4", FLY_LAYER)
-	else if(rpm>10000)
-		overlays += image('icons/obj/pipes.dmi', "comp-o3", FLY_LAYER)
-	else if(rpm>2000)
-		overlays += image('icons/obj/pipes.dmi', "comp-o2", FLY_LAYER)
-	else if(rpm>500)
-		overlays += image('icons/obj/pipes.dmi', "comp-o1", FLY_LAYER)
-	 //TODO: DEFERRED
+/obj/machinery/compressor/pipe/handle_contains()
+
 
 /obj/machinery/power/turbine/New()
 	..()
