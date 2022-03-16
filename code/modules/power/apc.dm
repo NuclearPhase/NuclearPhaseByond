@@ -957,9 +957,9 @@
 		return terminal.powernet.draw_power(amount)
 	return 0
 
-/obj/machinery/power/apc/avail()
+/obj/machinery/power/apc/available()
 	if(terminal)
-		return terminal.avail()
+		return terminal.available()
 	else
 		return 0
 
@@ -991,7 +991,7 @@
 
 	var/excess = surplus()
 
-	if(!src.avail())
+	if(!src.available())
 		main_status = 0
 	else if(excess < 0)
 		main_status = 1
@@ -1002,6 +1002,47 @@
 		log_debug("Status: [main_status] - Excess: [excess] - Last Equip: [lastused_equip] - Last Light: [lastused_light] - Longterm: [longtermpower]")
 
 	if(cell && !shorted)
+		var/from_grid = min(lastused_total, excess)
+		var/from_cell = max(0, min(lastused_total - from_grid, cell.charge))
+		var/total = (from_cell + from_grid)
+		if(total >= lastused_total)
+			if(excess >= lastused_total) // FIXME: Cubic always charges
+				var/to_charge = min((excess - total), (cell.maxcharge - cell.charge) * CELLRATE)
+				var/draw = draw_power(to_charge) // TODO: add cellrate
+				cell.give(draw / CELLRATE)
+				lastused_charging = draw
+			if(from_cell)
+				cell.use(from_cell)
+			draw_power(from_grid)
+		else
+			charging = 0
+			chargecount = 0
+			// This turns everything off in the case that there is still a charge left on the battery, just not enough to run the room.
+			equipment = autoset(equipment, 0)
+			lighting = autoset(lighting, 0)
+			environ = autoset(environ, 0)
+			autoflag = 0
+		update_channels()
+		/* FIXME: Cubic
+		if(cell.charge >= cell.maxcharge)
+			cell.charge = cell.maxcharge
+			charging = 2
+		if(chargemode)
+			if(!charging)
+				if(excess > cell.maxcharge*chargelevel)
+					chargecount++
+				else
+					chargecount = 0
+				if(chargecount >= 10)
+					chargecount = 0
+					charging = 1
+
+		else // chargemode off
+			charging = 0
+			chargecount = 0
+		*/
+
+	/*
 		// draw power from cell as before to power the area
 		var/cellused = min(cell.charge, CELLRATE * lastused_total)	// clamp deduction to a max, amount left in cell
 		cell.use(cellused)
@@ -1044,25 +1085,9 @@
 				chargecount = 0
 
 		// show cell as fully charged if so
-		if(cell.charge >= cell.maxcharge)
-			cell.charge = cell.maxcharge
-			charging = 2
 
-		if(chargemode)
-			if(!charging)
-				if(excess > cell.maxcharge*chargelevel)
-					chargecount++
-				else
-					chargecount = 0
 
-				if(chargecount >= 10)
-
-					chargecount = 0
-					charging = 1
-
-		else // chargemode off
-			charging = 0
-			chargecount = 0
+		*/
 
 	else // no cell, switch everything off
 		charging = 0

@@ -6,7 +6,7 @@
         var/turf/unsimulated/floor/outwards/O = loc
         adhered_gas += O.adhered_gas
 
-    var/used = between(0, adhered_gas, ADHERED_GAS_MAX_USE)
-    bodytemperature += between(BODYTEMP_COOLING_MAX, -used * ADHERED_GAS_COOLING_COEF, BODYTEMP_HEATING_MAX)
+    var/used = clamp(adhered_gas, 0, ADHERED_GAS_MAX_USE)
+    bodytemperature += clamp(-used * ADHERED_GAS_COOLING_COEF, BODYTEMP_COOLING_MAX, BODYTEMP_HEATING_MAX)
     adhered_gas -= used
 

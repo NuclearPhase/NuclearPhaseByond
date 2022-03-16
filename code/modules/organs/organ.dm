@@ -114,7 +114,7 @@ var/list/organ_cache = list()
 		germ_level += rand(2,6)
 		if(germ_level >= INFECTION_LEVEL_TWO)
 			germ_level += rand(4,8)
-			
+
 		if(germ_level >= INFECTION_LEVEL_THREE)
 			germ_level += rand(1,2)
 
@@ -215,7 +215,7 @@ var/list/organ_cache = list()
 /obj/item/organ/proc/handle_antibiotics()
 	if(!owner || (germ_level <= 0) || !(CE_ANTIBIOTIC in owner.chem_effects))
 		return
-	
+
 	var/antibiotics = owner.chem_effects[CE_ANTIBIOTIC]
 
 	germ_level -= antibiotics / 3.5
@@ -224,10 +224,10 @@ var/list/organ_cache = list()
 
 //Note: external organs have their own version of this proc
 /obj/item/organ/proc/take_damage(amount, var/silent=0)
-	damage = between(0, damage + round(amount, 0.1), max_damage)
+	damage = clamp(damage + round(amount), 0, max_damage)
 
 /obj/item/organ/proc/heal_damage(amount)
-	damage = between(0, damage - round(amount, 0.1), max_damage)
+	damage = clamp(damage - round(amount), 0, max_damage)
 
 
 /obj/item/organ/proc/robotize() //Being used to make robutt hearts, etc

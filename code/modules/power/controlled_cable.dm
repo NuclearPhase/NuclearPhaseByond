@@ -52,7 +52,7 @@
 
 		var/diff = text2num(href_list["adj"])
 
-		var/newresistance = between(CABLE_1MM_RESISTANCE / 100, cables[1].resistance + diff, CABLE_1MM_RESISTANCE)
+		var/newresistance = clamp(cables[1].resistance + diff, CABLE_1MM_RESISTANCE / 100, CABLE_1MM_RESISTANCE)
 
 		for(var/obj/structure/cable/controlled/C in cables)
 			C.resistance = newresistance

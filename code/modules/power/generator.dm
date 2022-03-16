@@ -1,3 +1,4 @@
+/*
 /obj/machinery/power/generator
 	name = "thermoelectric generator"
 	desc = "It's a high efficiency thermoelectric generator."
@@ -230,3 +231,4 @@
 		return
 
 	src.set_dir(turn(src.dir, -90))
+*/

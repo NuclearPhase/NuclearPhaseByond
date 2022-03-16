@@ -165,8 +165,7 @@ Thus, the two variables affect pump operation are set in New():
 		use_power = !use_power
 
 	if(signal.data["set_output_pressure"])
-		target_pressure = between(0, text2num(signal.data["set_output_pressure"]), ONE_ATMOSPHERE*50
-		)
+		target_pressure = clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE*50)
 
 	if(signal.data["status"])
 		spawn(2)
@@ -205,7 +204,7 @@ Thus, the two variables affect pump operation are set in New():
 			. = 1
 		if ("set")
 			var/new_pressure = input(usr,"Enter new output pressure (0-[max_pressure_setting]kPa)","Pressure control",src.target_pressure) as num
-			src.target_pressure = between(0, new_pressure, max_pressure_setting)
+			src.target_pressure = clamp(new_pressure, 0, max_pressure_setting)
 			. = 1
 
 	if(.)

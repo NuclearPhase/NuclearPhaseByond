@@ -153,7 +153,7 @@
 		if (used)
 			to_chat(user, "<span class='notice'>You fit [used] [stack.singular_name]\s to damaged and broken parts on \the [src].</span>")
 			stack.use(used)
-			health = between(health, health + used*DOOR_REPAIR_AMOUNT, maxhealth)
+			health = clamp(health + used*DOOR_REPAIR_AMOUNT, health, maxhealth)
 		return
 
 	//psa to whoever coded this, there are plenty of objects that need to call attack() on doors without bludgeoning them.

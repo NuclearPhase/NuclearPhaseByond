@@ -39,18 +39,9 @@
 	if(drain_check)
 		return 1
 
-	if(powernet && powernet.avail)
+	if(powernet && powernet.available)
 		powernet.trigger_warning()
 		return powernet.draw_power(amount)
-
-/obj/machinery/power/proc/add_power(var/a, var/v = 1 KVOLT)
-	if(powernet)
-		powernet.add_power(a, v)
-		return 1
-	return 0
-
-/obj/machinery/power/proc/generate_power(var/a, var/v = 1 KVOLT)
-	return powernet ? powernet.generate_power(a, v) : 0
 
 /obj/machinery/power/proc/draw_power(var/amount, var/efficiency = 0)
 	ASSERT(efficiency <= 1) // infinity engine is prohibited
@@ -68,8 +59,8 @@
 /obj/machinery/power/proc/surplus()
 	return powernet?.last_surplus()
 
-/obj/machinery/power/proc/avail()
-	return powernet?.avail
+/obj/machinery/power/proc/available()
+	return powernet?.lavailable
 
 /obj/machinery/power/proc/disconnect_terminal(var/obj/machinery/power/terminal/term) // machines without a terminal will just return, no harm no fowl.
 	return
@@ -374,3 +365,19 @@
 	else if (istype(power_source, /obj/item/weapon/cell))
 		cell.use(drained_energy)
 	return drained_energy
+/obj/machinery/power/proc/add_power(var/a, var/v = 1 KVOLT)
+	if(powernet)
+		powernet.add_power(a, v)
+		return 1
+	return 0
+
+/obj/machinery/power/generator
+
+/obj/machinery/power/generator/proc/available_power()
+	return 0
+
+/obj/machinery/power/generator/proc/get_voltage()
+	return 0
+
+/obj/machinery/power/generator/proc/on_power_drain(var/w)
+	return

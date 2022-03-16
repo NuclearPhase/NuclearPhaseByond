@@ -302,19 +302,19 @@
 		if (signal.data["set_internal_pressure"] == "default")
 			internal_pressure_bound = internal_pressure_bound_default
 		else
-			internal_pressure_bound = between(0,text2num(signal.data["set_internal_pressure"]), MAX_PUMP_PRESSURE)
+			internal_pressure_bound = clamp(text2num(signal.data["set_internal_pressure"]), 0, MAX_PUMP_PRESSURE)
 
 	if(signal.data["set_external_pressure"] != null)
 		if (signal.data["set_external_pressure"] == "default")
 			external_pressure_bound = external_pressure_bound_default
 		else
-			external_pressure_bound = between(0,text2num(signal.data["set_external_pressure"]),MAX_PUMP_PRESSURE)
+			external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]), 0, MAX_PUMP_PRESSURE)
 
 	if(signal.data["adjust_internal_pressure"] != null)
-		internal_pressure_bound = between(0,internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]),MAX_PUMP_PRESSURE)
+		internal_pressure_bound = clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, MAX_PUMP_PRESSURE)
 
 	if(signal.data["adjust_external_pressure"] != null)
-		external_pressure_bound = between(0,external_pressure_bound + text2num(signal.data["adjust_external_pressure"]),MAX_PUMP_PRESSURE)
+		external_pressure_bound = clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, MAX_PUMP_PRESSURE)
 
 	if(signal.data["init"] != null)
 		SetName(signal.data["init"])

@@ -2,42 +2,34 @@
 	var/list/cables = list()	// all cables & junctions
 	var/list/nodes = list()		// all connected machines
 
-	var/load = 0				// the current load on the powernet, increased by each machine at processing {W}
-	var/newavail = 0			// what available power was gathered last tick, then becomes...
-	var/avail = 0				//...the current available power in the powernet {A}
-	var/viewload = 0			// the load as it appears on the power console (gradually updated) {W}
-	var/number = 0				// Unused //TODEL
-	var/vload   = 0				// virtual load, not depends on surplus. helpful in power generation {W}
-	var/vload_r = 0				// real virtual load
 	var/smes_demand = 0			// Amount of power demanded by all SMESs from this network. Needed for load balancing.
 	var/list/inputting = list()	// List of SMESs that are demanding power from this network. Needed for load balancing.
 
 	var/smes_avail = 0			// Amount of power (avail) from SMESes. Used by SMES load balancing
 	var/smes_newavail = 0		// As above, just for newavail
 
-	var/perapc = 0			// per-apc avilability
-	var/perapc_excess = 0
 	var/netexcess = 0			// excess power on the powernet (typically avail-load)
 
 	var/problem = 0				// If this is not 0 there is some sort of issue in the powernet. Monitors will display warnings.
 	var/voltage = 0
 	var/newvoltage = 0
 
-/datum/powernet/proc/add_power(a, v)
-	if(v >= (voltage - 0.1))
-		return
-	newavail *= voltage / v
-	newavail += a
-	newvoltage = v
+	var/ldemand = 0
+	var/demand = 0 // W
+	var/lavailable = 0
+	var/available = 0 // W
 
-/datum/powernet/proc/generate_power(a, v) // add_power, but considers vload, returns used {W}
-	if(v < (voltage - 0.1))
+/datum/powernet/proc/add_power(a, v)
+	if((voltage - 0.1) >= v)
 		return
-	newavail *= voltage / v
 	newvoltage = v
-	var/power = min(a * v, vload)
-	newavail += power / v
-	return power
+	available += a * v
+
+/datum/powernet/proc/add_power_w(w, v)
+	if((voltage - 0.1) >= v)
+		return
+	newvoltage = v
+	available += w
 
 /datum/powernet/New()
 	START_PROCESSING_POWERNET(src)
@@ -53,19 +45,18 @@
 	STOP_PROCESSING_POWERNET(src)
 	return ..()
 
+/datum/powernet/proc/load()
+	return min(ldemand, lavailable)
+
 //Returns the amount of excess power from last tick.
 //This is for machines that might adjust their power consumption using this data.
 // {W}
 /datum/powernet/proc/last_surplus()
-	if(!voltage)
-		return 0
-	return max(avail - viewload / voltage, 0) * voltage
+	return max(0, lavailable - ldemand)
 
 /datum/powernet/proc/draw_power(w)
-	vload_r += w
-	var/draw = between(0, w, last_surplus())
-	load += draw
-	return draw
+	demand += w
+	return min(w, last_surplus())
 
 /datum/powernet/proc/is_empty()
 	return !cables.len && !nodes.len
@@ -115,44 +106,68 @@
 /datum/powernet/proc/trigger_warning(var/duration_ticks = 20)
 	problem = max(duration_ticks, problem)
 
+/datum/powernet/proc/handle_generators()
+	var/list/sorted = list() // unperfomance shit
+	for(var/obj/machinery/power/generator/G in nodes)
+		sorted[G] = G.available_power()
+
+	if(sorted.len > 1)
+		sorted = sortAssoc(sorted)
+		var/tcoef = (sorted.len / (sorted.len-1))
+
+		var/tosuck = ldemand
+		for(var/A in sorted)
+			var/obj/machinery/power/generator/G = A
+			var/np = tosuck / sorted.len
+			var/ap = sorted[A]
+			var/v = G.get_voltage()
+
+			if((voltage - 0.1) >= v || ap < 1)
+				tosuck += np * tcoef
+				continue
+
+			newvoltage = v
+			if(ap >= np)
+				G.on_power_drain(np)
+			else
+				tosuck += (np - ap) * tcoef
+				if(ap)
+					G.on_power_drain(ap)
+			available += ap
+	else if(sorted.len)
+		var/obj/machinery/power/generator/G = sorted[1]
+		var/ap = sorted[G]
+		var/v = G.get_voltage()
+
+		if((voltage - 0.1) >= v || ap < 1)
+			return
+		newvoltage = v
+		available += ap
+		G.on_power_drain(min(ap, ldemand))
+		
 
 //handles the power changes in the powernet
 //called every ticks by the powernet controller
 /datum/powernet/proc/reset()
-	var/numapc = 0
+
+	//var/numapc = 0
 
 	if(problem > 0)
 		problem = max(problem - 1, 0)
-
-	if(nodes && nodes.len) // Added to fix a bad list bug -- TLE
-		for(var/obj/machinery/power/terminal/term in nodes)
-			if( istype( term.master, /obj/machinery/power/apc ) )
-				numapc++
-
-	netexcess = avail - load
-
-	if(numapc)
-		//very simple load balancing. If there was a net excess this tick then it must have been that some APCs used less than perapc, since perapc*numapc = avail
-		//Therefore we can raise the amount of power rationed out to APCs on the assumption that those APCs that used less than perapc will continue to do so.
-		//If that assumption fails, then some APCs will miss out on power next tick, however it will be rebalanced for the tick after.
-		if (netexcess >= 0)
-			perapc_excess += min(netexcess/numapc, (avail - perapc) - perapc_excess)
-		else
-			perapc_excess = 0
-
-		perapc = avail/numapc + perapc_excess
-
 	var/coef = min(1, 0.8 + cables.len * 0.045)
 
-	for(var/obj/structure/cable/C in cables)
-		var/turf/T = get_turf(C)
-		var/datum/fluid_mixture/environment = T.return_air()
-		var/used = draw_power(POWERNET_HEAT(src, C.resistance) / coef)
-		environment.add_thermal_energy(POWER2HEAT(used))
+	if(voltage)
+		for(var/obj/structure/cable/C in cables)
+			var/turf/T = get_turf(C)
+			var/datum/fluid_mixture/environment = T.return_air()
+			var/used = draw_power(POWERNET_HEAT(src, C.resistance) / coef)
+			environment.add_thermal_energy(POWER2HEAT(used))
 
+	handle_generators()
+/*
 	// At this point, all other machines have finished using power. Anything left over may be used up to charge SMESs.
 	if(inputting.len && smes_demand)
-		var/smes_input_percentage = between(0, (netexcess / smes_demand) * 100, 100)
+		var/smes_input_percentage = clamp((netexcess / smes_demand) * 100, 0, 100)
 		for(var/obj/machinery/power/smes/S in inputting)
 			S.input_power(smes_input_percentage)
 
@@ -164,33 +179,33 @@
 			S.restore(perc)
 
 	viewload = load
+*/
 
 	//reset the powernet
-	load = 0
-	avail = newavail
 	smes_avail = smes_newavail
 	inputting.Cut()
 	smes_demand = 0
-	newavail = 0
 	smes_newavail = 0
 	voltage = newvoltage
 	newvoltage = 0
-	vload = vload_r
-	vload_r = 0
+	ldemand = demand
+	demand = 0
+	lavailable = available
+	available = 0
 
 /datum/powernet/proc/get_percent_load(var/smes_only = 0)
 	if(smes_only)
-		var/smes_used = load - (avail - smes_avail) 			// SMESs are always last to provide power
+		var/smes_used = load() - (available - smes_avail) 			// SMESs are always last to provide power
 		if(!smes_used || smes_used < 0 || !smes_avail)			// SMES power isn't available or being used at all, SMES load is therefore 0%
 			return 0
-		return between(0, (smes_used / smes_avail) * 100, 100)	// Otherwise return percentage load of SMESs.
+		return clamp((smes_used / smes_avail) * 100, 0, 100)	// Otherwise return percentage load of SMESs.
 	else
-		if(!load)
+		if(!load())
 			return 0
-		return between(0, (avail / load) * 100, 100)
+		return clamp((available / load()) * 100, 0, 100)
 
 /datum/powernet/proc/get_electrocute_damage()
-	switch(avail)
+	switch(POWERNET_AMPERAGE(src))
 		if (1000000 to INFINITY)
 			return min(rand(50,160),rand(50,160))
 		if (200000 to 1000000)

@@ -49,7 +49,7 @@
 	var/agony = 0
 	var/embed = 0 // whether or not the projectile can embed itself in the mob
 	var/penetration_modifier = 0.2 //How much internal damage this projectile can deal, as a multiplier.
-	
+
 	var/hitscan = 0		// whether the projectile should be hitscan
 	var/step_delay = 1	// the delay between iterations if not a hitscan projectile
 
@@ -153,8 +153,8 @@
 	//randomize clickpoint a bit based on dispersion
 	if(dispersion)
 		var/radius = round((dispersion*0.443)*world.icon_size*0.8) //0.443 = sqrt(pi)/4 = 2a, where a is the side length of a square that shares the same area as a circle with diameter = dispersion
-		p_x = between(0, p_x + rand(-radius, radius), world.icon_size)
-		p_y = between(0, p_y + rand(-radius, radius), world.icon_size)
+		p_x = clamp(p_x + rand(-radius, world.icon_size), 0, radius)
+		p_y = clamp(p_y + rand(-radius, world.icon_size), 0, radius)
 
 //called to launch a projectile
 /obj/item/projectile/proc/launch(atom/target, var/target_zone, var/x_offset=0, var/y_offset=0, var/angle_offset=0)

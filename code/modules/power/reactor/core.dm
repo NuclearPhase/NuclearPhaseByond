@@ -1,7 +1,9 @@
 #define NC_POWER (1 MWATT) // stable power 
+#define NC_POWER_RATE 5
 #define NC_CRITICAL_POWER (1200)
 #define NC_POWER_PROPORTION 0.5
-#define NC_POWER_TRANSFER_MAX 2
+#define NC_POWER_TRANSFER_MAX 100
+#define NC_DT 1.5
 
 /obj/machinery/power/nuclear/core
 	name = "Nuclear core"
@@ -67,12 +69,12 @@
 		var/outsides = (env.temperature * env.heat_capacity) / NC_POWER
 		if(outsides < power)
 			var/pwr = min((power - outsides), NC_POWER_TRANSFER_MAX)
-			power -= env.add_thermal_energy(pwr * NC_POWER)
+			power -= env.add_thermal_energy(pwr * NC_POWER * NC_DT)
 		else
 			var/dpower = min((outsides - power), NC_POWER_TRANSFER_MAX)
-			power += abs(env.add_thermal_energy(-dpower * NC_POWER))
+			power += abs(env.add_thermal_energy(-dpower * NC_POWER * NC_DT))
 
-	var/poweradd = 1
+	var/poweradd = NC_POWER_RATE
 	var/coef = 1
 	for(var/obj/machinery/power/nuclear/controlrod/rod in rods)
 		coef -= (100 - rod.state) / 400

@@ -18,7 +18,7 @@
 	dstrength = 0.05
 
 /datum/organ_disease/infarct/update()
-	strength = between(0, strength + dstrength, max_strength)
+	strength = clamp(strength + dstrength, 0, max_strength)
 
 /datum/arrythmia
 	var/id

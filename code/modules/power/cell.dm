@@ -13,7 +13,7 @@
 	w_class = ITEM_SIZE_NORMAL
 	var/c_uid
 	var/charge			                // Current charge
-	var/maxcharge = 1000 // Capacity in Wh
+	var/maxcharge = 1000000 // Capacity in Wh
 	var/overlay_state
 	matter = list(DEFAULT_WALL_MATERIAL = 700, "glass" = 50)
 
@@ -131,7 +131,7 @@
 	force = 0
 	throw_speed = 5
 	throw_range = 7
-	maxcharge = 100
+	maxcharge = 100000
 	matter = list("metal" = 70, "glass" = 5)
 
 /obj/item/weapon/cell/device/variable/New(newloc, charge_amount)
@@ -140,20 +140,20 @@
 
 /obj/item/weapon/cell/device/standard
 	name = "standard device power cell"
-	maxcharge = 25
+	maxcharge = 25000
 
 /obj/item/weapon/cell/device/high
 	name = "advanced device power cell"
 	desc = "A small power cell designed to power more energy-demanding devices."
 	icon_state = "hdevice"
-	maxcharge = 100
+	maxcharge = 100000
 	matter = list("metal" = 70, "glass" = 6)
 
 /obj/item/weapon/cell/crap
 	name = "old power cell"
 	desc = "A cheap old power cell. It's probably been in use for quite some time now."
 	origin_tech = list(TECH_POWER = 0)
-	maxcharge = 100
+	maxcharge = 100000
 	matter = list(DEFAULT_WALL_MATERIAL = 700, "glass" = 40)
 
 /obj/item/weapon/cell/crap/empty
@@ -225,7 +225,7 @@
 	desc = "Pinnacle of power storage technology, this very expensive power cell provides the best energy density reachable with conventional electrochemical cells."
 	origin_tech = list(TECH_POWER = 6)
 	icon_state = "hpcell"
-	maxcharge = 3000
+	maxcharge = 3000000
 	matter = list(DEFAULT_WALL_MATERIAL = 700, "glass" = 80)
 
 /obj/item/weapon/cell/hyper/empty/New()
@@ -238,7 +238,7 @@
 	desc = "This special experimental power cell has both very large capacity, and ability to recharge itself by draining power from contained bluespace pocket."
 	icon_state = "icell"
 	origin_tech =  null
-	maxcharge = 3000
+	maxcharge = 3000000
 	matter = list(DEFAULT_WALL_MATERIAL = 700, "glass" = 80)
 
 /obj/item/weapon/cell/infinite/check_charge()
@@ -254,7 +254,7 @@
 	origin_tech = list(TECH_POWER = 1)
 	icon = 'icons/obj/power.dmi' //'icons/obj/harvest.dmi'
 	icon_state = "potato_cell" //"potato_battery"
-	maxcharge = 20
+	maxcharge = 20000
 
 
 /obj/item/weapon/cell/slime
@@ -263,5 +263,5 @@
 	origin_tech = list(TECH_POWER = 2, TECH_BIO = 4)
 	icon = 'icons/mob/slimes.dmi' //'icons/obj/harvest.dmi'
 	icon_state = "yellow slime extract" //"potato_battery"
-	maxcharge = 200
+	maxcharge = 200000
 	matter = null

@@ -230,14 +230,14 @@ Max Output Pressure: [output_pressure] kPa<BR>"}
 
 	if(href_list["adj_pressure"])
 		var/change = text2num(href_list["adj_pressure"])
-		pressure_setting = between(0, pressure_setting + change, MAX_PUMP_PRESSURE)
+		pressure_setting = clamp(pressure_setting + change, 0, MAX_PUMP_PRESSURE)
 		spawn(1)
 			src.updateUsrDialog()
 		return 1
 
 	if(href_list["adj_input_flow_rate"])
 		var/change = text2num(href_list["adj_input_flow_rate"])
-		input_flow_setting = between(0, input_flow_setting + change, ATMOS_DEFAULT_VOLUME_PUMP + 500) //default flow rate limit for air injectors
+		input_flow_setting = clamp(input_flow_setting + change, 0, ATMOS_DEFAULT_VOLUME_PUMP + 500) //default flow rate limit for air injectors
 		spawn(1)
 			src.updateUsrDialog()
 		return 1
@@ -349,14 +349,14 @@ Min Core Pressure: [pressure_limit] kPa<BR>"}
 
 	if(href_list["adj_pressure"])
 		var/change = text2num(href_list["adj_pressure"])
-		pressure_setting = between(0, pressure_setting + change, MAX_PUMP_PRESSURE)
+		pressure_setting = clamp(pressure_setting + change, 0, MAX_PUMP_PRESSURE)
 		spawn(1)
 			src.updateUsrDialog()
 		return 1
 
 	if(href_list["adj_input_flow_rate"])
 		var/change = text2num(href_list["adj_input_flow_rate"])
-		input_flow_setting = between(0, input_flow_setting + change, ATMOS_DEFAULT_VOLUME_PUMP + 500) //default flow rate limit for air injectors
+		input_flow_setting = clamp(input_flow_setting + change, 0, ATMOS_DEFAULT_VOLUME_PUMP + 500) //default flow rate limit for air injectors
 		spawn(1)
 			src.updateUsrDialog()
 		return 1
